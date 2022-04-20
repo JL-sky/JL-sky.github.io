@@ -117,4 +117,305 @@
         <tag>算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title></title>
+    <url>/2022/04/14/Latex/</url>
+    <content><![CDATA[<h1 id="一、公式详解"><a href="#一、公式详解" class="headerlink" title="一、公式详解"></a>一、公式详解</h1><ul>
+<li><h2 id="普通公式"><a href="#普通公式" class="headerlink" title="普通公式"></a>普通公式</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\section</span>&#123;公式详解&#125;</span><br><span class="line"><span class="comment">% 普通公式</span></span><br><span class="line"><span class="built_in">$</span> y=x+1 <span class="built_in">$</span><span class="keyword">\newline</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="公式居中"><a href="#公式居中" class="headerlink" title="公式居中"></a>公式居中</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 公式居中</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> y=x-1 <span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="带标号公式"><a href="#带标号公式" class="headerlink" title="带标号公式"></a>带标号公式</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 带标号公式</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;equation&#125;    </span><br><span class="line">    y=x<span class="built_in">^</span>2</span><br><span class="line"><span class="keyword">\end</span>&#123;equation&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;equation&#125;</span><br><span class="line">    y=x+2</span><br><span class="line"><span class="keyword">\end</span>&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="上标"><a href="#上标" class="headerlink" title="上标"></a>上标</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 上标</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> y=x<span class="built_in">^</span>2+1 <span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="下标"><a href="#下标" class="headerlink" title="下标"></a>下标</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 下标</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> x<span class="built_in">_</span>1,x<span class="built_in">_</span>&#123;12&#125;,x<span class="built_in">_</span>3 <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="comment">% 特殊字母</span></span><br><span class="line"><span class="built_in">$</span><span class="keyword">\alpha</span><span class="built_in">$</span>,<span class="built_in">$</span><span class="keyword">\beta</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="根号"><a href="#根号" class="headerlink" title="根号"></a>根号</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 根号</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\sqrt</span>&#123;2&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\sqrt</span>[3]&#123;2&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\sqrt</span>&#123;x<span class="built_in">^</span>2+y<span class="built_in">^</span>2&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\sqrt</span>&#123;1+<span class="keyword">\sqrt</span>&#123;1+x<span class="built_in">^</span>2&#125;&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="分式"><a href="#分式" class="headerlink" title="分式"></a>分式</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 分式</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;x&#125;&#123;x+1&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;x&#125;&#123;x<span class="built_in">^</span>2+x+1&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;<span class="keyword">\sqrt</span>&#123;x+1&#125;&#125;&#123;<span class="keyword">\sqrt</span>[3]&#123;x-1&#125;&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;1&#125;&#123;1+<span class="keyword">\sqrt</span>&#123;x+1&#125;&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="括号"><a href="#括号" class="headerlink" title="括号"></a>括号</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 括号</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>(x+1)<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>x[2+(x+2)]<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>&#123;x+1&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>3(<span class="keyword">\frac</span>&#123;2&#125;&#123;5&#125;)<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>3<span class="keyword">\left</span>(<span class="keyword">\frac</span>&#123;2&#125;&#123;5&#125;<span class="keyword">\right</span>)<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>3<span class="keyword">\left</span>[<span class="keyword">\frac</span>&#123;2&#125;&#123;5&#125;<span class="keyword">\right</span>]<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\left</span>|<span class="keyword">\frac</span>&#123;x&#125;&#123;x+1&#125;<span class="keyword">\right</span>|<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="comment">% \left与\right必须成对出现</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\left</span><span class="keyword">\&#123;</span>x<span class="built_in">^</span>2<span class="keyword">\right</span>.<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5FVH"><img src="https://s1.ax1x.com/2022/04/19/LB5FVH.png" alt="LB5FVH.png"></a><a href="https://imgtu.com/i/LB5Pqe"><img src="https://s1.ax1x.com/2022/04/19/LB5Pqe.png" alt="LB5Pqe.png"></a></p>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><ul>
+<li>正负号</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span>cos<span class="keyword">\alpha</span>=<span class="keyword">\pm</span> 1<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>sin<span class="keyword">\beta</span>=<span class="keyword">\pm</span> <span class="keyword">\frac</span>&#123;<span class="keyword">\sqrt</span>&#123;3&#125;&#125;&#123;2&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5Do9"><img src="https://s1.ax1x.com/2022/04/19/LB5Do9.png" alt="LB5Do9.png"></a></p>
+<ul>
+<li>不等号</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span>a<span class="built_in">^</span>x+y <span class="keyword">\neq</span> a<span class="built_in">^</span><span class="keyword">\left</span>.x+y<span class="keyword">\right</span>.<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5siR"><img src="https://s1.ax1x.com/2022/04/19/LB5siR.png" alt="LB5siR.png"></a></p>
+<ul>
+<li><p>积分号</p>
+<ul>
+<li>不定积分</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\int</span> x<span class="built_in">^</span>2dx=<span class="keyword">\frac</span>&#123;x<span class="built_in">^</span>3&#125;&#123;3&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\int</span> x<span class="built_in">^</span>3 <span class="keyword">\mathrm</span>&#123;d&#125;x=<span class="keyword">\frac</span>&#123;1&#125;&#123;4&#125;x<span class="built_in">^</span>4<span class="built_in">$</span><span class="built_in">$</span><span class="comment">%将dx中的d变为正体</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>定积分</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\int</span><span class="built_in">_</span>0<span class="built_in">^</span>1x<span class="built_in">^</span>2<span class="keyword">\mathrm</span>&#123;d&#125;x=<span class="keyword">\frac</span>&#123;1&#125;&#123;3&#125;<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>多重积分</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\iint</span> <span class="keyword">\left</span>(x<span class="built_in">^</span>2+y<span class="built_in">^</span>2<span class="keyword">\right</span>)dxdy<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\iiint</span> <span class="keyword">\left</span>(x<span class="built_in">^</span>2+y<span class="built_in">^</span>2+z<span class="built_in">^</span>2<span class="keyword">\right</span>)dxdydz<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p>[<img src="https://s1.ax1x.com/2022/04/19/LB56Rx.png" alt="LB56Rx.png">](<a href="https://imgtu.com/i/LB56Rx%EF%BC%89">https://imgtu.com/i/LB56Rx）</a></p>
+</li>
+<li><p>导数与微分</p>
+<ul>
+<li>常微分 </li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span>y&#x27;+p(z)y+q(x)=0<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>y&#x27;&#x27;+py&#x27;+qy=0<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;dy&#125;&#123;dx&#125;=2x<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;d<span class="built_in">^</span>2y&#125;&#123;dx<span class="built_in">^</span>2&#125;=x<span class="keyword">\frac</span>&#123;dy&#125;&#123;dx&#125;+<span class="keyword">\alpha</span>=0<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>偏微分</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;<span class="keyword">\partial</span> y&#125;&#123;<span class="keyword">\partial</span> x&#125;+t<span class="keyword">\frac</span>&#123;<span class="keyword">\partial</span> y&#125;&#123;<span class="keyword">\partial</span> z&#125;=0<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5cz6"><img src="https://s1.ax1x.com/2022/04/19/LB5cz6.png" alt="LB5cz6.png"></a></p>
+</li>
+<li><p>求和</p>
+</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\sum</span><span class="built_in">_</span>&#123;k=1&#125;<span class="built_in">^</span>n k<span class="built_in">^</span>2=<span class="keyword">\frac</span>&#123;1&#125;&#123;5&#125;n<span class="built_in">^</span>3+<span class="keyword">\frac</span>&#123;1&#125;&#123;3&#125;n<span class="built_in">^</span>2+n<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB52QK"><img src="https://s1.ax1x.com/2022/04/19/LB52QK.png" alt="LB52QK.png"></a></p>
+<ul>
+<li>极限</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\lim</span><span class="built_in">_</span>&#123;n <span class="keyword">\to</span> <span class="keyword">\infty</span>&#125;f(x)<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5RsO"><img src="https://s1.ax1x.com/2022/04/19/LB5RsO.png" alt="LB5RsO.png"></a></p>
+<ul>
+<li>矩阵</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;displaymath&#125;</span><br><span class="line">    <span class="keyword">\left</span>[</span><br><span class="line">    <span class="keyword">\begin</span>&#123;array&#125;&#123;ccc&#125;</span><br><span class="line">         1<span class="built_in">&amp;</span>2<span class="built_in">&amp;</span>3  <span class="keyword">\\</span></span><br><span class="line">         4<span class="built_in">&amp;</span>5<span class="built_in">&amp;</span>6  <span class="keyword">\\</span></span><br><span class="line">         4<span class="built_in">&amp;</span>5<span class="built_in">&amp;</span>6  <span class="keyword">\\</span></span><br><span class="line">    <span class="keyword">\end</span>&#123;array&#125;</span><br><span class="line">    <span class="keyword">\right</span>]</span><br><span class="line"><span class="keyword">\end</span>&#123;displaymath&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><a href="https://imgtu.com/i/LBjkCD"><img src="https://s1.ax1x.com/2022/04/19/LBjkCD.png" alt="LBjkCD.png"></a></p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;displaymath&#125;</span><br><span class="line">    <span class="keyword">\left</span>[</span><br><span class="line">    <span class="keyword">\begin</span>&#123;array&#125;&#123;cccc&#125;</span><br><span class="line">         1<span class="built_in">&amp;</span>2<span class="built_in">&amp;</span> <span class="keyword">\cdots</span> <span class="built_in">&amp;</span>9  <span class="keyword">\\</span></span><br><span class="line">         4<span class="built_in">&amp;</span>5<span class="built_in">&amp;</span> <span class="keyword">\cdots</span> <span class="built_in">&amp;</span>10  <span class="keyword">\\</span></span><br><span class="line">         <span class="keyword">\vdots</span><span class="built_in">&amp;</span><span class="keyword">\vdots</span><span class="built_in">&amp;</span> <span class="keyword">\ddots</span> <span class="built_in">&amp;</span><span class="keyword">\vdots</span>  <span class="keyword">\\</span></span><br><span class="line">         4<span class="built_in">&amp;</span>5<span class="built_in">&amp;</span> <span class="keyword">\cdots</span> <span class="built_in">&amp;</span>20  <span class="keyword">\\</span></span><br><span class="line">    <span class="keyword">\end</span>&#123;array&#125;latex</span><br><span class="line">    <span class="keyword">\right</span>]</span><br><span class="line"><span class="keyword">\end</span>&#123;displaymath&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><a href="https://imgtu.com/i/LBjA8e"><img src="https://s1.ax1x.com/2022/04/19/LBjA8e.png" alt="LBjA8e.png"></a></p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;displaymath&#125;</span><br><span class="line">f(x)=<span class="keyword">\frac</span>&#123;1&#125;&#123;3&#125;<span class="keyword">\times</span></span><br><span class="line">    <span class="keyword">\left</span>[</span><br><span class="line">    <span class="keyword">\begin</span>&#123;array&#125;&#123;ccc&#125;</span><br><span class="line">         1<span class="built_in">&amp;</span>2<span class="built_in">&amp;</span>3  <span class="keyword">\\</span></span><br><span class="line">         4<span class="built_in">&amp;</span>5<span class="built_in">&amp;</span>6  <span class="keyword">\\</span></span><br><span class="line">         4<span class="built_in">&amp;</span>5<span class="built_in">&amp;</span>6  <span class="keyword">\\</span></span><br><span class="line">    <span class="keyword">\end</span>&#123;array&#125;</span><br><span class="line">    <span class="keyword">\right</span>]</span><br><span class="line"><span class="keyword">\end</span>&#123;displaymath&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LBji4O"><img src="https://s1.ax1x.com/2022/04/19/LBji4O.png" alt="LBji4O.png"></a></p>
+<ul>
+<li>分段函数</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;displaymath&#125;</span><br><span class="line">g(x)=</span><br><span class="line"><span class="keyword">\left</span><span class="keyword">\&#123;</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;array&#125;&#123;cc&#125;</span><br><span class="line">     x+1<span class="built_in">&amp;</span> x&gt;1 <span class="keyword">\\</span></span><br><span class="line">     x<span class="built_in">&amp;</span> x<span class="keyword">\leq</span>1<span class="keyword">\\</span></span><br><span class="line">     </span><br><span class="line"><span class="keyword">\end</span>&#123;array&#125;</span><br><span class="line"><span class="keyword">\right</span>.latex</span><br><span class="line"><span class="keyword">\end</span>&#123;displaymath&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LBjPUK"><img src="https://s1.ax1x.com/2022/04/19/LBjPUK.png" alt="LBjPUK.png"></a></p>
+<h1 id="二、列表"><a href="#二、列表" class="headerlink" title="二、列表"></a>二、列表</h1><h2 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h2><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\maketitle</span></span><br><span class="line"><span class="comment">% 无序列表</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;itemize&#125;</span><br><span class="line">    <span class="keyword">\item</span> subject</span><br><span class="line">    <span class="keyword">\begin</span>&#123;itemize&#125;</span><br><span class="line">        <span class="keyword">\item</span> chinese</span><br><span class="line">        <span class="keyword">\item</span> math</span><br><span class="line">        <span class="keyword">\item</span> english</span><br><span class="line">    <span class="keyword">\end</span>&#123;itemize&#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">\item</span> animal</span><br><span class="line">    <span class="keyword">\begin</span>&#123;itemize&#125;</span><br><span class="line">        <span class="keyword">\item</span> dog</span><br><span class="line">        <span class="keyword">\item</span> cat</span><br><span class="line">    <span class="keyword">\end</span>&#123;itemize&#125;</span><br><span class="line">    <span class="keyword">\item</span> student</span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>&#123;itemize&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5CrD"><img src="https://s1.ax1x.com/2022/04/19/LB5CrD.png" alt="LB5CrD.png"></a></p>
+<h2 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h2><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;enumerate&#125;</span><br><span class="line">    <span class="keyword">\item</span> subject</span><br><span class="line">    <span class="keyword">\begin</span>&#123;enumerate&#125;</span><br><span class="line">        <span class="keyword">\item</span> chinese</span><br><span class="line">        <span class="keyword">\item</span> math</span><br><span class="line">        <span class="keyword">\item</span> english</span><br><span class="line">    <span class="keyword">\end</span>&#123;enumerate&#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">\item</span> animal</span><br><span class="line">    <span class="keyword">\begin</span>&#123;enumerate&#125;</span><br><span class="line">        <span class="keyword">\item</span> dog</span><br><span class="line">        <span class="keyword">\item</span> cat</span><br><span class="line">    <span class="keyword">\end</span>&#123;enumerate&#125;</span><br><span class="line">    <span class="keyword">\item</span> student</span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>&#123;enumerate&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5AIA"><img src="https://s1.ax1x.com/2022/04/19/LB5AIA.png" alt="LB5AIA.png"></a></p>
+<h1 id="三、插入图片"><a href="#三、插入图片" class="headerlink" title="三、插入图片"></a>三、插入图片</h1><ul>
+<li><h2 id="单图"><a href="#单图" class="headerlink" title="单图"></a>单图</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>[12pt]&#123;article&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>[utf8]&#123;ctex&#125;</span><br><span class="line"><span class="comment">% 插入图片的宏包</span></span><br><span class="line"><span class="keyword">\usepackage</span>&#123;graphicx&#125;</span><br><span class="line"><span class="keyword">\date</span>&#123;&#125;</span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="comment">% \maketitle</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;figure&#125;[htp]<span class="comment">%h:here t:top p:pciture,设置图片到顶部</span></span><br><span class="line">    <span class="comment">%设置图片居中</span></span><br><span class="line">    <span class="keyword">\centering</span></span><br><span class="line">    <span class="comment">%导入图片</span></span><br><span class="line">    <span class="keyword">\includegraphics</span>[width=4cm]&#123;dog.jpg&#125;</span><br><span class="line">    <span class="comment">% 设置图片标题</span></span><br><span class="line">    <span class="keyword">\caption</span>&#123;柯基&#125;</span><br><span class="line">    <span class="keyword">\label</span>&#123;fig:my<span class="built_in">_</span>label&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;figure&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5KsS"><img src="https://s1.ax1x.com/2022/04/19/LB5KsS.png" alt="LB5KsS.png"></a></p>
+<ul>
+<li><h2 id="多图排版"><a href="#多图排版" class="headerlink" title="多图排版"></a>多图排版</h2></li>
+</ul>
+<p>导入宏包</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\usepackage</span>&#123;graphicx&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>&#123;subfigure&#125;</span><br></pre></td></tr></table></figure>
+
+<p>嵌入代码</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;figure&#125;[htp]</span><br><span class="line">    <span class="keyword">\centering</span></span><br><span class="line">    <span class="keyword">\subfigure</span>[dog]&#123;  <span class="comment">% 第一个子图，xx 为第一个字体的名称</span></span><br><span class="line">    <span class="keyword">\includegraphics</span>[width=3.4cm]&#123;dog.jpg&#125;  <span class="comment">% 图片路径和大小</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">\quad</span></span><br><span class="line">    <span class="keyword">\subfigure</span>[code]&#123;  <span class="comment">% 第二个子图</span></span><br><span class="line">    <span class="keyword">\includegraphics</span>[width=3.4cm]&#123;code.png&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">\caption</span>&#123;figure&#125;    <span class="comment">% 整个大图的标题</span></span><br><span class="line">    <span class="keyword">\label</span>&#123;fig&#125;       <span class="comment">% 标签</span></span><br><span class="line"><span class="keyword">\end</span>&#123;figure&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB50Z4"><img src="https://s1.ax1x.com/2022/04/19/LB50Z4.png" alt="LB50Z4.png"></a></p>
+<h1 id="四、表格"><a href="#四、表格" class="headerlink" title="四、表格"></a>四、表格</h1><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;table&#125;[htb]</span><br><span class="line">    <span class="keyword">\centering</span></span><br><span class="line">    <span class="comment">% 设置列数，c表示单元格数据居中，|表示表格竖线</span></span><br><span class="line">    <span class="keyword">\begin</span>&#123;tabular&#125;&#123;|c|c|c|c|&#125;</span><br><span class="line">        <span class="keyword">\hline</span><span class="comment">%表格横线</span></span><br><span class="line">         姓名<span class="built_in">&amp;</span>性别<span class="built_in">&amp;</span>年龄<span class="built_in">&amp;</span>成绩  <span class="keyword">\\</span></span><br><span class="line">        <span class="keyword">\hline</span></span><br><span class="line">         张三<span class="built_in">&amp;</span>男<span class="built_in">&amp;</span>18<span class="built_in">&amp;</span>98<span class="keyword">\\</span></span><br><span class="line">         <span class="keyword">\hline</span></span><br><span class="line">         李四<span class="built_in">&amp;</span>女<span class="built_in">&amp;</span>21<span class="built_in">&amp;</span>65<span class="keyword">\\</span></span><br><span class="line">         <span class="keyword">\hline</span></span><br><span class="line">         王五<span class="built_in">&amp;</span>男<span class="built_in">&amp;</span>22<span class="built_in">&amp;</span>66<span class="keyword">\\</span></span><br><span class="line">         <span class="keyword">\hline</span></span><br><span class="line">    <span class="keyword">\end</span>&#123;tabular&#125;</span><br><span class="line">    <span class="keyword">\caption</span>&#123;成绩表&#125;</span><br><span class="line">    <span class="keyword">\label</span>&#123;tab:my<span class="built_in">_</span>label&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;table&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5uM8"><img src="https://s1.ax1x.com/2022/04/19/LB5uM8.png" alt="LB5uM8.png"></a></p>
+<h1 id="五、脚注与定理"><a href="#五、脚注与定理" class="headerlink" title="五、脚注与定理"></a>五、脚注与定理</h1><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>[12pt]&#123;article&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>[utf8]&#123;ctex&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\title</span>&#123;我的论文<span class="keyword">\footnote</span>&#123;发布于2020年&#125;&#125;</span><br><span class="line"><span class="keyword">\author</span>&#123;姜磊<span class="keyword">\footnote</span>&#123;十佳青年学者&#125;&#125;</span><br><span class="line"><span class="keyword">\date</span>&#123;2020/4/13&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\maketitle</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">\section</span>&#123;介绍&#125;</span><br><span class="line">这是介绍<span class="keyword">\footnote</span>&#123;引言&#125;</span><br><span class="line"><span class="keyword">\section</span>&#123;定理&#125;</span><br><span class="line">这是定理</span><br><span class="line"><span class="comment">% 定理,[section]表示加小标</span></span><br><span class="line"><span class="keyword">\newtheorem</span>&#123;theorem&#125;&#123;定理&#125;[section]</span><br><span class="line"><span class="keyword">\begin</span>&#123;theorem&#125;</span><br><span class="line">菲涅尔</span><br><span class="line"><span class="keyword">\end</span>&#123;theorem&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;theorem&#125;</span><br><span class="line">数列定理</span><br><span class="line"><span class="keyword">\end</span>&#123;theorem&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5lZQ"><img src="https://s1.ax1x.com/2022/04/19/LB5lZQ.png" alt="LB5lZQ.png"></a></p>
+<h1 id="六、子标题"><a href="#六、子标题" class="headerlink" title="六、子标题"></a>六、子标题</h1><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\section</span>&#123;绪论&#125;</span><br><span class="line"><span class="keyword">\subsection</span>&#123;背景&#125;</span><br><span class="line"><span class="keyword">\subsection</span>&#123;引言&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB51aj"><img src="https://s1.ax1x.com/2022/04/19/LB51aj.png" alt="LB51aj.png"></a></p>
+<h1 id="七、目录与附录"><a href="#七、目录与附录" class="headerlink" title="七、目录与附录"></a>七、目录与附录</h1><ul>
+<li><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2></li>
+</ul>
+<p>在**\begin{document}**后插入</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\tableofcontents</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5Gin"><img src="https://s1.ax1x.com/2022/04/19/LB5Gin.png" alt="LB5Gin.png"></a></p>
+<ul>
+<li><h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">%首先引入附录宏包</span></span><br><span class="line"><span class="keyword">\usepackage</span>&#123;appendix&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">%在主体中嵌入以下代码</span></span><br><span class="line"><span class="comment">%指定下一页</span></span><br><span class="line"><span class="keyword">\newpage</span></span><br><span class="line"><span class="comment">% 附录</span></span><br><span class="line"><span class="keyword">\appendix</span></span><br><span class="line"><span class="comment">% \appendixpage</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%在目录中插入Appendices</span></span><br><span class="line"><span class="keyword">\addappheadtotoc</span></span><br><span class="line"><span class="keyword">\section</span>&#123;数据&#125;</span><br><span class="line"><span class="keyword">\section</span>&#123;代码&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="八、参考文献"><a href="#八、参考文献" class="headerlink" title="八、参考文献"></a>八、参考文献</h1><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\maketitle</span></span><br><span class="line">this is a book<span class="keyword">\cite</span>&#123;文献1&#125;<span class="keyword">\newline</span></span><br><span class="line">这里引用文献<span class="keyword">\cite</span>&#123;文献2&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">% 参考文献</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;thebibliography&#125;&#123;9&#125;<span class="comment">%9表示参考文献条数为1~9，99表示条数为1~99，以此类推</span></span><br><span class="line"><span class="keyword">\bibitem</span>&#123;文献1&#125;胡欣韵.数据挖掘算法的改进研究[D].安徽大学，2019</span><br><span class="line"><span class="keyword">\bibitem</span>&#123;文献2&#125; Macqueen J.Some methods for classification and analysis of multivariate observations[C].Proceedings of the Fifth BerKeley Symposium on Mathematical and Probability,BerKeley,1967,1(14):281-297</span><br><span class="line"><span class="keyword">\end</span>&#123;thebibliography&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><a href="https://imgtu.com/i/LB5UMT"><img src="https://s1.ax1x.com/2022/04/19/LB5UMT.png" alt="LB5UMT.png"></a></p>
+<h1 id="九、字体设置"><a href="#九、字体设置" class="headerlink" title="九、字体设置"></a>九、字体设置</h1><h2 id="字体样式"><a href="#字体样式" class="headerlink" title="字体样式"></a>字体样式</h2><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">This is a new book<span class="keyword">\\</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="加粗"><a href="#加粗" class="headerlink" title="加粗"></a>加粗</h3></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">This is a <span class="keyword">\textbf</span>&#123;new&#125; book<span class="keyword">\\</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="斜体"><a href="#斜体" class="headerlink" title="斜体"></a>斜体</h3></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">This is a <span class="keyword">\textit</span>&#123;new&#125; book<span class="keyword">\\</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="字母大写"><a href="#字母大写" class="headerlink" title="字母大写"></a>字母大写</h3></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">This is a <span class="keyword">\textsc</span>&#123;new&#125; book<span class="keyword">\\</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="等线"><a href="#等线" class="headerlink" title="等线"></a>等线</h3></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">This is a <span class="keyword">\texttt</span>&#123;new&#125; book<span class="keyword">\\</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5tzV"><img src="https://s1.ax1x.com/2022/04/19/LB5tzV.png" alt="LB5tzV.png"></a></p>
+<ul>
+<li><h3 id="自定义字体"><a href="#自定义字体" class="headerlink" title="自定义字体"></a>自定义字体</h3><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\newCJKfontfamily</span><span class="keyword">\huawenxinwei</span>&#123;STXINWEI.TTF&#125;[AutoFakeSlant,AutoFakeBold]<span class="comment">%华文新魏</span></span><br></pre></td></tr></table></figure>
+
+<p>如：</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\kai</span> <span class="keyword">\fontsize</span>&#123;42pt&#125;&#123;<span class="keyword">\baselineskip</span>&#125;<span class="keyword">\selectfont</span></span><br><span class="line">你好世界</span><br><span class="line"><span class="keyword">\huawenxinwei</span> <span class="keyword">\zihao</span>&#123;0&#125;</span><br><span class="line">你好世界</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5BdJ"><img src="https://s1.ax1x.com/2022/04/19/LB5BdJ.png" alt="LB5BdJ.png"></a></p>
+</li>
+</ul>
+<h2 id="字体大小"><a href="#字体大小" class="headerlink" title="字体大小"></a>字体大小</h2><ul>
+<li><h4 id="第一种设置"><a href="#第一种设置" class="headerlink" title="第一种设置"></a>第一种设置</h4></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">This is a &#123;<span class="keyword">\tiny</span> new&#125; book<span class="keyword">\\</span></span><br><span class="line">This is a &#123;<span class="keyword">\scriptsize</span> new&#125; book<span class="keyword">\\</span></span><br><span class="line">This is a &#123;<span class="keyword">\footnotesize</span> new&#125; book<span class="keyword">\\</span></span><br><span class="line">This is a &#123;<span class="keyword">\normalsize</span> new&#125; book<span class="keyword">\\</span></span><br><span class="line">This is a &#123;<span class="keyword">\large</span> new&#125; book<span class="keyword">\\</span></span><br><span class="line">This is a &#123;<span class="keyword">\Large</span> new&#125; book<span class="keyword">\\</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5asU"><img src="https://s1.ax1x.com/2022/04/19/LB5asU.png" alt="LB5asU.png"></a></p>
+<ul>
+<li><h4 id="第二种设置"><a href="#第二种设置" class="headerlink" title="第二种设置"></a>第二种设置</h4></li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\chuhao</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;42pt&#125;&#123;44.9pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 初号, 1.5倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\xiaochu</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;30pt&#125;&#123;40pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 小初, 1.5倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\yihao</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;26pt&#125;&#123;36pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 一号, 1.4倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\erhao</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;22pt&#125;&#123;28pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 二号, 1.25倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\xiaoer</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;18pt&#125;&#123;18pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 小二, 单倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\sanhao</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;16pt&#125;&#123;24pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 三号, 1.5倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\xiaosan</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;15pt&#125;&#123;22pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 小三, 1.5倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\sihao</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;14pt&#125;&#123;21pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 四号, 1.5倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\banxiaosi</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;13pt&#125;&#123;19.5pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 半小四, 1.5倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\xiaosi</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;12pt&#125;&#123;18pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 小四, 1.5倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\dawuhao</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;11pt&#125;&#123;11pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 大五号, 单倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\wuhao</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;10.5pt&#125;&#123;10.5pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 五号, 单倍行距</span></span><br><span class="line"><span class="keyword">\newcommand</span>&#123;<span class="keyword">\xiaowu</span>&#125;&#123;<span class="keyword">\fontsize</span>&#123;9pt&#125;&#123;9pt&#125;<span class="keyword">\selectfont</span>&#125;  <span class="comment">% 五号, 单倍行距</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="第三种设置"><a href="#第三种设置" class="headerlink" title="第三种设置"></a>第三种设置</h4></li>
+</ul>
+<p>加载<strong>ctex</strong>宏包</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\zihao</span>&#123;1&#125;<span class="comment">%一号字体</span></span><br><span class="line"><span class="keyword">\zihao</span>&#123;-3&#125;<span class="comment">%小三号字体</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="十、页面设置"><a href="#十、页面设置" class="headerlink" title="十、页面设置"></a>十、页面设置</h1><h2 id="页边距"><a href="#页边距" class="headerlink" title="页边距"></a>页边距</h2><figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 设置页边距，左右1.5，上下均为1</span></span><br><span class="line"><span class="keyword">\usepackage</span>[left=1.5in,right=1.5in,top=1in,botton=1in]&#123;geometry&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="行间距"><a href="#行间距" class="headerlink" title="行间距"></a>行间距</h2><ul>
+<li>全局行间距</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">% 设置全局行间距1.5倍，默认1.2倍行间距</span></span><br><span class="line"><span class="keyword">\linespread</span>&#123;1.5&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>段落行间距</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="comment">%包裹段落使用\linespread&#123;2&#125;\selectfont</span></span><br><span class="line">&#123;<span class="keyword">\linespread</span>&#123;2&#125;<span class="keyword">\selectfont</span></span><br><span class="line">“物以类聚，人以群分”，生活中离不开聚类。聚类分析仅根据在数据中发现</span><br><span class="line">的描述对象及其关系的信息，将数据对象分组。其目标是，使不同类之间的数据</span><br><span class="line">对象彼此相异，同一类内的数据对象彼此相似。组内的相似性(同质性)越大，</span><br><span class="line">组间差别越大，聚类就越好。<span class="keyword">\par</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如：</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>[12pt]&#123;article&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>[utf8]&#123;ctex&#125;</span><br><span class="line"><span class="comment">% 设置页边距，左右1.5，上下均为1</span></span><br><span class="line"><span class="keyword">\usepackage</span>[left=1.5in,right=1.5in,top=1in,botton=1in]&#123;geometry&#125;</span><br><span class="line"><span class="comment">% 设置全局行间距1.5倍，默认1.2倍行间距</span></span><br><span class="line"><span class="keyword">\linespread</span>&#123;1.5&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\title</span>&#123;我的论文<span class="keyword">\footnote</span>&#123;发布于2020年&#125;&#125;</span><br><span class="line"><span class="keyword">\author</span>&#123;姜磊<span class="keyword">\footnote</span>&#123;十佳青年学者&#125;&#125;</span><br><span class="line"><span class="keyword">\date</span>&#123;2020/4/13&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\maketitle</span></span><br><span class="line"><span class="keyword">\section</span>&#123;聚类分析&#125;</span><br><span class="line"><span class="comment">% 设置段落行间距</span></span><br><span class="line">&#123;<span class="keyword">\linespread</span>&#123;2&#125;<span class="keyword">\selectfont</span></span><br><span class="line">“物以类聚，人以群分”，生活中离不开聚类。聚类分析仅根据在数据中发现</span><br><span class="line">的描述对象及其关系的信息，将数据对象分组。其目标是，使不同类之间的数据</span><br><span class="line">对象彼此相异，同一类内的数据对象彼此相似。组内的相似性(同质性)越大，</span><br><span class="line">组间差别越大，聚类就越好。<span class="keyword">\par</span>&#125;</span><br><span class="line">聚类是典型的交叉学科，在很多领域有广泛的应用，其研究已有 60 多年的</span><br><span class="line">历史。聚类分析是一个不断探索的分析过程，分类时根据数据本身进行分类而无</span><br><span class="line">需预先确定分类标准。采用不同的方法进行聚类分析得到的结果往往不尽相同。</span><br><span class="line">从现实应用角度分析，聚类无疑为数据挖掘的重要任务之一。它不仅可以作为一</span><br><span class="line">个单独的工具，有效获取数据的分布状况，观察每个类中数据的特征，从而进一</span><br><span class="line">步分析所研究的特定的聚类集合，也能够作为分类和相关性分析等其他算法的预</span><br><span class="line">处理步骤。聚类能够发现数据之间的潜在关系，从而进一步得到数据的分布模式，</span><br><span class="line">因此在数据分析、图像处理、模式识别、市场分析等领域中它已被广泛应用</span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5yJ1"><img src="https://s1.ax1x.com/2022/04/19/LB5yJ1.png" alt="LB5yJ1.png"></a></p>
+<h2 id="页眉页脚"><a href="#页眉页脚" class="headerlink" title="页眉页脚"></a>页眉页脚</h2><ul>
+<li>标准 LaTeX 提供下列四种页版式，可用 <strong>\pagestyle{页版式}</strong> 命令来设置页面版式：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>LaTeX标准页版式</th>
+<th>样式说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>empty</td>
+<td>无页眉页脚</td>
+</tr>
+<tr>
+<td>plain（默认）</td>
+<td>无页眉，页脚为居中页码</td>
+</tr>
+<tr>
+<td>headings</td>
+<td>页眉为章节标题，无页脚</td>
+</tr>
+<tr>
+<td>myheadings</td>
+<td>页眉内容可自定义，无页脚</td>
+</tr>
+</tbody></table>
+<ul>
+<li>自定义页眉页脚</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\pagestyle</span>&#123;fancy&#125;</span><br><span class="line"><span class="comment">% 自定义页眉</span></span><br><span class="line"><span class="keyword">\lhead</span>&#123;team&#125;</span><br><span class="line"><span class="keyword">\chead</span>&#123;聚类分析&#125;</span><br><span class="line"><span class="keyword">\rhead</span>&#123;lof1&#125;</span><br><span class="line"><span class="comment">% 自定义页脚</span></span><br><span class="line"><span class="keyword">\lfoot</span>&#123;&#125;</span><br><span class="line"><span class="keyword">\cfoot</span>&#123;第<span class="keyword">\thepage</span> 页&#125;<span class="comment">%\thepage显示当前页码</span></span><br><span class="line"><span class="keyword">\rfoot</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="overleaf中文显示"><a href="#overleaf中文显示" class="headerlink" title="overleaf中文显示"></a>overleaf中文显示</h2><p>引入</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\usepackage</span>[utf8]&#123;ctex&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改<strong>菜单</strong>中<strong>编辑器</strong>选项为<strong>xeLaTex</strong></p>
+<p><a href="https://imgtu.com/i/LB5JGq"><img src="https://s1.ax1x.com/2022/04/19/LB5JGq.png" alt="LB5JGq.png"></a></p>
+<h2 id="控制符"><a href="#控制符" class="headerlink" title="控制符"></a>控制符</h2><ul>
+<li>换行</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\\</span></span><br><span class="line">或</span><br><span class="line"><span class="keyword">\newline</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>换段</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\par</span></span><br></pre></td></tr></table></figure>
+
+<p>如：</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">你好世界<span class="keyword">\\</span></span><br><span class="line">我是你<span class="keyword">\par</span></span><br><span class="line">我是谁</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://imgtu.com/i/LB5dLF"><img src="https://s1.ax1x.com/2022/04/19/LB5dLF.png" alt="LB5dLF.png"></a></p>
+<ul>
+<li><p>显示当前页码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">\thepage</span><br></pre></td></tr></table></figure></li>
+<li><p>空格</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">~</span><br><span class="line"><span class="keyword">\quad</span><span class="comment">%一个空格</span></span><br><span class="line"><span class="keyword">\qquad</span><span class="comment">%两个空格</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Latex符号大全"><a href="#Latex符号大全" class="headerlink" title="Latex符号大全"></a>Latex符号大全</h2><p><a href="https://blog.csdn.net/YEN_CSDN/article/details/79966985">(14条消息) LaTex符号大全（LaTeX_Symbols）_YEN_csdn的博客-CSDN博客_latex符号</a></p>
+]]></content>
+  </entry>
 </search>
