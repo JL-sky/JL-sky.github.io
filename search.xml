@@ -1,123 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>堆排序</title>
-    <url>/2022/04/05/%E5%A0%86%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">heapAdjust</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> p, <span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> temp = num[p];<span class="comment">//取出根节点，待找到该根节点的子树中最大的节点之后与该根节点进行交换</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span> * p + <span class="number">1</span>; i &lt; n; i = <span class="number">2</span>*i+<span class="number">1</span>)<span class="comment">//遍历子树，寻找最大节点</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (i + <span class="number">1</span> &lt; n &amp;&amp; num[i + <span class="number">1</span>] &gt; num[i]) i++;<span class="comment">//首先比较父节点的两个孩子的最大值</span></span><br><span class="line">		<span class="keyword">if</span> (temp &gt;= num[i]) <span class="keyword">break</span>;<span class="comment">//如果父节点比两个孩子节点都大，则不需要交换，说明当前子树已经是大根堆</span></span><br><span class="line">		num[p] = num[i];<span class="comment">//将最大孩子进行上移为父节点</span></span><br><span class="line">		p = i;<span class="comment">//继续遍历子树，保证其子树也是大根堆</span></span><br><span class="line">	&#125;</span><br><span class="line">	num[p] = temp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">heapSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//构建初始大根堆</span></span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = n / <span class="number">2</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)<span class="comment">//从最后一个非叶子节点向上构造大根堆</span></span><br><span class="line">		<span class="built_in">heapAdjust</span>(num, i, n);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> j = n - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//大根堆的第一个数字是最大的,将大根与最后一个数字进行交换，则该数组的最后一个数一定是最大的</span></span><br><span class="line">		<span class="built_in">swap</span>(num[<span class="number">0</span>], num[j]);</span><br><span class="line">		<span class="comment">//将数组长度减去1后，调整堆，重新进行交换</span></span><br><span class="line">		<span class="built_in">heapAdjust</span>(num, <span class="number">0</span>, j);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>冒泡排序</title>
-    <url>/2022/04/05/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">bubbleSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n - i - <span class="number">1</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (num[j + <span class="number">1</span>] &lt; num[j])</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">swap</span>(num[j], num[j + <span class="number">1</span>]);</span><br><span class="line">				flag = <span class="literal">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (!flag)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>希尔排序</title>
-    <url>/2022/04/05/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">shellSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> i, j, temp;</span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> gap = n / <span class="number">2</span>; gap &gt; <span class="number">0</span>; gap = gap / <span class="number">2</span>)<span class="comment">//增量设置的边界条件不能等于0</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (i = gap; i &lt; n; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = num[i];</span><br><span class="line">			<span class="keyword">for</span> (j = i - gap; j &gt;= <span class="number">0</span> &amp;&amp; temp&lt;num[j]; j -= gap)</span><br><span class="line">				num[j + gap] = num[j];</span><br><span class="line">			num[j + gap] = temp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>快速排序</title>
-    <url>/2022/04/05/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">paratition</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> low, <span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> base = num[low];<span class="comment">//选择基准元素</span></span><br><span class="line">	<span class="keyword">while</span> (low &lt; high)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="comment">//num[high] &gt;= base中的=判断不能省略</span></span><br><span class="line">		<span class="keyword">while</span> (num[high] &gt;= base  &amp;&amp; low &lt; high   ) high--;<span class="comment">//该循环跳出语句中&amp;&amp;前后衔接可互换，但由于&amp;&amp;的短路特性，更建议先判断low&lt;high</span></span><br><span class="line">		num[low] = num[high];</span><br><span class="line">		<span class="keyword">while</span> (low &lt; high &amp;&amp; num[low] &lt;= base ) low++;</span><br><span class="line">		num[high] = num[low];</span><br><span class="line">	&#125;</span><br><span class="line">	num[low] = base;</span><br><span class="line">	<span class="keyword">return</span> low;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">quickSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num,<span class="type">int</span> low,<span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (low &lt; high)<span class="comment">//该语句不可少，只有在low&lt;high时的交换才起作用，否则在递归时会出现错误</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> j = <span class="built_in">paratition</span>(num, low, high);</span><br><span class="line">		<span class="built_in">quickSort</span>(num, low, j - <span class="number">1</span>);</span><br><span class="line">		<span class="built_in">quickSort</span>(num, j + <span class="number">1</span>, high);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>桶排序</title>
-    <url>/2022/04/05/%E6%A1%B6%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">定义一个编号为[0,max]的桶，其中max为待排序数组当中的最大值</span><br><span class="line">遍历数组，将数组的中的元素值放到该元素对应编号的桶中，桶数组的值代表放入桶中的个数，初始时桶中个数为0</span><br><span class="line">按照桶的编号顺序依次取出桶中的元素</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//桶排序</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bucketSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//思想：</span></span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">	<span class="type">int</span> max=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (nums[i] &gt; max)</span><br><span class="line">			max = nums[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">bucket</span><span class="params">(max+<span class="number">1</span>, <span class="number">0</span>)</span></span>;<span class="comment">//初始化桶</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)<span class="comment">//将数组中的数放到对应编号的桶中</span></span><br><span class="line">		bucket[nums[i]]++;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>,j=<span class="number">0</span>; i &lt;= max; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span> (bucket[i]--&gt; <span class="number">0</span>)</span><br><span class="line">			nums[j++] = i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>归并排序</title>
-    <url>/2022/04/05/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">merge</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> low, <span class="type">int</span> mid, <span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; help;<span class="comment">//定义辅助数组</span></span><br><span class="line">	help.<span class="built_in">resize</span>(high - low + <span class="number">1</span>);</span><br><span class="line">	<span class="type">int</span> i = low, j = mid + <span class="number">1</span>, k = <span class="number">0</span>;<span class="comment">//i为第一序列的扫描指针，j为第二序列的扫描指针，k为辅助数组的扫描指针</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt;= mid &amp;&amp; j &lt;= high)<span class="comment">// = 不能省略</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (num[i] &lt; num[j]) help[k++] = num[i++];</span><br><span class="line">		<span class="keyword">else</span> help[k++] = num[j++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (i &lt;= mid) help[k++] = num[i++];</span><br><span class="line">	<span class="keyword">while</span> (j &lt;= high) help[k++] = num[j++];</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = low, k = <span class="number">0</span>; i &lt;= high; i++, k++)</span><br><span class="line">	&#123;</span><br><span class="line">		num[i] = help[k];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">mergeSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> low, <span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (low == high)<span class="comment">//递归跳出条件，即当子序列长度为1时终止递归</span></span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="type">int</span> mid = (low + high) / <span class="number">2</span>;</span><br><span class="line">	<span class="built_in">mergeSort</span>(num, low, mid);<span class="comment">//递归划分左区间，直到区间序列个数为1时终止递归</span></span><br><span class="line">	<span class="built_in">mergeSort</span>(num, mid + <span class="number">1</span>, high);<span class="comment">//递归划分右区间，知道区间序列个数为1时终止递归</span></span><br><span class="line">	<span class="built_in">merge</span>(num, low, mid, high);<span class="comment">//合并</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>直接插入排序</title>
-    <url>/2022/04/05/%E7%9B%B4%E6%8E%A5%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">insertSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> i, j, temp;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; num.<span class="built_in">size</span>(); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		temp = num[i];</span><br><span class="line">		<span class="keyword">for</span> (j = i - <span class="number">1</span>; j &gt;= <span class="number">0</span> &amp;&amp; temp&lt;num[j]; j--)<span class="comment">//易错点，&amp;&amp;前后不可拆分为if语句，这是一个连续的循环</span></span><br><span class="line">		&#123;</span><br><span class="line">			num[j + <span class="number">1</span>] = num[j];</span><br><span class="line">		&#125;</span><br><span class="line">		num[j + <span class="number">1</span>] = temp;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>选择排序</title>
-    <url>/2022/04/05/%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>算法思想：</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">selectSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> min = i;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; n; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (num[j] &lt; num[min])</span><br><span class="line">			&#123;</span><br><span class="line">				min = j;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (min != i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">swap</span>(num[min], num[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>内部排序</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title></title>
     <url>/2022/04/14/Latex/</url>
     <content><![CDATA[<h1 id="一、公式详解"><a href="#一、公式详解" class="headerlink" title="一、公式详解"></a>一、公式详解</h1><ul>
@@ -417,5 +300,985 @@
 </ul>
 <h2 id="Latex符号大全"><a href="#Latex符号大全" class="headerlink" title="Latex符号大全"></a>Latex符号大全</h2><p><a href="https://blog.csdn.net/YEN_CSDN/article/details/79966985">(14条消息) LaTex符号大全（LaTeX_Symbols）_YEN_csdn的博客-CSDN博客_latex符号</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>内部排序</title>
+    <url>/2022/04/05/%E5%86%85%E9%83%A8%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>本文总结了八种内部排序算法思想及各种适用优缺点（附c++代码）</p>
+<span id="more"></span>
+<h1 id="直接插入排序"><a href="#直接插入排序" class="headerlink" title="直接插入排序"></a>直接插入排序</h1><p>算法思想：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">insertSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> i, j, temp;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; num.<span class="built_in">size</span>(); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		temp = num[i];</span><br><span class="line">		<span class="keyword">for</span> (j = i - <span class="number">1</span>; j &gt;= <span class="number">0</span> &amp;&amp; temp&lt;num[j]; j--)<span class="comment">//易错点，&amp;&amp;前后不可拆分为if语句，这是一个连续的循环</span></span><br><span class="line">		&#123;</span><br><span class="line">			num[j + <span class="number">1</span>] = num[j];</span><br><span class="line">		&#125;</span><br><span class="line">		num[j + <span class="number">1</span>] = temp;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h1><p>算法思想：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">shellSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> i, j, temp;</span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> gap = n / <span class="number">2</span>; gap &gt; <span class="number">0</span>; gap = gap / <span class="number">2</span>)<span class="comment">//增量设置的边界条件不能等于0</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (i = gap; i &lt; n; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = num[i];</span><br><span class="line">			<span class="keyword">for</span> (j = i - gap; j &gt;= <span class="number">0</span> &amp;&amp; temp&lt;num[j]; j -= gap)</span><br><span class="line">				num[j + gap] = num[j];</span><br><span class="line">			num[j + gap] = temp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>算法思想：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">bubbleSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n - i - <span class="number">1</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (num[j + <span class="number">1</span>] &lt; num[j])</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">swap</span>(num[j], num[j + <span class="number">1</span>]);</span><br><span class="line">				flag = <span class="literal">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (!flag)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>算法思想：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">paratition</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> low, <span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> base = num[low];<span class="comment">//选择基准元素</span></span><br><span class="line">	<span class="keyword">while</span> (low &lt; high)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="comment">//num[high] &gt;= base中的=判断不能省略</span></span><br><span class="line">		<span class="keyword">while</span> (num[high] &gt;= base  &amp;&amp; low &lt; high   ) high--;<span class="comment">//该循环跳出语句中&amp;&amp;前后衔接可互换，但由于&amp;&amp;的短路特性，更建议先判断low&lt;high</span></span><br><span class="line">		num[low] = num[high];</span><br><span class="line">		<span class="keyword">while</span> (low &lt; high &amp;&amp; num[low] &lt;= base ) low++;</span><br><span class="line">		num[high] = num[low];</span><br><span class="line">	&#125;</span><br><span class="line">	num[low] = base;</span><br><span class="line">	<span class="keyword">return</span> low;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">quickSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num,<span class="type">int</span> low,<span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (low &lt; high)<span class="comment">//该语句不可少，只有在low&lt;high时的交换才起作用，否则在递归时会出现错误</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> j = <span class="built_in">paratition</span>(num, low, high);</span><br><span class="line">		<span class="built_in">quickSort</span>(num, low, j - <span class="number">1</span>);</span><br><span class="line">		<span class="built_in">quickSort</span>(num, j + <span class="number">1</span>, high);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>算法思想：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">selectSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> min = i;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; n; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (num[j] &lt; num[min])</span><br><span class="line">			&#123;</span><br><span class="line">				min = j;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (min != i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">swap</span>(num[min], num[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><p>算法思想：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">heapAdjust</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> p, <span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> temp = num[p];<span class="comment">//取出根节点，待找到该根节点的子树中最大的节点之后与该根节点进行交换</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span> * p + <span class="number">1</span>; i &lt; n; i = <span class="number">2</span>*i+<span class="number">1</span>)<span class="comment">//遍历子树，寻找最大节点</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (i + <span class="number">1</span> &lt; n &amp;&amp; num[i + <span class="number">1</span>] &gt; num[i]) i++;<span class="comment">//首先比较父节点的两个孩子的最大值</span></span><br><span class="line">		<span class="keyword">if</span> (temp &gt;= num[i]) <span class="keyword">break</span>;<span class="comment">//如果父节点比两个孩子节点都大，则不需要交换，说明当前子树已经是大根堆</span></span><br><span class="line">		num[p] = num[i];<span class="comment">//将最大孩子进行上移为父节点</span></span><br><span class="line">		p = i;<span class="comment">//继续遍历子树，保证其子树也是大根堆</span></span><br><span class="line">	&#125;</span><br><span class="line">	num[p] = temp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">heapSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//构建初始大根堆</span></span><br><span class="line">	<span class="type">int</span> n = num.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = n / <span class="number">2</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)<span class="comment">//从最后一个非叶子节点向上构造大根堆</span></span><br><span class="line">		<span class="built_in">heapAdjust</span>(num, i, n);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> j = n - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//大根堆的第一个数字是最大的,将大根与最后一个数字进行交换，则该数组的最后一个数一定是最大的</span></span><br><span class="line">		<span class="built_in">swap</span>(num[<span class="number">0</span>], num[j]);</span><br><span class="line">		<span class="comment">//将数组长度减去1后，调整堆，重新进行交换</span></span><br><span class="line">		<span class="built_in">heapAdjust</span>(num, <span class="number">0</span>, j);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>算法思想：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">merge</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> low, <span class="type">int</span> mid, <span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; help;<span class="comment">//定义辅助数组</span></span><br><span class="line">	help.<span class="built_in">resize</span>(high - low + <span class="number">1</span>);</span><br><span class="line">	<span class="type">int</span> i = low, j = mid + <span class="number">1</span>, k = <span class="number">0</span>;<span class="comment">//i为第一序列的扫描指针，j为第二序列的扫描指针，k为辅助数组的扫描指针</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt;= mid &amp;&amp; j &lt;= high)<span class="comment">// = 不能省略</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (num[i] &lt; num[j]) help[k++] = num[i++];</span><br><span class="line">		<span class="keyword">else</span> help[k++] = num[j++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (i &lt;= mid) help[k++] = num[i++];</span><br><span class="line">	<span class="keyword">while</span> (j &lt;= high) help[k++] = num[j++];</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = low, k = <span class="number">0</span>; i &lt;= high; i++, k++)</span><br><span class="line">	&#123;</span><br><span class="line">		num[i] = help[k];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">mergeSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; num, <span class="type">int</span> low, <span class="type">int</span> high)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (low == high)<span class="comment">//递归跳出条件，即当子序列长度为1时终止递归</span></span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="type">int</span> mid = (low + high) / <span class="number">2</span>;</span><br><span class="line">	<span class="built_in">mergeSort</span>(num, low, mid);<span class="comment">//递归划分左区间，直到区间序列个数为1时终止递归</span></span><br><span class="line">	<span class="built_in">mergeSort</span>(num, mid + <span class="number">1</span>, high);<span class="comment">//递归划分右区间，知道区间序列个数为1时终止递归</span></span><br><span class="line">	<span class="built_in">merge</span>(num, low, mid, high);<span class="comment">//合并</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>算法思想：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">定义一个编号为[0,max]的桶，其中max为待排序数组当中的最大值</span><br><span class="line">遍历数组，将数组的中的元素值放到该元素对应编号的桶中，桶数组的值代表放入桶中的个数，初始时桶中个数为0</span><br><span class="line">按照桶的编号顺序依次取出桶中的元素</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//桶排序</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bucketSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//思想：</span></span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">	<span class="type">int</span> max=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (nums[i] &gt; max)</span><br><span class="line">			max = nums[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">bucket</span><span class="params">(max+<span class="number">1</span>, <span class="number">0</span>)</span></span>;<span class="comment">//初始化桶</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)<span class="comment">//将数组中的数放到对应编号的桶中</span></span><br><span class="line">		bucket[nums[i]]++;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>,j=<span class="number">0</span>; i &lt;= max; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span> (bucket[i]--&gt; <span class="number">0</span>)</span><br><span class="line">			nums[j++] = i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+        <tag>数据结构与算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>c++系统编程</title>
+    <url>/2022/04/20/c++%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p>c++系统编程</p>
+<span id="more"></span>
+<h1 id="多进程编程"><a href="#多进程编程" class="headerlink" title="多进程编程"></a>多进程编程</h1><h2 id="1-创建子进程"><a href="#1-创建子进程" class="headerlink" title="1.创建子进程"></a>1.创建子进程</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span>int main()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> pid=fork();</span><br><span class="line">    <span class="keyword">if</span>(pid&lt;<span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>( <span class="string">&quot;error! \n&quot;</span> );</span><br><span class="line">    <span class="keyword">if</span>(pid&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>( <span class="string">&quot;father-&gt; pid : %d, fpid : %d\n&quot;</span> , <span class="built_in">getpid</span>() , <span class="built_in">getppid</span>( ) );</span><br><span class="line">        <span class="built_in">sleep</span> ( <span class="number">1</span>);<span class="comment">//让父进程后死亡</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pid==<span class="number">0</span>)</span><br><span class="line">    	<span class="built_in">printf</span>( <span class="string">&quot;child-&gt; pid : %d , fpid:%d\n&quot;</span> , <span class="built_in">getpid</span>() , <span class="built_in">getppid</span>( ));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>父子进程的执行是随机的</li>
+<li>子进程完全复制父进程用户区的数据，但与父进程的内核区的数据不完全相同，如进程id</li>
+</ul>
+<h2 id="2-创建三个子进程"><a href="#2-创建三个子进程" class="headerlink" title="2.创建三个子进程"></a>2.创建三个子进程</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="type">int</span> pid=fork();</span><br><span class="line">                <span class="keyword">if</span>(pid&lt;<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="built_in">printf</span>(<span class="string">&quot;error!\n&quot;</span>);</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(pid&gt;<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="built_in">printf</span>(<span class="string">&quot;father-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line">                        <span class="comment">// sleep(1);//让父进程后死亡</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(pid==<span class="number">0</span>)</span><br><span class="line">                        <span class="built_in">printf</span>(<span class="string">&quot;child-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">sleep</span>(<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/3a75007c0e06e4cd.png"><img src="https://s3.bmp.ovh/imgs/2022/04/19/8429dd51eae9c26b.png"></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="type">int</span> pid=fork();</span><br><span class="line">                <span class="keyword">if</span>(pid&lt;<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="built_in">printf</span>(<span class="string">&quot;error!\n&quot;</span>);</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(pid&gt;<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="built_in">printf</span>(<span class="string">&quot;father-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line">                        <span class="comment">// sleep(1);//让父进程后死亡</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(pid==<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="built_in">printf</span>(<span class="string">&quot;child-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line">                        <span class="keyword">break</span>;<span class="comment">//让子进程不再创建子进程</span></span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">sleep</span>(<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/753811118e8f49b0.png"></p>
+<ul>
+<li>在写操作下父子进程之间不共享全局变量，但在读操作下他们共享一份变量</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> glo=<span class="number">99</span>;<span class="comment">//定义全局变量，在父进程中修改它，在子进程中打印它，看他是否出现变化</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> pid=fork();</span><br><span class="line">        <span class="keyword">if</span>(pid&lt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;error!\n&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(pid&gt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;father-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%p&quot;</span>,&amp;glo);<span class="comment">//输出地址</span></span><br><span class="line">                glo++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(pid==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">sleep</span>(<span class="number">1</span>);<span class="comment">//让父进程先执行</span></span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;child-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,glo);</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%p&quot;</span>,&amp;glo);<span class="comment">//输出地址</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">sleep</span>(<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/a300a273b08723b0.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/1faf7cbb8a23a478.png"></p>
+<h2 id="3-execl函数族"><a href="#3-execl函数族" class="headerlink" title="3.execl函数族"></a>3.execl函数族</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv[])</span><span class="comment">//第一个参数为命令行的个数，第二个参数为命令行字符串，如ls -l，则argc=2，其中argv[0]=&quot;ls&quot;,argv[1]=&quot;-l&quot;</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	cout&lt;&lt;<span class="string">&quot;hello world&quot;</span>&lt;&lt;endl;</span><br><span class="line"> <span class="comment">// for(int i=0;i&lt;argc;i++)</span></span><br><span class="line"> <span class="comment">// &#123;</span></span><br><span class="line"> <span class="comment">//     cout&lt;&lt;&quot;argc[&quot;&lt;&lt;i&lt;&lt;&quot;]:&quot;&lt;&lt;argv[i]&lt;&lt;endl;</span></span><br><span class="line"> <span class="comment">// &#125;</span></span><br><span class="line"> <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="type">int</span> pid=fork();</span><br><span class="line"> <span class="keyword">if</span>(pid&lt;<span class="number">0</span>)</span><br><span class="line"> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;error!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">if</span>(pid&gt;<span class="number">0</span>)</span><br><span class="line"> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;father-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">if</span>(pid==<span class="number">0</span>)</span><br><span class="line"> &#123;</span><br><span class="line">        <span class="built_in">sleep</span>(<span class="number">1</span>);<span class="comment">//让父进程先执行</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child-&gt; pid:%d,fpid:%d\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">getppid</span>());</span><br><span class="line">        <span class="comment">// execl(&quot;/bin/ls&quot;,&quot;ls&quot;,&quot;-l&quot;,NULL);//在子进程中执行系统函数ls，该函数如果执行成功将不返回且不会执行后续代码</span></span><br><span class="line">        <span class="built_in">execl</span>(<span class="string">&quot;./test&quot;</span>,<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>,<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;ls error&quot;</span>);<span class="comment">//若execl函数执行错误将返回并执行后续代码</span></span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">sleep</span>(<span class="number">10</span>);</span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/312324fc97f47069.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/db4bd8090303d36c.png"><img src="https://s3.bmp.ovh/imgs/2022/04/19/4e6b2dcc539323e7.png"></p>
+<h2 id="4-进程的回收"><a href="#4-进程的回收" class="headerlink" title="4.进程的回收"></a>4.进程的回收</h2><h2 id="5-进程间通信"><a href="#5-进程间通信" class="headerlink" title="5.进程间通信"></a>5.进程间通信</h2><h3 id="5-1父子进程管道通信"><a href="#5-1父子进程管道通信" class="headerlink" title="5.1父子进程管道通信"></a>5.1父子进程管道通信</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// #include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">        <span class="comment">//父进程创建管道</span></span><br><span class="line">        <span class="type">int</span> ret=<span class="built_in">pipe</span>(fd);</span><br><span class="line">        <span class="keyword">if</span>(ret&lt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;pipe error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//父进程创建子进程，此时由于父进程已经创建来管道，故创建子进程后管道的读写两端均有父子进程文件描述符</span></span><br><span class="line">        <span class="type">pid_t</span> id=fork();</span><br><span class="line">        <span class="keyword">if</span>(id&lt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;fork error&quot;</span>&lt;&lt;endl;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(id&gt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// 父进程关闭读端</span></span><br><span class="line">                <span class="built_in">close</span>(fd[<span class="number">0</span>]);</span><br><span class="line">                <span class="type">char</span> message[<span class="number">64</span>]=<span class="string">&quot;hello world!&quot;</span>;</span><br><span class="line">                <span class="built_in">write</span>(fd[<span class="number">1</span>],message,<span class="built_in">strlen</span>(message));</span><br><span class="line">                <span class="comment">// 该函数功能为阻塞当前父进程，等待子进程结束后再回收父进程，并且若存在僵尸进程，则它会自动收集僵尸进程当信息并强制撤销僵尸进程</span></span><br><span class="line">                <span class="built_in">wait</span>(<span class="literal">NULL</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(id==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="type">char</span> rev[<span class="number">64</span>];</span><br><span class="line">                <span class="built_in">memset</span>(&amp;rev,<span class="number">0</span>,<span class="built_in">sizeof</span>(rev));</span><br><span class="line">                <span class="comment">// 子进程关闭写端，并接受读取到的数据</span></span><br><span class="line">                <span class="built_in">close</span>(fd[<span class="number">1</span>]);</span><br><span class="line">                <span class="type">int</span> n=<span class="built_in">read</span>(fd[<span class="number">0</span>],rev,<span class="built_in">sizeof</span>(rev));</span><br><span class="line">                cout &lt;&lt;<span class="string">&quot;接受到&quot;</span>&lt;&lt;n&lt;&lt;<span class="string">&quot;个字符---&gt;&quot;</span>&lt;&lt;rev&lt;&lt;endl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/8ce8115939fb3482.png"></p>
+<h3 id="5-2-兄弟进程管道通信"><a href="#5-2-兄弟进程管道通信" class="headerlink" title="5.2 兄弟进程管道通信"></a>5.2 兄弟进程管道通信</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">        <span class="type">int</span> ret=<span class="built_in">pipe</span>(fd);</span><br><span class="line">        <span class="keyword">if</span>(ret&lt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;pipe error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> i=<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="type">int</span> pid=fork();</span><br><span class="line">                <span class="keyword">if</span>(pid&lt;<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;fork error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(pid&gt;<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// cout&lt;&lt;&quot;fater:&quot;&lt;&lt;getpid()&lt;&lt;endl;</span></span><br><span class="line">                        <span class="built_in">wait</span>(<span class="literal">NULL</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;i==&quot;</span>&lt;&lt;i&lt;&lt;<span class="string">&quot;\tchild:&quot;</span>&lt;&lt;<span class="built_in">getpid</span>()&lt;&lt;<span class="string">&quot;---&gt;&quot;</span>&lt;&lt;<span class="built_in">getppid</span>()&lt;                                                                                                                                                             &lt;endl;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(i==<span class="number">0</span>)<span class="comment">//子进程1</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">close</span>(fd[<span class="number">0</span>]);<span class="comment">//关闭读端，写入数据</span></span><br><span class="line">                <span class="type">char</span> message[<span class="number">64</span>]=<span class="string">&quot;hello world!&quot;</span>;</span><br><span class="line">                <span class="built_in">write</span>(fd[<span class="number">1</span>],message,<span class="built_in">strlen</span>(message));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(i==<span class="number">1</span>)<span class="comment">//子进程2</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">close</span>(fd[<span class="number">1</span>]);<span class="comment">//关闭写端，接受数据</span></span><br><span class="line">                <span class="type">char</span> buff[<span class="number">64</span>];</span><br><span class="line">                <span class="built_in">memset</span>(&amp;buff,<span class="number">0</span>,<span class="built_in">sizeof</span>(buff));</span><br><span class="line">                <span class="type">int</span> n=<span class="built_in">read</span>(fd[<span class="number">0</span>],buff,<span class="built_in">sizeof</span>(buff));</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;共受到&quot;</span>&lt;&lt;n&lt;&lt;<span class="string">&quot;个字符\t---&gt;\t&quot;</span>&lt;&lt;buff&lt;&lt;endl;</span><br><span class="line">        &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/2dc733fbe43ce171.png"></p>
+<h3 id="5-3用管道通信模拟系统命令ps-aux-grep-bash"><a href="#5-3用管道通信模拟系统命令ps-aux-grep-bash" class="headerlink" title="5.3用管道通信模拟系统命令ps aux | grep bash"></a>5.3用管道通信模拟系统命令ps aux | grep bash</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">        <span class="type">int</span> ret=<span class="built_in">pipe</span>(fd);</span><br><span class="line">        <span class="keyword">if</span>(ret&lt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;pipe error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> id=fork();</span><br><span class="line">        <span class="keyword">if</span>(id&lt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;fork error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(id&gt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">close</span>(fd[<span class="number">0</span>]);</span><br><span class="line">                <span class="comment">//重定向，将父进程当文件描述符从标准输入输出文件重定向到管道的写端</span></span><br><span class="line">                <span class="built_in">dup2</span>(fd[<span class="number">1</span>],STDOUT_FILENO);</span><br><span class="line">                <span class="comment">//执行系统函数ps aui</span></span><br><span class="line">                <span class="built_in">execlp</span>(<span class="string">&quot;ps&quot;</span>,<span class="string">&quot;ps&quot;</span>,<span class="string">&quot;aux&quot;</span>,<span class="literal">NULL</span>);<span class="comment">//第二个参数为占位符，一般命令当名字来写</span></span><br><span class="line">                <span class="built_in">wait</span>(<span class="literal">NULL</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">close</span>(fd[<span class="number">1</span>]);</span><br><span class="line">                <span class="comment">//重定向，将父进程当文件描述符从标准输入输出文件重定向到管道的读端</span></span><br><span class="line">                <span class="built_in">dup2</span>(fd[<span class="number">0</span>],STDIN_FILENO);</span><br><span class="line">                <span class="built_in">execlp</span>(<span class="string">&quot;grep&quot;</span>,<span class="string">&quot;grep&quot;</span>,<span class="string">&quot;bash&quot;</span>,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/617c3065cae7c438.png"></p>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><h2 id="1-线程创建"><a href="#1-线程创建" class="headerlink" title="1.线程创建"></a>1.线程创建</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">void</span> *<span class="title">mythread</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">//获取子线程所在的进程空间id与其自身进程号</span></span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;child thread,pid==[%d],id==[%ld]\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">pthread_self</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="type">pthread_t</span> thread;<span class="comment">//子线程的线程号</span></span><br><span class="line"> <span class="type">int</span> ret=<span class="built_in">pthread_create</span>(&amp;thread,<span class="literal">NULL</span>,mythread,<span class="literal">NULL</span>);</span><br><span class="line"> <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line"> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pthread_create error,[%s]\n&quot;</span>,<span class="built_in">strerror</span>(ret));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;main thread,pid==[%d],id==[%ld]\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">pthread_self</span>());</span><br><span class="line"> <span class="built_in">sleep</span>(<span class="number">1</span>);<span class="comment">//由于子线程与主线程共享地址空间，故当主线程空间撤销时，子线程也将不存                                                                                                                                                             在，该语句是为了防止子线程还未启动但主线程却撤销</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/a00b740eabb0207e.png"></p>
+<h2 id="2-线程传参"><a href="#2-线程传参" class="headerlink" title="2.线程传参"></a>2.线程传参</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//线程执行函数</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">test</span></span><br><span class="line">&#123;</span><br><span class="line"> <span class="type">int</span> data;</span><br><span class="line"> <span class="comment">// char name[64];</span></span><br><span class="line"> string name;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> *<span class="title">mythread</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">//获取子线程所在的进程空间id与其自身进程号</span></span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;child thread,pid==[%d],id==[%ld]\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">pthread_self</span>());</span><br><span class="line"> <span class="comment">// int n=*(int *)arg;</span></span><br><span class="line"> <span class="comment">// printf(&quot;n=%d\n&quot;,n);</span></span><br><span class="line"> <span class="keyword">struct</span> <span class="title class_">test</span> *t;</span><br><span class="line"> t=(<span class="keyword">struct</span> test*)arg;</span><br><span class="line"> cout&lt;&lt;t-&gt;data&lt;&lt;<span class="string">&quot;\t&quot;</span>&lt;&lt;t-&gt;name&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="type">int</span> n=<span class="number">99</span>;<span class="comment">//传入整型</span></span><br><span class="line"> <span class="keyword">struct</span> <span class="title class_">test</span> t;<span class="comment">//传入结构体</span></span><br><span class="line"> t.data=<span class="number">10</span>;</span><br><span class="line"> t.name=<span class="string">&quot;LiHua&quot;</span>;</span><br><span class="line"> <span class="type">pthread_t</span> thread;</span><br><span class="line"> <span class="comment">// int ret=pthread_create(&amp;thread,NULL,mythread,NULL);</span></span><br><span class="line"> <span class="type">int</span> ret =<span class="built_in">pthread_create</span>(&amp;thread,<span class="literal">NULL</span>,mythread,&amp;t);</span><br><span class="line"> <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line"> &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;pthread_create error,[%s]\n&quot;,strerror(ret));</span></span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;pthread_create error&quot;</span>&lt;&lt;ret&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;main thread,pid==[%d],id==[%ld]\n&quot;</span>,<span class="built_in">getpid</span>(),<span class="built_in">pthread_self</span>());</span><br><span class="line"> <span class="built_in">sleep</span>(<span class="number">1</span>);<span class="comment">//由于子线程与主线程共享地址空间，故当主线程空间撤销时，子线程也将不存                                                                                                                                                             在，该语句是为了防止子线程还未启动但主线程却撤销</span></span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-多线程创建"><a href="#3-多线程创建" class="headerlink" title="3.多线程创建"></a>3.多线程创建</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">person</span></span><br><span class="line">&#123;</span><br><span class="line">        string name;</span><br><span class="line">        <span class="type">int</span> age;</span><br><span class="line">&#125;person;</span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">mythread</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="comment">// person *p;</span></span><br><span class="line">        <span class="comment">// p=(person* )arg;</span></span><br><span class="line">        <span class="comment">// cout&lt;&lt;&quot;name:&quot;&lt;&lt;p-&gt;name&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// cout&lt;&lt;&quot;age:&quot;&lt;&lt;p-&gt;age&lt;&lt;endl;</span></span><br><span class="line">        <span class="type">int</span> n=*(<span class="type">int</span>*)arg;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;\t&quot;</span>&lt;&lt;n&lt;&lt;<span class="string">&quot;-&gt;&quot;</span>&lt;&lt;<span class="built_in">getpid</span>()&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="built_in">pthread_self</span>()&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="comment">// person per;</span></span><br><span class="line">        <span class="comment">// per.name=&quot;李华&quot;;</span></span><br><span class="line">        <span class="comment">// per.age=18;</span></span><br><span class="line">        <span class="type">pthread_t</span> thread[<span class="number">5</span>];</span><br><span class="line">        <span class="type">int</span> arr[<span class="number">5</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                arr[i]=i;</span><br><span class="line">                <span class="type">int</span> ret =<span class="built_in">pthread_create</span>(&amp;thread[i],<span class="literal">NULL</span>,mythread,&amp;arr[i]);</span><br><span class="line">                <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;pthread_create error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;<span class="built_in">getpid</span>()&lt;&lt;<span class="string">&quot;\t--&gt;\t&quot;</span>&lt;&lt;<span class="built_in">pthread_self</span>()&lt;&lt;endl;</span><br><span class="line">        <span class="built_in">sleep</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/ac0485d9b4260bfd.png"></p>
+<h2 id="4-线程分离"><a href="#4-线程分离" class="headerlink" title="4.线程分离"></a>4.线程分离</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">pthread_detach</span><span class="params">(<span class="type">pthread_t</span> thread)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">功能   使调用线程与当前进程分离，分离后不代表此线程不依赖当前进程，线程分离的目的是将线程资源回收</span></span><br><span class="line"><span class="comment">       的工作交由系统自动完成，也就是说当被分离的线程结束之后，系统会自动回收它的资源，所以，此</span></span><br><span class="line"><span class="comment">       函数不会阻塞</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">参数    thread 线程号</span></span><br><span class="line"><span class="comment">返回    成功 0     失败 非0</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="5-pthread-join"><a href="#5-pthread-join" class="headerlink" title="5.pthread_join()"></a>5.pthread_join()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1. 用于等待其他线程结束：当调用 pthread_join() 时，当前线程会处于阻塞状态，直到被调用的线程结束后，当前线程才会重新开始执行。</span><br><span class="line">2. 对线程的资源进行回收：如果一个线程是非分离的（默认情况下创建的线程都是非分离）并且没有对该线程使用 pthread_join() 的话，该线程结束后并不会释放其内存空间，这会导致该线程变成了“僵尸线程”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">mythread</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">                count++;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;ch_pthread:&quot;</span>&lt;&lt;<span class="built_in">pthread_self</span>()&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">pthread_t</span> thread;</span><br><span class="line">        <span class="type">int</span> ret=<span class="built_in">pthread_create</span>(&amp;thread,<span class="literal">NULL</span>,mythread,<span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;pthread_create error!&quot;</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;thread&lt;&lt;<span class="string">&quot;\nmain_thread:&quot;</span>&lt;&lt;<span class="built_in">pthread_self</span>()&lt;&lt;endl;</span><br><span class="line">        <span class="comment">// pthread_join(thread,NULL);</span></span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;count:&quot;</span>&lt;&lt;count&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/ba5283072d62bcb3.png"></p>
+<h2 id="6-线程同步"><a href="#6-线程同步" class="headerlink" title="6.线程同步"></a>6.线程同步</h2><h3 id="6-1同步概念与测试"><a href="#6-1同步概念与测试" class="headerlink" title="6.1同步概念与测试"></a>6.1同步概念与测试</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">测试：</span><br><span class="line">	设置两个线程和一个全局变量，让两个线程共同计数50000次，在每个线程的实现代码中设置一个中间转换，则必有一次由于线程同步问题无法使得总次数为100000</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> number=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">mythread</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> n;</span><br><span class="line">        <span class="type">int</span> c=*(<span class="type">int</span>*)arg;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">50000</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                n=number;</span><br><span class="line">                n++;</span><br><span class="line">                number=n;</span><br><span class="line">                cout&lt;&lt;c&lt;&lt;<span class="string">&quot; ---&gt; number:&quot;</span>&lt;&lt;number&lt;&lt;endl;</span><br><span class="line">                <span class="built_in">sleep</span>(<span class="number">0.01</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">pthread_t</span> thread[<span class="number">2</span>];</span><br><span class="line">        <span class="type">int</span> arr[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                arr[i]=i;</span><br><span class="line">                <span class="type">int</span> ret=<span class="built_in">pthread_create</span>(&amp;thread[i],<span class="literal">NULL</span>,mythread,&amp;arr[i]);</span><br><span class="line">                <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;第&quot;</span>&lt;&lt;i&lt;&lt;<span class="string">&quot;个线程error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">pthread_join</span>(thread[<span class="number">0</span>],<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_join</span>(thread[<span class="number">1</span>],<span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/d26d3131e21e89ac.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/a6f011a68de1e3c4.png"></p>
+<h3 id="6-2-互斥锁"><a href="#6-2-互斥锁" class="headerlink" title="6.2.互斥锁"></a>6.2.互斥锁</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> number=<span class="number">0</span>;</span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;<span class="comment">//定义互斥锁</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">mythread</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> n;</span><br><span class="line">        <span class="type">int</span> c=*(<span class="type">int</span>*)arg;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">50000</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">pthread_mutex_lock</span>(&amp;mutex);<span class="comment">//加锁</span></span><br><span class="line">            n=number;</span><br><span class="line">            n++;</span><br><span class="line">            number=n;</span><br><span class="line">            cout&lt;&lt;c&lt;&lt;<span class="string">&quot; ---&gt; number:&quot;</span>&lt;&lt;number&lt;&lt;endl;</span><br><span class="line">            <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);<span class="comment">//解锁</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="built_in">pthread_mutex_init</span>(&amp;mutex,<span class="literal">NULL</span>);<span class="comment">//初始化锁</span></span><br><span class="line">        <span class="type">pthread_t</span> thread[<span class="number">2</span>];</span><br><span class="line">        <span class="type">int</span> arr[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                arr[i]=i;</span><br><span class="line">                <span class="type">int</span> ret=<span class="built_in">pthread_create</span>(&amp;thread[i],<span class="literal">NULL</span>,mythread,&amp;arr[i]);</span><br><span class="line">                <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;第&quot;</span>&lt;&lt;i&lt;&lt;<span class="string">&quot;个线程error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">pthread_join</span>(thread[<span class="number">0</span>],<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_join</span>(thread[<span class="number">1</span>],<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_mutex_destroy</span>(&amp;mutex);<span class="comment">//释放锁</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;<span class="comment">//定义锁</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">mythread</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> n;</span><br><span class="line">        <span class="type">int</span> c=*(<span class="type">int</span>*)arg;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">if</span>(c==<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="built_in">pthread_mutex_lock</span>(&amp;mutex);<span class="comment">//第一个线程加锁</span></span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;hello &quot;</span>;</span><br><span class="line">                        <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;world!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);<span class="comment">//第一个线程解锁</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="built_in">pthread_mutex_lock</span>(&amp;mutex);<span class="comment">//第二个线程加锁</span></span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;HELLO &quot;</span>;</span><br><span class="line">                        <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;WORLD!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);<span class="comment">//第二个线程解锁</span></span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="built_in">srand</span>((<span class="type">unsigned</span>)<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">        <span class="built_in">pthread_mutex_init</span>(&amp;mutex,<span class="literal">NULL</span>);<span class="comment">//初始化锁</span></span><br><span class="line">        <span class="type">pthread_t</span> thread[<span class="number">2</span>];</span><br><span class="line">        <span class="type">int</span> arr[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">                arr[i]=i;</span><br><span class="line">                <span class="type">int</span> ret=<span class="built_in">pthread_create</span>(&amp;thread[i],<span class="literal">NULL</span>,mythread,&amp;arr[i]);</span><br><span class="line">                <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;第&quot;</span>&lt;&lt;i&lt;&lt;<span class="string">&quot;个线程error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">pthread_join</span>(thread[<span class="number">0</span>],<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_join</span>(thread[<span class="number">1</span>],<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_mutex_destroy</span>(&amp;mutex);<span class="comment">//释放锁</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>加锁前：</strong></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/9da0a4a5b52a3667.png"></p>
+<p><strong>加锁后：</strong></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/5dfd534c3f74d17c.png"></p>
+<h3 id="6-3-死锁"><a href="#6-3-死锁" class="headerlink" title="6.3 死锁"></a>6.3 死锁</h3><h3 id="6-4-读写锁"><a href="#6-4-读写锁" class="headerlink" title="6.4 读写锁"></a>6.4 读写锁</h3><p><strong>写独占，读共享</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> number=<span class="number">0</span>;</span><br><span class="line"><span class="type">pthread_rwlock_t</span> rwlock;<span class="comment">//定义读写锁</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">thread_read</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> c=*(<span class="type">int</span>*)arg;</span><br><span class="line">        <span class="type">int</span> n;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">pthread_rwlock_rdlock</span>(&amp;rwlock);<span class="comment">//加读锁</span></span><br><span class="line">                n=number;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;r:[&quot;</span>&lt;&lt;c&lt;&lt;<span class="string">&quot;]&quot;</span>&lt;&lt;n&lt;&lt;endl;</span><br><span class="line">                <span class="built_in">pthread_rwlock_unlock</span>(&amp;rwlock);<span class="comment">//解锁</span></span><br><span class="line">                <span class="built_in">sleep</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">thread_write</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="type">int</span> c=*(<span class="type">int</span>*)arg;</span><br><span class="line">        <span class="type">int</span> n;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">pthread_rwlock_wrlock</span>(&amp;rwlock);<span class="comment">//加写锁</span></span><br><span class="line">                n=number;</span><br><span class="line">                n++;</span><br><span class="line">                number=n;</span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;w:[&quot;</span>&lt;&lt;c&lt;&lt;<span class="string">&quot;]&quot;</span>&lt;&lt;number&lt;&lt;endl;</span><br><span class="line">                <span class="built_in">pthread_rwlock_unlock</span>(&amp;rwlock);<span class="comment">//解锁</span></span><br><span class="line">                <span class="built_in">sleep</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="built_in">pthread_rwlock_init</span>(&amp;rwlock,<span class="literal">NULL</span>);<span class="comment">//读写锁初始化</span></span><br><span class="line">        <span class="type">int</span> arr[<span class="number">8</span>];</span><br><span class="line">        <span class="type">pthread_t</span> thread[<span class="number">8</span>];</span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)<span class="comment">//定义三个写进程</span></span><br><span class="line">        &#123;</span><br><span class="line">                arr[i]=i;</span><br><span class="line">                <span class="type">int</span> ret=<span class="built_in">pthread_create</span>(&amp;thread[i],<span class="literal">NULL</span>,thread_write,&amp;arr[i]);</span><br><span class="line">                <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;thread_read error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">3</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//定义五个读进程</span></span><br><span class="line">        &#123;</span><br><span class="line">                arr[i]=i;</span><br><span class="line">                <span class="type">int</span> ret=<span class="built_in">pthread_create</span>(&amp;thread[i],<span class="literal">NULL</span>,thread_read,&amp;arr[i]);</span><br><span class="line">                <span class="keyword">if</span>(ret!=<span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;thread_write error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;<span class="number">8</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">pthread_join</span>(thread[j],<span class="literal">NULL</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">pthread_rwlock_destroy</span>(&amp;rwlock);<span class="comment">//释放读写锁</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>加锁前：</strong></p>
+<p><img src="https://s2.loli.net/2022/04/19/2g61hQAtdsXeBEZ.png" alt="image-20220411172728414.png"></p>
+<p><strong>加锁后：</strong></p>
+<p><img src="https://s2.loli.net/2022/04/19/1RFXThacAfGJwUo.png" alt="image-20220411172523719.png"></p>
+<h3 id="6-5条件变量"><a href="#6-5条件变量" class="headerlink" title="6.5条件变量"></a>6.5条件变量</h3><h4 id="6-5-1-单生产者消费者线程"><a href="#6-5-1-单生产者消费者线程" class="headerlink" title="6.5.1 单生产者消费者线程"></a>6.5.1 单生产者消费者线程</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//定义链表结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="type">int</span> data;</span><br><span class="line">        <span class="keyword">struct</span> <span class="title class_">node</span>* next;</span><br><span class="line">&#125;node,*list;</span><br><span class="line"></span><br><span class="line"><span class="comment">//维护一个共享链表</span></span><br><span class="line">list l=<span class="literal">NULL</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> 0</span></span><br><span class="line">l=<span class="keyword">new</span> node;</span><br><span class="line">l-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//定义互斥变量与条件变量</span></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;</span><br><span class="line"><span class="type">pthread_cond_t</span> cond;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生产者进程</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">producer</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="comment">// list l=(node*)arg;</span></span><br><span class="line">        <span class="built_in">srand</span>((<span class="type">unsigned</span>)<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//生产产品</span></span><br><span class="line">            node* s=<span class="keyword">new</span> node;</span><br><span class="line"></span><br><span class="line">            s-&gt;data=<span class="built_in">rand</span>()%<span class="number">100</span>+<span class="number">1</span>;</span><br><span class="line">            cout&lt;&lt;<span class="string">&quot;生产中：&quot;</span>&lt;&lt;s-&gt;data&lt;&lt;endl;</span><br><span class="line">            <span class="comment">//将产品放入共享数据区域</span></span><br><span class="line">            <span class="built_in">pthread_mutex_lock</span>(&amp;mutex);<span class="comment">//加锁</span></span><br><span class="line"></span><br><span class="line">            <span class="meta">#<span class="keyword">if</span> 0</span></span><br><span class="line">            s-&gt;next=l-&gt;next;</span><br><span class="line">            l-&gt;next=s;</span><br><span class="line">            <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">            <span class="comment">//头插</span></span><br><span class="line">            <span class="meta">#<span class="keyword">if</span> 1</span></span><br><span class="line">            s-&gt;next=l;</span><br><span class="line">            l=s;</span><br><span class="line">            <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">            <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);<span class="comment">//解锁</span></span><br><span class="line">            <span class="comment">//发信号取数据，若有多个等待被唤醒的线程，则该函数可一次性唤醒所有等待唤醒的线程，这些之前等待的线程将自行抢占CPU</span></span><br><span class="line">            <span class="built_in">pthread_cond_signal</span>(&amp;cond);</span><br><span class="line">            <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//消费者进程</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">consumer</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="built_in">srand</span>((<span class="type">unsigned</span>)<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">        <span class="comment">// list l=(node*)arg;</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//从共享数据区域中取数据</span></span><br><span class="line">            <span class="built_in">pthread_mutex_lock</span>(&amp;mutex);<span class="comment">//加锁</span></span><br><span class="line">            <span class="keyword">if</span>(l==<span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//等待生产者进程唤醒该进程</span></span><br><span class="line">                <span class="built_in">pthread_cond_wait</span>(&amp;cond,&amp;mutex);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//取产品</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">// node* p=l-&gt;next;</span></span><br><span class="line">            node* p=l;</span><br><span class="line">            cout&lt;&lt;<span class="string">&quot;已消费：&quot;</span>&lt;&lt;p-&gt;data&lt;&lt;endl;</span><br><span class="line">            <span class="comment">// l-&gt;next=p-&gt;next;</span></span><br><span class="line">            l=l-&gt;next;</span><br><span class="line">            <span class="keyword">delete</span> p;</span><br><span class="line">            <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);<span class="comment">//解锁</span></span><br><span class="line">            <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="built_in">pthread_mutex_init</span>(&amp;mutex,<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_cond_init</span>(&amp;cond,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">pthread_t</span> threadProducer;</span><br><span class="line">        <span class="type">pthread_t</span> threadConsumer;</span><br><span class="line">        <span class="comment">//维护一个共享链表</span></span><br><span class="line">        <span class="comment">// list l=(node*)malloc(sizeof(node));</span></span><br><span class="line">        <span class="comment">// list l=new node;</span></span><br><span class="line">        <span class="comment">// l-&gt;next=NULL;</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">pthread_create</span>(&amp;threadProducer,<span class="literal">NULL</span>,producer,&amp;l);</span><br><span class="line">        <span class="built_in">pthread_create</span>(&amp;threadConsumer,<span class="literal">NULL</span>,consumer,&amp;l);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">pthread_join</span>(threadProducer,<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_join</span>(threadConsumer,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">pthread_mutex_destroy</span>(&amp;mutex);</span><br><span class="line">        <span class="built_in">pthread_cond_destroy</span>(&amp;cond);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：</strong>pthread_cond_wait()函数必须与mutex互斥变量配对使用，因为其内部实现的主要步骤为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.线程放在等待队列上，解锁</span><br><span class="line"></span><br><span class="line">2.等待 pthread_cond_signal或者pthread_cond_broadcast信号之后去竞争锁</span><br><span class="line"></span><br><span class="line">3.若竞争到互斥索则加锁。</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/04/19/zwARMPNqJ4LaoHi.png" alt="image-20220412142530152.png"></p>
+<h4 id="6-5-2-多生产者消费者线程"><a href="#6-5-2-多生产者消费者线程" class="headerlink" title="6.5.2 多生产者消费者线程"></a>6.5.2 多生产者消费者线程</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//定义链表节点结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> data;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">node</span>* next;</span><br><span class="line">&#125;node,*list;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义共享数据区域</span></span><br><span class="line">list l=<span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> 0</span></span><br><span class="line">l=<span class="keyword">new</span> node;</span><br><span class="line">l-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//定义互斥变量与条件变量</span></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;</span><br><span class="line"><span class="type">pthread_cond_t</span> cond;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生产者线程</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">producer</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> n=*(<span class="type">int</span>*)arg;</span><br><span class="line">    <span class="built_in">srand</span>((<span class="type">unsigned</span>)<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//生产数据</span></span><br><span class="line">        node* s=<span class="keyword">new</span> node;</span><br><span class="line">        s-&gt;data=<span class="built_in">rand</span>()%<span class="number">100</span>+<span class="number">1</span>;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;[&quot;</span>&lt;&lt;n&lt;&lt;<span class="string">&quot;]生产：&quot;</span>&lt;&lt;s-&gt;data&lt;&lt;endl;</span><br><span class="line">        <span class="comment">//互斥将生产的数据放入共享缓冲区</span></span><br><span class="line">        <span class="built_in">pthread_mutex_lock</span>(&amp;mutex);<span class="comment">//加锁</span></span><br><span class="line"></span><br><span class="line">        <span class="meta">#<span class="keyword">if</span> 0</span></span><br><span class="line">        s-&gt;next=l-&gt;next;</span><br><span class="line">        l-&gt;next=s;</span><br><span class="line">        <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">        <span class="comment">//头插法将数据插入到缓冲区中</span></span><br><span class="line">        <span class="meta">#<span class="keyword">if</span> 1</span></span><br><span class="line">        s-&gt;next=l;</span><br><span class="line">        l=s;</span><br><span class="line">        <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">        <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);<span class="comment">//解锁</span></span><br><span class="line">        <span class="built_in">pthread_cond_signal</span>(&amp;cond);<span class="comment">//唤醒消费者进程</span></span><br><span class="line">        <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//消费者线程</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">consumer</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> n=*(<span class="type">int</span>*)arg;</span><br><span class="line">    <span class="built_in">srand</span>((<span class="type">unsigned</span>)<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">    <span class="comment">// list l=(node*)arg;</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">pthread_mutex_lock</span>(&amp;mutex);</span><br><span class="line">        <span class="keyword">if</span>(l==<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">pthread_cond_wait</span>(&amp;cond,&amp;mutex);<span class="comment">//等待唤醒</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//由于pthread_cond_singal()唤醒的所有的消费者进程，使得各消费者进行抢占CPU，因此会出现一个消费者消费完所有数据后此后还有消费者取数据，而此时l==NULL,故p-&gt;data中已无数据</span></span><br><span class="line">        <span class="keyword">if</span>(l==<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);<span class="comment">//当出现缓冲区中数据无数据进行判断时，首先需要对缓冲区进行解锁以防止出现死锁现象</span></span><br><span class="line">            <span class="keyword">continue</span>;<span class="comment">//跳出该消费者取数据循环中</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// node* p=l-&gt;next;</span></span><br><span class="line">        node* p=l;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;[&quot;</span>&lt;&lt;n&lt;&lt;<span class="string">&quot;]消费：&quot;</span>&lt;&lt;p-&gt;data&lt;&lt;endl;</span><br><span class="line">        <span class="comment">// l-&gt;next=p-&gt;next;</span></span><br><span class="line">        l=l-&gt;next;</span><br><span class="line">        <span class="keyword">delete</span> p;</span><br><span class="line">        <span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);</span><br><span class="line">        <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">pthread_mutex_init</span>(&amp;mutex,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">pthread_cond_init</span>(&amp;cond,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义五个生产者与消费者进程组</span></span><br><span class="line">    <span class="type">pthread_t</span> threadProducer[<span class="number">5</span>];</span><br><span class="line">    <span class="type">pthread_t</span> threadConsumer[<span class="number">5</span>];</span><br><span class="line">    <span class="type">int</span> arr[<span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        arr[i]=i;</span><br><span class="line">        <span class="built_in">pthread_create</span>(&amp;threadProducer[i],<span class="literal">NULL</span>,producer,&amp;arr[i]);</span><br><span class="line">        <span class="built_in">pthread_create</span>(&amp;threadConsumer[i],<span class="literal">NULL</span>,consumer,&amp;arr[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;<span class="number">5</span>;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">pthread_join</span>(threadProducer[j],<span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">pthread_join</span>(threadConsumer[j],<span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_mutex_destroy</span>(&amp;mutex);</span><br><span class="line">    <span class="built_in">pthread_cond_destroy</span>(&amp;cond);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/04/19/eH78TNj5b1Xwof9.png" alt="image-20220412124128152.png"></p>
+<h4 id="6-5-3-信号量"><a href="#6-5-3-信号量" class="headerlink" title="6.5.3 信号量"></a>6.5.3 信号量</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//定义链表节点结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> data;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">node</span>* next;</span><br><span class="line">&#125;node,*list;</span><br><span class="line"><span class="comment">//定义共享区域</span></span><br><span class="line">list l=<span class="literal">NULL</span>;</span><br><span class="line"><span class="comment">//定义信号量</span></span><br><span class="line"><span class="type">sem_t</span> pro;</span><br><span class="line"><span class="type">sem_t</span> con;</span><br><span class="line"><span class="comment">//生产者线程</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">producer</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">srand</span>((<span class="type">unsigned</span>)<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">sem_wait</span>(&amp;pro);</span><br><span class="line">        <span class="comment">//生产数据</span></span><br><span class="line">        node* s=<span class="keyword">new</span> node;</span><br><span class="line">        s-&gt;data=<span class="built_in">rand</span>()%<span class="number">100</span>+<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//将数据存放共享区域</span></span><br><span class="line">        s-&gt;next=l;</span><br><span class="line">        l=s;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;producer:&quot;</span>&lt;&lt;s-&gt;data&lt;&lt;endl;</span><br><span class="line">        <span class="built_in">sem_post</span>(&amp;con);<span class="comment">//给消费者发信号数据已经存放完毕</span></span><br><span class="line">        <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//消费者线程</span></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="title">consumer</span><span class="params">(<span class="type">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">srand</span>((<span class="type">unsigned</span>)<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">sem_wait</span>(&amp;con);</span><br><span class="line">        <span class="comment">//从共享区域中读出数据</span></span><br><span class="line">        node* p=l;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;consumer:&quot;</span>&lt;&lt;p-&gt;data&lt;&lt;endl;</span><br><span class="line">        <span class="comment">//将读出的数据从共享区域中删除</span></span><br><span class="line">        l=p-&gt;next;</span><br><span class="line">        <span class="keyword">delete</span> p;</span><br><span class="line">        <span class="built_in">sem_post</span>(&amp;pro);<span class="comment">//给生产者发信号数据已从共享区域中读出</span></span><br><span class="line">        <span class="built_in">sleep</span>(<span class="built_in">rand</span>()%<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//初始化信号量</span></span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;pro,<span class="number">0</span>,<span class="number">5</span>);</span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;con,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//设置线程id</span></span><br><span class="line">    <span class="type">pthread_t</span> thread_producer;</span><br><span class="line">    <span class="type">pthread_t</span> thread_consumer;</span><br><span class="line">    <span class="comment">//创建子线程</span></span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;thread_producer,<span class="literal">NULL</span>,producer,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;thread_consumer,<span class="literal">NULL</span>,consumer,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//等待子线程退出，并回收子线程区域</span></span><br><span class="line">    <span class="built_in">pthread_join</span>(thread_producer,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">pthread_join</span>(thread_consumer,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//销毁子线程</span></span><br><span class="line">    <span class="built_in">sem_destroy</span>(&amp;pro);</span><br><span class="line">    <span class="built_in">sem_destroy</span>(&amp;con);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/04/19/8KuOnj2Bx3r7gJm.png" alt="image-20220413102851778.png"></p>
+]]></content>
+      <categories>
+        <category>系统编程</category>
+      </categories>
+      <tags>
+        <tag>系统编程</tag>
+        <tag>c++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux基础命令</title>
+    <url>/2022/04/20/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>Linux基础命令</p>
+<span id="more"></span>
+
+<h1 id="linux命令"><a href="#linux命令" class="headerlink" title="linux命令"></a>linux命令</h1><h2 id="1-常用终端命令"><a href="#1-常用终端命令" class="headerlink" title="1.常用终端命令"></a>1.常用终端命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ls</td>
+<td>list</td>
+<td>查看当前文件夹内容</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>print work directory</td>
+<td>查看当前所在文件夹</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>change directory</td>
+<td>进入文件夹</td>
+</tr>
+<tr>
+<td>cd ..</td>
+<td>.代表当前目录     ..代表上一级目录</td>
+<td>返回上一级文件夹</td>
+</tr>
+<tr>
+<td>cd ~</td>
+<td></td>
+<td>默认返回根目录</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>make director</td>
+<td>创建文件夹</td>
+</tr>
+<tr>
+<td>rmdir</td>
+<td>remove director</td>
+<td>删除文件夹</td>
+</tr>
+<tr>
+<td>touch</td>
+<td>touch</td>
+<td>创建文件</td>
+</tr>
+<tr>
+<td>rm</td>
+<td>remove</td>
+<td>删除文件</td>
+</tr>
+<tr>
+<td>clear</td>
+<td></td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>cp</td>
+<td>copy</td>
+<td>拷贝文件</td>
+</tr>
+<tr>
+<td>mv</td>
+<td>move</td>
+<td>移动文件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>tips:</p>
+<ul>
+<li>ctrl+shift+&#x3D;	放大终端窗口字体显示</li>
+<li>ctrl+-   缩小终端窗口字体显示</li>
+</ul>
+<h2 id="2-终端命令格式"><a href="#2-终端命令格式" class="headerlink" title="2.终端命令格式"></a>2.终端命令格式</h2><p>command [-options] [parameter]</p>
+<p>如：rm -r 111	删除名为111的文件夹</p>
+<h2 id="3-查阅终端命令帮助文档"><a href="#3-查阅终端命令帮助文档" class="headerlink" title="3.查阅终端命令帮助文档"></a>3.查阅终端命令帮助文档</h2><p>command –help</p>
+<p>man command	命令使用手册</p>
+<h1 id="文件和目录命令"><a href="#文件和目录命令" class="headerlink" title="文件和目录命令"></a>文件和目录命令</h1><h2 id="2-1-ls命令说明"><a href="#2-1-ls命令说明" class="headerlink" title="2.1 ls命令说明"></a>2.1 ls命令说明</h2><p>功能：显示当前目录文件，对应于DOS下的dir命令</p>
+<p>linux文件特点：<br>以.开头的文件为隐藏文件，需要用-a参数才能显示，如下：</p>
+<p><img src="https://s2.loli.net/2022/04/20/VGk9boiSsXlYvKn.png" alt="image-20220322153918108.png"></p>
+<h2 id="2-2-ls常用选项"><a href="#2-2-ls常用选项" class="headerlink" title="2.2 ls常用选项"></a>2.2 <strong>ls</strong>常用选项</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a</td>
+<td>显示指定目录下所有子目录及其文件，包括隐藏文件</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>以列表方式显示文件详细信息</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>与-l配合以人性化的方式显示文件大小</td>
+</tr>
+</tbody></table>
+<p>如下：</p>
+<p><img src="https://s2.loli.net/2022/04/20/dGz3uwjYTQftVcg.png" alt="image-20220322154755553.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/ODikzv7Rh41eyQP.png" alt="image-20220322154904581.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/NcoAjmasRJPWGC2.png" alt="image-20220322154951860.png"></p>
+<h2 id="2-3-ls通配符"><a href="#2-3-ls通配符" class="headerlink" title="2.3 ls通配符"></a>2.3 ls通配符</h2><table>
+<thead>
+<tr>
+<th>通配符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>匹配任意个数的字符</td>
+</tr>
+<tr>
+<td>？</td>
+<td>匹配某一个字符，但不能代表0个字符</td>
+</tr>
+<tr>
+<td>[abc]</td>
+<td>匹配abc中任意一个字符</td>
+</tr>
+<tr>
+<td>[a-f]</td>
+<td>匹配a-f字母中任意一个字符</td>
+</tr>
+</tbody></table>
+<h2 id="2-4-cd切换目录"><a href="#2-4-cd切换目录" class="headerlink" title="2.4 cd切换目录"></a>2.4 cd切换目录</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cd</td>
+<td>切换到目录</td>
+</tr>
+<tr>
+<td>cd ~</td>
+<td>切换到当前用户的家目录</td>
+</tr>
+<tr>
+<td>cd ..</td>
+<td>退出当前目录到上一级目录</td>
+</tr>
+<tr>
+<td>cd -</td>
+<td>在最近两次访问的目录之间切换</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/Tf2wJXoirjuPHk5.png" alt="image-20220322162200576.png"></p>
+<h2 id="2-5-touch创建文件"><a href="#2-5-touch创建文件" class="headerlink" title="2.5 touch创建文件"></a>2.5 touch创建文件</h2><p>1.文件不存在时，创建新的空白文件</p>
+<p>2.文件存在时，可修改文件最后一次修改时间</p>
+<p><img src="https://s2.loli.net/2022/04/20/zWiETkc1HasMLF4.png" alt="image-20220322162957159.png"></p>
+<h2 id="2-6-mkdir创建文件夹"><a href="#2-6-mkdir创建文件夹" class="headerlink" title="2.6 mkdir创建文件夹"></a>2.6 mkdir创建文件夹</h2><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-p</td>
+<td>递归创建文件夹</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/IbB5ErRfu4gj7Uh.png" alt="image-20220322163650769.png"></p>
+<h2 id="2-7-rm-删除文件或文件夹"><a href="#2-7-rm-删除文件或文件夹" class="headerlink" title="2.7 rm 删除文件或文件夹"></a>2.7 rm 删除文件或文件夹</h2><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-f</td>
+<td>强制删除</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>递归删除，删除文件夹时必须使用该参数</td>
+</tr>
+</tbody></table>
+<h1 id="文件拷贝与移动命令"><a href="#文件拷贝与移动命令" class="headerlink" title="文件拷贝与移动命令"></a>文件拷贝与移动命令</h1><h2 id="3-1-tree显示文件树形结构"><a href="#3-1-tree显示文件树形结构" class="headerlink" title="3.1 tree显示文件树形结构"></a>3.1 tree显示文件树形结构</h2><p><strong>功能：</strong>以树形结构显示当前目录下所有文件</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-d</td>
+<td>只显示文件夹</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/wLlgDJXsBpqGdKY.png" alt="image-20220322171941510.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/7JSpxHuhqIzLCsr.png" alt="image-20220322172013314.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/R2hu6SprVnBo3E7.png" alt="image-20220322172031362.png"></p>
+<h2 id="3-2-cp复制文件"><a href="#3-2-cp复制文件" class="headerlink" title="3.2 cp复制文件"></a>3.2 cp复制文件</h2><p><strong>命令：</strong>cp 源文件 目标文件</p>
+<p><strong>作用：</strong>将给出的源文件复制到目标文件或目录中</p>
+<p><img src="https://s2.loli.net/2022/04/20/K2zBNUXMV8Sm6ef.png" alt="image-20220322173405369.png"></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i</td>
+<td>覆盖文件前提示</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>复制文件夹</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/GxyneHsBhwOdTXv.png" alt="image-20220322174537680.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/54Ke8Vo61l2sEHn.png" alt="image-20220322174617008.png"><img src="https://s2.loli.net/2022/04/20/zhmbqneT4RGgoEu.png" alt="image-20220322174656349.png"></p>
+<h2 id="3-3-mv移动文件-x2F-目录或重命名文件-x2F-目录"><a href="#3-3-mv移动文件-x2F-目录或重命名文件-x2F-目录" class="headerlink" title="3.3 mv移动文件&#x2F;目录或重命名文件&#x2F;目录"></a>3.3 mv移动文件&#x2F;目录或重命名文件&#x2F;目录</h2><p><strong>命令：</strong>mv 源文件 目标文件</p>
+<p>1.<strong>移动文件夹</strong></p>
+<p><img src="https://s2.loli.net/2022/04/20/Vy8vRcjHEKLTdDq.png" alt="image-20220322175123337.png"><img src="https://s2.loli.net/2022/04/20/8trNh7OsJyGvXf9.png" alt="image-20220322175305836.png"></p>
+<p>2.<strong>移动文件</strong></p>
+<p><img src="https://s2.loli.net/2022/04/20/A1EFvnCkOWwhfs6.png" alt="image-20220322175437927.png"></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i</td>
+<td>覆盖文件前提示</td>
+</tr>
+</tbody></table>
+<h1 id="文件内容命令"><a href="#文件内容命令" class="headerlink" title="文件内容命令"></a>文件内容命令</h1><h2 id="4-1-cat查看文件内容"><a href="#4-1-cat查看文件内容" class="headerlink" title="4.1 cat查看文件内容"></a>4.1 cat查看文件内容</h2><p><strong>功能：</strong>查看文件内容、创建文件、合并文件、追加文件内容等，适合查看较少内容的文件</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-b</td>
+<td>对非空输出行编号</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>对所有输出行编号</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/789MKrcO1XNYqlG.png" alt="image-20220323163405091.png"><img src="https://s2.loli.net/2022/04/20/vFX7Cs1oHQJZ6q2.png" alt="image-20220323163428189.png"><img src="https://s2.loli.net/2022/04/20/zlnjg7EtdsifOGX.png" alt="image-20220323163538070.png"><img src="https://s2.loli.net/2022/04/20/DfN4LeWAk53RXFt.png" alt="image-20220323163453550.png"></p>
+<h2 id="4-2-more查看文件内容"><a href="#4-2-more查看文件内容" class="headerlink" title="4.2 more查看文件内容"></a>4.2 more查看文件内容</h2><p><strong>功能：</strong>分屏显示文件内容。适合查看较多内容的文件</p>
+<table>
+<thead>
+<tr>
+<th>操作键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>空格键</td>
+<td>显示手册的下一屏</td>
+</tr>
+<tr>
+<td>Enter键</td>
+<td>显示下一行</td>
+</tr>
+<tr>
+<td>b</td>
+<td>回滚一屏</td>
+</tr>
+<tr>
+<td>f</td>
+<td>前滚一屏</td>
+</tr>
+<tr>
+<td>q</td>
+<td>退出</td>
+</tr>
+<tr>
+<td>&#x2F;word</td>
+<td>搜索word字符串</td>
+</tr>
+</tbody></table>
+<h2 id="4-3-grep文本搜索工具"><a href="#4-3-grep文本搜索工具" class="headerlink" title="4.3 grep文本搜索工具"></a>4.3 grep文本搜索工具</h2><p><strong>功能：</strong>查找匹配的文本内容</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-n</td>
+<td>显示匹配的行与行号</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>显示不包含匹配文本的所有行</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>不区分大小写</td>
+</tr>
+</tbody></table>
+<p>常用的两种模式查找：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>^a</td>
+<td>查找以字符a为开头的行</td>
+</tr>
+<tr>
+<td>a$</td>
+<td>查找以字符a为结尾的行</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/AWNorzebOamkpgQ.png" alt="image-20220323165923263.png"><img src="https://s2.loli.net/2022/04/20/a5cJmnhGICvRP9i.png" alt="image-20220323165954584.png"><img src="https://s2.loli.net/2022/04/20/S4GDhUknqBQ1LZj.png" alt="image-20220323170011732.png"></p>
+<h1 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h1><h2 id="5-1-echo终端打印与-gt-、-gt-gt-重定向"><a href="#5-1-echo终端打印与-gt-、-gt-gt-重定向" class="headerlink" title="5.1 echo终端打印与&gt;、&gt;&gt;重定向"></a>5.1 echo终端打印与&gt;、&gt;&gt;重定向</h2><p><strong>echo</strong> hello相当于cout&lt;&lt;”hello”，即将hello字符串在终端打印出来</p>
+<p><strong>重定向</strong>：将文本内容写入到文件当中</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&gt;</td>
+<td>覆盖源文件所有内容</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>在源文件中追加内容</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/uAmnaQB2LlsvrYD.png" alt="image-20220323171443541.png"></p>
+<h2 id="5-2-管道命令"><a href="#5-2-管道命令" class="headerlink" title="5.2 管道命令 |"></a>5.2 管道命令 |</h2><p>Linux允许通过管道命令|将一个命令的输出作为另一个命令的输入</p>
+<p>如：<img src="https://s2.loli.net/2022/04/20/m41fTBpnXtYE5iU.png" alt="image-20220323172709900.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/RnJ2AUuMzDbwjrQ.png" alt="image-20220323172821104.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/qpRTnjfzD6degEx.png" alt="image-20220323173026914.png"></p>
+<h1 id="远程管理命令"><a href="#远程管理命令" class="headerlink" title="远程管理命令"></a>远程管理命令</h1><h2 id="6-1-关机-重启"><a href="#6-1-关机-重启" class="headerlink" title="6.1 关机\重启"></a>6.1 关机\重启</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">shutdown <span class="comment">//默认1分钟后关机</span></span><br><span class="line">shutdown <span class="number">22</span>:<span class="number">22</span> <span class="comment">//在今天的22：22关机</span></span><br><span class="line">shutdown +<span class="number">10</span> <span class="comment">//10分钟后关机</span></span><br><span class="line">shutdown now <span class="comment">//现在立刻关机</span></span><br><span class="line">shutdown -c <span class="comment">//取消关机命令</span></span><br><span class="line">shutdown -r now<span class="comment">//现在重启操作系统</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="6-2-查看-x2F-配置网卡信息"><a href="#6-2-查看-x2F-配置网卡信息" class="headerlink" title="6.2 查看&#x2F;配置网卡信息"></a>6.2 查看&#x2F;配置网卡信息</h2><ul>
+<li><strong>ifconfig</strong>查看网卡配置信息（<strong>DOS</strong>下为<strong>ipconfig</strong>）</li>
+<li>ifconfig | grep inet 查看网卡对应的IP地址</li>
+<li>注意：一台电脑可能有一个物理网卡和多个虚拟网卡，Linux中物理网卡以ensXX表示</li>
+<li>127.0.0.1为本地环回地址，一般用来测试本地网卡是否正常</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/Pw2AiMJfaL4981F.png" alt="image-20220323180126895.png"></p>
+<ul>
+<li><p><strong>ping</strong> IP地址，测试目标IP地址的主机是否连接通常</p>
+</li>
+<li><p>ping 127.0.0.1，测试本机是否连接通畅</p>
+</li>
+<li><p>终止终端程序执行：<strong>CTRL+C</strong></p>
+<p><img src="https://s2.loli.net/2022/04/20/Z2HLjadMqm4QIyW.png" alt="image-20220323180615700.png"></p>
+</li>
+</ul>
+<h2 id="6-3-ssh基础"><a href="#6-3-ssh基础" class="headerlink" title="6.3 ssh基础"></a>6.3 ssh基础</h2><p><img src="https://s2.loli.net/2022/04/20/AQblGB2y8XtuFv6.png" alt="image-20220324092715654.png"></p>
+<ul>
+<li><strong>ssh客户端</strong>是一种使用<strong>secure shell协议</strong>连接到远程计算机的软件程序</li>
+<li>ssh是目前可靠，<strong>专为远程登录会话和其他网络服务</strong>提供安全性的协议<ul>
+<li>通过ssh协议可以有效<strong>防止远程原理过程中的信息泄露</strong></li>
+<li>通过ssh协议可以对所有传输的数据进行加密，也能够<strong>防止DNS欺骗和IP欺骗</strong></li>
+</ul>
+</li>
+<li>ssh协议传输的<strong>数据是经过压缩</strong>的，可以<strong>加快传输速度</strong></li>
+</ul>
+<h3 id="6-3-1-域名与端口号"><a href="#6-3-1-域名与端口号" class="headerlink" title="6.3.1 域名与端口号"></a>6.3.1 域名与端口号</h3><p><strong>域名：</strong>IP地址的别名，如：<a href="http://www.baidu.com/">www.baidu.com</a></p>
+<p><img src="https://s2.loli.net/2022/04/20/GzmYxeXNCEU4qr6.png" alt="image-20220324093342913.png"></p>
+<p><strong>端口号</strong></p>
+<ul>
+<li>通过<strong>IP</strong>地址找到<strong>计算机</strong></li>
+<li>通过<strong>端口号</strong>找到<strong>计算机上运行的应用程序</strong><ul>
+<li>SSH服务器的默认端口号是22，如果是默认端口号，在连接时可以省略</li>
+</ul>
+</li>
+<li>常见服务端口号列表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>服务</th>
+<th>端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>SSH服务器</td>
+<td>22</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Web服务器</td>
+<td>80</td>
+</tr>
+<tr>
+<td>03</td>
+<td>HTTPS</td>
+<td>443</td>
+</tr>
+<tr>
+<td>04</td>
+<td>FTP服务器</td>
+<td>21</td>
+</tr>
+</tbody></table>
+<h3 id="6-3-2-SSH客户端的简单使用"><a href="#6-3-2-SSH客户端的简单使用" class="headerlink" title="6.3.2  SSH客户端的简单使用"></a>6.3.2  SSH客户端的简单使用</h3><p><strong>ssh -p sort user@IP&#x2F;域名</strong></p>
+<p><strong>sort：</strong>端口号，默认为SSH服务器端口号22</p>
+<p><strong>user：</strong>远程机器上的用户名</p>
+<p>（1）查询本地虚拟机Linux的IP地址</p>
+<p><img src="https://s2.loli.net/2022/04/20/9k5aqwW6xpB8AcH.png" alt="image-20220324101003815.png"></p>
+<p>（2）通过DOS窗口连接本地虚拟机，并通过DOS窗口远程对虚拟机进行操作</p>
+<p><img src="https://s2.loli.net/2022/04/20/URST34h2vdnNICu.png" alt="image-20220324101712161.png"></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注：SSH命令只能在Linux系统和UNIX系统下使用c++</span></span><br><span class="line"><span class="comment">//在Windows系统下使用需要安装PUTTY或者Xshell软件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="6-4-scp远程拷贝命令"><a href="#6-4-scp远程拷贝命令" class="headerlink" title="6.4 scp远程拷贝命令"></a>6.4 scp远程拷贝命令</h2><ul>
+<li><strong>scp-scure copy</strong>,在Linux下的远程拷贝命令</li>
+<li>其地址格式与ssh命令相同，但选项**-P为大写字母**</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">scp -P port <span class="number">01.</span>py user@IP:Desktop/<span class="number">01.</span>py   <span class="comment">//将本地01.py文件拷贝到远程桌面上</span></span><br><span class="line">scp -P port user@IP:Desktop/<span class="number">01.</span>py <span class="number">01.</span>py   <span class="comment">//将远程文件拷贝到本地桌面上</span></span><br><span class="line">加上-r选项可以拷贝文件夹</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将虚拟机Desktop文件夹里的123.txt文件拷贝到本地Desktop文件夹下</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/04/20/iKaZdk5y2rftJVT.png" alt="image-20220324151546457.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将本地桌面文件夹的123.txt文件拷贝到虚拟机上的桌面文件夹下</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/04/20/Cf79iL1B3tbwVJZ.png" alt="image-20220324151653275.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将虚拟机桌面文件夹下的aaa文件夹拷贝到本地桌面文件夹下</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/04/20/k8uaWJGl7VMKqj6.png" alt="image-20220324151829083.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将本地桌面文件夹下的aaa文件拷贝到虚拟机的桌面文件夹下</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/04/20/TUIEm9K8SwRux7N.png" alt="image-20220324152035116.png"></p>
+<h1 id="SSH高级"><a href="#SSH高级" class="headerlink" title="SSH高级"></a>SSH高级</h1><h1 id="用户权限"><a href="#用户权限" class="headerlink" title="用户权限"></a>用户权限</h1><h2 id="8-1-基本概念"><a href="#8-1-基本概念" class="headerlink" title="8.1 基本概念"></a>8.1 基本概念</h2><ul>
+<li>对<strong>文件&#x2F;目录</strong>的权限</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>英文</th>
+<th>缩写</th>
+<th>代号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读</td>
+<td>read</td>
+<td>r</td>
+<td>4</td>
+</tr>
+<tr>
+<td>写</td>
+<td>write</td>
+<td>w</td>
+<td>2</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>excute</td>
+<td>x</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<ul>
+<li>组：由几个不同的用户组成，实际应用中，可以对组设置权限，从而避免对每一个用户依次设置权限</li>
+</ul>
+<h2 id="8-2-ls-l详细信息"><a href="#8-2-ls-l详细信息" class="headerlink" title="8.2  ls -l详细信息"></a>8.2  ls -l详细信息</h2><ul>
+<li>权限：第一个字符以d为开头表示目录</li>
+<li>硬连接数：表示有几种方式可以访问当前目录&#x2F;文件</li>
+<li>拥有者：</li>
+<li>组：</li>
+<li>大小：</li>
+<li>时间：</li>
+<li>名称：</li>
+<li><img src="https://s2.loli.net/2022/04/20/fRPD7c8MrAoBFVC.png" alt="image-20220324160218211.png"></li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/94hNoiPbIHEUXWm.png" alt="image-20220324160402306.png"></p>
+<h2 id="8-3-chmod修改权限命令"><a href="#8-3-chmod修改权限命令" class="headerlink" title="8.3 chmod修改权限命令"></a>8.3 chmod修改权限命令</h2><p><strong>作用：</strong>修改<strong>用户&#x2F;组</strong>对<strong>文件&#x2F;目录</strong>的权限</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">chmod +r/w/x 文件名  <span class="comment">//给文件增加权限</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">chmod -r/w/x 文件名  <span class="comment">//给文件取消权限</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>给<strong>文件</strong>增加<strong>执行</strong>权限</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/nyD2WzRxpHfbT7C.png" alt="image-20220324165539972.png"></p>
+<ul>
+<li>给<strong>文件</strong>取消<strong>执行、读取</strong>权限</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/5Qr6RStHWh9Ppaw.png" alt="image-20220324165704094.png"><img src="https://s2.loli.net/2022/04/20/pKUvWwyqb1hTxZ6.png" alt="image-20220324165717075.png"></p>
+<ul>
+<li>给<strong>文件夹</strong>取消<strong>执行</strong>权限</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/oXdABO3TQPMu7ac.png" alt="image-20220324170653231.png"></p>
+<h2 id="8-4-超级用户介绍"><a href="#8-4-超级用户介绍" class="headerlink" title="8.4  超级用户介绍"></a>8.4  超级用户介绍</h2><ul>
+<li><p>Linux系统中存在一个<strong>root</strong>用户用于<strong>对系统的维护和管理</strong>，对操作系统的资源<strong>具有所有访问权限</strong></p>
+</li>
+<li><p>Linux安装过程中，会自动创建一个用户账号，该账号称为<strong>标准用户</strong></p>
+</li>
+<li><p><strong>su</strong>为<strong>substitute user</strong>的缩写，表示用另一个用户的身份</p>
+</li>
+<li><p><strong>sudo</strong>命令意为用其他身份执行命令，预设身份为<strong>root</strong></p>
+</li>
+</ul>
+<h1 id="组管理"><a href="#组管理" class="headerlink" title="组管理"></a>组管理</h1><p>注：<strong>创建组&#x2F;删除组</strong>都需要<strong>sudo</strong>执行</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>groupadd 组名</td>
+<td>添加组</td>
+</tr>
+<tr>
+<td>groupdel  组名</td>
+<td>删除组</td>
+</tr>
+<tr>
+<td>cat &#x2F;etc&#x2F;group</td>
+<td>确认组信息</td>
+</tr>
+<tr>
+<td>chgrp -R 组名 文件&#x2F;目录名</td>
+<td>修改文件&#x2F;目录所在组</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>组信息</strong>都保存在<strong>etc&#x2F;group</strong>中</li>
+<li><strong>&#x2F;etc</strong>是专门用来<strong>保存系统配置文件信息</strong>的目录</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/9csAJPGTLbxyp5w.png" alt="image-20220325160837125.png"><a href="https://imgtu.com/i/LrPniR"><img src="https://s1.ax1x.com/2022/04/20/LrPniR.png" alt="LrPniR.png"></a></p>
+<p><strong>修改文件目录所在组实操：</strong></p>
+<ul>
+<li>创建pythonStudy文件目录</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPKRx"><img src="https://s1.ax1x.com/2022/04/20/LrPKRx.png" alt="LrPKRx.png"></a></p>
+<ul>
+<li>创建dev组</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPeo9"><img src="https://s1.ax1x.com/2022/04/20/LrPeo9.png" alt="LrPeo9.png"></a></p>
+<ul>
+<li>将pythonStudy目录所在组修改为dev</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPZdJ"><img src="https://s1.ax1x.com/2022/04/20/LrPZdJ.png" alt="LrPZdJ.png"></a></p>
+<h1 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h1><h2 id="10-1-终端命令"><a href="#10-1-终端命令" class="headerlink" title="10.1 终端命令"></a>10.1 终端命令</h2><p><strong>注：创建&#x2F;删除用户以及修改用户密码</strong>的终端命令都需要<strong>sudo</strong>执行</p>
+<ul>
+<li><p>创建用户&#x2F;设置密码&#x2F;删除用户</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>useradd -m -g 组 新建用户名</td>
+<td>添加新用户</td>
+<td><strong>-m</strong>自动建立用户家目录<br><strong>-g</strong>指定用户所在组，否则会建立一个同名的组</td>
+</tr>
+<tr>
+<td>passwd 用户名</td>
+<td>设置用户密码</td>
+<td>如果是普通用户，直接用passwd可以直接修改用户密码</td>
+</tr>
+<tr>
+<td>userdel -r 用户名</td>
+<td>删除用户</td>
+<td><strong>-r</strong>选项会自动删除用户家目录</td>
+</tr>
+<tr>
+<td>cat&#x2F;etc&#x2F;passwd|grep 用户名</td>
+<td>确认用户信息</td>
+<td>新建用户后，用户信息会保存在etc&#x2F;passwd文件中</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p><strong>测试</strong></p>
+<ul>
+<li>创建新用户myuser</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrP1sO"><img src="https://s1.ax1x.com/2022/04/20/LrP1sO.png" alt="LrP1sO.png"></a></p>
+<ul>
+<li>修改myuser密码（输入密码时在屏幕上不打印）</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPMz6"><img src="https://s1.ax1x.com/2022/04/20/LrPMz6.png" alt="LrPMz6.png"></a></p>
+<ul>
+<li>在Windows下的putty远程登录软件上登录myuser用户进行测试</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPlQK"><img src="https://s1.ax1x.com/2022/04/20/LrPlQK.png" alt="LrPlQK.png"></a></p>
+<h2 id="10-2-查看用户信息"><a href="#10-2-查看用户信息" class="headerlink" title="10.2 查看用户信息"></a>10.2 查看用户信息</h2><h1 id="查看系统信息"><a href="#查看系统信息" class="headerlink" title="查看系统信息"></a>查看系统信息</h1><ul>
+<li>时间日期<ul>
+<li>date</li>
+<li>cal</li>
+</ul>
+</li>
+<li>磁盘和目录空间<ul>
+<li>df</li>
+<li>du</li>
+</ul>
+</li>
+<li>进程信息<ul>
+<li>ps</li>
+<li>top</li>
+<li>kill</li>
+</ul>
+</li>
+</ul>
+<h2 id="11-1-时间日期"><a href="#11-1-时间日期" class="headerlink" title="11.1  时间日期"></a>11.1  时间日期</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>date</td>
+<td>查看系统时间</td>
+</tr>
+<tr>
+<td>cal</td>
+<td>calendar查看日历，-y 选项可以查看一年的日历</td>
+</tr>
+</tbody></table>
+<p><a href="https://imgtu.com/i/LrPqYR"><img src="https://s1.ax1x.com/2022/04/20/LrPqYR.png" alt="LrPqYR.png"></a></p>
+<h2 id="11-2-磁盘信息"><a href="#11-2-磁盘信息" class="headerlink" title="11.2 磁盘信息"></a>11.2 磁盘信息</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>df -h</td>
+<td>disk free 显示磁盘剩余空间</td>
+</tr>
+<tr>
+<td>du -h[目录名]</td>
+<td>disk usage 显示磁盘目录下的文件大小</td>
+</tr>
+</tbody></table>
+<ul>
+<li>-h表示以人性化的方式显示文件大小</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPLf1"><img src="https://s1.ax1x.com/2022/04/20/LrPLf1.png" alt="LrPLf1.png"></a></p>
+<h2 id="11-3-进程信息"><a href="#11-3-进程信息" class="headerlink" title="11.3 进程信息"></a>11.3 进程信息</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ps aux</td>
+<td>process status 查看进程的详细状态</td>
+</tr>
+<tr>
+<td>top</td>
+<td>动态显示正在运行中的进程</td>
+</tr>
+<tr>
+<td>kill [-9] 进程代号</td>
+<td>终止指定代号的进程，-9表示强制终止</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>ps选项</strong>说明功能</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>显示终端所有进程，包括没有控制终端的进程</td>
+</tr>
+<tr>
+<td>u</td>
+<td>显示进程的详细状态</td>
+</tr>
+<tr>
+<td>x</td>
+<td>显示没有控制终端的进程</td>
+</tr>
+</tbody></table>
+<p>​	</p>
+<h1 id="其他命令-1"><a href="#其他命令-1" class="headerlink" title="其他命令"></a>其他命令</h1><ul>
+<li>查找文件<ul>
+<li>find</li>
+</ul>
+</li>
+<li>软链接<ul>
+<li>ln</li>
+</ul>
+</li>
+<li>打包压缩<ul>
+<li>tar</li>
+</ul>
+</li>
+<li>软件安装<ul>
+<li>apt-get</li>
+</ul>
+</li>
+</ul>
+<h2 id="12-1-查找文件"><a href="#12-1-查找文件" class="headerlink" title="12.1 查找文件"></a>12.1 查找文件</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>find [路径] -name .py</td>
+<td>查找指定路径下扩展名为.py的文件，包括子目录</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>省略路径名，表示在当前目录下查找</p>
+</li>
+<li><p>正则查找</p>
+</li>
+<li><p>搜索桌面文件下，包含“1”的文件</p>
+</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPbk9"><img src="https://s1.ax1x.com/2022/04/20/LrPbk9.png" alt="LrPbk9.png"></a></p>
+<ul>
+<li>搜索桌面文件下，所有以“.txt”为扩展名的文件</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrP7TJ"><img src="https://s1.ax1x.com/2022/04/20/LrP7TJ.png" alt="LrP7TJ.png"></a></p>
+<ul>
+<li>搜索桌面文件下，以数字“1”为开头的文件</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPTw4"><img src="https://s1.ax1x.com/2022/04/20/LrPTw4.png" alt="LrPTw4.png"></a></p>
+<h2 id="12-2-软链接"><a href="#12-2-软链接" class="headerlink" title="12.2 软链接"></a>12.2 软链接</h2><p>​	</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ln -s</td>
+<td>建立该文件的软链接，类似与Windows下的快捷方式</td>
+</tr>
+</tbody></table>
+<ul>
+<li>若没有-s表示建立的是一个硬链接</li>
+<li><strong>源文件</strong>要使用<strong>绝对路径</strong></li>
+</ul>
+<p><strong>演练</strong></p>
+<ul>
+<li>在桌面创建01.py文件与demo&#x2F;b&#x2F;c文件夹，并在01.py文件内写入内容</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPv6K"><img src="https://s1.ax1x.com/2022/04/20/LrPv6K.png" alt="LrPv6K.png"></a></p>
+<ul>
+<li>将01.py文件移动到demo&#x2F;b&#x2F;c文件夹下</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPxOO"><img src="https://s1.ax1x.com/2022/04/20/LrPxOO.png" alt="LrPxOO.png"></a></p>
+<ul>
+<li>在桌面分别创建01.py软链接的相对路径与绝对路径，并分别访问这两个软链接</li>
+</ul>
+<p><a href="https://imgtu.com/i/LriSmD"><img src="https://s1.ax1x.com/2022/04/20/LriSmD.png" alt="LriSmD.png"></a><a href="https://imgtu.com/i/Lrip0e"><img src="https://s1.ax1x.com/2022/04/20/Lrip0e.png" alt="Lrip0e.png"></a></p>
+<ul>
+<li>将01.py相对路径的软链接与硬链接移动到demo&#x2F;b&#x2F;c文件夹下，并分别访问这两个软链接，比较两者差异</li>
+</ul>
+<p><a href="https://imgtu.com/i/Lri9TH"><img src="https://s1.ax1x.com/2022/04/20/Lri9TH.png" alt="Lri9TH.png"></a></p>
+<p><a href="https://imgtu.com/i/LriPkd"><img src="https://s1.ax1x.com/2022/04/20/LriPkd.png" alt="LriPkd.png"></a></p>
+<h2 id="12-3-打包压缩"><a href="#12-3-打包压缩" class="headerlink" title="12.3 打包压缩"></a>12.3 打包压缩</h2><ul>
+<li><strong>windows</strong> 下使用 <strong>rar</strong></li>
+<li><strong>mac</strong> 下使用 <strong>zip</strong></li>
+<li><strong>linux</strong> 下使用 <strong>tar.gz</strong></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
   </entry>
 </search>
