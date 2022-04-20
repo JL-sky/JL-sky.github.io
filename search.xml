@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title></title>
-    <url>/2022/04/14/Latex/</url>
-    <content><![CDATA[<h1 id="一、公式详解"><a href="#一、公式详解" class="headerlink" title="一、公式详解"></a>一、公式详解</h1><ul>
+    <title>Latex</title>
+    <url>/2022/04/05/Latex/</url>
+    <content><![CDATA[<p>latex语法简介</p>
+<span id="more"></span>
+
+<h1 id="一、公式详解"><a href="#一、公式详解" class="headerlink" title="一、公式详解"></a>一、公式详解</h1><ul>
 <li><h2 id="普通公式"><a href="#普通公式" class="headerlink" title="普通公式"></a>普通公式</h2></li>
 </ul>
 <figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\section</span>&#123;公式详解&#125;</span><br><span class="line"><span class="comment">% 普通公式</span></span><br><span class="line"><span class="built_in">$</span> y=x+1 <span class="built_in">$</span><span class="keyword">\newline</span></span><br></pre></td></tr></table></figure>
@@ -73,11 +76,11 @@
 </ul>
 <figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\iint</span> <span class="keyword">\left</span>(x<span class="built_in">^</span>2+y<span class="built_in">^</span>2<span class="keyword">\right</span>)dxdy<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\iiint</span> <span class="keyword">\left</span>(x<span class="built_in">^</span>2+y<span class="built_in">^</span>2+z<span class="built_in">^</span>2<span class="keyword">\right</span>)dxdydz<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
 
-<p>[<img src="https://s1.ax1x.com/2022/04/19/LB56Rx.png" alt="LB56Rx.png">](<a href="https://imgtu.com/i/LB56Rx%EF%BC%89">https://imgtu.com/i/LB56Rx）</a></p>
+<p><a href="https://imgtu.com/i/LB56Rx"><img src="https://s1.ax1x.com/2022/04/19/LB56Rx.png" alt="LB56Rx.png"></a></p>
 </li>
 <li><p>导数与微分</p>
 <ul>
-<li>常微分 </li>
+<li>常微分</li>
 </ul>
 <figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span>y&#x27;+p(z)y+q(x)=0<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span>y&#x27;&#x27;+py&#x27;+qy=0<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;dy&#125;&#123;dx&#125;=2x<span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span><span class="keyword">\frac</span>&#123;d<span class="built_in">^</span>2y&#125;&#123;dx<span class="built_in">^</span>2&#125;=x<span class="keyword">\frac</span>&#123;dy&#125;&#123;dx&#125;+<span class="keyword">\alpha</span>=0<span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
 
@@ -294,12 +297,21 @@
 <p><a href="https://imgtu.com/i/LB5dLF"><img src="https://s1.ax1x.com/2022/04/19/LB5dLF.png" alt="LB5dLF.png"></a></p>
 <ul>
 <li><p>显示当前页码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">\thepage</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">\thepage</span><br></pre></td></tr></table></figure>
+
+
+</li>
 <li><p>空格</p>
 <figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">~</span><br><span class="line"><span class="keyword">\quad</span><span class="comment">%一个空格</span></span><br><span class="line"><span class="keyword">\qquad</span><span class="comment">%两个空格</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="Latex符号大全"><a href="#Latex符号大全" class="headerlink" title="Latex符号大全"></a>Latex符号大全</h2><p><a href="https://blog.csdn.net/YEN_CSDN/article/details/79966985">(14条消息) LaTex符号大全（LaTeX_Symbols）_YEN_csdn的博客-CSDN博客_latex符号</a></p>
 ]]></content>
+      <categories>
+        <category>Latex</category>
+      </categories>
+      <tags>
+        <tag>Latex</tag>
+      </tags>
   </entry>
   <entry>
     <title>内部排序</title>

@@ -1219,9 +1219,6 @@ pre code {
     margin-left: 0;
   }
 }
-.use-motion .menu-item {
-  visibility: hidden;
-}
 .sidebar-inner {
   color: #999;
   max-height: calc(100vh - 24px);
@@ -2697,7 +2694,7 @@ body {
 .main-inner > .tabs-comment,
 .main-inner > .comments,
 .main-inner > .pagination {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.7);
 }
 body {
   color: #000;
@@ -2706,7 +2703,7 @@ body {
   color: #000;
 }
 .posts-expand .post-meta-container {
-  color: #800;
+  color: #f00;
 }
 .content-wrap {
   opacity: 0.9;
