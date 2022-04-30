@@ -2708,3 +2708,14 @@ body {
 .content-wrap {
   opacity: 0.9;
 }
+.btn {
+/* background: var(--btn-default-bg); */
+  border: 2px solid #000;
+  border-radius: 2px;
+  color: #000;
+  display: inline-block;
+  font-size: 0.875em;
+  line-height: 2;
+  padding: 0 20px;
+  transition: background-color 0.2s ease-in-out;
+}
