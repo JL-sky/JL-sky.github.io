@@ -415,9 +415,12 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode</title>
+    <title>图像处理基础</title>
     <url>/2022/05/01/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="图像处理基础"><a href="#图像处理基础" class="headerlink" title="图像处理基础"></a>图像处理基础</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">获取上一级文件路径</span><br><span class="line"></span><br><span class="line">abs_path=os.path.abspath(<span class="string">&quot;..&quot;</span>)</span><br><span class="line">path = abs_path + <span class="string">r&quot;\data\2-7data&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(path)</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<p>本文通过opencv-python介绍了有关计算机视觉图像处理理论基础及相关代码实现</p>
+<span id="more"></span>
+
+<h1 id="图像处理基础"><a href="#图像处理基础" class="headerlink" title="图像处理基础"></a>图像处理基础</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">获取上一级文件路径</span><br><span class="line"></span><br><span class="line">abs_path=os.path.abspath(<span class="string">&quot;..&quot;</span>)</span><br><span class="line">path = abs_path + <span class="string">r&quot;\data\2-7data&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(path)</span><br></pre></td></tr></table></figure>
 
 
 
