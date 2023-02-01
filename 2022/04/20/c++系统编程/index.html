@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>c++系统编程-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="系统编程,c++,">
+<meta name="description" content="本文介绍了多进程编程和多线程编程；其中多进程编程介绍了子进程的创建与GDB调试、execl函数族、孤儿进程与僵尸进程和进程间通信与回收;多线程编程介绍了线程的创建、分离、回收及线程同步和锁机制">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文章目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										关于
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章目录</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">关于</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/系统编程">系统编程</a></li>
+            
+            <li><a href="/tags/c++">c++</a></li>
+            
+            
+        </ul>
+        
+        <h1>c++系统编程</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/系统编程/" target="_blank" >系统编程</a>
+                    
+                </div>
+                <p>2022-04-20 18:55:28</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
+  
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8Blinux%E5%91%BD%E4%BB%A4"><span class="toc-text">多进程linux命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">多进程编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-text">创建子进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%9A%84GDB%E8%B0%83%E8%AF%95"><span class="toc-text">多进程的GDB调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%89%E4%B8%AA%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-text">创建三个子进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#execl%E5%87%BD%E6%95%B0%E6%97%8F"><span class="toc-text">execl函数族</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%E4%B8%8E%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B"><span class="toc-text">孤儿进程与僵尸进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%9B%9E%E6%94%B6"><span class="toc-text">进程的回收</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-text">进程间通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-text">匿名管道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%B6%E5%AD%90%E8%BF%9B%E7%A8%8B%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1"><span class="toc-text">父子进程管道通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%84%E5%BC%9F%E8%BF%9B%E7%A8%8B%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1"><span class="toc-text">兄弟进程管道通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1%E6%A8%A1%E6%8B%9F%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4ps-aux-grep-bash"><span class="toc-text">用管道通信模拟系统命令ps aux | grep bash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-text">有名管道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">有名管道的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E5%8A%9F%E8%83%BD"><span class="toc-text">利用有名管道实现聊天功能</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B"><span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-text">线程创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%BC%A0%E5%8F%82"><span class="toc-text">线程传参</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-text">多线程创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%88%86%E7%A6%BB"><span class="toc-text">线程分离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%9B%9E%E6%94%B6"><span class="toc-text">线程回收</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%B1%9E%E6%80%A7"><span class="toc-text">线程属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="toc-text">线程同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E6%A6%82%E5%BF%B5%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="toc-text">同步概念与测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%92%E6%96%A5%E9%94%81"><span class="toc-text">互斥锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-text">死锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="toc-text">读写锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="toc-text">条件变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E7%BA%BF%E7%A8%8B"><span class="toc-text">单生产者消费者线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E7%BA%BF%E7%A8%8B"><span class="toc-text">多生产者消费者线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-text">信号量</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <!-- more -->
+
+<h1 id="多进程linux命令"><a href="#多进程linux命令" class="headerlink" title="多进程linux命令"></a>多进程linux命令</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ps -aux</td>
+<td>查看所有进程信息</td>
+</tr>
+<tr>
+<td>ps -ajx</td>
+<td>查看所有进程信息（显示父进程id等更多信息）</td>
+</tr>
+<tr>
+<td>kill</td>
+<td>杀死进程</td>
+</tr>
+</tbody></table>
+<h1 id="多进程编程"><a href="#多进程编程" class="headerlink" title="多进程编程"></a>多进程编程</h1><h2 id="创建子进程"><a href="#创建子进程" class="headerlink" title="创建子进程"></a>创建子进程</h2><pre><code class="c++">#include&lt;stdlib.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+int main()
+&#123;
+    int pid=fork();//创建子进程
+    if(pid&lt;0)//子进程创建失败
+        perror(&quot;fork&quot;);//打印失败信息
+    if(pid&gt;0)//子进程创建成功，且当前进入父进程执行，此时pid表示子进程id
+    &#123;
+        printf( &quot;father-&gt; pid : %d, fpid : %d\n&quot; , getpid() , getppid( ) );//getpid()表示获取当前进程id，getppid()表示获取当前进行的父进程id
+        sleep ( 1);//让父进程后死亡
+    &#125;
+    if(pid==0)//此时进行子进程执行
+        printf( &quot;child-&gt; pid : %d , fpid:%d\n&quot; , getpid() , getppid( ));
+    return 0;
+&#125;
+</code></pre>
+<ul>
+<li>父子进程的执行是随机的</li>
+<li>子进程完全复制父进程用户区的数据，但与父进程的内核区的数据不完全相同，如进程id</li>
+</ul>
+<h2 id="多进程的GDB调试"><a href="#多进程的GDB调试" class="headerlink" title="多进程的GDB调试"></a>多进程的GDB调试</h2><pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int main(int args, char* argc[])
+&#123;
+    int pid = fork();
+    if (pid &gt; 0)
+    &#123;
+        printf(&quot;I am parentProcess,my id is %d\n&quot;, getpid());
+        for (int i = 0; i &lt; 10; i++)
+        &#123;
+            printf(&quot;%d	-&gt;	i=%d\n&quot;,getpid(), i);
+            sleep(1);
+        &#125;
+    &#125;
+    if (pid == 0)
+    &#123;
+        printf(&quot;I am childProcess,my id is %d and my parentProcess id is %d\n&quot;,
+            getpid(), getppid());
+        for (int j = 0; j &lt; 10; j++)
+        &#123;
+            printf(&quot;%d	-&gt;	j=%d\n&quot;,getpid() ,j);
+            sleep(1);
+        &#125;
+    &#125;
+    else
+        perror(&quot;fork&quot;);
+    return 1;
+&#125;
+</code></pre>
+<p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230120233214495.png" alt="image-20230120233214495"></p>
+<h2 id="创建三个子进程"><a href="#创建三个子进程" class="headerlink" title="创建三个子进程"></a>创建三个子进程</h2><pre><code class="c++">#include&lt;stdlib.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+int main()
+&#123;
+        for(int i=0;i&lt;3;i++)
+        &#123;
+                int pid=fork();
+                if(pid&lt;0)
+                &#123;
+                        printf(&quot;error!\n&quot;);
+                        return -1;
+                &#125;
+                if(pid&gt;0)
+                &#123;
+                        printf(&quot;father-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
+                        // sleep(1);//让父进程后死亡
+                &#125;
+                if(pid==0)
+                        printf(&quot;child-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
+        &#125;
+        sleep(10);
+        return 0;
+&#125;
+</code></pre>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/3a75007c0e06e4cd.png"><img src="https://s3.bmp.ovh/imgs/2022/04/19/8429dd51eae9c26b.png"></p>
+<pre><code class="c++">#include&lt;stdlib.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+int main()
+&#123;
+        for(int i=0;i&lt;3;i++)
+        &#123;
+                int pid=fork();
+                if(pid&lt;0)
+                &#123;
+                        printf(&quot;error!\n&quot;);
+                        return -1;
+                &#125;
+                if(pid&gt;0)
+                &#123;
+                        printf(&quot;father-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
+                        // sleep(1);//让父进程后死亡
+                &#125;
+                if(pid==0)
+                &#123;
+                        printf(&quot;child-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
+                        break;//当子进程进入循环体时就直接退出循环，让子进程不再创建子进程
+                &#125;
+        &#125;
+        sleep(10);
+        return 0;
+&#125;
+</code></pre>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/753811118e8f49b0.png"></p>
+<ul>
+<li>在写操作下父子进程之间不共享全局变量，但在读操作下他们共享一份变量</li>
+</ul>
+<pre><code class="c++">#include&lt;stdlib.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+int glo=99;//定义全局变量，在父进程中修改它，在子进程中打印它，看他是否出现变化
+int main()
+&#123;
+        int pid=fork();
+        if(pid&lt;0)
+        &#123;
+                printf(&quot;error!\n&quot;);
+                return -1;
+        &#125;
+        if(pid&gt;0)
+        &#123;
+                printf(&quot;father-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
+                printf(&quot;%p&quot;,&amp;glo);//输出地址
+                glo++;
+        &#125;
+        if(pid==0)
+        &#123;
+                sleep(1);//让父进程先执行
+                printf(&quot;child-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
+                printf(&quot;%d\n&quot;,glo);
+                printf(&quot;%p&quot;,&amp;glo);//输出地址
+        &#125;
+        sleep(10);
+        return 0;
+&#125;
+</code></pre>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/a300a273b08723b0.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/1faf7cbb8a23a478.png"></p>
+<h2 id="execl函数族"><a href="#execl函数族" class="headerlink" title="execl函数族"></a>execl函数族</h2><p>exec函数族的作用是根据指定的文件名找到可执行文件，并用它来取代调用进程的内容，换句话说，就是在调用进程内部执行一个可执行文件。这里的可执行文件既可以是二进制文件，也可以是任何Linux下可执行的脚本文件。</p>
+<pre><code class="c++">int execl(const char *path, const char *arg, ...);
+</code></pre>
+<p>execl()函数用于执行参数path字符串所代表的文件路径（必须指定路径），接下来是一系列可变参数，它们代表执行该文件时传递过去的 argv[0]、argv[1]… argv[n] ，最后一个参数必须用空指针NULL作为结束的标志。</p>
+<pre><code class="c++">#include&lt;iostream&gt;
+using namespace std;
+int main(int argc,char* argv[])//第一个参数为命令行的个数，第二个参数为命令行字符串，如ls -l，则argc=2，其中argv[0]=&quot;ls&quot;,argv[1]=&quot;-l&quot;
+&#123;
+     cout&lt;&lt;&quot;hello world&quot;&lt;&lt;endl;
+ // for(int i=0;i&lt;argc;i++)
+ // &#123;
+ //     cout&lt;&lt;&quot;argc[&quot;&lt;&lt;i&lt;&lt;&quot;]:&quot;&lt;&lt;argv[i]&lt;&lt;endl;
+ // &#125;
+ return 1;
+&#125;
+</code></pre>
+<pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+int main()
+&#123;
+    int pid = fork();
+    if (pid &gt; 0)
+    &#123;
+        printf(&quot;farent:%d\n&quot;, getpid());
+    &#125;
+    if (pid == 0)
+    &#123;
+        sleep(1);
+        //第一个参数为可执行文件名称，
+        //其余参数为该可执行文件传入的可变参数，最后一个参数必须为NULL
+        //当执行成功时不返回，否则返回-1
+        //作用：在进程中执行一个程序，替换原来的进程用户区数据
+        execl(&quot;/usr/bin/ls&quot;, &quot;ls&quot;, &quot;-n&quot;, NULL);//在子进程中执行系统程序ls -a
+        //如果execl函数执行成功，则子进程将不会继续向下执行
+        printf(&quot;child:%d\n&quot;, getpid());
+    &#125;
+    for (int i = 0; i &lt; 3; i++)
+    &#123;
+        printf(&quot;%d\n&quot;, getpid());
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+<p><strong>execlp函数</strong>：在环境变量中查找可执行文件，故在第一个参数中可不必写可执行文件的绝对路径</p>
+<pre><code class="c++">        int ret=execlp(&quot;ls&quot;, &quot;ls&quot;, &quot;-n&quot;, NULL);//在子进程中执行系统程序ls -a
+</code></pre>
+<h2 id="孤儿进程与僵尸进程"><a href="#孤儿进程与僵尸进程" class="headerlink" title="孤儿进程与僵尸进程"></a>孤儿进程与僵尸进程</h2><p><strong>孤儿进程：</strong>父进程先死亡，子进程仍在运行，此时的子进程成为孤儿进程，且该子进程将由系统的初始进程init“领养”，故孤儿进程执行结束时可以被回收</p>
+<pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int main(int args, char* argc[])
+&#123;
+    int pid = fork();
+    if (pid &gt; 0)
+    &#123;
+        printf(&quot;farent-&gt;%d\n&quot;, getpid());
+        for (int i = 0; i &lt; 0; i++)
+            printf(&quot;i=%d\n&quot;, i);
+    &#125;
+    if (pid == 0)
+    &#123;
+        sleep(1);//让父进程执行完后死亡，留下子进程
+        printf(&quot;child-&gt;%d and my parent-&gt;%d\n&quot;, getpid(), getppid());
+        for (int j = 0; j &lt; 3; j++)
+        &#123;
+            printf(&quot;j=%d\n&quot;, j);
+        &#125;
+    &#125;
+    return 1;
+&#125;
+</code></pre>
+<p><strong>僵尸进程：</strong>当进程结束时，其用户区数据部分将自动释放，但内核区的pcb必须由父进程释放，因此如果子进程执行结束时，父进程迟迟不回收（比如当父进程进入死循环时）子进程的pcb，则子进程此时成为僵尸进程，僵尸进程不能被kill命令杀死，且占用进程id号，然而系统的id号是有限的，因此如果存在大量的僵尸进程，将会给系统带来麻烦。处理僵尸进程的方法就是要求父进程必须回收子进程</p>
+<pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int main(int args, char* argc[])
+&#123;
+    int pid = fork();
+    if (pid &gt; 0)
+    &#123;
+        while (1)//让父进程进入死循环，当子进程执行完时将无法回收子进程，则此时子进程将成功僵尸进程
+        &#123;
+            printf(&quot;farent-&gt;%d\n&quot;, getpid());
+            sleep(1);
+        &#125;
+        //for (int i = 0; i &lt; 0; i++)
+            //printf(&quot;i=%d\n&quot;, i);
+    &#125;
+    if (pid == 0)
+    &#123;
+        //sleep(1);
+        printf(&quot;child-&gt;%d and my parent-&gt;%d\n&quot;, getpid(), getppid());
+        for (int j = 0; j &lt; 3; j++)
+        &#123;
+            printf(&quot;j=%d\n&quot;, j);
+        &#125;
+    &#125;
+    return 1;
+&#125;
+</code></pre>
+<h2 id="进程的回收"><a href="#进程的回收" class="headerlink" title="进程的回收"></a>进程的回收</h2><p><em><em>int wait(int</em> wstatus)</em>*:阻塞父进程，直到有子进程退出时继续执行，以便让父进程回收子进程的资源</p>
+<pre><code class="c++">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;sys/wait.h&gt;
+int main()
+&#123;
+    int pid;
+    for (int i = 0; i &lt; 5; i++)//创建五个进程
+    &#123;
+        pid = fork();
+        
+        if (pid == 0)
+        &#123;
+            break;
+        &#125;
+    &#125;
+
+    if (pid &gt; 0)
+    &#123;
+        while (1)
+        &#123;
+            printf(&quot;farent	-&gt;	%d\n&quot;, getpid());
+            //阻塞父进程的执行，
+            //直到一个子进程退出时就回收该子进程的资源
+            //如果回收成功就返回该子进程的id，否则（或子进程已全部回收完毕）返回-1
+            //该函数每次只能回收一个子进程
+            int ret = wait(NULL);
+            printf(&quot;child has died,id=%d\n&quot;, ret);
+            sleep(1);
+        &#125;
+    &#125;
+    if (pid == 0)
+    &#123;
+        while (1)
+        &#123;
+            printf(&quot;child	-&gt;	%d\n&quot;, getpid());
+            sleep(1);
+        &#125;
+    &#125;
+
+    return 0;
+&#125;
+</code></pre>
+<p><strong>int waitpid()</strong></p>
+<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><ul>
+<li>管道（简单，本质为内核缓冲区）</li>
+<li>信号（系统开销小）</li>
+<li>共享映射区（有无血缘关系的进程之间都可进行通信）</li>
+<li>本地socket套接字（稳定）</li>
+</ul>
+<h2 id="匿名管道"><a href="#匿名管道" class="headerlink" title="匿名管道"></a>匿名管道</h2><h3 id="父子进程管道通信"><a href="#父子进程管道通信" class="headerlink" title="父子进程管道通信"></a>父子进程管道通信</h3><p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230122180235783.png" alt="image-20230122180235783"></p>
+<pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;string.h&gt;
+int main()
+&#123;
+    int fd[2];//作为管道的传出参数，表示文件描述符，其中fd[0]表示读端，fd[1]表示写端
+    int ret = pipe(fd);//创建管道
+    int pid = fork();//创建子进程，此时父子进程共享管道两端的读写文件描述符
+    if (pid &gt; 0)
+    &#123;
+        //父进程关闭读端，写数据
+        //close(fd[0]);
+        char* str = &quot;hello,I am farent!&quot;;
+        write(fd[1], str, strlen(str));//向管道的写端进行写数据
+        printf(&quot;farent	-&gt;	%d,发送成功！\n&quot;, getpid());
+
+        char buf[64];
+        memset(&amp;buf, 0, sizeof(buf));
+        int n0 = read(fd[0], buf, sizeof(buf));
+        printf(&quot;farent	-&gt;	%d,共接受%d个字符：%s\n&quot;, getpid(), n0, buf);
+
+    &#125;
+    if (pid == 0)
+    &#123;
+        //close(fd[1]);
+        char buf[64];
+        memset(&amp;buf, 0, sizeof(buf));
+        int n=read(fd[0], buf, sizeof(buf));
+        printf(&quot;child	-&gt;	%d共接受到%d个字符：%s\n&quot;,getpid(), n, buf);
+
+        char* s = &quot;I am child!&quot;;
+        write(fd[1], s, strlen(s));
+        printf(&quot;child	-&gt;	%d发送成功!\n&quot;, getpid());
+    &#125;
+
+    return  0;
+&#125;
+</code></pre>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/8ce8115939fb3482.png"></p>
+<h3 id="兄弟进程管道通信"><a href="#兄弟进程管道通信" class="headerlink" title="兄弟进程管道通信"></a>兄弟进程管道通信</h3><pre><code class="c++">#include&lt;iostream&gt;
+#include&lt;string.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;sys/wait.h&gt;
+#include&lt;unistd.h&gt;
+using namespace std;
+int main()
+&#123;
+        int fd[2];
+        int ret=pipe(fd);
+        if(ret&lt;0)
+        &#123;
+                cout&lt;&lt;&quot;pipe error!&quot;&lt;&lt;endl;
+                return -1;
+        &#125;
+        int i=-1;
+        for(i=0;i&lt;2;i++)
+        &#123;
+                int pid=fork();
+                if(pid&lt;0)
+                &#123;
+                        cout&lt;&lt;&quot;fork error!&quot;&lt;&lt;endl;
+                        return -1;
+                &#125;
+                if(pid&gt;0)
+                &#123;
+                        // cout&lt;&lt;&quot;fater:&quot;&lt;&lt;getpid()&lt;&lt;endl;
+                        wait(NULL);
+                &#125;
+                else
+                &#123;
+                        cout&lt;&lt;&quot;i==&quot;&lt;&lt;i&lt;&lt;&quot;\tchild:&quot;&lt;&lt;getpid()&lt;&lt;&quot;---&gt;&quot;&lt;&lt;getppid()&lt;&lt;endl;
+                        break;
+                &#125;
+        &#125;
+        if(i==0)//子进程1
+        &#123;
+                close(fd[0]);//关闭读端，写入数据
+                char message[64]=&quot;hello world!&quot;;
+                write(fd[1],message,strlen(message));
+        &#125;
+        if(i==1)//子进程2
+        &#123;
+                close(fd[1]);//关闭写端，接受数据
+                char buff[64];
+                memset(&amp;buff,0,sizeof(buff));
+                int n=read(fd[0],buff,sizeof(buff));
+                cout&lt;&lt;&quot;共受到&quot;&lt;&lt;n&lt;&lt;&quot;个字符\t---&gt;\t&quot;&lt;&lt;buff&lt;&lt;endl;
+        &#125;
+     return 1;
+&#125;
+</code></pre>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/2dc733fbe43ce171.png"></p>
+<h3 id="用管道通信模拟系统命令ps-aux-grep-bash"><a href="#用管道通信模拟系统命令ps-aux-grep-bash" class="headerlink" title="用管道通信模拟系统命令ps aux | grep bash"></a>用管道通信模拟系统命令ps aux | grep bash</h3><pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;string.h&gt;
+#include&lt;sys/wait.h&gt;
+int main()
+&#123;
+    int fd[2];
+    int ret = pipe(fd);//创建管道
+    if (ret &lt; 0)
+    &#123;
+        perror(&quot;pipe&quot;);
+        return 0;
+    &#125;
+    int pid = fork();//创建子进程
+    if (pid &gt; 0)//父进程执行ps -aux，并将数据通过管道发送给子进程
+    &#123;
+        close(fd[0]);//关闭读端
+        dup2(fd[1], STDOUT_FILENO);//由于execlp函数的输出为std屏幕，因此需要将输出重定向到管道的写端
+        execlp(&quot;ps&quot;, &quot;ps&quot;, &quot;-aux&quot;,NULL);//执行ps -aux
+        perror(&quot;execlp&quot;);//如果excelp函数执行成功，则该句不执行，否则可通过该语句返回错误信息
+        wait(NULL);//等待子进程结束回收子进程
+        return 0;
+    &#125;
+    if (pid == 0)//子进程接受ps -aux信息
+    &#123;
+        close(fd[1]);//关闭写端
+        char buf[1024];//定义缓冲区接受数据
+        memset(&amp;buf, 0, sizeof(buf));
+        while (read(fd[0], buf, sizeof(buf)) &gt; 0)//由于缓冲区大小有限，因此一次读取的内容不完整，需要进行循环读取，直到将管道数据读取完毕
+        &#123;
+            printf(&quot;%s&quot;, buf);
+            memset(&amp;buf, 0, 1024);
+        &#125;
+    &#125;
+    else &#123;
+        perror(&quot;fork&quot;);
+        return 0;
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+<h2 id="有名管道"><a href="#有名管道" class="headerlink" title="有名管道"></a>有名管道</h2><h3 id="有名管道的使用"><a href="#有名管道的使用" class="headerlink" title="有名管道的使用"></a>有名管道的使用</h3><p>可实现非血缘关系进程之间的通信</p>
+<p><strong>write.cpp</strong></p>
+<pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/wait.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;sys/stat.h&gt;
+#include&lt;fcntl.h&gt;
+#include&lt;string.h&gt;
+int main()
+&#123;
+    int ret = access(&quot;fifo&quot;, F_OK);//判断文件是否存在
+    if (ret &lt; 0)
+    &#123;
+        printf(&quot;管道不存在，创建管道\n&quot;);
+        ret = mkfifo(&quot;fifo&quot;, 0777);//创建有名管道文件
+        if (ret == -1)
+        &#123;
+            perror(&quot;mkfifo&quot;);
+            return 0;
+        &#125;
+    &#125;
+    //打开管道文件
+    int fd = open(&quot;fifo&quot;, O_WRONLY);//以只写方式打开文件
+    if (fd == -1)
+    &#123;
+        perror(&quot;open&quot;);
+        return 0;
+    &#125;
+    //向管道文件中写数据
+    for (int i = 0; i &lt; 100; i++)
+    &#123;
+        char buf[1024];
+        memset(&amp;buf, 0, sizeof(buf));
+        sprintf(buf, &quot;hello,%d\n&quot;, i);
+        printf(&quot;发送数据：%s\n&quot;, buf);
+        write(fd, buf, strlen(buf));
+        sleep(1);
+    &#125;
+    close(fd);
+    return 0;
+&#125;
+</code></pre>
+<p><strong>read.cpp</strong></p>
+<pre><code class="c++">#include&lt;sys/types.h&gt;
+#include&lt;sys/stat.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;string.h&gt;
+#include&lt;fcntl.h&gt;
+int main()
+&#123;
+    int fd = open(&quot;fifo&quot;, O_RDONLY);//打开管道文件
+    if (fd &lt; 0)
+    &#123;
+        perror(&quot;open&quot;);
+        exit(0);
+    &#125;
+    while (1)
+    &#123;
+        char buf[1024];
+        memset(&amp;buf, 0, sizeof(buf));
+        int len = read(fd, buf,sizeof(buf));//读取管道文件数据
+        if (len == 0)
+        &#123;
+            printf(&quot;写端关闭了\n&quot;);
+            break;
+        &#125;
+        printf(&quot;接受数据:%s\n&quot;, buf);
+
+    &#125;
+    close(fd);
+    return 0;
+&#125;
+</code></pre>
+<h3 id="利用有名管道实现聊天功能"><a href="#利用有名管道实现聊天功能" class="headerlink" title="利用有名管道实现聊天功能"></a>利用有名管道实现聊天功能</h3><p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230123225111855.png" alt="image-20230123225111855"></p>
+<p>​	</p>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><h2 id="线程创建"><a href="#线程创建" class="headerlink" title="线程创建"></a>线程创建</h2><pre><code class="c++">//int pthread_create(pthread_t* thread, const pthread_attr_t* attr,
+//    void* (*start_routine) (void*), void* arg);
+//参数
+//    -线程号
+//    -线程属性
+//    -函数指针，其内容即是子线程的具体函数代码
+//				子线程的返回类型为void*,传入参数类型也为void*
+//    -给第三个参数（子线程函数）的传入参数
+//返回值
+//	创建成功则返回0，否则返回错误号，通过streero返回错误信息
+
+#include&lt;stdio.h&gt;
+#include&lt;pthread.h&gt;
+#include&lt;string.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;stdlib.h&gt;
+
+void* callback(void* arg)
+&#123;
+    printf(&quot;child thread....\npid=%d,tid2=%d\nnum=%d\n&quot;,
+        getpid(),pthread_self(),*(int*)arg);//将空指针参数arg转换为int*，再解引用取值
+    return NULL;
+&#125;
+
+int main()
+&#123;
+    pthread_t tid;
+    //创建子线程，子线程具体代码由callback函数执行，并通过tid传出子线程的id
+    //int ret = pthread_create(&amp;tid, NULL, callback, NULL);
+    
+    //设置子线程传入参数
+    int num = 10;
+    int ret = pthread_create(&amp;tid, NULL, callback, (void*)&amp;num);//将传入参数地址并转换类型为void*
+
+    if (ret != 0)
+    &#123;
+        char* str = strerror(ret);
+        printf(&quot;error:%s\n&quot;, str);
+        return 0;
+    &#125;
+    //main()为主线程
+    sleep(1);
+    printf(&quot;tid1=%d&quot;, tid);
+    for (int i = 0; i &lt; 3; i++)
+    &#123;
+        printf(&quot;%d\n&quot;, i);
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+<h2 id="线程传参"><a href="#线程传参" class="headerlink" title="线程传参"></a>线程传参</h2><pre><code class="c++">#include&lt;pthread.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;string&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;iostream&gt;
+using namespace std;
+//线程执行函数
+struct test
+&#123;
+ int data;
+ // char name[64];
+ string name;
+&#125;;
+void *mythread(void* arg)
+&#123;
+ //获取子线程所在的进程空间id与其自身进程号
+ printf(&quot;child thread,pid==[%d],id==[%ld]\n&quot;,getpid(),pthread_self());
+ // int n=*(int *)arg;
+ // printf(&quot;n=%d\n&quot;,n);
+ struct test *t;
+ t=(struct test*)arg;
+ cout&lt;&lt;t-&gt;data&lt;&lt;&quot;\t&quot;&lt;&lt;t-&gt;name&lt;&lt;endl;
+&#125;
+
+int main()
+&#123;
+ int n=99;//传入整型
+ struct test t;//传入结构体
+ t.data=10;
+ t.name=&quot;LiHua&quot;;
+ pthread_t thread;
+ // int ret=pthread_create(&amp;thread,NULL,mythread,NULL);
+ int ret =pthread_create(&amp;thread,NULL,mythread,&amp;t);
+ if(ret!=0)
+ &#123;
+        // printf(&quot;pthread_create error,[%s]\n&quot;,strerror(ret));
+        cout&lt;&lt;&quot;pthread_create error&quot;&lt;&lt;ret&lt;&lt;endl;
+        return -1;
+ &#125;
+ printf(&quot;main thread,pid==[%d],id==[%ld]\n&quot;,getpid(),pthread_self());
+ sleep(1);//由于子线程与主线程共享地址空间，故当主线程空间撤销时，子线程也将不存在，该语句是为了防止子线程还未启动但主线程却撤销
+ return 0;
+&#125;
+</code></pre>
+<h2 id="多线程创建"><a href="#多线程创建" class="headerlink" title="多线程创建"></a>多线程创建</h2><pre><code class="c++">#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;pthread.h&gt;
+using namespace std;
+typedef struct person
+&#123;
+        string name;
+        int age;
+&#125;person;
+void* mythread(void* arg)
+&#123;
+        // person *p;
+        // p=(person* )arg;
+        // cout&lt;&lt;&quot;name:&quot;&lt;&lt;p-&gt;name&lt;&lt;endl;
+        // cout&lt;&lt;&quot;age:&quot;&lt;&lt;p-&gt;age&lt;&lt;endl;
+        int n=*(int*)arg;
+        cout&lt;&lt;&quot;\t&quot;&lt;&lt;n&lt;&lt;&quot;-&gt;&quot;&lt;&lt;getpid()&lt;&lt;&quot; &quot;&lt;&lt;pthread_self()&lt;&lt;endl;
+&#125;
+int main()
+&#123;
+        // person per;
+        // per.name=&quot;李华&quot;;
+        // per.age=18;
+        pthread_t thread[5];
+        int arr[5];
+        for(int i=0;i&lt;5;i++)
+        &#123;
+                arr[i]=i;
+                int ret =pthread_create(&amp;thread[i],NULL,mythread,&amp;arr[i]);
+                if(ret!=0)
+                &#123;
+                        cout&lt;&lt;&quot;pthread_create error!&quot;&lt;&lt;endl;
+                        return -1;
+                &#125;
+        &#125;
+        cout&lt;&lt;getpid()&lt;&lt;&quot;\t--&gt;\t&quot;&lt;&lt;pthread_self()&lt;&lt;endl;
+        sleep(1);
+        return 1;
+&#125;
+</code></pre>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/ac0485d9b4260bfd.png"></p>
+<h2 id="线程分离"><a href="#线程分离" class="headerlink" title="线程分离"></a>线程分离</h2><pre><code class="c++">int pthread_detach(pthread_t thread);
+/*
+功能   使调用线程与当前进程分离，分离后不代表此线程不依赖当前进程，线程分离的目的是将线程资源回收
+       的工作交由系统自动完成，也就是说当被分离的线程结束之后，系统会自动回收它的资源，不需要使用pthread_join进行回收，所以，此
+       函数不会阻塞
+
+参数    thread 线程号
+返回    成功 0     失败 非0
+*/
+</code></pre>
+<pre><code class="c++">#include&lt;stdio.h&gt;
+#include&lt;pthread.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;string.h&gt;
+void* mythread(void* arg)
+&#123;
+    int n = *(int*)arg;
+    printf(&quot;child%d:-&gt;	pid=%d,tid=%d\n&quot;, n, getpid(), pthread_self());
+    //sleep(3);
+    return NULL;
+&#125;
+
+int main()
+&#123;
+    pthread_t tid;
+    int num = 10;
+    int ret = pthread_create(&amp;tid, NULL, mythread, &amp;num);
+    if (ret != 0)
+    &#123;
+        char* error = strerror(ret);
+        printf(&quot;error:%s\n&quot;, error);
+        return -1;
+    &#125;
+    //sleep(1);
+
+    //设置子线程为分离状态，运行结束后可有系统自动回收其资源
+    pthread_detach(tid);
+
+    pthread_exit(NULL);//退出当前线程 return 0;
+&#125;
+</code></pre>
+<h2 id="线程回收"><a href="#线程回收" class="headerlink" title="线程回收"></a>线程回收</h2><pre><code>   1. 用于等待其他线程结束：当调用 pthread_join() 时，当前线程会处于阻塞状态，直到被调用的线程结束后，当前线程才会重新开始执行。
+   2. 对线程的资源进行回收：如果一个线程是非分离的（默认情况下创建的线程都是非分离）并且没有对该线程使用 pthread_join() 的话，该线程结束后并不会释放其内存空间，这会导致该线程变成了“僵尸线程”
+</code></pre>
+<pre><code class="c++">#include&lt;stdio.h&gt;
+#include&lt;pthread.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;string.h&gt;
+int tt = 10;
+void* mythread(void* arg)
+&#123;
+    int n = *(int*)arg;
+    printf(&quot;child%d:-&gt;	pid=%d,tid=%d\n&quot;, n, getpid(), pthread_self());
+    //sleep(3);
+    //return NULL;
+    pthread_exit ((void*)&amp;tt);//return (void*)&amp;tt
+&#125;
+
+//int pthread_join(pthread_t thread, void** retval);
+//作用：连接已经终止的线程，回收子线程资源。阻塞当前线程执行，直到要回收的线程运行结束用当前线程回收子线程
+//注：子进程只能通过父进程回收，而线程的资源可通过其他线程回收，一般情况下我们指定用主线程进行回收
+//参数：
+//	-要回收的线程id
+//	-传出参数，将回收线程的返回值传出来，其类型为二级指针，即指针变量的地址
+
+//不能连接已经分离的线程
+
+int main()
+&#123;
+    pthread_t tid;
+    int num = 10;
+    int ret = pthread_create(&amp;tid, NULL, mythread, &amp;num);
+    if (ret != 0)
+    &#123;
+        char* error = strerror(ret);
+        printf(&quot;error:%s\n&quot;, error);
+        return -1;
+    &#125;
+    //sleep(1);
+
+    //pthread_join(tid, NULL);//回收子线程
+    int* thread_reval;//用指针变量接收传出参数值
+    pthread_join(tid, (void**)&amp;thread_reval);//回收子线程，并传出子线程返回值
+    printf(&quot;线程资源回收完毕！\n&quot;);
+    printf(&quot;tt=%d\n&quot;, *thread_reval);
+
+    pthread_exit(NULL);//退出当前线程 return 0;
+&#125;
+</code></pre>
+<h2 id="线程属性"><a href="#线程属性" class="headerlink" title="线程属性"></a>线程属性</h2><pre><code class="c++">初始化线程属性变量	pthread_attr_init()
+设置/获取线程属性
+撤销线程属性变量	pthread_attr_destory()
+</code></pre>
+<pre><code class="c++">#include&lt;pthread.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+#include&lt;unistd.h&gt;
+
+void* mythread(void* arg)
+&#123;
+    printf(&quot;childThreadId:%d\n&quot;, pthread_self());
+    return NULL;
+&#125;
+int main()
+&#123;
+    pthread_attr_t attr;
+    pthread_attr_init(&amp;attr);//初始化线程变量
+    pthread_attr_setdetachstate(&amp;attr, PTHREAD_CREATE_DETACHED);//设置属性变量为分离状态
+    
+    
+    pthread_t tid;
+    int ret= pthread_create(&amp;tid,&amp;attr,mythread,NULL);
+    if (ret != 0)
+    &#123;
+        char* error = strerror(ret);
+        printf(&quot;error:%s\n&quot;, error);
+        return -1;
+    &#125;
+    size_t size;
+    pthread_attr_getstacksize(&amp;attr, &amp;size);//获取线程默认分配栈的大小
+    printf(&quot;stackSize:%ld\n&quot;, size);
+    sleep(1);
+    pthread_attr_destroy(&amp;attr);//销毁线程属性变量
+
+    return 0;
+&#125;
+</code></pre>
+<h2 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h2><h3 id="同步概念与测试"><a href="#同步概念与测试" class="headerlink" title="同步概念与测试"></a>同步概念与测试</h3><pre><code class="c++">测试：设置三个线程进行售票，其中总票数不变，设置为全局变量
+</code></pre>
+<pre><code class="c++">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;pthread.h&gt;
+
+
+int stick = 100;//总票数
+
+void* mythread(void* arg)
+&#123;
+
+    //临界区，各线程并发执行
+    while (stick &gt; 0)
+    &#123;
+        usleep(3000);
+        printf(&quot;%d:正在售出第%d张票\n&quot;, pthread_self(), stick);
+        stick--;
+    &#125;
+    return NULL;
+&#125;
+
+int main()
+&#123;
+    pthread_t tid[3];
+    //创建三个子线程进行售票
+    for (int i = 0; i &lt; 3; i++)
+    &#123;
+        int ret = pthread_create(&amp;tid[i], NULL, mythread, NULL);
+        if (ret != 0)
+        &#123;
+            char* error = strerror(ret);
+            printf(&quot;error:%s\n&quot;, error);
+            return -1;
+        &#125;
+    &#125;
+    //回收子线程资源
+    for (int i = 0; i &lt; 3; i++)
+    &#123;
+        pthread_join(tid[i],NULL);
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/a6f011a68de1e3c4.png"></p>
+<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><pre><code class="c++">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;pthread.h&gt;
+
+
+int stick = 100;//总票数
+//定义互斥锁，该锁一般定义为全局变量，否则如果定义在主线程中，当主线程结束之后回收栈资源，则该锁将不能被再次使用
+pthread_mutex_t mutex;
+
+void* mythread(void* arg)
+&#123;
+    //临界区，各线程并发执行
+    while (1)
+    &#123;
+        pthread_mutex_lock(&amp;mutex);//加锁
+        if (stick &gt; 0)
+        &#123;
+            usleep(3000);
+            printf(&quot;%d:正在售出第%d张票\n&quot;, pthread_self(), stick);
+            stick--;
+        &#125;
+        else &#123;
+            pthread_mutex_unlock(&amp;mutex);//解锁
+            break;
+        &#125;
+        pthread_mutex_unlock(&amp;mutex);
+    &#125;
+    return NULL;
+&#125;
+
+int main()
+&#123;
+    pthread_t tid[3];
+    pthread_mutex_init(&amp;mutex,NULL);//初始化互斥锁
+
+    //创建三个子线程进行售票
+    for (int i = 0; i &lt; 3; i++)
+    &#123;
+        int ret = pthread_create(&amp;tid[i], NULL, mythread, NULL);
+        if (ret != 0)
+        &#123;
+            char* error = strerror(ret);
+            printf(&quot;error:%s\n&quot;, error);
+            return -1;
+        &#125;
+    &#125;
+    //回收子线程资源
+    for (int i = 0; i &lt; 3; i++)
+    &#123;
+        pthread_join(tid[i],NULL);
+    &#125;
+
+    pthread_mutex_destroy(&amp;mutex);//释放互斥锁资源
+    return 0;
+&#125;
+</code></pre>
+<pre><code class="c++">#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;pthread.h&gt;
+#include&lt;time.h&gt;
+using namespace std;
+pthread_mutex_t mutex;//定义锁
+void* mythread(void* arg)
+&#123;
+        int n;
+        int c=*(int*)arg;
+        for(int i=0;i&lt;5;i++)
+        &#123;
+                if(c==0)
+                &#123;
+                        pthread_mutex_lock(&amp;mutex);//第一个线程加锁
+                        cout&lt;&lt;&quot;hello &quot;;
+                        sleep(rand()%3);
+                        cout&lt;&lt;&quot;world!&quot;&lt;&lt;endl;
+                        pthread_mutex_unlock(&amp;mutex);//第一个线程解锁
+                &#125;
+                else
+                &#123;
+                        pthread_mutex_lock(&amp;mutex);//第二个线程加锁
+                        cout&lt;&lt;&quot;HELLO &quot;;
+                        sleep(rand()%3);
+                        cout&lt;&lt;&quot;WORLD!&quot;&lt;&lt;endl;
+                        pthread_mutex_unlock(&amp;mutex);//第二个线程解锁
+                &#125;
+        &#125;
+&#125;
+int main()
+&#123;
+        srand((unsigned)time(0));
+        pthread_mutex_init(&amp;mutex,NULL);//初始化锁
+        pthread_t thread[2];
+        int arr[2];
+        for(int i=0;i&lt;2;i++)
+        &#123;
+                arr[i]=i;
+                int ret=pthread_create(&amp;thread[i],NULL,mythread,&amp;arr[i]);
+                if(ret!=0)
+                &#123;
+                        cout&lt;&lt;&quot;第&quot;&lt;&lt;i&lt;&lt;&quot;个线程error!&quot;&lt;&lt;endl;
+                        return -1;
+                &#125;
+        &#125;
+        pthread_join(thread[0],NULL);
+        pthread_join(thread[1],NULL);
+        pthread_mutex_destroy(&amp;mutex);//释放锁
+        return 1;
+&#125;
+</code></pre>
+<p><strong>加锁前：</strong></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/9da0a4a5b52a3667.png"></p>
+<p><strong>加锁后：</strong></p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/5dfd534c3f74d17c.png"></p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><h3 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h3><p><strong>写独占，读共享</strong></p>
+<pre><code class="c++">#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;pthread.h&gt;
+using namespace std;
+int number=0;
+pthread_rwlock_t rwlock;//定义读写锁
+void* thread_read(void* arg)
+&#123;
+        int c=*(int*)arg;
+        int n;
+        while(1)
+        &#123;
+                pthread_rwlock_rdlock(&amp;rwlock);//加读锁
+                n=number;
+                cout&lt;&lt;&quot;r:[&quot;&lt;&lt;c&lt;&lt;&quot;]&quot;&lt;&lt;n&lt;&lt;endl;
+                pthread_rwlock_unlock(&amp;rwlock);//解锁
+                sleep(1);
+        &#125;
+&#125;
+void* thread_write(void* arg)
+&#123;
+        int c=*(int*)arg;
+        int n;
+        while(1)
+        &#123;
+                pthread_rwlock_wrlock(&amp;rwlock);//加写锁
+                n=number;
+                n++;
+                number=n;
+                cout&lt;&lt;&quot;w:[&quot;&lt;&lt;c&lt;&lt;&quot;]&quot;&lt;&lt;number&lt;&lt;endl;
+                pthread_rwlock_unlock(&amp;rwlock);//解锁
+                sleep(1);
+        &#125;
+&#125;
+int main()
+&#123;
+        pthread_rwlock_init(&amp;rwlock,NULL);//读写锁初始化
+        int arr[8];
+        pthread_t thread[8];
+        int i;
+        for(int i=0;i&lt;3;i++)//定义三个写进程
+        &#123;
+                arr[i]=i;
+                int ret=pthread_create(&amp;thread[i],NULL,thread_write,&amp;arr[i]);
+                if(ret!=0)
+                &#123;
+                        cout&lt;&lt;&quot;thread_read error!&quot;&lt;&lt;endl;
+                        return -1;
+                &#125;
+        &#125;
+        for(int i=3;i&lt;8;i++)//定义五个读进程
+        &#123;
+                arr[i]=i;
+                int ret=pthread_create(&amp;thread[i],NULL,thread_read,&amp;arr[i]);
+                if(ret!=0)
+                &#123;
+                        cout&lt;&lt;&quot;thread_write error!&quot;&lt;&lt;endl;
+                        return -1;
+                &#125;
+        &#125;
+        for(int j=0;j&lt;8;j++)
+        &#123;
+                pthread_join(thread[j],NULL);
+        &#125;
+        pthread_rwlock_destroy(&amp;rwlock);//释放读写锁
+        return 1;
+&#125;
+</code></pre>
+<p><strong>加锁前：</strong></p>
+<p><img src="https://s2.loli.net/2022/04/19/2g61hQAtdsXeBEZ.png" alt="image-20220411172728414.png"></p>
+<p><strong>加锁后：</strong></p>
+<p><img src="https://s2.loli.net/2022/04/19/1RFXThacAfGJwUo.png" alt="image-20220411172523719.png"></p>
+<h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><h4 id="单生产者消费者线程"><a href="#单生产者消费者线程" class="headerlink" title="单生产者消费者线程"></a>单生产者消费者线程</h4><pre><code class="c++">#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;time.h&gt;
+#include&lt;pthread.h&gt;
+using namespace std;
+//定义链表结构
+typedef struct node
+&#123;
+        int data;
+        struct node* next;
+&#125;node,*list;
+
+//维护一个共享链表
+list l=NULL;
+#if 0
+l=new node;
+l-&gt;next=NULL;
+#endif
+
+//定义互斥变量与条件变量
+pthread_mutex_t mutex;
+pthread_cond_t cond;
+
+//生产者进程
+void* producer(void* arg)
+&#123;
+        // list l=(node*)arg;
+        srand((unsigned)time(0));
+        while(1)
+        &#123;
+            //生产产品
+            node* s=new node;
+
+            s-&gt;data=rand()%100+1;
+            cout&lt;&lt;&quot;生产中：&quot;&lt;&lt;s-&gt;data&lt;&lt;endl;
+            //将产品放入共享数据区域
+            pthread_mutex_lock(&amp;mutex);//加锁
+
+            #if 0
+            s-&gt;next=l-&gt;next;
+            l-&gt;next=s;
+            #endif
+            //头插
+            #if 1
+            s-&gt;next=l;
+            l=s;
+            #endif
+            pthread_mutex_unlock(&amp;mutex);//解锁
+            //发信号取数据，若有多个等待被唤醒的线程，则该函数可一次性唤醒所有等待唤醒的线程，这些之前等待的线程将自行抢占CPU
+            pthread_cond_signal(&amp;cond);
+            sleep(rand()%3);
+        &#125;
+&#125;
+//消费者进程
+void* consumer(void* arg)
+&#123;
+        srand((unsigned)time(0));
+        // list l=(node*)arg;
+        while(1)
+        &#123;
+            //从共享数据区域中取数据
+            pthread_mutex_lock(&amp;mutex);//加锁
+            if(l==NULL)
+            &#123;
+                //等待生产者进程唤醒该进程
+                pthread_cond_wait(&amp;cond,&amp;mutex);
+            &#125;
+            
+            //取产品
+            
+            // node* p=l-&gt;next;
+            node* p=l;
+            cout&lt;&lt;&quot;已消费：&quot;&lt;&lt;p-&gt;data&lt;&lt;endl;
+            // l-&gt;next=p-&gt;next;
+            l=l-&gt;next;
+            delete p;
+            pthread_mutex_unlock(&amp;mutex);//解锁
+            sleep(rand()%3);
+        &#125;
+&#125;
+
+int main()
+&#123;
+        pthread_mutex_init(&amp;mutex,NULL);
+        pthread_cond_init(&amp;cond,NULL);
+
+        pthread_t threadProducer;
+        pthread_t threadConsumer;
+        //维护一个共享链表
+        // list l=(node*)malloc(sizeof(node));
+        // list l=new node;
+        // l-&gt;next=NULL;
+
+        pthread_create(&amp;threadProducer,NULL,producer,&amp;l);
+        pthread_create(&amp;threadConsumer,NULL,consumer,&amp;l);
+
+        pthread_join(threadProducer,NULL);
+        pthread_join(threadConsumer,NULL);
+
+        pthread_mutex_destroy(&amp;mutex);
+        pthread_cond_destroy(&amp;cond);
+
+        return 1;
+&#125;
+</code></pre>
+<p><strong>注：</strong>pthread_cond_wait()函数必须与mutex互斥变量配对使用，因为其内部实现的主要步骤为：</p>
+<pre><code class="c++">1.线程放在等待队列上，解锁
+
+2.等待 pthread_cond_signal或者pthread_cond_broadcast信号之后去竞争锁
+
+3.若竞争到互斥索则加锁。
+</code></pre>
+<p><img src="https://s2.loli.net/2022/04/19/zwARMPNqJ4LaoHi.png" alt="image-20220412142530152.png"></p>
+<h4 id="多生产者消费者线程"><a href="#多生产者消费者线程" class="headerlink" title="多生产者消费者线程"></a>多生产者消费者线程</h4><pre><code class="c++">#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;time.h&gt;
+#include&lt;pthread.h&gt;
+using namespace std;
+//定义链表节点结构
+typedef struct node
+&#123;
+    int data;
+    struct node* next;
+&#125;node,*list;
+
+//定义共享数据区域
+list l=NULL;
+
+#if 0
+l=new node;
+l-&gt;next=NULL;
+#endif
+
+//定义互斥变量与条件变量
+pthread_mutex_t mutex;
+pthread_cond_t cond;
+
+//生产者线程
+void* producer(void* arg)
+&#123;
+    int n=*(int*)arg;
+    srand((unsigned)time(0));
+    while(1)
+    &#123;
+        //生产数据
+        node* s=new node;
+        s-&gt;data=rand()%100+1;
+        cout&lt;&lt;&quot;[&quot;&lt;&lt;n&lt;&lt;&quot;]生产：&quot;&lt;&lt;s-&gt;data&lt;&lt;endl;
+        //互斥将生产的数据放入共享缓冲区
+        pthread_mutex_lock(&amp;mutex);//加锁
+
+        #if 0
+        s-&gt;next=l-&gt;next;
+        l-&gt;next=s;
+        #endif
+        //头插法将数据插入到缓冲区中
+        #if 1
+        s-&gt;next=l;
+        l=s;
+        #endif
+        pthread_mutex_unlock(&amp;mutex);//解锁
+        pthread_cond_signal(&amp;cond);//唤醒消费者进程
+        sleep(rand()%3);
+    &#125;
+&#125;
+
+
+//消费者线程
+void* consumer(void* arg)
+&#123;
+    int n=*(int*)arg;
+    srand((unsigned)time(0));
+    // list l=(node*)arg;
+    while(1)
+    &#123;
+        pthread_mutex_lock(&amp;mutex);
+        if(l==NULL)
+        &#123;
+            pthread_cond_wait(&amp;cond,&amp;mutex);//等待唤醒
+        &#125;
+
+        //由于pthread_cond_singal()唤醒的所有的消费者进程，使得各消费者进行抢占CPU，因此会出现一个消费者消费完所有数据后此后还有消费者取数据，而此时l==NULL,故p-&gt;data中已无数据
+        if(l==NULL)
+        &#123;
+            pthread_mutex_unlock(&amp;mutex);//当出现缓冲区中数据无数据进行判断时，首先需要对缓冲区进行解锁以防止出现死锁现象
+            continue;//跳出该消费者取数据循环中
+        &#125;
+
+        // node* p=l-&gt;next;
+        node* p=l;
+        cout&lt;&lt;&quot;[&quot;&lt;&lt;n&lt;&lt;&quot;]消费：&quot;&lt;&lt;p-&gt;data&lt;&lt;endl;
+        // l-&gt;next=p-&gt;next;
+        l=l-&gt;next;
+        delete p;
+        pthread_mutex_unlock(&amp;mutex);
+        sleep(rand()%3);
+    &#125;
+&#125;
+
+int main()
+&#123;
+    pthread_mutex_init(&amp;mutex,NULL);
+    pthread_cond_init(&amp;cond,NULL);
+
+    //定义五个生产者与消费者进程组
+    pthread_t threadProducer[5];
+    pthread_t threadConsumer[5];
+    int arr[5];
+
+    for(int i=0;i&lt;5;i++)
+    &#123;
+        arr[i]=i;
+        pthread_create(&amp;threadProducer[i],NULL,producer,&amp;arr[i]);
+        pthread_create(&amp;threadConsumer[i],NULL,consumer,&amp;arr[i]);
+    &#125;
+
+
+    for(int j=0;j&lt;5;j++)
+    &#123;
+        pthread_join(threadProducer[j],NULL);
+        pthread_join(threadConsumer[j],NULL);
+    &#125;
+
+    pthread_mutex_destroy(&amp;mutex);
+    pthread_cond_destroy(&amp;cond);
+
+    return 1;
+&#125;
+</code></pre>
+<p><img src="https://s2.loli.net/2022/04/19/eH78TNj5b1Xwof9.png" alt="image-20220412124128152.png"></p>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><pre><code class="c++">#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;pthread.h&gt;
+#include&lt;semaphore.h&gt;
+#include&lt;time.h&gt;
+using namespace std;
+//定义链表节点结构
+typedef struct node
+&#123;
+    int data;
+    struct node* next;
+&#125;node,*list;
+//定义共享区域
+list l=NULL;
+//定义信号量
+sem_t pro;
+sem_t con;
+//生产者线程
+void* producer(void* arg)
+&#123;
+    srand((unsigned)time(0));
+    while(1)
+    &#123;
+        sem_wait(&amp;pro);
+        //生产数据
+        node* s=new node;
+        s-&gt;data=rand()%100+1;
+        //将数据存放共享区域
+        s-&gt;next=l;
+        l=s;
+        cout&lt;&lt;&quot;producer:&quot;&lt;&lt;s-&gt;data&lt;&lt;endl;
+        sem_post(&amp;con);//给消费者发信号数据已经存放完毕
+        sleep(rand()%3);
+    &#125;
+&#125;
+//消费者线程
+void* consumer(void* arg)
+&#123;
+    srand((unsigned)time(0));
+    while(1)
+    &#123;
+        sem_wait(&amp;con);
+        //从共享区域中读出数据
+        node* p=l;
+        cout&lt;&lt;&quot;consumer:&quot;&lt;&lt;p-&gt;data&lt;&lt;endl;
+        //将读出的数据从共享区域中删除
+        l=p-&gt;next;
+        delete p;
+        sem_post(&amp;pro);//给生产者发信号数据已从共享区域中读出
+        sleep(rand()%3);
+    &#125;
+&#125;
+
+int main()
+&#123;
+    //初始化信号量
+    sem_init(&amp;pro,0,5);
+    sem_init(&amp;con,0,0);
+    //设置线程id
+    pthread_t thread_producer;
+    pthread_t thread_consumer;
+    //创建子线程
+    pthread_create(&amp;thread_producer,NULL,producer,NULL);
+    pthread_create(&amp;thread_consumer,NULL,consumer,NULL);
+    //等待子线程退出，并回收子线程区域
+    pthread_join(thread_producer,NULL);
+    pthread_join(thread_consumer,NULL);
+    //销毁子线程信号量
+    sem_destroy(&amp;pro);
+    sem_destroy(&amp;con);
+    return 1;
+&#125;
+</code></pre>
+<p><img src="https://s2.loli.net/2022/04/19/8KuOnj2Bx3r7gJm.png" alt="image-20220413102851778.png"></p>
+<p>​	</p>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
+  
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/2022/04/20/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Linux基础命令</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/2022/04/05/Latex/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Latex</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
+
+
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
+</html>
+
