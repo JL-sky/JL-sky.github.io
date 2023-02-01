@@ -1,420 +1,1164 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
+<html>
+	<head>
+		
+<title>Qt-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
 
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/index.css">
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="本文介绍了Qt界面开发当中的信号与槽机制使用、常用空间以及事件触发处理">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Qt">
-<meta property="og:url" content="http://example.com/2022/04/28/Qt/index.html">
-<meta property="og:site_name" content="一个人的兵荒马乱">
-<meta property="og:description" content="本文介绍了Qt界面开发当中的信号与槽机制使用、常用空间以及事件触发处理">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5eAI.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5mNt.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5n4P.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5VHA.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5EBd.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5K9f.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5M38.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5QgS.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/28/LX5ljg.png">
-<meta property="article:published_time" content="2022-04-28T11:51:06.000Z">
-<meta property="article:modified_time" content="2022-04-30T11:56:34.527Z">
-<meta property="article:author" content="千钧">
-<meta property="article:tag" content="c++">
-<meta property="article:tag" content="Qt">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1.ax1x.com/2022/04/28/LX5eAI.png">
+<meta name="keywords" content="c++,Qt,">
+<meta name="description" content="本文介绍了Qt界面开发当中的信号与槽机制使用、常用空间以及事件触发处理">
 
 
-<link rel="canonical" href="http://example.com/2022/04/28/Qt/">
+<script src="/js/jquery.min.js"></script>
 
 
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/04/28/Qt/","path":"2022/04/28/Qt/","title":"Qt"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Qt | 一个人的兵荒马乱</title>
-  
+<script src="/js/index.js"></script>
 
 
+<script src="/js/fancybox.umd.js"></script>
 
 
+<script src="/js/fancybox-images.js"></script>
 
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-<a target="_blank" rel="noopener" href="https://your-url" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-  <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文章目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										关于
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
     </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">一个人的兵荒马乱</p>
-      <i class="logo-line"></i>
-    </a>
-      <p class="site-subtitle" itemprop="description">醉后不知天在水，满床清梦压星河</p>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-  </ul>
-</nav>
-
-
-
-
-</div>
+    <ul>
         
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
+        <li>
+            <a href="/">首页</a>
         </li>
-        <li class="sidebar-nav-overview">
-          站点概览
+        
+        <li>
+            <a href="/archives">文章目录</a>
         </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD"><span class="nav-number">1.</span> <span class="nav-text">信号与槽</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%89%E9%92%AE%E6%8E%A7%E4%BB%B6%E4%B8%8E%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.1.</span> <span class="nav-text">按钮控件与信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.2.</span> <span class="nav-text">自定义信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD%E5%8F%91%E7%94%9F%E9%87%8D%E8%BD%BD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">自定义信号与槽发生重载的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%89%E9%92%AE%E8%A7%A6%E5%8F%91%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.4.</span> <span class="nav-text">按钮触发信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%93%BE%E6%8E%A5%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.5.</span> <span class="nav-text">信号链接信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lamdba%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.6.</span> <span class="nav-text">lamdba表达式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A7%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">控件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8F%9C%E5%8D%95%E6%A0%8F%E4%B8%8E%E5%B7%A5%E5%85%B7%E6%A0%8F"><span class="nav-number">2.1.</span> <span class="nav-text">菜单栏与工具栏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%80%81%E4%B8%8E%E9%9D%9E%E6%A8%A1%E6%80%81%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="nav-number">2.2.</span> <span class="nav-text">模态与非模态对话框</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="nav-number">2.3.</span> <span class="nav-text">消息对话框</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="nav-number">2.4.</span> <span class="nav-text">其他对话框</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UI%E5%B8%83%E5%B1%80%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.5.</span> <span class="nav-text">UI布局设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%89%E9%92%AE%E6%8E%A7%E4%BB%B6%E7%BB%84"><span class="nav-number">2.6.</span> <span class="nav-text">按钮控件组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QListWidget%E5%88%97%E8%A1%A8%E5%AE%B9%E5%99%A8"><span class="nav-number">2.7.</span> <span class="nav-text">QListWidget列表容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#treeWidget%E6%A0%91%E6%8E%A7%E4%BB%B6"><span class="nav-number">2.8.</span> <span class="nav-text">treeWidget树控件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tableWidget%E8%A1%A8%E6%A0%BC%E6%8E%A7%E4%BB%B6"><span class="nav-number">2.9.</span> <span class="nav-text">tableWidget表格控件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.10.</span> <span class="nav-text">其他控件介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6"><span class="nav-number">2.11.</span> <span class="nav-text">自定义控件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">事件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">鼠标事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-number">3.2.</span> <span class="nav-text">定时器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E5%99%A8"><span class="nav-number">3.3.</span> <span class="nav-text">事件分发器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">3.4.</span> <span class="nav-text">事件过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%9B%BE%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.5.</span> <span class="nav-text">绘图事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QFile%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C"><span class="nav-number">3.6.</span> <span class="nav-text">QFile文件读写操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QFileIno%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF%E8%AF%BB%E5%8F%96"><span class="nav-number">3.7.</span> <span class="nav-text">QFileIno文件信息读取</span></a></li></ol></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="千钧"
-      src="/images/dog.jpg">
-  <p class="site-author-name" itemprop="name">千钧</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap site-overview-item animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">14</span>
-          <span class="site-state-item-name">日志</span>
+        
+        <li>
+            <a href="/categories">分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">关于</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">12</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author site-overview-item animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/JL-sky/JL-sky.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;JL-sky&#x2F;JL-sky.github.io" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
-      </span>
-  </div>
-
-
-
-        </div>
-      </div>
-    </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
-
-    
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/28/Qt/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/dog.jpg">
-      <meta itemprop="name" content="千钧">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="一个人的兵荒马乱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Qt | 一个人的兵荒马乱">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Qt
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-04-28 19:51:06" itemprop="dateCreated datePublished" datetime="2022-04-28T19:51:06+08:00">2022-04-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-04-30 19:56:34" itemprop="dateModified" datetime="2022-04-30T19:56:34+08:00">2022-04-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <p>本文介绍了Qt界面开发当中的信号与槽机制使用、常用空间以及事件触发处理</p>
-<span id="more"></span>
-
-
-<h1 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h1><h2 id="按钮控件与信号"><a href="#按钮控件与信号" class="headerlink" title="按钮控件与信号"></a>按钮控件与信号</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//    创建按钮对象及其实例，参数一为按钮名称，参数二为将按钮控件镶嵌到主窗口当中</span></span><br><span class="line">    QPushButton* btn=<span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">&quot;close&quot;</span>,<span class="keyword">this</span>);</span><br><span class="line"><span class="comment">//   重新设置主窗口大小</span></span><br><span class="line">    <span class="built_in">resize</span>(<span class="number">600</span>,<span class="number">400</span>);</span><br><span class="line"><span class="comment">//    移动按钮位置，按钮创建时默认为原点</span></span><br><span class="line">    btn-&gt;<span class="built_in">move</span>(<span class="built_in">width</span>()/<span class="number">2</span>,<span class="built_in">height</span>()/<span class="number">2</span>);</span><br><span class="line"><span class="comment">//    设置主窗口名称</span></span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">setObjectName</span>(<span class="string">&quot;按钮实验&quot;</span>);</span><br><span class="line"><span class="comment">//   信号控件，参数：发送信号者，发送的信号，接受信号者，接受的信号</span></span><br><span class="line">    <span class="built_in">connect</span>(btn,&amp;QPushButton::clicked,<span class="keyword">this</span>,&amp;myWidget::close);</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mywidget.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ui_mywidget.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;QPushButton&gt;</span></span></span><br><span class="line"></span><br><span class="line">myWidget::<span class="built_in">myWidget</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QWidget</span>(parent)</span><br><span class="line">    , <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::myWidget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建教师对象</span></span><br><span class="line">    <span class="keyword">this</span>-&gt;zt=<span class="keyword">new</span> <span class="built_in">Teacher</span>(<span class="keyword">this</span>);</span><br><span class="line">   <span class="comment">//创建学生对象</span></span><br><span class="line">    <span class="keyword">this</span>-&gt;st=<span class="keyword">new</span> <span class="built_in">Student</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(zt,&amp;Teacher::hungry,st,&amp;Student::treat);</span><br><span class="line">    <span class="built_in">classIsOver</span>();</span><br><span class="line">    <span class="built_in">classIsOver</span>();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myWidget::classIsOver</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//emit发射信号</span></span><br><span class="line">    emit zt-&gt;<span class="built_in">hungry</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myWidget::~<span class="built_in">myWidget</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;student.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line">Student::<span class="built_in">Student</span>(QObject *parent) : <span class="built_in">QObject</span>(parent)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Student::treat</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;请老师吃饭&quot;</span>&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="自定义信号与槽发生重载的问题"><a href="#自定义信号与槽发生重载的问题" class="headerlink" title="自定义信号与槽发生重载的问题"></a>自定义信号与槽发生重载的问题</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建教师对象</span></span><br><span class="line"> <span class="keyword">this</span>-&gt;zt=<span class="keyword">new</span> <span class="built_in">Teacher</span>(<span class="keyword">this</span>);</span><br><span class="line"><span class="comment">//创建学生对象</span></span><br><span class="line"> <span class="keyword">this</span>-&gt;st=<span class="keyword">new</span> <span class="built_in">Student</span>(<span class="keyword">this</span>);</span><br><span class="line"> <span class="comment">//函数指针-&gt;函数地址</span></span><br><span class="line"> <span class="built_in">void</span>(Teacher::*teacherSingal)(QString)=&amp;Teacher::hungry;</span><br><span class="line"> <span class="built_in">void</span>(Student::*studentSingal)(QString)=&amp;Student::treat;</span><br><span class="line"></span><br><span class="line"> <span class="built_in">connect</span>(zt,teacherSingal,st,studentSingal);</span><br><span class="line"> <span class="built_in">classIsOver</span>();</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;student.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line">Student::<span class="built_in">Student</span>(QObject *parent) : <span class="built_in">QObject</span>(parent)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Student::treat</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;请老师吃饭&quot;</span>&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Student::treat</span><span class="params">(QString foodName)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;请老师吃：&quot;</span>&lt;&lt;foodName&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myWidget::classIsOver</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//emit发射信号</span></span><br><span class="line">    emit zt-&gt;<span class="built_in">hungry</span>(<span class="string">&quot;宫保鸡丁&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="按钮触发信号"><a href="#按钮触发信号" class="headerlink" title="按钮触发信号"></a>按钮触发信号</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> QPushButton* btn=<span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">&quot;下课&quot;</span>,<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">resize</span>(<span class="number">600</span>,<span class="number">400</span>);</span><br><span class="line">    <span class="comment">//点击下课按钮触发宫保鸡丁时间</span></span><br><span class="line">    <span class="built_in">connect</span>(btn,&amp;QPushButton::clicked,<span class="keyword">this</span>,&amp;myWidget::classIsOver);</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myWidget::classIsOver</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//emit发射信号</span></span><br><span class="line">    emit st-&gt;<span class="built_in">treat</span>(<span class="string">&quot;宫保鸡丁&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="信号链接信号"><a href="#信号链接信号" class="headerlink" title="信号链接信号"></a>信号链接信号</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//    无参信号与槽链接</span></span><br><span class="line">    <span class="built_in">void</span>(Teacher::*teacherSingal)(<span class="type">void</span>)=&amp;Teacher::hungry;</span><br><span class="line">    <span class="built_in">void</span>(Student::*studentSingal)(<span class="type">void</span>)=&amp;Student::treat;</span><br><span class="line">    <span class="built_in">connect</span>(zt,teacherSingal,st,studentSingal);</span><br><span class="line"></span><br><span class="line"><span class="comment">//    信号链接信号,按钮信号链接教师信号 </span></span><br><span class="line">    <span class="built_in">connect</span>(btn,&amp;QPushButton::clicked,zt,teacherSingal);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myWidget::classIsOver</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//emit发射信号</span></span><br><span class="line">    emit zt-&gt;<span class="built_in">hungry</span>();</span><br><span class="line"><span class="comment">//    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);</span></span><br><span class="line"><span class="comment">//    emit st-&gt;treat(&quot;宫保鸡丁&quot;);</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="lamdba表达式"><a href="#lamdba表达式" class="headerlink" title="lamdba表达式"></a>lamdba表达式</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//    lamdba表达式</span></span><br><span class="line"><span class="comment">//    [外部变量捕获方式](形参)mutable-&gt;返回类型&#123;函数体&#125;(实参);</span></span><br><span class="line"><span class="comment">//    [外部变量捕获方式]：当&#123;&#125;中使用外部变量时，需要在此声明使用的外部变量，称其为捕获，捕获方式有，</span></span><br><span class="line"><span class="comment">//              值传递[a]：该方式传递外部变量进入lamdba表达式内部使用时，默认为const方式，即不可改变传递进来的外部变量的值，</span></span><br><span class="line"><span class="comment">//                                若需要改变，则需要使用关键字mutable，但注意，此刻改变的并非外部变量本体的值，而是拷贝进lamdba的值</span></span><br><span class="line"><span class="comment">//              引用传递[&amp;]：使用引用方式传递外部变量进入lamdba表达式，将lamdba表达式内使用的外部变量与本体外部变量进行绑定</span></span><br><span class="line"><span class="comment">//              自推导方式[=]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//    （形参）：lamdba表达式函数形参</span></span><br><span class="line"><span class="comment">//      &#123;函数体&#125;：lamdba表达式具体实现</span></span><br><span class="line"><span class="comment">//    （实参）：传递给形参的值，&#123;&#125;中使用return语句时必须使用该实参</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    QPushButton* btn1=<span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">&quot;btn1&quot;</span>,<span class="keyword">this</span>);</span><br><span class="line">    QPushButton* btn2=<span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">&quot;btn2&quot;</span>,<span class="keyword">this</span>);</span><br><span class="line">    QPushButton* btn3=<span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">&quot;btn3&quot;</span>,<span class="keyword">this</span>);</span><br><span class="line">    <span class="built_in">resize</span>(<span class="number">600</span>,<span class="number">400</span>);</span><br><span class="line">    btn2-&gt;<span class="built_in">move</span>(<span class="number">300</span>,<span class="number">200</span>);</span><br><span class="line">    btn3-&gt;<span class="built_in">move</span>(<span class="number">200</span>,<span class="number">300</span>);</span><br><span class="line">    <span class="type">int</span> m=<span class="number">10</span>;</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;start:&quot;</span>&lt;&lt;m&lt;&lt;endl;</span><br><span class="line">    <span class="built_in">connect</span>(btn1,&amp;QPushButton::clicked,<span class="keyword">this</span>,[=]()&#123;<span class="built_in">qDebug</span>()&lt;&lt;m+<span class="number">10</span>&lt;&lt;endl;&#125;);</span><br><span class="line">    <span class="built_in">connect</span>(btn2,&amp;QPushButton::clicked,<span class="keyword">this</span>,[m]()<span class="keyword">mutable</span>&#123;<span class="built_in">qDebug</span>()&lt;&lt;m+<span class="number">20</span>&lt;&lt;endl;&#125;);</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;next:&quot;</span>&lt;&lt;m&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> 1</span></span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    ret=[m]()<span class="keyword">mutable</span>-&gt;<span class="type">int</span>&#123;<span class="keyword">return</span> m+<span class="number">30</span>;&#125;();<span class="comment">//值传递</span></span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;ret_m:&quot;</span>&lt;&lt;ret&lt;&lt;endl;<span class="comment">//40</span></span><br><span class="line">    ret=[=]()-&gt;<span class="type">int</span>&#123;<span class="keyword">return</span> m+<span class="number">40</span>;&#125;();<span class="comment">//自推导传递</span></span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;ret_=:&quot;</span>&lt;&lt;ret&lt;&lt;endl;<span class="comment">//50</span></span><br><span class="line">    ret=[](<span class="type">int</span> a,<span class="type">int</span> b)-&gt;<span class="type">int</span>&#123;<span class="keyword">return</span> a+b;&#125;(<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;ret_a+b:&quot;</span>&lt;&lt;ret&lt;&lt;endl;<span class="comment">//5</span></span><br><span class="line">    ret=[](<span class="type">int</span> x)-&gt;<span class="type">int</span>&#123;<span class="keyword">return</span> [](<span class="type">int</span> y)-&gt;<span class="type">int</span>&#123;<span class="keyword">return</span> y*<span class="number">2</span>;&#125;(x)+<span class="number">6</span>;&#125;(<span class="number">5</span>);</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;ret&lt;&lt;endl;<span class="comment">//16</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用lamdba表达式进行信号传递</span></span><br><span class="line">    QPushButton* btn_lam=<span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">&quot;关闭&quot;</span>,<span class="keyword">this</span>);</span><br><span class="line">    btn_lam-&gt;<span class="built_in">move</span>(<span class="number">100</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">connect</span>(btn_lam,&amp;QPushButton::clicked,<span class="keyword">this</span>,[=]()&#123;</span><br><span class="line">     <span class="keyword">this</span>-&gt;<span class="built_in">close</span>();</span><br><span class="line"><span class="comment">//        emit st-&gt;treat(&quot;宫保鸡丁&quot;);</span></span><br><span class="line"><span class="comment">//        btn_lam-&gt;setText(&quot;aaa&quot;);//效果：点击“关闭”按钮后，按钮名称自动改为“aaa”</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-
-<h1 id="控件"><a href="#控件" class="headerlink" title="控件"></a>控件</h1><h2 id="菜单栏与工具栏"><a href="#菜单栏与工具栏" class="headerlink" title="菜单栏与工具栏"></a>菜单栏与工具栏</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    <span class="built_in">resize</span>(<span class="number">600</span>,<span class="number">400</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//    创建菜单栏QMenuBar,最多有一个</span></span><br><span class="line">    QMenuBar* bar=<span class="built_in">menuBar</span>();</span><br><span class="line"><span class="comment">//    将菜单栏放入窗口中</span></span><br><span class="line">    <span class="built_in">setMenuBar</span>(bar);</span><br><span class="line"><span class="comment">//    创建菜单QMenu</span></span><br><span class="line">   QMenu* fileMenu=bar-&gt;<span class="built_in">addMenu</span>(<span class="string">&quot;文件&quot;</span>);</span><br><span class="line">   QMenu* editMenu=bar-&gt;<span class="built_in">addMenu</span>(<span class="string">&quot;编辑&quot;</span>);</span><br><span class="line"><span class="comment">//   创建菜单项QAction</span></span><br><span class="line">   fileMenu-&gt;<span class="built_in">addAction</span>(<span class="string">&quot;新建&quot;</span>);</span><br><span class="line">   fileMenu-&gt;<span class="built_in">addSeparator</span>();<span class="comment">//添加菜单栏分割线</span></span><br><span class="line">   fileMenu-&gt;<span class="built_in">addAction</span>(<span class="string">&quot;打开&quot;</span>);</span><br><span class="line">   fileMenu-&gt;<span class="built_in">addSeparator</span>();<span class="comment">//添加菜单栏分割线</span></span><br><span class="line">   fileMenu-&gt;<span class="built_in">addAction</span>(<span class="string">&quot;保存&quot;</span>);</span><br><span class="line">   fileMenu-&gt;<span class="built_in">addSeparator</span>();<span class="comment">//添加菜单栏分割线</span></span><br><span class="line">   fileMenu-&gt;<span class="built_in">addAction</span>(<span class="string">&quot;关闭&quot;</span>);</span><br><span class="line">   fileMenu-&gt;<span class="built_in">addSeparator</span>();</span><br><span class="line"></span><br><span class="line">   <span class="comment">//工具栏</span></span><br><span class="line">     QToolBar* toolBar=<span class="keyword">new</span> <span class="built_in">QToolBar</span>(<span class="keyword">this</span>);</span><br><span class="line"><span class="comment">//设置默认停靠区域</span></span><br><span class="line">     <span class="built_in">addToolBar</span>(Qt::LeftToolBarArea,toolBar);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 后期设置，左右停靠</span></span><br><span class="line">    toolBar-&gt;<span class="built_in">setAllowedAreas</span>(Qt::LeftToolBarArea|Qt::RightToolBarArea);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置浮动</span></span><br><span class="line">    toolBar-&gt;<span class="built_in">setFloatable</span>(<span class="literal">false</span>);<span class="comment">//工具栏将不能浮动在窗口表面</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//设置移动</span></span><br><span class="line">     toolBar-&gt;<span class="built_in">setMovable</span>(<span class="literal">false</span>);<span class="comment">//工具栏将不能移动，此时上边左右停靠的设置将失效</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 工具栏中添加内容</span></span><br><span class="line"><span class="comment">// 创建内容</span></span><br><span class="line">     QAction* helpAction=fileMenu-&gt;<span class="built_in">addAction</span>(<span class="string">&quot;帮助&quot;</span>);<span class="comment">//将菜单栏中的内容添加到工具栏中</span></span><br><span class="line">     QAction* processAction=fileMenu-&gt;<span class="built_in">addAction</span>(<span class="string">&quot;项目&quot;</span>);</span><br><span class="line"><span class="comment">// 将内容添加到工具栏中</span></span><br><span class="line">     toolBar-&gt;<span class="built_in">addAction</span>(helpAction);</span><br><span class="line">     toolBar-&gt;<span class="built_in">addSeparator</span>();<span class="comment">//添加工具栏分割线</span></span><br><span class="line">     toolBar-&gt;<span class="built_in">addAction</span>(processAction);</span><br><span class="line">     toolBar-&gt;<span class="built_in">addSeparator</span>();<span class="comment">//添加工具栏分割线</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//在工具栏中添加控件</span></span><br><span class="line">     QPushButton* btn=<span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">&quot;设置&quot;</span>,<span class="keyword">this</span>);</span><br><span class="line">     toolBar-&gt;<span class="built_in">addWidget</span>(btn);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tips：</span><br><span class="line">    <span class="comment">//菜单栏，最多有一个</span></span><br><span class="line">    QMenuBar* bar=<span class="built_in">menuBar</span>();</span><br><span class="line">	<span class="built_in">setMenuBar</span>(bar);</span><br><span class="line">	<span class="comment">//添加菜单内容</span></span><br><span class="line">	QMenu* fileMenu=bar-&gt;<span class="built_in">addMenu</span>(<span class="string">&quot;文件&quot;</span>);</span><br><span class="line">	<span class="comment">//添加菜单项</span></span><br><span class="line">	QAction* newAction=fileMenu-&gt;<span class="built_in">addAction</span>(<span class="string">&quot;创建&quot;</span>);</span><br><span class="line">	<span class="comment">//添加分割线</span></span><br><span class="line">	fileMenu-&gt;<span class="built_in">addSeparator</span>(newAction);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//工具栏，可以有多个</span></span><br><span class="line">	QToolBar* toolBar=<span class="keyword">new</span> <span class="built_in">QToolBar</span>(<span class="string">&quot;this&quot;</span>);</span><br><span class="line">	<span class="comment">//设置默认停靠区域</span></span><br><span class="line">	<span class="built_in">addToolBar</span>(Qt::leftBarArea,toolBar);</span><br><span class="line">	<span class="comment">//后期设置停靠区域，浮动，移动，在工具栏中添加内容，控件</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="模态与非模态对话框"><a href="#模态与非模态对话框" class="headerlink" title="模态与非模态对话框"></a>模态与非模态对话框</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//点击创建按钮，弹出一个对话框</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;</span><br><span class="line">        <span class="comment">//模态对话框，不可以对其他窗口进行操作</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> 0</span></span><br><span class="line">        QDialog <span class="built_in">dlg</span>(<span class="keyword">this</span>);</span><br><span class="line">        dlg.<span class="built_in">resize</span>(<span class="number">200</span>,<span class="number">100</span>);</span><br><span class="line">        dlg.<span class="built_in">exec</span>();</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> 0</span></span><br><span class="line">        <span class="comment">//非模态对话框,可以对其他窗口进行操作</span></span><br><span class="line">        QDialog* dlg2=<span class="keyword">new</span> <span class="built_in">QDialog</span>(<span class="keyword">this</span>);</span><br><span class="line">        dlg2-&gt;<span class="built_in">resize</span>(<span class="number">200</span>,<span class="number">100</span>);</span><br><span class="line">        dlg2-&gt;<span class="built_in">show</span>();</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<h2 id="消息对话框"><a href="#消息对话框" class="headerlink" title="消息对话框"></a>消息对话框</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//点击创建按钮，弹出一个对话框</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;</span><br><span class="line">        <span class="comment">//错误对话框,参数：父类，标题，提示内容</span></span><br><span class="line"><span class="comment">//        QMessageBox::critical(this,&quot;critical&quot;,&quot;错误&quot;);</span></span><br><span class="line">        <span class="comment">//信息对话框</span></span><br><span class="line"><span class="comment">//        QMessageBox::information(this,&quot;info&quot;,&quot;信息&quot;);</span></span><br><span class="line">        <span class="comment">//提问对话框,参数：1.父类，2.标题，3.提示内容,4.按键类型，5.默认关联回车键</span></span><br><span class="line"><span class="comment">//        QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//        if(QMessageBox::Save==QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))</span></span><br><span class="line"><span class="comment">//        &#123;</span></span><br><span class="line"><span class="comment">//            qDebug()&lt;&lt;&quot;选择的按键类型是保存&quot;&lt;&lt;endl;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//        else</span></span><br><span class="line"><span class="comment">//        &#123;</span></span><br><span class="line"><span class="comment">//            qDebug()&lt;&lt;&quot;选择的按键类型是选择取消&quot;&lt;&lt;endl;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//警告对话框</span></span><br><span class="line">        QMessageBox::<span class="built_in">warning</span>(<span class="keyword">this</span>,<span class="string">&quot;warning&quot;</span>,<span class="string">&quot;警告&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h2 id="其他对话框"><a href="#其他对话框" class="headerlink" title="其他对话框"></a>其他对话框</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">connect</span>(ui-&gt;actionnew,&amp;QAction::triggered,[=]()&#123;</span><br><span class="line">        <span class="comment">//颜色对话框</span></span><br><span class="line"><span class="comment">//        QColor color=QColorDialog::getColor(QColor(0,255,0));</span></span><br><span class="line"><span class="comment">//        qDebug()&lt;&lt;&quot;red:&quot;&lt;&lt;color.red()&lt;&lt;&quot;green:&quot;&lt;&lt;color.green()&lt;&lt;&quot;blue:&quot;&lt;&lt;color.blue()&lt;&lt;endl;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//文件对话框，参数：父亲，标题，默认文件路径，筛选的文件类型</span></span><br><span class="line">        <span class="comment">//返回值为文件路径</span></span><br><span class="line"><span class="comment">//        QString str=QFileDialog::getOpenFileName(this,&quot;openFile&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*.md&quot;);</span></span><br><span class="line"><span class="comment">//        qDebug()&lt;&lt;str&lt;&lt;endl;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//字体对话框</span></span><br><span class="line">        <span class="type">bool</span> flag;</span><br><span class="line">        QFont font=QFontDialog::<span class="built_in">getFont</span>(&amp;flag,<span class="built_in">QFont</span>(<span class="string">&quot;仿宋&quot;</span>,<span class="number">36</span>));</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;字体 &quot;</span>&lt;&lt;font.<span class="built_in">family</span>()&lt;&lt;<span class="string">&quot;大小 &quot;</span>&lt;&lt;font.<span class="built_in">pointSize</span>()&lt;&lt;<span class="string">&quot;是否加粗 &quot;</span>&lt;&lt;font.<span class="built_in">bold</span>()&lt;&lt;<span class="string">&quot;是否倾斜 &quot;</span>&lt;&lt;font.<span class="built_in">italic</span>()&lt;&lt;endl;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-
-<h2 id="UI布局设计"><a href="#UI布局设计" class="headerlink" title="UI布局设计"></a>UI布局设计</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5eAI"><img src="https://s1.ax1x.com/2022/04/28/LX5eAI.png" alt="LX5eAI.png"></a></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tips：</span><br><span class="line">	<span class="number">1.</span>选取widget进行布局，水平、垂直、栅格</span><br><span class="line">    <span class="number">2.</span>默认窗口与控件之间存在<span class="number">9</span>的间隙，可以调整layoutLeftMargin</span><br><span class="line">    <span class="number">3.</span>利用弹簧进行布局</span><br></pre></td></tr></table></figure>
-
-<h2 id="按钮控件组"><a href="#按钮控件组" class="headerlink" title="按钮控件组"></a>按钮控件组</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5mNt"><img src="https://s1.ax1x.com/2022/04/28/LX5mNt.png" alt="LX5mNt.png"></a></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//默认性别单选框为男</span></span><br><span class="line">    ui-&gt;rBtnMan-&gt;<span class="built_in">setChecked</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//点击”女“，打印信息</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;rBtnWoman,&amp;QRadioButton::clicked,[=]()&#123;</span><br><span class="line"><span class="comment">//        qDebug()&lt;&lt;QString::fromUtf8(&quot;女&quot;)&lt;&lt;endl;</span></span><br><span class="line">         <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;女&quot;</span>&lt;&lt;endl;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//点击”操作系统“显示状态码,0表示未选中，2表示选中</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;boxOS,&amp;QCheckBox::stateChanged,[=](<span class="type">int</span> state)&#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;state&lt;&lt;endl;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tips:</span><br><span class="line">	按钮组：</span><br><span class="line">        QPushButton：常用按钮</span><br><span class="line">        QToolButton：工具按钮，用于显示图片，如想显示文字，修改风格toolButtonStyle，凸起风格：autoRaise</span><br><span class="line">        QRadioButton：单选按钮，ui-&gt;rBtnMan-&gt;<span class="built_in">setChecked</span>(<span class="literal">true</span>);<span class="comment">//设置默认选项</span></span><br><span class="line">		QCheckBox:多选按钮，监听状态QStateChecked,<span class="number">0</span>未选中，<span class="number">1</span>半选，<span class="number">2</span>选中</span><br></pre></td></tr></table></figure>
-
-<h2 id="QListWidget列表容器"><a href="#QListWidget列表容器" class="headerlink" title="QListWidget列表容器"></a>QListWidget列表容器</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用listwidget写诗</span></span><br><span class="line">    QListWidgetItem* item=<span class="keyword">new</span> <span class="built_in">QListWidgetItem</span>(<span class="string">&quot;锄禾日当午&quot;</span>);</span><br><span class="line">    ui-&gt;listWidget-&gt;<span class="built_in">addItem</span>(item);<span class="comment">//添加一句话</span></span><br><span class="line">    item-&gt;<span class="built_in">setTextAlignment</span>(Qt::AlignHCenter);<span class="comment">//设置对其方式为居中</span></span><br><span class="line"></span><br><span class="line">    QStringList list;</span><br><span class="line">    list&lt;&lt;<span class="string">&quot;我见青山多妩媚&quot;</span>&lt;&lt;<span class="string">&quot;料青山见我应如是！&quot;</span>;</span><br><span class="line">    ui-&gt;listWidget-&gt;<span class="built_in">addItems</span>(list);<span class="comment">//添加多句话</span></span><br><span class="line">	ui-&gt;listWidget-&gt;<span class="built_in">addItems</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;自其变者而观之，则天地曾不能以一瞬&quot;</span>&lt;&lt;<span class="string">&quot;自其不变者而观之，则物与我皆无尽也&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-
-
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5n4P"><img src="https://s1.ax1x.com/2022/04/28/LX5n4P.png" alt="LX5n4P.png"></a></p>
-<h2 id="treeWidget树控件"><a href="#treeWidget树控件" class="headerlink" title="treeWidget树控件"></a>treeWidget树控件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置水平头</span></span><br><span class="line">    ui-&gt;treeWidget-&gt;<span class="built_in">setHeaderLabels</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;英雄&quot;</span>&lt;&lt;<span class="string">&quot;英雄自我介绍&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置顶层节点</span></span><br><span class="line">    QTreeWidgetItem* strongItem=<span class="keyword">new</span> <span class="built_in">QTreeWidgetItem</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;力量&quot;</span>);</span><br><span class="line">    QTreeWidgetItem* speedItem=<span class="keyword">new</span> <span class="built_in">QTreeWidgetItem</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;速度&quot;</span>);</span><br><span class="line">    QTreeWidgetItem* inteligenceItem=<span class="keyword">new</span> <span class="built_in">QTreeWidgetItem</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;智力&quot;</span>);</span><br><span class="line">    <span class="comment">//加载顶层节点</span></span><br><span class="line">    ui-&gt;treeWidget-&gt;<span class="built_in">addTopLevelItem</span>(strongItem);</span><br><span class="line">    ui-&gt;treeWidget-&gt;<span class="built_in">addTopLevelItem</span>(speedItem);</span><br><span class="line">    ui-&gt;treeWidget-&gt;<span class="built_in">addTopLevelItem</span>(inteligenceItem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//追加子节点</span></span><br><span class="line">    QTreeWidgetItem* l1=<span class="keyword">new</span> <span class="built_in">QTreeWidgetItem</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;刚被猪&quot;</span>&lt;&lt;<span class="string">&quot;前排坦克。。。。。。&quot;</span>);</span><br><span class="line">    strongItem-&gt;<span class="built_in">addChild</span>(l1); </span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5VHA"><img src="https://s1.ax1x.com/2022/04/28/LX5VHA.png" alt="LX5VHA.png"></a></p>
-<h2 id="tableWidget表格控件"><a href="#tableWidget表格控件" class="headerlink" title="tableWidget表格控件"></a>tableWidget表格控件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置列数</span></span><br><span class="line">    ui-&gt;tableWidget-&gt;<span class="built_in">setColumnCount</span>(<span class="number">3</span>);</span><br><span class="line">    <span class="comment">//设置水平表头</span></span><br><span class="line">    ui-&gt;tableWidget-&gt;<span class="built_in">setHorizontalHeaderLabels</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;姓名&quot;</span>&lt;&lt;<span class="string">&quot;性别&quot;</span>&lt;&lt;<span class="string">&quot;年龄&quot;</span>);</span><br><span class="line">    <span class="comment">//设置行数</span></span><br><span class="line">    ui-&gt;tableWidget-&gt;<span class="built_in">setRowCount</span>(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置正文</span></span><br><span class="line">    QStringList nameList;</span><br><span class="line">    nameList&lt;&lt;<span class="string">&quot;张三&quot;</span>&lt;&lt;<span class="string">&quot;李四&quot;</span>&lt;&lt;<span class="string">&quot;王五&quot;</span>&lt;&lt;<span class="string">&quot;赵六&quot;</span>&lt;&lt;<span class="string">&quot;丁丁&quot;</span>;</span><br><span class="line">    QList&lt;QString&gt; sexList;</span><br><span class="line">    sexList&lt;&lt;<span class="string">&quot;男&quot;</span>&lt;&lt;<span class="string">&quot;男&quot;</span>&lt;&lt;<span class="string">&quot;女&quot;</span>&lt;&lt;<span class="string">&quot;女&quot;</span>&lt;&lt;<span class="string">&quot;男&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> col=<span class="number">0</span>;</span><br><span class="line">       ui-&gt;tableWidget-&gt;<span class="built_in">setItem</span>(i,col++,<span class="keyword">new</span> <span class="built_in">QTableWidgetItem</span>(nameList[i]));</span><br><span class="line">       ui-&gt;tableWidget-&gt;<span class="built_in">setItem</span>(i,col++,<span class="keyword">new</span> <span class="built_in">QTableWidgetItem</span>(sexList.<span class="built_in">at</span>(i)));</span><br><span class="line">        <span class="comment">//将数字转换为QString</span></span><br><span class="line">        ui-&gt;tableWidget-&gt;<span class="built_in">setItem</span>(i,col++,<span class="keyword">new</span> <span class="built_in">QTableWidgetItem</span>(QString::<span class="built_in">number</span>(i+<span class="number">18</span>)));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5EBd"><img src="https://s1.ax1x.com/2022/04/28/LX5EBd.png" alt="LX5EBd.png"></a></p>
-<h2 id="其他控件介绍"><a href="#其他控件介绍" class="headerlink" title="其他控件介绍"></a>其他控件介绍</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//栈控件使用</span></span><br><span class="line">    <span class="comment">//设置默认定位</span></span><br><span class="line">    ui-&gt;stackedWidget-&gt;<span class="built_in">setCurrentIndex</span>(<span class="number">2</span>);</span><br><span class="line">    <span class="comment">//点击按钮跳转到TabWidget控件页面</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btnTab,&amp;QPushButton::clicked,[=]()&#123;</span><br><span class="line">       ui-&gt;stackedWidget-&gt;<span class="built_in">setCurrentIndex</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">//点击按钮跳转到scrollArea控件页面</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btnScroll,&amp;QPushButton::clicked,[=]()&#123;</span><br><span class="line">        ui-&gt;stackedWidget-&gt;<span class="built_in">setCurrentIndex</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">//点击按钮跳转到toolBox控件页面</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btnTool,&amp;QPushButton::clicked,[=]()&#123;</span><br><span class="line">        ui-&gt;stackedWidget-&gt;<span class="built_in">setCurrentIndex</span>(<span class="number">2</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//下拉框</span></span><br><span class="line">    ui-&gt;comboBox-&gt;<span class="built_in">addItems</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;宝马&quot;</span>&lt;&lt;<span class="string">&quot;奔驰&quot;</span>&lt;&lt;<span class="string">&quot;拖拉机&quot;</span>);</span><br><span class="line">    <span class="comment">//选中“拖拉机”按钮跳转到下拉框拖拉机</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btnSelect,&amp;QPushButton::clicked,[=]()&#123;</span><br><span class="line"><span class="comment">//        ui-&gt;comboBox-&gt;setCurrentIndex(2);</span></span><br><span class="line">        ui-&gt;comboBox-&gt;<span class="built_in">setCurrentText</span>(<span class="string">&quot;拖拉机&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tips:</span><br><span class="line">	栈控件：ui-&gt;stackedWidget-&gt;<span class="built_in">setCurrentIndex</span>();</span><br><span class="line">	下拉框：ui-&gt;comboBox-&gt;<span class="built_in">addItems</span>(<span class="built_in">QStringList</span>()&lt;&lt;<span class="string">&quot;奔驰&quot;</span>&lt;&lt;<span class="string">&quot;宝马&quot;</span>);</span><br><span class="line">    Qlabel显示图片：ui-&gt;labelImage-&gt;<span class="built_in">setPixmap</span>(<span class="string">&quot;图片路径&quot;</span>);</span><br><span class="line">    Qlabel显示动图：ui-&gt;LabenImage-&gt;<span class="built_in">setMoive</span>();</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="自定义控件"><a href="#自定义控件" class="headerlink" title="自定义控件"></a>自定义控件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">smallWidget</span> : <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">smallWidget</span><span class="params">(QWidget *parent = <span class="literal">nullptr</span>)</span></span>;</span><br><span class="line">    ~<span class="built_in">smallWidget</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置数值</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">setNum</span><span class="params">(<span class="type">int</span> num)</span></span>;</span><br><span class="line">    <span class="comment">//获取数值</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getNum</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::smallWidget *ui;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">smallWidget::<span class="built_in">smallWidget</span>(QWidget *parent) :</span><br><span class="line">    <span class="built_in">QWidget</span>(parent),</span><br><span class="line">    <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::smallWidget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//QSpinBox翻滚，QSlider跟着移动</span></span><br><span class="line">    <span class="built_in">void</span>(QSpinBox::* spSingal)(<span class="type">int</span>)=&amp;QSpinBox::valueChanged;</span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//QSlider移动，QSpinBox跟着翻滚</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">smallWidget::setNum</span><span class="params">(<span class="type">int</span> num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ui-&gt;spinBox-&gt;<span class="built_in">setValue</span>(num);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">smallWidget::getNum</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ui-&gt;spinBox-&gt;<span class="built_in">value</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">smallWidget::~<span class="built_in">smallWidget</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5K9f"><img src="https://s1.ax1x.com/2022/04/28/LX5K9f.png" alt="LX5K9f.png"></a></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">myWidget::<span class="built_in">myWidget</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QWidget</span>(parent)</span><br><span class="line">    , <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::myWidget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//点击按钮获取数值</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btnGetNum,&amp;QPushButton::clicked,[=]()</span><br><span class="line">    &#123;</span><br><span class="line">       <span class="built_in">qDebug</span>()&lt;&lt;ui-&gt;widget-&gt;<span class="built_in">getNum</span>();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//点击按钮设置进度条到一半数值</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btnSetNum,&amp;QPushButton::clicked,[=]()&#123;</span><br><span class="line">        ui-&gt;widget-&gt;<span class="built_in">setNum</span>(<span class="number">50</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5M38"><img src="https://s1.ax1x.com/2022/04/28/LX5M38.png" alt="LX5M38.png"></a></p>
-<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><h2 id="鼠标事件"><a href="#鼠标事件" class="headerlink" title="鼠标事件"></a>鼠标事件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mylabel.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> execution_character_set(<span class="string">&quot;utf-8&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;QMouseEvent&gt;</span></span></span><br><span class="line">myLabel::<span class="built_in">myLabel</span>(QWidget *parent) : <span class="built_in">QLabel</span>(parent)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//设置鼠标跟踪状态</span></span><br><span class="line">    <span class="built_in">setMouseTracking</span>(<span class="literal">true</span>);<span class="comment">//此时只要是鼠标事件其状态都会被监听</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myLabel::enterEvent</span><span class="params">(QEvent *event)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//    qDebug()&lt;&lt;&quot;鼠标进入了!&quot;&lt;&lt;endl;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myLabel::leaveEvent</span><span class="params">(QEvent *)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//    qDebug()&lt;&lt;&quot;鼠标离开了!&quot;&lt;&lt;endl;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myLabel::mousePressEvent</span><span class="params">(QMouseEvent *ev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//鼠标左键按下，则显示信息</span></span><br><span class="line">    <span class="keyword">if</span>(ev-&gt;<span class="built_in">button</span>()==Qt::LeftButton)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//返回鼠标在指定区域内的坐标值以及在整个窗口内的坐标值</span></span><br><span class="line">        <span class="comment">//QString::arg()//用字符串变量参数依次替代字符串中最小数值</span></span><br><span class="line">        QString str=<span class="built_in">QString</span>(<span class="string">&quot;鼠标按下了  x=%1  y=%2 gloalX=%3  globalY=%4&quot;</span>).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">x</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">y</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">globalX</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">globalY</span>());</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myLabel::mouseReleaseEvent</span><span class="params">(QMouseEvent *ev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//    if(ev-&gt;button()==Qt::LeftButton)</span></span><br><span class="line">    &#123;</span><br><span class="line">        QString str=<span class="built_in">QString</span>(<span class="string">&quot;鼠标释放了！x=%1 y=%2 globalX=%3 globalY=%4&quot;</span>).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">x</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">y</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">globalX</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">globalY</span>());</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myLabel::mouseMoveEvent</span><span class="params">(QMouseEvent *ev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//    if(ev-&gt;buttons()&amp;Qt::LeftButton)//组合键</span></span><br><span class="line">    &#123;</span><br><span class="line">        QString str=<span class="built_in">QString</span>(<span class="string">&quot;鼠标移动了！x=%1 y=%2 globalX=%3 globalY=%4&quot;</span>).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">x</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">y</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">globalX</span>()).<span class="built_in">arg</span>(ev-&gt;<span class="built_in">globalY</span>());</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tips:</span><br><span class="line">	在UI中添加一个label ,选中label右键-&gt;提升 -&gt;输入类名myLabel.</span><br><span class="line">    这就完成了对label控件的鼠标事件的重写.</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5QgS"><img src="https://s1.ax1x.com/2022/04/28/LX5QgS.png" alt="LX5QgS.png"></a></p>
-<h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">myWidget</span> : <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">myWidget</span>(QWidget *parent = <span class="literal">nullptr</span>);</span><br><span class="line">    ~<span class="built_in">myWidget</span>();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> id1;</span><br><span class="line">    <span class="type">int</span> id2;</span><br><span class="line">    <span class="comment">//重写定时器事件</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">timerEvent</span><span class="params">(QTimerEvent* ev )</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::myWidget *ui;</span><br><span class="line"></span><br><span class="line">    Teacher* zt;</span><br><span class="line">    Student* st;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">classIsOver</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">myWidget::<span class="built_in">myWidget</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QWidget</span>(parent)</span><br><span class="line">    , <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::myWidget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//启动定时器,startTimer(定时器间隔时长),返回定时器的唯一ID号</span></span><br><span class="line">    id1=<span class="built_in">startTimer</span>(<span class="number">1000</span>);</span><br><span class="line">    id2=<span class="built_in">startTimer</span>(<span class="number">2000</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//定时器的第二种启动方式</span></span><br><span class="line">   QTimer* timer=<span class="keyword">new</span> <span class="built_in">QTimer</span>(<span class="keyword">this</span>);</span><br><span class="line">   timer-&gt;<span class="built_in">start</span>(<span class="number">500</span>);</span><br><span class="line">   <span class="built_in">connect</span>(timer,&amp;QTimer::timeout,[=]()&#123;</span><br><span class="line">       <span class="type">static</span> <span class="type">int</span> num=<span class="number">1</span>;</span><br><span class="line">       ui-&gt;label_3-&gt;<span class="built_in">setText</span>(QString::<span class="built_in">number</span>(num++));</span><br><span class="line">   &#125;);</span><br><span class="line"></span><br><span class="line">   <span class="comment">//点击按钮停止定时器</span></span><br><span class="line">   <span class="built_in">connect</span>(ui-&gt;btn,&amp;QPushButton::clicked,[=]()&#123;</span><br><span class="line">       timer-&gt;<span class="built_in">stop</span>();</span><br><span class="line">   &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//重写定时器事件</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myWidget::timerEvent</span><span class="params">(QTimerEvent* ev)</span><span class="comment">//当定时器启动后，系统会自动调用该定时器事件函数</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ev-&gt;<span class="built_in">timerId</span>()==id1)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">static</span> <span class="type">int</span> num=<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//定时器启动后自动调用该函数，若启动的定时器ID号为1号，则在label上每隔1s自动加1并显示，QString::number将数字转换为Qstring类型数据</span></span><br><span class="line">        ui-&gt;label-&gt;<span class="built_in">setText</span>(QString::<span class="built_in">number</span>(num++));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(ev-&gt;<span class="built_in">timerId</span>()==id2)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">static</span> <span class="type">int</span> num=<span class="number">1</span>;</span><br><span class="line">        ui-&gt;label_2-&gt;<span class="built_in">setText</span>(QString::<span class="built_in">number</span>(num++));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="事件分发器"><a href="#事件分发器" class="headerlink" title="事件分发器"></a>事件分发器</h2><h2 id="事件过滤器"><a href="#事件过滤器" class="headerlink" title="事件过滤器"></a>事件过滤器</h2><h2 id="绘图事件"><a href="#绘图事件" class="headerlink" title="绘图事件"></a>绘图事件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">myWidget::paintEvent</span><span class="params">(QPaintEvent*)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   QPainter*painter=<span class="keyword">new</span> <span class="built_in">QPainter</span>(<span class="keyword">this</span>);<span class="comment">//实例化画家对象</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">//设置画笔</span></span><br><span class="line">   <span class="function">QPen <span class="title">pen</span><span class="params">(QColor(<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>))</span></span>;</span><br><span class="line">   <span class="comment">//设置画笔宽度</span></span><br><span class="line">   pen.<span class="built_in">setWidth</span>(<span class="number">2</span>);</span><br><span class="line">   <span class="comment">//设置画笔风格</span></span><br><span class="line">   pen.<span class="built_in">setStyle</span>(Qt::DotLine);</span><br><span class="line"></span><br><span class="line">   <span class="comment">//让画家使用画笔</span></span><br><span class="line">    painter-&gt;<span class="built_in">setPen</span>(pen);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置画刷</span></span><br><span class="line">    <span class="function">QBrush <span class="title">brush</span><span class="params">(Qt::cyan)</span></span>;</span><br><span class="line">    <span class="comment">//设置画刷风格</span></span><br><span class="line">    brush.<span class="built_in">setStyle</span>(Qt::Dense7Pattern);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//让画家使用画刷</span></span><br><span class="line">   painter-&gt;<span class="built_in">setBrush</span>(brush);</span><br><span class="line"></span><br><span class="line">   <span class="comment">//画线</span></span><br><span class="line">    painter-&gt;<span class="built_in">drawLine</span>(<span class="built_in">QPoint</span>(<span class="number">0</span>,<span class="number">0</span>),<span class="built_in">QPoint</span>(<span class="number">100</span>,<span class="number">100</span>));</span><br><span class="line">    <span class="comment">//画椭圆</span></span><br><span class="line">    painter-&gt;<span class="built_in">drawEllipse</span>(<span class="built_in">QPoint</span>(<span class="number">100</span>,<span class="number">100</span>),<span class="number">50</span>,<span class="number">50</span>);</span><br><span class="line">    <span class="comment">//画矩形</span></span><br><span class="line">    painter-&gt;<span class="built_in">drawRect</span>(<span class="built_in">QRect</span>(<span class="number">150</span>,<span class="number">150</span>,<span class="number">100</span>,<span class="number">50</span>));</span><br><span class="line">    <span class="comment">//画文字</span></span><br><span class="line">    painter-&gt;<span class="built_in">drawText</span>(<span class="built_in">QRect</span>(<span class="number">300</span>,<span class="number">400</span>,<span class="number">300</span>,<span class="number">300</span>),<span class="string">&quot;好好学习，天天向上&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="QFile文件读写操作"><a href="#QFile文件读写操作" class="headerlink" title="QFile文件读写操作"></a>QFile文件读写操作</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5ljg"><img src="https://s1.ax1x.com/2022/04/28/LX5ljg.png" alt="LX5ljg.png"></a></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//点击按钮，打开文件</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btn,&amp;QPushButton::clicked,<span class="keyword">this</span>,[=]()&#123;</span><br><span class="line">        <span class="comment">//获取文件路径</span></span><br><span class="line">       QString path=QFileDialog::<span class="built_in">getOpenFileName</span>(<span class="keyword">this</span>,<span class="string">&quot;打开文件&quot;</span>,<span class="string">&quot;C:\Users\Administrator\Desktop&quot;</span>,<span class="string">&quot;*md&quot;</span>);</span><br><span class="line">       <span class="comment">//将文件路径放入到ui窗口内的lineEdit控件中</span></span><br><span class="line">       ui-&gt;lineEdit-&gt;<span class="built_in">setText</span>(path);</span><br><span class="line">       </span><br><span class="line">       <span class="comment">//在textEdit控件中显示内容</span></span><br><span class="line">       QFile <span class="built_in">file</span>(path);</span><br><span class="line">       <span class="comment">//打开文件，设置打开方式</span></span><br><span class="line">       file.<span class="built_in">open</span>(QIODevice::ReadOnly);</span><br><span class="line">       <span class="comment">//读取文件内容</span></span><br><span class="line">       QByteArray array=file.<span class="built_in">readAll</span>();</span><br><span class="line">       ui-&gt;textEdit-&gt;<span class="built_in">setText</span>(array);<span class="comment">//将内容显示到textEdit控件中    </span></span><br><span class="line">       file.<span class="built_in">close</span>();</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">       <span class="comment">//写文件</span></span><br><span class="line">       file.<span class="built_in">open</span>(QIODevice::Append);<span class="comment">//以追加方式写入文件</span></span><br><span class="line">       file.<span class="built_in">write</span>(<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">       file.<span class="built_in">close</span>();</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//点击按钮，打开文件</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;btn,&amp;QPushButton::clicked,<span class="keyword">this</span>,[=]()&#123;</span><br><span class="line">        <span class="comment">//获取文件路径</span></span><br><span class="line">       QString path=QFileDialog::<span class="built_in">getOpenFileName</span>(<span class="keyword">this</span>,<span class="string">&quot;打开文件&quot;</span>,<span class="string">&quot;C:\Users\Administrator\Desktop&quot;</span>,<span class="string">&quot;*md&quot;</span>);</span><br><span class="line">       <span class="comment">//将文件路径放入到ui窗口内的lineEdit控件中</span></span><br><span class="line">       ui-&gt;lineEdit-&gt;<span class="built_in">setText</span>(path);</span><br><span class="line"></span><br><span class="line">       <span class="comment">//编码格式类</span></span><br><span class="line">       QTextCodec* codec=QTextCodec::<span class="built_in">codecForName</span>(<span class="string">&quot;gbk&quot;</span>);<span class="comment">//文件编码默认为utf-8，人为设定文件打开编码格式为gbk</span></span><br><span class="line">       <span class="comment">//在textEdit控件中显示内容</span></span><br><span class="line">       QFile <span class="built_in">file</span>(path);</span><br><span class="line">       <span class="comment">//打开文件，设置打开方式</span></span><br><span class="line">       file.<span class="built_in">open</span>(QIODevice::ReadOnly);</span><br><span class="line">       <span class="comment">//读取文件内容</span></span><br><span class="line">       QByteArray array=file.<span class="built_in">readAll</span>();</span><br><span class="line">	   <span class="comment">//将内容显示到textEdit控件中</span></span><br><span class="line">       ui-&gt;textEdit-&gt;<span class="built_in">setText</span>(codec-&gt;<span class="built_in">toUnicode</span>(array));</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-
-<h2 id="QFileIno文件信息读取"><a href="#QFileIno文件信息读取" class="headerlink" title="QFileIno文件信息读取"></a>QFileIno文件信息读取</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文件信息类</span></span><br><span class="line">      <span class="function">QFileInfo <span class="title">info</span><span class="params">(文件路径)</span></span>;</span><br><span class="line">      <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;大小：&quot;</span>&lt;&lt;info.<span class="built_in">size</span>()&lt;&lt;<span class="string">&quot;   文件后缀名称：&quot;</span>&lt;&lt;info.<span class="built_in">suffix</span>()&lt;&lt;<span class="string">&quot;   文件名称：&quot;</span>&lt;&lt;info.<span class="built_in">fileName</span>();</span><br><span class="line">      <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;创建日期：&quot;</span>&lt;&lt;info.<span class="built_in">created</span>().<span class="built_in">toString</span>(<span class="string">&quot;yyyy/MM/dd hh::mm::ss&quot;</span>)&lt;&lt;endl;</span><br><span class="line">      <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;最后修改日期&quot;</span>&lt;&lt;info.<span class="built_in">lastModified</span>().<span class="built_in">toString</span>(<span class="string">&quot;yyyy/MM/dd hh::mm::ss&quot;</span>)&lt;&lt;endl;</span><br></pre></td></tr></table></figure>
-
-
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/c/" rel="tag"># c++</a>
-              <a href="/tags/Qt/" rel="tag"># Qt</a>
-          </div>
-
         
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2022/04/28/%E6%9C%BA%E6%88%BF%E9%A2%84%E7%BA%A6%E7%B3%BB%E7%BB%9F/" rel="prev" title="机房预约系统">
-                  <i class="fa fa-chevron-left"></i> 机房预约系统
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2022/04/30/leetCode/" rel="next" title="LeetCode">
-                  LeetCode <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">千钧</span>
-</div>
-
-<!--
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>
--->
-
     </div>
-  </footer>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
 
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/c++">c++</a></li>
+            
+            <li><a href="/tags/Qt">Qt</a></li>
+            
+            
+        </ul>
+        
+        <h1>Qt</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/C/" target="_blank" >C++</a>
+                    
+                </div>
+                <p>2022-04-28 19:51:06</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD"><span class="toc-text">信号与槽</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E9%92%AE%E6%8E%A7%E4%BB%B6%E4%B8%8E%E4%BF%A1%E5%8F%B7"><span class="toc-text">按钮控件与信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BF%A1%E5%8F%B7"><span class="toc-text">自定义信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD%E5%8F%91%E7%94%9F%E9%87%8D%E8%BD%BD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">自定义信号与槽发生重载的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E9%92%AE%E8%A7%A6%E5%8F%91%E4%BF%A1%E5%8F%B7"><span class="toc-text">按钮触发信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%93%BE%E6%8E%A5%E4%BF%A1%E5%8F%B7"><span class="toc-text">信号链接信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lamdba%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">lamdba表达式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%A7%E4%BB%B6"><span class="toc-text">控件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8F%9C%E5%8D%95%E6%A0%8F%E4%B8%8E%E5%B7%A5%E5%85%B7%E6%A0%8F"><span class="toc-text">菜单栏与工具栏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%80%81%E4%B8%8E%E9%9D%9E%E6%A8%A1%E6%80%81%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="toc-text">模态与非模态对话框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="toc-text">消息对话框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="toc-text">其他对话框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UI%E5%B8%83%E5%B1%80%E8%AE%BE%E8%AE%A1"><span class="toc-text">UI布局设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E9%92%AE%E6%8E%A7%E4%BB%B6%E7%BB%84"><span class="toc-text">按钮控件组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#QListWidget%E5%88%97%E8%A1%A8%E5%AE%B9%E5%99%A8"><span class="toc-text">QListWidget列表容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#treeWidget%E6%A0%91%E6%8E%A7%E4%BB%B6"><span class="toc-text">treeWidget树控件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tableWidget%E8%A1%A8%E6%A0%BC%E6%8E%A7%E4%BB%B6"><span class="toc-text">tableWidget表格控件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="toc-text">其他控件介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6"><span class="toc-text">自定义控件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6"><span class="toc-text">事件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6"><span class="toc-text">鼠标事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="toc-text">定时器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E5%99%A8"><span class="toc-text">事件分发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-text">事件过滤器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%98%E5%9B%BE%E4%BA%8B%E4%BB%B6"><span class="toc-text">绘图事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#QFile%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C"><span class="toc-text">QFile文件读写操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#QFileIno%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF%E8%AF%BB%E5%8F%96"><span class="toc-text">QFileIno文件信息读取</span></a></li></ol></li></ol>
+      </div>
+    
 
+    <!-- more -->
+
+
+<h1 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h1><h2 id="按钮控件与信号"><a href="#按钮控件与信号" class="headerlink" title="按钮控件与信号"></a>按钮控件与信号</h2><pre><code class="c++">//    创建按钮对象及其实例，参数一为按钮名称，参数二为将按钮控件镶嵌到主窗口当中
+    QPushButton* btn=new QPushButton(&quot;close&quot;,this);
+//   重新设置主窗口大小
+    resize(600,400);
+//    移动按钮位置，按钮创建时默认为原点
+    btn-&gt;move(width()/2,height()/2);
+//    设置主窗口名称
+    this-&gt;setObjectName(&quot;按钮实验&quot;);
+//   信号控件，参数：发送信号者，发送的信号，接受信号者，接受的信号
+    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::close);
+</code></pre>
+<h2 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h2><pre><code class="c++">#include &quot;mywidget.h&quot;
+#include &quot;ui_mywidget.h&quot;
+#include&lt;QPushButton&gt;
+
+myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //创建教师对象
+    this-&gt;zt=new Teacher(this);
+   //创建学生对象
+    this-&gt;st=new Student(this);
+
+    connect(zt,&amp;Teacher::hungry,st,&amp;Student::treat);
+    classIsOver();
+    classIsOver();
+
+&#125;
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry();
+&#125;
+
+myWidget::~myWidget()
+&#123;
+    delete ui;
+&#125;
+
+</code></pre>
+<pre><code class="c++">#include &quot;student.h&quot;
+#include&lt;QDebug&gt;
+
+Student::Student(QObject *parent) : QObject(parent)
+&#123;
+
+&#125;
+void Student::treat()
+&#123;
+     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
+&#125;
+</code></pre>
+<h2 id="自定义信号与槽发生重载的问题"><a href="#自定义信号与槽发生重载的问题" class="headerlink" title="自定义信号与槽发生重载的问题"></a>自定义信号与槽发生重载的问题</h2><pre><code class="c++">   //创建教师对象
+    this-&gt;zt=new Teacher(this);
+   //创建学生对象
+    this-&gt;st=new Student(this);
+    //函数指针-&gt;函数地址
+    void(Teacher::*teacherSingal)(QString)=&amp;Teacher::hungry;
+    void(Student::*studentSingal)(QString)=&amp;Student::treat;
+
+    connect(zt,teacherSingal,st,studentSingal);
+    classIsOver();
+</code></pre>
+<pre><code class="c++">#include &quot;student.h&quot;
+#include&lt;QDebug&gt;
+
+Student::Student(QObject *parent) : QObject(parent)
+&#123;
+
+&#125;
+void Student::treat()
+&#123;
+     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
+&#125;
+void Student::treat(QString foodName)
+&#123;
+    qDebug()&lt;&lt;&quot;请老师吃：&quot;&lt;&lt;foodName&lt;&lt;endl;
+&#125;
+
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="按钮触发信号"><a href="#按钮触发信号" class="headerlink" title="按钮触发信号"></a>按钮触发信号</h2><pre><code class="c++"> QPushButton* btn=new QPushButton(&quot;下课&quot;,this);
+    this-&gt;resize(600,400);
+    //点击下课按钮触发宫保鸡丁时间
+    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::classIsOver);
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="信号链接信号"><a href="#信号链接信号" class="headerlink" title="信号链接信号"></a>信号链接信号</h2><pre><code class="c++">//    无参信号与槽链接
+    void(Teacher::*teacherSingal)(void)=&amp;Teacher::hungry;
+    void(Student::*studentSingal)(void)=&amp;Student::treat;
+    connect(zt,teacherSingal,st,studentSingal);
+
+//    信号链接信号,按钮信号链接教师信号 
+    connect(btn,&amp;QPushButton::clicked,zt,teacherSingal);
+&#125;
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry();
+//    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
+//    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="lamdba表达式"><a href="#lamdba表达式" class="headerlink" title="lamdba表达式"></a>lamdba表达式</h2><pre><code class="c++">//    lamdba表达式
+//    [外部变量捕获方式](形参)mutable-&gt;返回类型&#123;函数体&#125;(实参);
+//    [外部变量捕获方式]：当&#123;&#125;中使用外部变量时，需要在此声明使用的外部变量，称其为捕获，捕获方式有，
+//              值传递[a]：该方式传递外部变量进入lamdba表达式内部使用时，默认为const方式，即不可改变传递进来的外部变量的值，
+//                                若需要改变，则需要使用关键字mutable，但注意，此刻改变的并非外部变量本体的值，而是拷贝进lamdba的值
+//              引用传递[&amp;]：使用引用方式传递外部变量进入lamdba表达式，将lamdba表达式内使用的外部变量与本体外部变量进行绑定
+//              自推导方式[=]
+
+
+//    （形参）：lamdba表达式函数形参
+//      &#123;函数体&#125;：lamdba表达式具体实现
+//    （实参）：传递给形参的值，&#123;&#125;中使用return语句时必须使用该实参
+    
+
+    QPushButton* btn1=new QPushButton(&quot;btn1&quot;,this);
+    QPushButton* btn2=new QPushButton(&quot;btn2&quot;,this);
+    QPushButton* btn3=new QPushButton(&quot;btn3&quot;,this);
+    resize(600,400);
+    btn2-&gt;move(300,200);
+    btn3-&gt;move(200,300);
+    int m=10;
+    qDebug()&lt;&lt;&quot;start:&quot;&lt;&lt;m&lt;&lt;endl;
+    connect(btn1,&amp;QPushButton::clicked,this,[=]()&#123;qDebug()&lt;&lt;m+10&lt;&lt;endl;&#125;);
+    connect(btn2,&amp;QPushButton::clicked,this,[m]()mutable&#123;qDebug()&lt;&lt;m+20&lt;&lt;endl;&#125;);
+    qDebug()&lt;&lt;&quot;next:&quot;&lt;&lt;m&lt;&lt;endl;
+
+#if 1
+    int ret;
+    ret=[m]()mutable-&gt;int&#123;return m+30;&#125;();//值传递
+    qDebug()&lt;&lt;&quot;ret_m:&quot;&lt;&lt;ret&lt;&lt;endl;//40
+    ret=[=]()-&gt;int&#123;return m+40;&#125;();//自推导传递
+    qDebug()&lt;&lt;&quot;ret_=:&quot;&lt;&lt;ret&lt;&lt;endl;//50
+    ret=[](int a,int b)-&gt;int&#123;return a+b;&#125;(2,3);
+    qDebug()&lt;&lt;&quot;ret_a+b:&quot;&lt;&lt;ret&lt;&lt;endl;//5
+    ret=[](int x)-&gt;int&#123;return [](int y)-&gt;int&#123;return y*2;&#125;(x)+6;&#125;(5);
+    qDebug()&lt;&lt;ret&lt;&lt;endl;//16
+#endif
+</code></pre>
+<pre><code class="c++">//利用lamdba表达式进行信号传递
+    QPushButton* btn_lam=new QPushButton(&quot;关闭&quot;,this);
+    btn_lam-&gt;move(100,0);
+    connect(btn_lam,&amp;QPushButton::clicked,this,[=]()&#123;
+     this-&gt;close();
+//        emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+//        btn_lam-&gt;setText(&quot;aaa&quot;);//效果：点击“关闭”按钮后，按钮名称自动改为“aaa”
+    &#125;);
+</code></pre>
+<h1 id="控件"><a href="#控件" class="headerlink" title="控件"></a>控件</h1><h2 id="菜单栏与工具栏"><a href="#菜单栏与工具栏" class="headerlink" title="菜单栏与工具栏"></a>菜单栏与工具栏</h2><pre><code class="c++">
+    resize(600,400);
+
+//    创建菜单栏QMenuBar,最多有一个
+    QMenuBar* bar=menuBar();
+//    将菜单栏放入窗口中
+    setMenuBar(bar);
+//    创建菜单QMenu
+   QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
+   QMenu* editMenu=bar-&gt;addMenu(&quot;编辑&quot;);
+//   创建菜单项QAction
+   fileMenu-&gt;addAction(&quot;新建&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;打开&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;保存&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;关闭&quot;);
+   fileMenu-&gt;addSeparator();
+
+   //工具栏
+     QToolBar* toolBar=new QToolBar(this);
+//设置默认停靠区域
+     addToolBar(Qt::LeftToolBarArea,toolBar);
+
+// 后期设置，左右停靠
+    toolBar-&gt;setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+
+// 设置浮动
+    toolBar-&gt;setFloatable(false);//工具栏将不能浮动在窗口表面
+
+//设置移动
+     toolBar-&gt;setMovable(false);//工具栏将不能移动，此时上边左右停靠的设置将失效
+
+// 工具栏中添加内容
+// 创建内容
+     QAction* helpAction=fileMenu-&gt;addAction(&quot;帮助&quot;);//将菜单栏中的内容添加到工具栏中
+     QAction* processAction=fileMenu-&gt;addAction(&quot;项目&quot;);
+// 将内容添加到工具栏中
+     toolBar-&gt;addAction(helpAction);
+     toolBar-&gt;addSeparator();//添加工具栏分割线
+     toolBar-&gt;addAction(processAction);
+     toolBar-&gt;addSeparator();//添加工具栏分割线
+
+//在工具栏中添加控件
+     QPushButton* btn=new QPushButton(&quot;设置&quot;,this);
+     toolBar-&gt;addWidget(btn);
+
+
+
+tips：
+    //菜单栏，最多有一个
+    QMenuBar* bar=menuBar();
+    setMenuBar(bar);
+    //添加菜单内容
+    QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
+    //添加菜单项
+    QAction* newAction=fileMenu-&gt;addAction(&quot;创建&quot;);
+    //添加分割线
+    fileMenu-&gt;addSeparator(newAction);
+
+
+    //工具栏，可以有多个
+    QToolBar* toolBar=new QToolBar(&quot;this&quot;);
+    //设置默认停靠区域
+    addToolBar(Qt::leftBarArea,toolBar);
+    //后期设置停靠区域，浮动，移动，在工具栏中添加内容，控件
+</code></pre>
+<h2 id="模态与非模态对话框"><a href="#模态与非模态对话框" class="headerlink" title="模态与非模态对话框"></a>模态与非模态对话框</h2><pre><code class="c++">  //点击创建按钮，弹出一个对话框
+    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
+        //模态对话框，不可以对其他窗口进行操作
+#if 0
+        QDialog dlg(this);
+        dlg.resize(200,100);
+        dlg.exec();
+#endif
+#if 0
+        //非模态对话框,可以对其他窗口进行操作
+        QDialog* dlg2=new QDialog(this);
+        dlg2-&gt;resize(200,100);
+        dlg2-&gt;show();
+#endif
+</code></pre>
+<h2 id="消息对话框"><a href="#消息对话框" class="headerlink" title="消息对话框"></a>消息对话框</h2><pre><code class="c++">//点击创建按钮，弹出一个对话框
+    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
+        //错误对话框,参数：父类，标题，提示内容
+//        QMessageBox::critical(this,&quot;critical&quot;,&quot;错误&quot;);
+        //信息对话框
+//        QMessageBox::information(this,&quot;info&quot;,&quot;信息&quot;);
+        //提问对话框,参数：1.父类，2.标题，3.提示内容,4.按键类型，5.默认关联回车键
+//        QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);
+
+//        if(QMessageBox::Save==QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))
+//        &#123;
+//            qDebug()&lt;&lt;&quot;选择的按键类型是保存&quot;&lt;&lt;endl;
+//        &#125;
+//        else
+//        &#123;
+//            qDebug()&lt;&lt;&quot;选择的按键类型是选择取消&quot;&lt;&lt;endl;
+//        &#125;
+
+        //警告对话框
+        QMessageBox::warning(this,&quot;warning&quot;,&quot;警告&quot;);
+</code></pre>
+<h2 id="其他对话框"><a href="#其他对话框" class="headerlink" title="其他对话框"></a>其他对话框</h2><pre><code class="c++">connect(ui-&gt;actionnew,&amp;QAction::triggered,[=]()&#123;
+        //颜色对话框
+//        QColor color=QColorDialog::getColor(QColor(0,255,0));
+//        qDebug()&lt;&lt;&quot;red:&quot;&lt;&lt;color.red()&lt;&lt;&quot;green:&quot;&lt;&lt;color.green()&lt;&lt;&quot;blue:&quot;&lt;&lt;color.blue()&lt;&lt;endl;
+
+        //文件对话框，参数：父亲，标题，默认文件路径，筛选的文件类型
+        //返回值为文件路径
+//        QString str=QFileDialog::getOpenFileName(this,&quot;openFile&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*.md&quot;);
+//        qDebug()&lt;&lt;str&lt;&lt;endl;
+
+        //字体对话框
+        bool flag;
+        QFont font=QFontDialog::getFont(&amp;flag,QFont(&quot;仿宋&quot;,36));
+        qDebug()&lt;&lt;&quot;字体 &quot;&lt;&lt;font.family()&lt;&lt;&quot;大小 &quot;&lt;&lt;font.pointSize()&lt;&lt;&quot;是否加粗 &quot;&lt;&lt;font.bold()&lt;&lt;&quot;是否倾斜 &quot;&lt;&lt;font.italic()&lt;&lt;endl;
+    &#125;);
+</code></pre>
+<h2 id="UI布局设计"><a href="#UI布局设计" class="headerlink" title="UI布局设计"></a>UI布局设计</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5eAI"><img src="https://s1.ax1x.com/2022/04/28/LX5eAI.png" alt="LX5eAI.png"></a></p>
+<pre><code class="c++">tips：
+    1.选取widget进行布局，水平、垂直、栅格
+    2.默认窗口与控件之间存在9的间隙，可以调整layoutLeftMargin
+    3.利用弹簧进行布局
+</code></pre>
+<h2 id="按钮控件组"><a href="#按钮控件组" class="headerlink" title="按钮控件组"></a>按钮控件组</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5mNt"><img src="https://s1.ax1x.com/2022/04/28/LX5mNt.png" alt="LX5mNt.png"></a></p>
+<pre><code class="c++"> //默认性别单选框为男
+    ui-&gt;rBtnMan-&gt;setChecked(true);
+
+    //点击”女“，打印信息
+    connect(ui-&gt;rBtnWoman,&amp;QRadioButton::clicked,[=]()&#123;
+//        qDebug()&lt;&lt;QString::fromUtf8(&quot;女&quot;)&lt;&lt;endl;
+         qDebug()&lt;&lt;&quot;女&quot;&lt;&lt;endl;
+    &#125;);
+
+    //点击”操作系统“显示状态码,0表示未选中，2表示选中
+    connect(ui-&gt;boxOS,&amp;QCheckBox::stateChanged,[=](int state)&#123;
+        qDebug()&lt;&lt;state&lt;&lt;endl;
+    &#125;);
+
+
+
+
+tips:
+    按钮组：
+        QPushButton：常用按钮
+        QToolButton：工具按钮，用于显示图片，如想显示文字，修改风格toolButtonStyle，凸起风格：autoRaise
+        QRadioButton：单选按钮，ui-&gt;rBtnMan-&gt;setChecked(true);//设置默认选项
+        QCheckBox:多选按钮，监听状态QStateChecked,0未选中，1半选，2选中
+</code></pre>
+<h2 id="QListWidget列表容器"><a href="#QListWidget列表容器" class="headerlink" title="QListWidget列表容器"></a>QListWidget列表容器</h2><pre><code class="c++">//利用listwidget写诗
+    QListWidgetItem* item=new QListWidgetItem(&quot;锄禾日当午&quot;);
+    ui-&gt;listWidget-&gt;addItem(item);//添加一句话
+    item-&gt;setTextAlignment(Qt::AlignHCenter);//设置对其方式为居中
+
+    QStringList list;
+    list&lt;&lt;&quot;我见青山多妩媚&quot;&lt;&lt;&quot;料青山见我应如是！&quot;;
+    ui-&gt;listWidget-&gt;addItems(list);//添加多句话
+    ui-&gt;listWidget-&gt;addItems(QStringList()&lt;&lt;&quot;自其变者而观之，则天地曾不能以一瞬&quot;&lt;&lt;&quot;自其不变者而观之，则物与我皆无尽也&quot;);
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5n4P"><img src="https://s1.ax1x.com/2022/04/28/LX5n4P.png" alt="LX5n4P.png"></a></p>
+<h2 id="treeWidget树控件"><a href="#treeWidget树控件" class="headerlink" title="treeWidget树控件"></a>treeWidget树控件</h2><pre><code class="c++">//设置水平头
+    ui-&gt;treeWidget-&gt;setHeaderLabels(QStringList()&lt;&lt;&quot;英雄&quot;&lt;&lt;&quot;英雄自我介绍&quot;);
+
+    //设置顶层节点
+    QTreeWidgetItem* strongItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;力量&quot;);
+    QTreeWidgetItem* speedItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;速度&quot;);
+    QTreeWidgetItem* inteligenceItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;智力&quot;);
+    //加载顶层节点
+    ui-&gt;treeWidget-&gt;addTopLevelItem(strongItem);
+    ui-&gt;treeWidget-&gt;addTopLevelItem(speedItem);
+    ui-&gt;treeWidget-&gt;addTopLevelItem(inteligenceItem);
+
+    //追加子节点
+    QTreeWidgetItem* l1=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;刚被猪&quot;&lt;&lt;&quot;前排坦克。。。。。。&quot;);
+    strongItem-&gt;addChild(l1); 
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5VHA"><img src="https://s1.ax1x.com/2022/04/28/LX5VHA.png" alt="LX5VHA.png"></a></p>
+<h2 id="tableWidget表格控件"><a href="#tableWidget表格控件" class="headerlink" title="tableWidget表格控件"></a>tableWidget表格控件</h2><pre><code class="c++">//设置列数
+    ui-&gt;tableWidget-&gt;setColumnCount(3);
+    //设置水平表头
+    ui-&gt;tableWidget-&gt;setHorizontalHeaderLabels(QStringList()&lt;&lt;&quot;姓名&quot;&lt;&lt;&quot;性别&quot;&lt;&lt;&quot;年龄&quot;);
+    //设置行数
+    ui-&gt;tableWidget-&gt;setRowCount(5);
+
+    //设置正文
+    QStringList nameList;
+    nameList&lt;&lt;&quot;张三&quot;&lt;&lt;&quot;李四&quot;&lt;&lt;&quot;王五&quot;&lt;&lt;&quot;赵六&quot;&lt;&lt;&quot;丁丁&quot;;
+    QList&lt;QString&gt; sexList;
+    sexList&lt;&lt;&quot;男&quot;&lt;&lt;&quot;男&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;男&quot;;
+    for(int i=0;i&lt;5;i++)
+    &#123;
+        int col=0;
+       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(nameList[i]));
+       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(sexList.at(i)));
+        //将数字转换为QString
+        ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(QString::number(i+18)));
+    &#125;
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5EBd"><img src="https://s1.ax1x.com/2022/04/28/LX5EBd.png" alt="LX5EBd.png"></a></p>
+<h2 id="其他控件介绍"><a href="#其他控件介绍" class="headerlink" title="其他控件介绍"></a>其他控件介绍</h2><pre><code class="c++">//栈控件使用
+    //设置默认定位
+    ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
+    //点击按钮跳转到TabWidget控件页面
+    connect(ui-&gt;btnTab,&amp;QPushButton::clicked,[=]()&#123;
+       ui-&gt;stackedWidget-&gt;setCurrentIndex(0);
+    &#125;);
+    //点击按钮跳转到scrollArea控件页面
+    connect(ui-&gt;btnScroll,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;stackedWidget-&gt;setCurrentIndex(1);
+    &#125;);
+    //点击按钮跳转到toolBox控件页面
+    connect(ui-&gt;btnTool,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
+    &#125;);
+
+    //下拉框
+    ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;宝马&quot;&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;拖拉机&quot;);
+    //选中“拖拉机”按钮跳转到下拉框拖拉机
+    connect(ui-&gt;btnSelect,&amp;QPushButton::clicked,[=]()&#123;
+//        ui-&gt;comboBox-&gt;setCurrentIndex(2);
+        ui-&gt;comboBox-&gt;setCurrentText(&quot;拖拉机&quot;);
+    &#125;);
+
+
+tips:
+    栈控件：ui-&gt;stackedWidget-&gt;setCurrentIndex();
+    下拉框：ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;宝马&quot;);
+    Qlabel显示图片：ui-&gt;labelImage-&gt;setPixmap(&quot;图片路径&quot;);
+    Qlabel显示动图：ui-&gt;LabenImage-&gt;setMoive();
+</code></pre>
+<h2 id="自定义控件"><a href="#自定义控件" class="headerlink" title="自定义控件"></a>自定义控件</h2><pre><code class="c++">class smallWidget : public QWidget
+&#123;
+    Q_OBJECT
+
+public:
+    explicit smallWidget(QWidget *parent = nullptr);
+    ~smallWidget();
+
+    //设置数值
+    void setNum(int num);
+    //获取数值
+    int getNum();
+
+private:
+    Ui::smallWidget *ui;
+&#125;;
+</code></pre>
+<pre><code class="c++">smallWidget::smallWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::smallWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //QSpinBox翻滚，QSlider跟着移动
+    void(QSpinBox::* spSingal)(int)=&amp;QSpinBox::valueChanged;
+    connect(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);
+
+    //QSlider移动，QSpinBox跟着翻滚
+    connect(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);
+&#125;
+
+void smallWidget::setNum(int num)
+&#123;
+    ui-&gt;spinBox-&gt;setValue(num);
+&#125;
+int smallWidget::getNum()
+&#123;
+    return ui-&gt;spinBox-&gt;value();
+&#125;
+
+
+smallWidget::~smallWidget()
+&#123;
+    delete ui;
+&#125;
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5K9f"><img src="https://s1.ax1x.com/2022/04/28/LX5K9f.png" alt="LX5K9f.png"></a></p>
+<pre><code class="c++">myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //点击按钮获取数值
+    connect(ui-&gt;btnGetNum,&amp;QPushButton::clicked,[=]()
+    &#123;
+       qDebug()&lt;&lt;ui-&gt;widget-&gt;getNum();
+    &#125;);
+
+    //点击按钮设置进度条到一半数值
+    connect(ui-&gt;btnSetNum,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;widget-&gt;setNum(50);
+    &#125;);
+
+&#125;
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5M38"><img src="https://s1.ax1x.com/2022/04/28/LX5M38.png" alt="LX5M38.png"></a></p>
+<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><h2 id="鼠标事件"><a href="#鼠标事件" class="headerlink" title="鼠标事件"></a>鼠标事件</h2><pre><code class="c++">#include &quot;mylabel.h&quot;
+#include&lt;QDebug&gt;
+#pragma execution_character_set(&quot;utf-8&quot;)
+#include&lt;QMouseEvent&gt;
+myLabel::myLabel(QWidget *parent) : QLabel(parent)
+&#123;
+    //设置鼠标跟踪状态
+    setMouseTracking(true);//此时只要是鼠标事件其状态都会被监听
+&#125;
+void myLabel::enterEvent(QEvent *event)
+&#123;
+//    qDebug()&lt;&lt;&quot;鼠标进入了!&quot;&lt;&lt;endl;
+&#125;
+void myLabel::leaveEvent(QEvent *)
+&#123;
+//    qDebug()&lt;&lt;&quot;鼠标离开了!&quot;&lt;&lt;endl;
+&#125;
+void myLabel::mousePressEvent(QMouseEvent *ev)
+&#123;
+    //鼠标左键按下，则显示信息
+    if(ev-&gt;button()==Qt::LeftButton)
+    &#123;
+        //返回鼠标在指定区域内的坐标值以及在整个窗口内的坐标值
+        //QString::arg()//用字符串变量参数依次替代字符串中最小数值
+        QString str=QString(&quot;鼠标按下了  x=%1  y=%2 gloalX=%3  globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+void myLabel::mouseReleaseEvent(QMouseEvent *ev)
+&#123;
+//    if(ev-&gt;button()==Qt::LeftButton)
+    &#123;
+        QString str=QString(&quot;鼠标释放了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+void myLabel::mouseMoveEvent(QMouseEvent *ev)
+&#123;
+//    if(ev-&gt;buttons()&amp;Qt::LeftButton)//组合键
+    &#123;
+        QString str=QString(&quot;鼠标移动了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+
+
+tips:
+    在UI中添加一个label ,选中label右键-&gt;提升 -&gt;输入类名myLabel.
+    这就完成了对label控件的鼠标事件的重写.
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5QgS"><img src="https://s1.ax1x.com/2022/04/28/LX5QgS.png" alt="LX5QgS.png"></a></p>
+<h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><pre><code class="c++">class myWidget : public QWidget
+&#123;
+    Q_OBJECT
+
+public:
+    myWidget(QWidget *parent = nullptr);
+    ~myWidget();
+
+    int id1;
+    int id2;
+    //重写定时器事件
+    void timerEvent(QTimerEvent* ev );
+
+private:
+    Ui::myWidget *ui;
+
+    Teacher* zt;
+    Student* st;
+    void classIsOver();
+&#125;;
+</code></pre>
+<pre><code class="c++">myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //启动定时器,startTimer(定时器间隔时长),返回定时器的唯一ID号
+    id1=startTimer(1000);
+    id2=startTimer(2000);
+
+
+    //定时器的第二种启动方式
+   QTimer* timer=new QTimer(this);
+   timer-&gt;start(500);
+   connect(timer,&amp;QTimer::timeout,[=]()&#123;
+       static int num=1;
+       ui-&gt;label_3-&gt;setText(QString::number(num++));
+   &#125;);
+
+   //点击按钮停止定时器
+   connect(ui-&gt;btn,&amp;QPushButton::clicked,[=]()&#123;
+       timer-&gt;stop();
+   &#125;);
+&#125;
+
+//重写定时器事件
+void myWidget::timerEvent(QTimerEvent* ev)//当定时器启动后，系统会自动调用该定时器事件函数
+&#123;
+    if(ev-&gt;timerId()==id1)
+    &#123;
+        static int num=1;
+        //定时器启动后自动调用该函数，若启动的定时器ID号为1号，则在label上每隔1s自动加1并显示，QString::number将数字转换为Qstring类型数据
+        ui-&gt;label-&gt;setText(QString::number(num++));
+    &#125;
+    if(ev-&gt;timerId()==id2)
+    &#123;
+        static int num=1;
+        ui-&gt;label_2-&gt;setText(QString::number(num++));
+    &#125;
+&#125;
+</code></pre>
+<h2 id="事件分发器"><a href="#事件分发器" class="headerlink" title="事件分发器"></a>事件分发器</h2><h2 id="事件过滤器"><a href="#事件过滤器" class="headerlink" title="事件过滤器"></a>事件过滤器</h2><h2 id="绘图事件"><a href="#绘图事件" class="headerlink" title="绘图事件"></a>绘图事件</h2><pre><code class="c++">void myWidget::paintEvent(QPaintEvent*)
+&#123;
+   QPainter*painter=new QPainter(this);//实例化画家对象
+
+   //设置画笔
+   QPen pen(QColor(255,0,0));
+   //设置画笔宽度
+   pen.setWidth(2);
+   //设置画笔风格
+   pen.setStyle(Qt::DotLine);
+
+   //让画家使用画笔
+    painter-&gt;setPen(pen);
+
+    //设置画刷
+    QBrush brush(Qt::cyan);
+    //设置画刷风格
+    brush.setStyle(Qt::Dense7Pattern);
+    
+    //让画家使用画刷
+   painter-&gt;setBrush(brush);
+
+   //画线
+    painter-&gt;drawLine(QPoint(0,0),QPoint(100,100));
+    //画椭圆
+    painter-&gt;drawEllipse(QPoint(100,100),50,50);
+    //画矩形
+    painter-&gt;drawRect(QRect(150,150,100,50));
+    //画文字
+    painter-&gt;drawText(QRect(300,400,300,300),&quot;好好学习，天天向上&quot;);
+&#125;
+</code></pre>
+<h2 id="QFile文件读写操作"><a href="#QFile文件读写操作" class="headerlink" title="QFile文件读写操作"></a>QFile文件读写操作</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LX5ljg"><img src="https://s1.ax1x.com/2022/04/28/LX5ljg.png" alt="LX5ljg.png"></a></p>
+<pre><code class="c++">//点击按钮，打开文件
+    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
+        //获取文件路径
+       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
+       //将文件路径放入到ui窗口内的lineEdit控件中
+       ui-&gt;lineEdit-&gt;setText(path);
+       
+       //在textEdit控件中显示内容
+       QFile file(path);
+       //打开文件，设置打开方式
+       file.open(QIODevice::ReadOnly);
+       //读取文件内容
+       QByteArray array=file.readAll();
+       ui-&gt;textEdit-&gt;setText(array);//将内容显示到textEdit控件中    
+       file.close();
+        
+        
+       //写文件
+       file.open(QIODevice::Append);//以追加方式写入文件
+       file.write(&quot;hello world&quot;);
+       file.close();
+    &#125;);
+</code></pre>
+<pre><code class="c++">//点击按钮，打开文件
+    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
+        //获取文件路径
+       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
+       //将文件路径放入到ui窗口内的lineEdit控件中
+       ui-&gt;lineEdit-&gt;setText(path);
+
+       //编码格式类
+       QTextCodec* codec=QTextCodec::codecForName(&quot;gbk&quot;);//文件编码默认为utf-8，人为设定文件打开编码格式为gbk
+       //在textEdit控件中显示内容
+       QFile file(path);
+       //打开文件，设置打开方式
+       file.open(QIODevice::ReadOnly);
+       //读取文件内容
+       QByteArray array=file.readAll();
+       //将内容显示到textEdit控件中
+       ui-&gt;textEdit-&gt;setText(codec-&gt;toUnicode(array));
+    &#125;);
+</code></pre>
+<h2 id="QFileIno文件信息读取"><a href="#QFileIno文件信息读取" class="headerlink" title="QFileIno文件信息读取"></a>QFileIno文件信息读取</h2><pre><code class="c++"> //文件信息类
+       QFileInfo info(文件路径);
+       qDebug()&lt;&lt;&quot;大小：&quot;&lt;&lt;info.size()&lt;&lt;&quot;   文件后缀名称：&quot;&lt;&lt;info.suffix()&lt;&lt;&quot;   文件名称：&quot;&lt;&lt;info.fileName();
+       qDebug()&lt;&lt;&quot;创建日期：&quot;&lt;&lt;info.created().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
+       qDebug()&lt;&lt;&quot;最后修改日期&quot;&lt;&lt;info.lastModified().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
+</code></pre>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
   
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/2022/04/30/leetCode/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>LeetCode</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/2022/04/28/%E6%9C%BA%E6%88%BF%E9%A2%84%E7%BA%A6%E7%B3%BB%E7%BB%9F/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>机房预约系统</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
 
 
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
 
 
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
 
-  
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
 
 
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
 
-
-
-
-  <!--樱花雨-->
-  <!-- <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/sakura.js"></script> -->
-
-
-</body>
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
 </html>
 

@@ -1,326 +1,573 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
+<html>
+	<head>
+		
+<title>正则表达式-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
 
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/index.css">
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="本文介绍了python语言中正则表达式的使用">
-<meta property="og:type" content="article">
-<meta property="og:title" content="正则表达式">
-<meta property="og:url" content="http://example.com/2022/04/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
-<meta property="og:site_name" content="一个人的兵荒马乱">
-<meta property="og:description" content="本文介绍了python语言中正则表达式的使用">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-04-30T12:13:21.000Z">
-<meta property="article:modified_time" content="2022-04-30T12:27:03.533Z">
-<meta property="article:author" content="千钧">
-<meta property="article:tag" content="正则表达式、python">
-<meta name="twitter:card" content="summary">
+<meta name="keywords" content="正则表达式、python,">
+<meta name="description" content="本文介绍了python语言中正则表达式的使用">
 
 
-<link rel="canonical" href="http://example.com/2022/04/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+<script src="/js/jquery.min.js"></script>
 
 
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/04/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/","path":"2022/04/30/正则表达式/","title":"正则表达式"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>正则表达式 | 一个人的兵荒马乱</title>
-  
+<script src="/js/index.js"></script>
 
 
+<script src="/js/fancybox.umd.js"></script>
 
 
+<script src="/js/fancybox-images.js"></script>
 
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-<a target="_blank" rel="noopener" href="https://your-url" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-  <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文章目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										关于
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
     </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">一个人的兵荒马乱</p>
-      <i class="logo-line"></i>
-    </a>
-      <p class="site-subtitle" itemprop="description">醉后不知天在水，满床清梦压星河</p>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-  </ul>
-</nav>
-
-
-
-
-</div>
+    <ul>
         
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-overview-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
+        <li>
+            <a href="/">首页</a>
         </li>
-        <li class="sidebar-nav-overview">
-          站点概览
+        
+        <li>
+            <a href="/archives">文章目录</a>
         </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="千钧"
-      src="/images/dog.jpg">
-  <p class="site-author-name" itemprop="name">千钧</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap site-overview-item animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">14</span>
-          <span class="site-state-item-name">日志</span>
+        
+        <li>
+            <a href="/categories">分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">关于</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">12</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author site-overview-item animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/JL-sky/JL-sky.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;JL-sky&#x2F;JL-sky.github.io" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
-      </span>
-  </div>
-
-
-
-        </div>
-      </div>
-    </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
-
-    
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/dog.jpg">
-      <meta itemprop="name" content="千钧">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="一个人的兵荒马乱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="正则表达式 | 一个人的兵荒马乱">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          正则表达式
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-04-30 20:13:21 / 修改时间：20:27:03" itemprop="dateCreated datePublished" datetime="2022-04-30T20:13:21+08:00">2022-04-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <p>本文介绍了python语言中正则表达式的使用</p>
-<span id="more"></span>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- codeing=utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Author:姜磊</span></span><br><span class="line"><span class="comment"># 人间烟火气，最抚凡人心</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">string = <span class="string">&#x27;small smell sm.ll smll smaall sm3ll smAll smaaaall sm\nll sm ll small smbll smbbll sm..ll sm**ll smaaaaaall&#x27;</span></span><br><span class="line"><span class="comment">#print(re.search(&quot;small&quot;,string))</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#匹配单个字符</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">print(re.findall(&quot;small&quot;,string))#查找所有匹配的字符</span></span><br><span class="line"><span class="string">print(re.findall(&quot;small|smell&quot;,string))#管道符，查找small或者smell</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm.ll&quot;,string))#.符号可以匹配任意一个字符</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[abcd]ll&quot;,string))#[]符号限定只匹配abcd中的字符</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[a-z]ll&quot;,string))#限定匹配所有的小写字母</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[a-zA-Z0-9]ll&quot;,string))#匹配小写字母，大写字母和数字</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm\.ll&quot;,string))#转义</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[^a]ll&quot;,string))#除了a以外的所有字符</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#量化符</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm.&#123;2&#125;ll&quot;,string))#任意一个字符匹配2两次</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[a-z]&#123;2,4&#125;ll&quot;,string))#匹配所有的小写字母出现2-4次</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[a-z]&#123;2,&#125;ll&quot;,string))#匹配所有的小写字母出现2次以上</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[a-z]?ll&quot;,string))#&#123;0,1&#125;</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[a-z]+ll&quot;,string))#&#123;1，&#125;</span></span><br><span class="line"><span class="string">print(re.findall(&quot;sm[a-z]*ll&quot;,string))#&#123;0，&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">eg=<span class="string">&quot;My name is jianglei.&quot;</span></span><br><span class="line">name0=<span class="string">&quot;My name is .+\.&quot;</span></span><br><span class="line">name=<span class="string">&quot;My name is (.+)\.&quot;</span><span class="comment">#()表示提取符合正则表达式的字符串中（）中的内容</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(name0,eg))</span><br><span class="line"><span class="built_in">print</span>(re.findall(name,eg)[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">rawdata = &#x27;</span></span><br><span class="line"><span class="string">555-1239</span></span><br><span class="line"><span class="string">Moe Szyslak</span></span><br><span class="line"><span class="string">(636) 555-0113</span></span><br><span class="line"><span class="string">Burns, C.Montgomery</span></span><br><span class="line"><span class="string">555-6542</span></span><br><span class="line"><span class="string">Rev. Timothy Lovejoy</span></span><br><span class="line"><span class="string">555 8904</span></span><br><span class="line"><span class="string">Ned Flanders</span></span><br><span class="line"><span class="string">636-555-3226</span></span><br><span class="line"><span class="string">Simpson,Homer</span></span><br><span class="line"><span class="string">5553642</span></span><br><span class="line"><span class="string">Dr. Julius Hibbert&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">rawdata = <span class="string">&#x27;555-1239Moe Szyslak(636) 555-0113Burns, C.Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson,Homer5553642Dr. Julius Hibbert&#x27;</span></span><br><span class="line"></span><br><span class="line">tel_pattern=<span class="string">&#x27;\(?[0-9]&#123;0,3&#125;\)?[ ]?[0-9]&#123;3&#125;[- ]?[0-9]&#123;4&#125;&#x27;</span></span><br><span class="line">tel=re.findall(tel_pattern,rawdata)</span><br><span class="line"><span class="comment">#print(tel)</span></span><br><span class="line"></span><br><span class="line">name_pattern=<span class="string">&#x27;[a-zA-Z]&#123;0,5&#125;[,\.]?[ ]?[a-zA-Z]&#123;1,7&#125;[\. ,][a-zA-Z]&#123;1,10&#125;&#x27;</span></span><br><span class="line">name=re.findall(name_pattern,rawdata)</span><br><span class="line"><span class="comment">#print(name)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">ans=pd.DataFrame(&#123;<span class="string">&#x27;name&#x27;</span>:name,<span class="string">&#x27;tel&#x27;</span>:tel&#125;)</span><br><span class="line"><span class="built_in">print</span>(ans)</span><br></pre></td></tr></table></figure>
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E3%80%81python/" rel="tag"># 正则表达式、python</a>
-          </div>
-
         
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2022/04/30/%E7%BD%91%E6%98%93%E4%BA%91%E6%96%B0%E6%AD%8C%E6%A6%9CVIP%E4%B8%8B%E8%BD%BD/" rel="prev" title="网易云新歌榜VIP下载">
-                  <i class="fa fa-chevron-left"></i> 网易云新歌榜VIP下载
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2022/04/30/%E8%B1%86%E7%93%A3%E5%BD%B1%E8%AF%84%E8%AF%8D%E4%BA%91%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90/" rel="next" title="豆瓣影评词云统计分析">
-                  豆瓣影评词云统计分析 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">千钧</span>
-</div>
-
-<!--
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>
--->
-
     </div>
-  </footer>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
 
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/正则表达式、python">正则表达式、python</a></li>
+            
+            
+        </ul>
+        
+        <h1>正则表达式</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/python/" target="_blank" >python</a>
+                    
+                </div>
+                <p>2022-04-30 20:13:21</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        
+      </div>
+    
 
+    <!-- more -->
+
+<pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+# -*- coding: UTF-8 -*-
+import re
+string = &#39;small smell sm.ll smll smaall sm3ll smAll smaaaall sm\nll sm ll small smbll smbbll sm..ll sm**ll smaaaaaall&#39;
+#print(re.search(&quot;small&quot;,string))
+
+
+#匹配单个字符
+&#39;&#39;&#39;
+print(re.findall(&quot;small&quot;,string))#查找所有匹配的字符
+print(re.findall(&quot;small|smell&quot;,string))#管道符，查找small或者smell
+print(re.findall(&quot;sm.ll&quot;,string))#.符号可以匹配任意一个字符
+print(re.findall(&quot;sm[abcd]ll&quot;,string))#[]符号限定只匹配abcd中的字符
+print(re.findall(&quot;sm[a-z]ll&quot;,string))#限定匹配所有的小写字母
+print(re.findall(&quot;sm[a-zA-Z0-9]ll&quot;,string))#匹配小写字母，大写字母和数字
+print(re.findall(&quot;sm\.ll&quot;,string))#转义
+print(re.findall(&quot;sm[^a]ll&quot;,string))#除了a以外的所有字符
+&#39;&#39;&#39;
+
+#量化符
+&#39;&#39;&#39;
+print(re.findall(&quot;sm.&#123;2&#125;ll&quot;,string))#任意一个字符匹配2两次
+print(re.findall(&quot;sm[a-z]&#123;2,4&#125;ll&quot;,string))#匹配所有的小写字母出现2-4次
+print(re.findall(&quot;sm[a-z]&#123;2,&#125;ll&quot;,string))#匹配所有的小写字母出现2次以上
+print(re.findall(&quot;sm[a-z]?ll&quot;,string))#&#123;0,1&#125;
+print(re.findall(&quot;sm[a-z]+ll&quot;,string))#&#123;1，&#125;
+print(re.findall(&quot;sm[a-z]*ll&quot;,string))#&#123;0，&#125;
+&#39;&#39;&#39;
+
+
+eg=&quot;My name is jianglei.&quot;
+name0=&quot;My name is .+\.&quot;
+name=&quot;My name is (.+)\.&quot;#()表示提取符合正则表达式的字符串中（）中的内容
+print(re.findall(name0,eg))
+print(re.findall(name,eg)[0])
+
+&#39;&#39;&#39;
+rawdata = &#39;
+555-1239
+Moe Szyslak
+(636) 555-0113
+Burns, C.Montgomery
+555-6542
+Rev. Timothy Lovejoy
+555 8904
+Ned Flanders
+636-555-3226
+Simpson,Homer
+5553642
+Dr. Julius Hibbert&#39;
+&#39;&#39;&#39;
+
+
+rawdata = &#39;555-1239Moe Szyslak(636) 555-0113Burns, C.Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson,Homer5553642Dr. Julius Hibbert&#39;
+
+tel_pattern=&#39;\(?[0-9]&#123;0,3&#125;\)?[ ]?[0-9]&#123;3&#125;[- ]?[0-9]&#123;4&#125;&#39;
+tel=re.findall(tel_pattern,rawdata)
+#print(tel)
+
+name_pattern=&#39;[a-zA-Z]&#123;0,5&#125;[,\.]?[ ]?[a-zA-Z]&#123;1,7&#125;[\. ,][a-zA-Z]&#123;1,10&#125;&#39;
+name=re.findall(name_pattern,rawdata)
+#print(name)
+
+import pandas as pd
+ans=pd.DataFrame(&#123;&#39;name&#39;:name,&#39;tel&#39;:tel&#125;)
+print(ans)
+</code></pre>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
   
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/2022/04/30/%E8%B1%86%E7%93%A3%E5%BD%B1%E8%AF%84%E8%AF%8D%E4%BA%91%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>豆瓣影评词云统计分析</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/2022/04/30/%E7%BD%91%E6%98%93%E4%BA%91%E6%96%B0%E6%AD%8C%E6%A6%9CVIP%E4%B8%8B%E8%BD%BD/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>网易云新歌榜VIP下载</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
 
 
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
 
 
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
 
-  
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
 
 
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
 
-
-
-
-  <!--樱花雨-->
-  <!-- <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/sakura.js"></script> -->
-
-
-</body>
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
 </html>
 

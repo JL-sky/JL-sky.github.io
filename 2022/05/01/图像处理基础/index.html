@@ -1,431 +1,900 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
+<html>
+	<head>
+		
+<title>图像处理基础-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
 
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/index.css">
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="本文通过opencv-python介绍了有关计算机视觉图像处理理论基础及相关代码实现">
-<meta property="og:type" content="article">
-<meta property="og:title" content="图像处理基础">
-<meta property="og:url" content="http://example.com/2022/05/01/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/index.html">
-<meta property="og:site_name" content="一个人的兵荒马乱">
-<meta property="og:description" content="本文通过opencv-python介绍了有关计算机视觉图像处理理论基础及相关代码实现">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC3yPs.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC3IIJ.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC3HR1.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC3bxx.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC8uJs.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC8KWn.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC8nij.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC8eoQ.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC8Zdg.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/05/01/OC8Mzq.png">
-<meta property="article:published_time" content="2022-05-01T11:02:44.000Z">
-<meta property="article:modified_time" content="2022-05-01T12:08:04.884Z">
-<meta property="article:author" content="千钧">
-<meta property="article:tag" content="opencv">
-<meta property="article:tag" content="python">
-<meta property="article:tag" content="计算机视觉">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1.ax1x.com/2022/05/01/OC3yPs.png">
+<meta name="keywords" content="opencv,python,计算机视觉,">
+<meta name="description" content="本文通过opencv-python介绍了有关计算机视觉图像处理理论基础及相关代码实现">
 
 
-<link rel="canonical" href="http://example.com/2022/05/01/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/">
+<script src="/js/jquery.min.js"></script>
 
 
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/05/01/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/","path":"2022/05/01/图像处理基础/","title":"图像处理基础"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>图像处理基础 | 一个人的兵荒马乱</title>
-  
+<script src="/js/index.js"></script>
 
 
+<script src="/js/fancybox.umd.js"></script>
 
 
+<script src="/js/fancybox-images.js"></script>
 
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-<a target="_blank" rel="noopener" href="https://your-url" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-  <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文章目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										关于
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
     </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">一个人的兵荒马乱</p>
-      <i class="logo-line"></i>
-    </a>
-      <p class="site-subtitle" itemprop="description">醉后不知天在水，满床清梦压星河</p>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-  </ul>
-</nav>
-
-
-
-
-</div>
+    <ul>
         
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
+        <li>
+            <a href="/">首页</a>
         </li>
-        <li class="sidebar-nav-overview">
-          站点概览
+        
+        <li>
+            <a href="/archives">文章目录</a>
         </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">图像处理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA"><span class="nav-number">1.1.</span> <span class="nav-text">图像显示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E8%AF%BB%E5%8F%96"><span class="nav-number">1.2.</span> <span class="nav-text">图像读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E8%AF%BB%E5%8F%96"><span class="nav-number">1.3.</span> <span class="nav-text">视频读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%88%87%E7%89%87%E4%B8%8E%E9%80%9A%E9%81%93%E6%8F%90%E5%8F%96%E5%88%86%E7%A6%BB"><span class="nav-number">1.4.</span> <span class="nav-text">图像切片与通道提取分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%88%87%E7%89%87"><span class="nav-number">1.4.1.</span> <span class="nav-text">图像切片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93%E6%8F%90%E5%8F%96"><span class="nav-number">1.4.2.</span> <span class="nav-text">通道提取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%95%8C%E5%A1%AB%E5%85%85"><span class="nav-number">1.5.</span> <span class="nav-text">边界填充</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E6%B3%95%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%80%9F%E5%8A%A9%E5%8E%9F%E5%9B%BE%E8%BE%B9%E7%BC%98%E5%8C%BA%E5%9F%9F%E4%BD%9C%E4%B8%BA%E5%A1%AB%E5%85%85%E5%8C%BA%E5%9F%9F"><span class="nav-number">1.5.1.</span> <span class="nav-text">复制法，直接借助原图边缘区域作为填充区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E6%B3%95%EF%BC%8Cgfdecba-abcdefg-gfdecba"><span class="nav-number">1.5.2.</span> <span class="nav-text">反射法，gfdecba|abcdefg|gfdecba</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E6%B3%952%EF%BC%8Cgfdecb-abcdefg-fdecba"><span class="nav-number">1.5.3.</span> <span class="nav-text">#反射法2，gfdecb|abcdefg|fdecba</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97"><span class="nav-number">1.6.</span> <span class="nav-text">数值计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E8%9E%8D%E5%90%88"><span class="nav-number">1.7.</span> <span class="nav-text">图像融合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E7%9B%B8%E5%8A%A0"><span class="nav-number">1.7.1.</span> <span class="nav-text">直接相加</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%80%BC%E5%8C%96%E4%B8%8E%E5%B9%B3%E6%BB%91%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">二值化与平滑处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E4%BA%8C%E5%80%BC%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text">图像二值化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%B9%B3%E6%BB%91%E5%A4%84%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">图像平滑处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">图像形态学处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80"><span class="nav-number">3.1.</span> <span class="nav-text">腐蚀与膨胀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E8%BF%90%E7%AE%97%E4%B8%8E%E9%97%AD%E8%BF%90%E7%AE%97"><span class="nav-number">3.2.</span> <span class="nav-text">开运算与闭运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E8%BF%90%E7%AE%97-%E8%86%A8%E8%83%80-%E8%85%90%E8%9A%80%EF%BC%8C%E5%BE%97%E5%88%B0%E8%BE%B9%E7%BC%98%E7%BB%93%E6%9E%9C"><span class="nav-number">3.3.</span> <span class="nav-text">梯度运算:膨胀-腐蚀，得到边缘结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BC%E5%B8%BD%E4%B8%8E%E9%BB%91%E5%B8%BD"><span class="nav-number">3.4.</span> <span class="nav-text">礼帽与黑帽</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E7%AE%97%E5%AD%90"><span class="nav-number">4.</span> <span class="nav-text">梯度算子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sobel%E7%AE%97%E5%AD%90"><span class="nav-number">4.1.</span> <span class="nav-text">sobel算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scharr%E7%AE%97%E5%AD%90"><span class="nav-number">4.2.</span> <span class="nav-text">Scharr算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#laplacian%E7%AE%97%E5%AD%90"><span class="nav-number">4.3.</span> <span class="nav-text">laplacian算子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#canny%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="nav-number">5.</span> <span class="nav-text">canny边缘检测</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="千钧"
-      src="/images/dog.jpg">
-  <p class="site-author-name" itemprop="name">千钧</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap site-overview-item animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">14</span>
-          <span class="site-state-item-name">日志</span>
+        
+        <li>
+            <a href="/categories">分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">关于</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">12</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author site-overview-item animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/JL-sky/JL-sky.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;JL-sky&#x2F;JL-sky.github.io" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
-      </span>
-  </div>
-
-
-
-        </div>
-      </div>
+        
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
-
-    
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/01/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/dog.jpg">
-      <meta itemprop="name" content="千钧">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="一个人的兵荒马乱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="图像处理基础 | 一个人的兵荒马乱">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          图像处理基础
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-05-01 19:02:44 / 修改时间：20:08:04" itemprop="dateCreated datePublished" datetime="2022-05-01T19:02:44+08:00">2022-05-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
-        </span>
-    </span>
-
-  
 </div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
 
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/opencv">opencv</a></li>
+            
+            <li><a href="/tags/python">python</a></li>
+            
+            <li><a href="/tags/计算机视觉">计算机视觉</a></li>
+            
+            
+        </ul>
+        
+        <h1>图像处理基础</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/计算机视觉/" target="_blank" >计算机视觉</a>
+                    
+                </div>
+                <p>2022-05-01 19:02:44</p>
+            </div>
         </div>
-      </header>
-
+    </div>
+</div>
+    <div class="post-content" id="content">
+  
+  <div id="article" class="post-content-info">
     
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80"><span class="toc-text">图像处理基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA"><span class="toc-text">图像显示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E8%AF%BB%E5%8F%96"><span class="toc-text">图像读取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E8%AF%BB%E5%8F%96"><span class="toc-text">视频读取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%88%87%E7%89%87%E4%B8%8E%E9%80%9A%E9%81%93%E6%8F%90%E5%8F%96%E5%88%86%E7%A6%BB"><span class="toc-text">图像切片与通道提取分离</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%88%87%E7%89%87"><span class="toc-text">图像切片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E6%8F%90%E5%8F%96"><span class="toc-text">通道提取</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%B9%E7%95%8C%E5%A1%AB%E5%85%85"><span class="toc-text">边界填充</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E6%B3%95%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%80%9F%E5%8A%A9%E5%8E%9F%E5%9B%BE%E8%BE%B9%E7%BC%98%E5%8C%BA%E5%9F%9F%E4%BD%9C%E4%B8%BA%E5%A1%AB%E5%85%85%E5%8C%BA%E5%9F%9F"><span class="toc-text">复制法，直接借助原图边缘区域作为填充区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E6%B3%95%EF%BC%8Cgfdecba-abcdefg-gfdecba"><span class="toc-text">反射法，gfdecba|abcdefg|gfdecba</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E6%B3%952%EF%BC%8Cgfdecb-abcdefg-fdecba"><span class="toc-text">#反射法2，gfdecb|abcdefg|fdecba</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97"><span class="toc-text">数值计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E8%9E%8D%E5%90%88"><span class="toc-text">图像融合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E7%9B%B8%E5%8A%A0"><span class="toc-text">直接相加</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E5%80%BC%E5%8C%96%E4%B8%8E%E5%B9%B3%E6%BB%91%E5%A4%84%E7%90%86"><span class="toc-text">二值化与平滑处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E4%BA%8C%E5%80%BC%E5%8C%96"><span class="toc-text">图像二值化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%B9%B3%E6%BB%91%E5%A4%84%E7%90%86"><span class="toc-text">图像平滑处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6%E5%A4%84%E7%90%86"><span class="toc-text">图像形态学处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80"><span class="toc-text">腐蚀与膨胀</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E8%BF%90%E7%AE%97%E4%B8%8E%E9%97%AD%E8%BF%90%E7%AE%97"><span class="toc-text">开运算与闭运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E8%BF%90%E7%AE%97-%E8%86%A8%E8%83%80-%E8%85%90%E8%9A%80%EF%BC%8C%E5%BE%97%E5%88%B0%E8%BE%B9%E7%BC%98%E7%BB%93%E6%9E%9C"><span class="toc-text">梯度运算:膨胀-腐蚀，得到边缘结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BC%E5%B8%BD%E4%B8%8E%E9%BB%91%E5%B8%BD"><span class="toc-text">礼帽与黑帽</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E7%AE%97%E5%AD%90"><span class="toc-text">梯度算子</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sobel%E7%AE%97%E5%AD%90"><span class="toc-text">sobel算子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scharr%E7%AE%97%E5%AD%90"><span class="toc-text">Scharr算子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#laplacian%E7%AE%97%E5%AD%90"><span class="toc-text">laplacian算子</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#canny%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-text">canny边缘检测</span></a></li></ol>
+      </div>
     
-    
-    <div class="post-body" itemprop="articleBody">
-        <p>本文通过opencv-python介绍了有关计算机视觉图像处理理论基础及相关代码实现</p>
-<span id="more"></span>
 
-<h1 id="图像处理基础"><a href="#图像处理基础" class="headerlink" title="图像处理基础"></a>图像处理基础</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">获取上一级文件路径</span><br><span class="line"></span><br><span class="line">abs_path=os.path.abspath(<span class="string">&quot;..&quot;</span>)</span><br><span class="line">path = abs_path + <span class="string">r&quot;\data\2-7data&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(path)</span><br></pre></td></tr></table></figure>
+    <!-- more -->
 
+<h1 id="图像处理基础"><a href="#图像处理基础" class="headerlink" title="图像处理基础"></a>图像处理基础</h1><pre><code class="python">import os
+import cv2 as cv
+import numpy as np
+import matplotlib.pyplot as plt
 
+获取上一级文件路径
 
-<h2 id="图像显示"><a href="#图像显示" class="headerlink" title="图像显示"></a>图像显示</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cv_show</span>(<span class="params">name, img</span>):</span><br><span class="line">    cv.imshow(name, img)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+abs_path=os.path.abspath(&quot;..&quot;)
+path = abs_path + r&quot;\data\2-7data&quot;
 
+print(path)
+</code></pre>
+<h2 id="图像显示"><a href="#图像显示" class="headerlink" title="图像显示"></a>图像显示</h2><pre><code class="python">def cv_show(name, img):
+    cv.imshow(name, img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+</code></pre>
+<h2 id="图像读取"><a href="#图像读取" class="headerlink" title="图像读取"></a>图像读取</h2><pre><code class="python">def img_test():
 
+abs_path=r&quot;D:\pythonProject1\opencv_code\2-7data\data&quot;
 
-<h2 id="图像读取"><a href="#图像读取" class="headerlink" title="图像读取"></a>图像读取</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">img_test</span>():</span><br><span class="line"></span><br><span class="line">abs_path=<span class="string">r&quot;D:\pythonProject1\opencv_code\2-7data\data&quot;</span></span><br><span class="line"></span><br><span class="line">​    img = cv.imread(path+<span class="string">r&quot;\lena.jpg&quot;</span>)</span><br><span class="line">​    cv_show(<span class="string">&quot;lena&quot;</span>, img)</span><br><span class="line">​    <span class="comment">#灰度图</span></span><br><span class="line">​    cat=cv.imread(path+<span class="string">&quot;\cat.jpg&quot;</span>,cv.IMREAD_GRAYSCALE)</span><br><span class="line">​    cv_show(<span class="string">&quot;cat&quot;</span>,cat)</span><br><span class="line">img_test()</span><br><span class="line"></span><br><span class="line"><span class="comment">## </span></span><br></pre></td></tr></table></figure>
+​    img = cv.imread(path+r&quot;\lena.jpg&quot;)
+​    cv_show(&quot;lena&quot;, img)
+​    #灰度图
+​    cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
+​    cv_show(&quot;cat&quot;,cat)
+img_test()
 
-<h2 id="视频读取"><a href="#视频读取" class="headerlink" title="视频读取"></a>视频读取</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">video_show</span>():</span><br><span class="line">    video=cv.VideoCapture(path+<span class="string">r&quot;\test.mp4&quot;</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">open</span>:</span><br><span class="line">        ret,frame=video.read()<span class="comment">#ret返回是否能够读取每一帧图像，frame返回视频中的每一帧图像</span></span><br><span class="line">        gray=cv.cvtColor(frame,cv.COLOR_BGR2GRAY)<span class="comment">#将BGR图像转为灰度图</span></span><br><span class="line">        <span class="keyword">if</span> frame <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> ret==<span class="literal">True</span>:</span><br><span class="line">            cv.imshow(<span class="string">&quot;video&quot;</span>,gray)</span><br><span class="line">        c=cv.waitKey(<span class="number">50</span>)<span class="comment">#每帧图像延迟100ms</span></span><br><span class="line">        <span class="keyword">if</span> c==<span class="number">27</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+## 
+</code></pre>
+<h2 id="视频读取"><a href="#视频读取" class="headerlink" title="视频读取"></a>视频读取</h2><pre><code class="python">def video_show():
+    video=cv.VideoCapture(path+r&quot;\test.mp4&quot;)
+    while open:
+        ret,frame=video.read()#ret返回是否能够读取每一帧图像，frame返回视频中的每一帧图像
+        gray=cv.cvtColor(frame,cv.COLOR_BGR2GRAY)#将BGR图像转为灰度图
+        if frame is None:
+            break
+        if ret==True:
+            cv.imshow(&quot;video&quot;,gray)
+        c=cv.waitKey(50)#每帧图像延迟100ms
+        if c==27:
+            break
+    cv.destroyAllWindows()
+</code></pre>
+<h2 id="图像切片与通道提取分离"><a href="#图像切片与通道提取分离" class="headerlink" title="图像切片与通道提取分离"></a>图像切片与通道提取分离</h2><h3 id="图像切片"><a href="#图像切片" class="headerlink" title="图像切片"></a>图像切片</h3><pre><code class="python">def cut_img():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;)
+    #图像切片
+    img=cat[0:100,0:200]#分别截取高度，宽度
 
-<h2 id="图像切片与通道提取分离"><a href="#图像切片与通道提取分离" class="headerlink" title="图像切片与通道提取分离"></a>图像切片与通道提取分离</h2><h3 id="图像切片"><a href="#图像切片" class="headerlink" title="图像切片"></a>图像切片</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cut_img</span>():</span><br><span class="line">    cat=cv.imread(path+<span class="string">&quot;\cat.jpg&quot;</span>)</span><br><span class="line">    <span class="comment">#图像切片</span></span><br><span class="line">    img=cat[<span class="number">0</span>:<span class="number">100</span>,<span class="number">0</span>:<span class="number">200</span>]<span class="comment">#分别截取高度，宽度</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(img.shape)<span class="comment">#顺序：高、宽</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
+print(img.shape)#顺序：高、宽
+</code></pre>
 <h3 id="通道提取"><a href="#通道提取" class="headerlink" title="通道提取"></a>通道提取</h3><p>​    </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#保留R通道</span></span><br><span class="line">cat[:,:,<span class="number">0</span>]=<span class="number">0</span><span class="comment">#关闭b通道</span></span><br><span class="line">cat[:,:,<span class="number">1</span>]=<span class="number">0</span><span class="comment">#关闭g通道</span></span><br><span class="line"></span><br><span class="line">b,g,r=cv.split(cat)</span><br><span class="line">    <span class="built_in">print</span>(r)</span><br><span class="line">    cv.imshow(<span class="string">&quot;cut_img&quot;</span>,img)</span><br><span class="line">    cv.imshow(<span class="string">&quot;cat&quot;</span>,cat)</span><br><span class="line">    cv.imshow(<span class="string">&quot;b_cat&quot;</span>,b)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    cv.destroyAllWindows()</span><br><span class="line"></span><br><span class="line">cut_img()</span><br></pre></td></tr></table></figure>
+<pre><code class="python">#保留R通道
+cat[:,:,0]=0#关闭b通道
+cat[:,:,1]=0#关闭g通道
 
+b,g,r=cv.split(cat)
+    print(r)
+    cv.imshow(&quot;cut_img&quot;,img)
+    cv.imshow(&quot;cat&quot;,cat)
+    cv.imshow(&quot;b_cat&quot;,b)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
-
-<h2 id="边界填充"><a href="#边界填充" class="headerlink" title="边界填充"></a>边界填充</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">border_caplicate</span>():</span><br><span class="line">    cat=cv.imread(path+<span class="string">&quot;\cat.jpg&quot;</span>,cv.IMREAD_GRAYSCALE)</span><br><span class="line">    top_size,bottom_size,left_size,right_size=(<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>)<span class="comment">#设置边界范围（上下左右）</span></span><br></pre></td></tr></table></figure>
-
-
-<h3 id="复制法，直接借助原图边缘区域作为填充区域"><a href="#复制法，直接借助原图边缘区域作为填充区域" class="headerlink" title="复制法，直接借助原图边缘区域作为填充区域"></a>复制法，直接借助原图边缘区域作为填充区域</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">replicate=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REPLICATE)</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="反射法，gfdecba-abcdefg-gfdecba"><a href="#反射法，gfdecba-abcdefg-gfdecba" class="headerlink" title="反射法，gfdecba|abcdefg|gfdecba"></a>反射法，gfdecba|abcdefg|gfdecba</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reflect=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT)</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="反射法2，gfdecb-abcdefg-fdecba"><a href="#反射法2，gfdecb-abcdefg-fdecba" class="headerlink" title="#反射法2，gfdecb|abcdefg|fdecba"></a>#反射法2，gfdecb|abcdefg|fdecba</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reflect101=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT101)</span><br></pre></td></tr></table></figure>
-
-
-
+cut_img()
+</code></pre>
+<h2 id="边界填充"><a href="#边界填充" class="headerlink" title="边界填充"></a>边界填充</h2><pre><code class="python">def border_caplicate():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
+    top_size,bottom_size,left_size,right_size=(100,100,100,100)#设置边界范围（上下左右）
+</code></pre>
+<h3 id="复制法，直接借助原图边缘区域作为填充区域"><a href="#复制法，直接借助原图边缘区域作为填充区域" class="headerlink" title="复制法，直接借助原图边缘区域作为填充区域"></a>复制法，直接借助原图边缘区域作为填充区域</h3><pre><code class="python"> replicate=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REPLICATE)
+</code></pre>
+<h3 id="反射法，gfdecba-abcdefg-gfdecba"><a href="#反射法，gfdecba-abcdefg-gfdecba" class="headerlink" title="反射法，gfdecba|abcdefg|gfdecba"></a>反射法，gfdecba|abcdefg|gfdecba</h3><pre><code class="python">    reflect=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT)
+</code></pre>
+<h3 id="反射法2，gfdecb-abcdefg-fdecba"><a href="#反射法2，gfdecb-abcdefg-fdecba" class="headerlink" title="#反射法2，gfdecb|abcdefg|fdecba"></a>#反射法2，gfdecb|abcdefg|fdecba</h3><pre><code class="python">    reflect101=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT101)
+</code></pre>
 <pre><code>### 外包装法,abcdefg|abcdefg|abcdefg
 </code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrap=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_WRAP)</span><br></pre></td></tr></table></figure>
-
-
+<pre><code class="python">  wrap=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_WRAP)
+</code></pre>
 <pre><code>### 常量法，直接设置填充色值
 </code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_CONSTANT,value=<span class="number">25</span>)</span><br><span class="line">cv_show(<span class="string">&#x27;cat&#x27;</span>,cat)</span><br><span class="line">plt.subplot(<span class="number">231</span>),plt.imshow(cat,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">232</span>),plt.imshow(replicate,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;replicate&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">233</span>),plt.imshow(reflect,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;reflect&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">234</span>),plt.imshow(reflect101,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;reflect101&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">235</span>),plt.imshow(wrap,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;wrap&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">236</span>),plt.imshow(const,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;const&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment">## </span></span><br></pre></td></tr></table></figure>
+<pre><code class="python">const=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_CONSTANT,value=25)
+cv_show(&#39;cat&#39;,cat)
+plt.subplot(231),plt.imshow(cat,&#39;gray&#39;),plt.title(&#39;gray&#39;)
+plt.subplot(232),plt.imshow(replicate,&#39;gray&#39;),plt.title(&#39;replicate&#39;)
+plt.subplot(233),plt.imshow(reflect,&#39;gray&#39;),plt.title(&#39;reflect&#39;)
+plt.subplot(234),plt.imshow(reflect101,&#39;gray&#39;),plt.title(&#39;reflect101&#39;)
+plt.subplot(235),plt.imshow(wrap,&#39;gray&#39;),plt.title(&#39;wrap&#39;)
+plt.subplot(236),plt.imshow(const,&#39;gray&#39;),plt.title(&#39;const&#39;)
+plt.show()
 
-<h2 id="数值计算"><a href="#数值计算" class="headerlink" title="数值计算"></a>数值计算</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">img_numpy_calculate</span>():</span><br><span class="line">    cat=cv.imread(path+<span class="string">&quot;\cat.jpg&quot;</span>)</span><br><span class="line">    add_cat=cat+<span class="number">50</span><span class="comment">#将图像三个通道的色值均加50，越界时（255）自动对256取余</span></span><br><span class="line">    super_cat=cat+add_cat</span><br><span class="line">    <span class="built_in">print</span>(cat[:<span class="number">5</span>,:,<span class="number">0</span>])</span><br><span class="line">    <span class="built_in">print</span>(add_cat[:<span class="number">5</span>,:,<span class="number">0</span>])</span><br><span class="line">    <span class="built_in">print</span>(super_cat[:<span class="number">5</span>,:,<span class="number">0</span>])</span><br><span class="line">    cv_show(<span class="string">&#x27;cat&#x27;</span>,cat)</span><br><span class="line">    cv_show(<span class="string">&#x27;add_cat&#x27;</span>,add_cat)</span><br><span class="line">    cv_show(<span class="string">&#x27;super_cat&#x27;</span>,super_cat)</span><br></pre></td></tr></table></figure>
+## 
+</code></pre>
+<h2 id="数值计算"><a href="#数值计算" class="headerlink" title="数值计算"></a>数值计算</h2><pre><code class="python">def img_numpy_calculate():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;)
+    add_cat=cat+50#将图像三个通道的色值均加50，越界时（255）自动对256取余
+    super_cat=cat+add_cat
+    print(cat[:5,:,0])
+    print(add_cat[:5,:,0])
+    print(super_cat[:5,:,0])
+    cv_show(&#39;cat&#39;,cat)
+    cv_show(&#39;add_cat&#39;,add_cat)
+    cv_show(&#39;super_cat&#39;,super_cat)
+</code></pre>
+<h2 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h2><pre><code class="python">def img_add():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;)
+    print(cat.shape)
 
+cv_show(&quot;cat&quot;,cat)
 
+res=cv.resize(cat,(400,224))#重新指定图像大小
 
-<h2 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">img_add</span>():</span><br><span class="line">    cat=cv.imread(path+<span class="string">&quot;\cat.jpg&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(cat.shape)</span><br><span class="line"></span><br><span class="line">cv_show(<span class="string">&quot;cat&quot;</span>,cat)</span><br><span class="line"></span><br><span class="line">res=cv.resize(cat,(<span class="number">400</span>,<span class="number">224</span>))<span class="comment">#重新指定图像大小</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(res.shape)</span><br><span class="line"></span><br><span class="line">cv_show(<span class="string">&quot;cat&quot;</span>,res)</span><br><span class="line"></span><br><span class="line">res1=cv.resize(cat,(<span class="number">0</span>,<span class="number">0</span>),fx=<span class="number">3</span>,fy=<span class="number">2</span>)<span class="comment">#横轴扩大3倍，纵轴扩大2倍</span></span><br><span class="line"></span><br><span class="line">cv_show(<span class="string">&#x27;res1&#x27;</span>,res1)</span><br></pre></td></tr></table></figure>
+print(res.shape)
 
+cv_show(&quot;cat&quot;,res)
 
+res1=cv.resize(cat,(0,0),fx=3,fy=2)#横轴扩大3倍，纵轴扩大2倍
 
-<h3 id="直接相加"><a href="#直接相加" class="headerlink" title="直接相加"></a>直接相加</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dog=cv.imread(path+<span class="string">&quot;\dog.jpg&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(dog.shape)</span><br><span class="line">dog=cv.resize(dog,(cat.shape[<span class="number">1</span>],cat.shape[<span class="number">0</span>]))</span><br><span class="line"><span class="built_in">print</span>(dog.shape)</span><br><span class="line">cat_add_dog=cat+dog<span class="comment">#越界取余</span></span><br><span class="line">cv_show(<span class="string">&quot;cat_add_dog&quot;</span>,cat_add_dog)</span><br><span class="line">add=cv.add(cat,dog)<span class="comment">#越界直接赋值为255</span></span><br><span class="line">cv_show(<span class="string">&quot;add&quot;</span>,add)</span><br></pre></td></tr></table></figure>
-
-
-
+cv_show(&#39;res1&#39;,res1)
+</code></pre>
+<h3 id="直接相加"><a href="#直接相加" class="headerlink" title="直接相加"></a>直接相加</h3><pre><code class="python">dog=cv.imread(path+&quot;\dog.jpg&quot;)
+print(dog.shape)
+dog=cv.resize(dog,(cat.shape[1],cat.shape[0]))
+print(dog.shape)
+cat_add_dog=cat+dog#越界取余
+cv_show(&quot;cat_add_dog&quot;,cat_add_dog)
+add=cv.add(cat,dog)#越界直接赋值为255
+cv_show(&quot;add&quot;,add)
+</code></pre>
 <pre><code>### 设置权重相加
 </code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">res=<span class="number">0.6</span>*cat+<span class="number">0.4</span>*dog+<span class="number">0</span></span><br><span class="line">res=cv.addWeighted(cat,<span class="number">0.6</span>,dog,<span class="number">0.4</span>,<span class="number">0</span>)</span><br><span class="line">cv_show(<span class="string">&quot;res&quot;</span>,res)</span><br></pre></td></tr></table></figure>
+<pre><code class="python">res=0.6*cat+0.4*dog+0
+res=cv.addWeighted(cat,0.6,dog,0.4,0)
+cv_show(&quot;res&quot;,res)
+</code></pre>
+<h1 id="二值化与平滑处理"><a href="#二值化与平滑处理" class="headerlink" title="二值化与平滑处理"></a>二值化与平滑处理</h1><pre><code class="python">import os
+import cv2 as cv
+import numpy as np
+import matplotlib.pyplot as plt
 
-<h1 id="二值化与平滑处理"><a href="#二值化与平滑处理" class="headerlink" title="二值化与平滑处理"></a>二值化与平滑处理</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取上一级文件路径</span></span><br><span class="line"></span><br><span class="line">abs_path=os.path.abspath(<span class="string">&quot;..&quot;</span>)</span><br><span class="line">path = abs_path + <span class="string">r&quot;\data\2-7data&quot;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cv_show</span>(<span class="params">name,img</span>):</span><br><span class="line">    cv.imshow(name,img)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    cv.destroyAllWindows()</span><br><span class="line"></span><br><span class="line">cat=cv.imread(path+<span class="string">&quot;\cat.jpg&quot;</span>,cv.IMREAD_GRAYSCALE)</span><br></pre></td></tr></table></figure>
+# 获取上一级文件路径
 
-<h2 id="图像二值化"><a href="#图像二值化" class="headerlink" title="图像二值化"></a>图像二值化</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">src_thresh</span>():</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 参数</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># src:图像</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># thresh:阈值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># marval:超出阈值所赋的值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># type： 二值化操作类型</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 返回值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ret：阈值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># thresh：阈值化处理后的图像</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#图像二值化：大于阈值的数取最大值255，否则为0</span></span><br><span class="line">    ret1,thresh1=cv.threshold(cat,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY)</span><br><span class="line">    <span class="comment">#图像二值化：大于阈值设置为0，否则为255</span></span><br><span class="line">    ret2,thresh2=cv.threshold(cat,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY_INV)</span><br><span class="line">    <span class="comment">#大于阈值的部分赋值为该阈值，否则不变</span></span><br><span class="line">    ret3,thresh3=cv.threshold(cat,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TRUNC)</span><br><span class="line">    <span class="comment">#小于阈值的部分设置为0，否则不变</span></span><br><span class="line">    ret4,thresh4=cv.threshold(cat,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO)</span><br><span class="line">    <span class="comment">#大于阈值的部分设置为0，否则不变</span></span><br><span class="line">    ret5,thresh5=cv.threshold(cat,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO_INV)</span><br><span class="line"></span><br><span class="line">    title=[<span class="string">&quot;cat&quot;</span>,<span class="string">&quot;THRESH_BINARY&quot;</span>,<span class="string">&quot;THRESH_BINARY_INV&quot;</span>,<span class="string">&quot;THRESH_TRUNC&quot;</span>,<span class="string">&quot;THRESH_TOZERO&quot;</span>,<span class="string">&quot;THRESH_TOZERO_INV&quot;</span>]</span><br><span class="line">    img=[cat,thresh1,thresh2,thresh3,thresh4,thresh5]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">6</span>):</span><br><span class="line">        plt.subplot(<span class="number">2</span>,<span class="number">3</span>,i+<span class="number">1</span>),plt.imshow(img[i],<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">        plt.title(title[i])</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+abs_path=os.path.abspath(&quot;..&quot;)
+path = abs_path + r&quot;\data\2-7data&quot;
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
-<h2 id="图像平滑处理"><a href="#图像平滑处理" class="headerlink" title="图像平滑处理"></a>图像平滑处理</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">blur</span>():</span><br><span class="line">    img=cv.imread(path+<span class="string">&quot;\lenaNoise.png&quot;</span>)</span><br><span class="line">    <span class="comment"># cv_show(&quot;img&quot;,img)</span></span><br><span class="line">    <span class="comment"># 均值滤波，取3*3矩阵的均值作为矩阵中心像素点的色值</span></span><br><span class="line">    blur=cv.blur(img,(<span class="number">3</span>,<span class="number">3</span>))</span><br><span class="line">    <span class="comment"># cv_show(&quot;blur&quot;,blur)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 方框滤波</span></span><br><span class="line">    <span class="comment"># 归一化为true，即将处理后的色值归一到0-255之间，与均值滤波效果等同，</span></span><br><span class="line">    box1=cv.boxFilter(img,-<span class="number">1</span>,(<span class="number">3</span>,<span class="number">3</span>),normalize=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># cv_show(&quot;box1&quot;,box1)</span></span><br><span class="line">    <span class="comment"># 若normalize为false，则直接对卷积核求和，越界直接截断为255</span></span><br><span class="line">    box2=cv.boxFilter(img,-<span class="number">1</span>,(<span class="number">3</span>,<span class="number">3</span>),normalize=<span class="literal">False</span>)</span><br><span class="line">    <span class="comment"># cv_show(&quot;box2&quot;,box2)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 高斯滤波，利用正态分布，距离正态分布均值近的数值权重大，距离均值远的数值权重小</span></span><br><span class="line">    <span class="comment"># 参数：src，卷积核大小，标准差</span></span><br><span class="line">    gaussian=cv.GaussianBlur(img,(<span class="number">3</span>,<span class="number">3</span>),<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># cv_show(&quot;gaussian_blur&quot;,gaussian)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 中值滤波，取矩阵的中值作为矩阵中心像素点的色值，对于椒盐噪声而言，中值滤波的效果最好</span></span><br><span class="line">    median=cv.medianBlur(img,<span class="number">3</span>)</span><br><span class="line">    <span class="comment"># cv_show(&quot;median&quot;,median)</span></span><br><span class="line"></span><br><span class="line">    res=np.hstack((blur,gaussian,median))<span class="comment">#横向拼接矩阵</span></span><br><span class="line">    cv.imshow(<span class="string">&quot;blur,gaussian,median&quot;</span>,res)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    cv.destroyAllWindows()</span><br><span class="line">blur()</span><br></pre></td></tr></table></figure>
+cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
+</code></pre>
+<h2 id="图像二值化"><a href="#图像二值化" class="headerlink" title="图像二值化"></a>图像二值化</h2><pre><code class="python">def src_thresh():
 
-<h1 id="图像形态学处理"><a href="#图像形态学处理" class="headerlink" title="图像形态学处理"></a>图像形态学处理</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">abs_path=os.path.abspath(<span class="string">&quot;..&quot;</span>)</span><br><span class="line">path=abs_path+<span class="string">r&quot;\data\2-7data&quot;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cv_show</span>(<span class="params">name,img</span>):</span><br><span class="line">    cv.imshow(name,img)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    cv.destroyAllWindows()</span><br><span class="line"></span><br><span class="line">img=cv.imread(path+<span class="string">&quot;\dige.png&quot;</span>)</span><br></pre></td></tr></table></figure>
+    # 参数
 
-<h2 id="腐蚀与膨胀"><a href="#腐蚀与膨胀" class="headerlink" title="腐蚀与膨胀"></a>腐蚀与膨胀</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">erosion_dilate</span>():</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 形态学-腐蚀操作,去除多余噪点</span></span><br><span class="line"></span><br><span class="line">    kernel=np.ones((<span class="number">5</span>,<span class="number">5</span>))</span><br><span class="line">    erosion=cv.erode(img,kernel,iterations=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># res=np.hstack((img,erosion))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># cv_show(&quot;res&quot;,res)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># pie=cv.imread(path+&quot;\pie.png&quot;)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># kernel=np.ones((10,10))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># erosion=cv.erode(pie,kernel,iterations=1)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># res=np.hstack((pie,erosion))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># cv_show(&quot;ee&quot;,res)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 形态学-膨胀操作，去除噪点过度处理的还原</span></span><br><span class="line"></span><br><span class="line">    dig_dilate=cv.dilate(erosion,np.ones((<span class="number">5</span>,<span class="number">5</span>)),iterations=<span class="number">1</span>)</span><br><span class="line">    res=np.hstack((img,erosion,dig_dilate))</span><br><span class="line">    cv_show(<span class="string">&quot;erosion_dilate&quot;</span>,res)</span><br></pre></td></tr></table></figure>
+    # src:图像
 
-<h2 id="开运算与闭运算"><a href="#开运算与闭运算" class="headerlink" title="开运算与闭运算"></a>开运算与闭运算</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">morphology_openAndClose</span>():</span><br><span class="line">    <span class="comment"># 开运算：先腐蚀再膨胀</span></span><br><span class="line">    res_open=cv.morphologyEx(img,cv.MORPH_OPEN,kernel=np.ones((<span class="number">5</span>,<span class="number">5</span>)))</span><br><span class="line">    cv_show(<span class="string">&quot;morphology_open&quot;</span>,res_open)</span><br><span class="line">    <span class="comment"># 闭运算：先膨胀再腐蚀</span></span><br><span class="line">    res_close=cv.morphologyEx(img,cv.MORPH_CLOSE,kernel=np.ones((<span class="number">5</span>,<span class="number">5</span>)))</span><br><span class="line">    cv_show(<span class="string">&quot;morphology_close&quot;</span>,res_close)</span><br></pre></td></tr></table></figure>
+    # thresh:阈值
 
-<h2 id="梯度运算-膨胀-腐蚀，得到边缘结果"><a href="#梯度运算-膨胀-腐蚀，得到边缘结果" class="headerlink" title="梯度运算:膨胀-腐蚀，得到边缘结果"></a>梯度运算:膨胀-腐蚀，得到边缘结果</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">morphology_gradient</span>():</span><br><span class="line">    <span class="comment"># pie=cv.imread(path+&quot;\pie.png&quot;)</span></span><br><span class="line">    res=cv.morphologyEx(img,cv.MORPH_GRADIENT,kernel=np.ones((<span class="number">5</span>,<span class="number">5</span>)))</span><br><span class="line">    cv_show(<span class="string">&quot;morphology_gradient&quot;</span>,res)</span><br></pre></td></tr></table></figure>
+    # marval:超出阈值所赋的值
 
-<h2 id="礼帽与黑帽"><a href="#礼帽与黑帽" class="headerlink" title="礼帽与黑帽"></a>礼帽与黑帽</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 礼帽：原始输入-开运算，得到噪点,可突出更加明亮区域</span></span><br><span class="line"><span class="comment"># 黑帽：闭运算-原始输入，得到噪点轮廓</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tophatAndblackhat</span>():</span><br><span class="line">    tophat=cv.morphologyEx(img,cv.MORPH_TOPHAT,np.ones((<span class="number">5</span>,<span class="number">5</span>)))</span><br><span class="line">    cv_show(<span class="string">&quot;tophat&quot;</span>,tophat)</span><br><span class="line">    blackhat=cv.morphologyEx(img,cv.MORPH_BLACKHAT,np.ones((<span class="number">5</span>,<span class="number">5</span>)))</span><br><span class="line">    cv_show(<span class="string">&quot;blackhat&quot;</span>,blackhat)</span><br></pre></td></tr></table></figure>
+    # type： 二值化操作类型
 
-<h1 id="梯度算子"><a href="#梯度算子" class="headerlink" title="梯度算子"></a>梯度算子</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">abs_path=os.path.abspath(<span class="string">&quot;..&quot;</span>)</span><br><span class="line">path=abs_path+<span class="string">r&quot;\data\2-7data&quot;</span></span><br><span class="line">img=cv.imread(path+<span class="string">&quot;\lena.jpg&quot;</span>,cv.IMREAD_GRAYSCALE)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cv_show</span>(<span class="params">name,img</span>):</span><br><span class="line">    cv.imshow(name,img)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    cv.destroyAllWindows()</span><br><span class="line"></span><br><span class="line"><span class="comment"># cv_show(&quot;img&quot;,img)</span></span><br></pre></td></tr></table></figure>
+    # 返回值
 
+    # ret：阈值
+
+    # thresh：阈值化处理后的图像
+
+    #图像二值化：大于阈值的数取最大值255，否则为0
+    ret1,thresh1=cv.threshold(cat,127,255,cv.THRESH_BINARY)
+    #图像二值化：大于阈值设置为0，否则为255
+    ret2,thresh2=cv.threshold(cat,127,255,cv.THRESH_BINARY_INV)
+    #大于阈值的部分赋值为该阈值，否则不变
+    ret3,thresh3=cv.threshold(cat,127,255,cv.THRESH_TRUNC)
+    #小于阈值的部分设置为0，否则不变
+    ret4,thresh4=cv.threshold(cat,127,255,cv.THRESH_TOZERO)
+    #大于阈值的部分设置为0，否则不变
+    ret5,thresh5=cv.threshold(cat,127,255,cv.THRESH_TOZERO_INV)
+
+    title=[&quot;cat&quot;,&quot;THRESH_BINARY&quot;,&quot;THRESH_BINARY_INV&quot;,&quot;THRESH_TRUNC&quot;,&quot;THRESH_TOZERO&quot;,&quot;THRESH_TOZERO_INV&quot;]
+    img=[cat,thresh1,thresh2,thresh3,thresh4,thresh5]
+    for i in range(6):
+        plt.subplot(2,3,i+1),plt.imshow(img[i],&quot;gray&quot;)
+        plt.title(title[i])
+    plt.show()
+</code></pre>
+<h2 id="图像平滑处理"><a href="#图像平滑处理" class="headerlink" title="图像平滑处理"></a>图像平滑处理</h2><pre><code class="python">def blur():
+    img=cv.imread(path+&quot;\lenaNoise.png&quot;)
+    # cv_show(&quot;img&quot;,img)
+    # 均值滤波，取3*3矩阵的均值作为矩阵中心像素点的色值
+    blur=cv.blur(img,(3,3))
+    # cv_show(&quot;blur&quot;,blur)
+
+    # 方框滤波
+    # 归一化为true，即将处理后的色值归一到0-255之间，与均值滤波效果等同，
+    box1=cv.boxFilter(img,-1,(3,3),normalize=True)
+    # cv_show(&quot;box1&quot;,box1)
+    # 若normalize为false，则直接对卷积核求和，越界直接截断为255
+    box2=cv.boxFilter(img,-1,(3,3),normalize=False)
+    # cv_show(&quot;box2&quot;,box2)
+
+    # 高斯滤波，利用正态分布，距离正态分布均值近的数值权重大，距离均值远的数值权重小
+    # 参数：src，卷积核大小，标准差
+    gaussian=cv.GaussianBlur(img,(3,3),1)
+    # cv_show(&quot;gaussian_blur&quot;,gaussian)
+
+    # 中值滤波，取矩阵的中值作为矩阵中心像素点的色值，对于椒盐噪声而言，中值滤波的效果最好
+    median=cv.medianBlur(img,3)
+    # cv_show(&quot;median&quot;,median)
+
+    res=np.hstack((blur,gaussian,median))#横向拼接矩阵
+    cv.imshow(&quot;blur,gaussian,median&quot;,res)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+blur()
+</code></pre>
+<h1 id="图像形态学处理"><a href="#图像形态学处理" class="headerlink" title="图像形态学处理"></a>图像形态学处理</h1><pre><code class="python">import cv2 as cv
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+abs_path=os.path.abspath(&quot;..&quot;)
+path=abs_path+r&quot;\data\2-7data&quot;
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+img=cv.imread(path+&quot;\dige.png&quot;)
+</code></pre>
+<h2 id="腐蚀与膨胀"><a href="#腐蚀与膨胀" class="headerlink" title="腐蚀与膨胀"></a>腐蚀与膨胀</h2><pre><code class="python">def erosion_dilate():
+
+    # 形态学-腐蚀操作,去除多余噪点
+
+    kernel=np.ones((5,5))
+    erosion=cv.erode(img,kernel,iterations=1)
+
+    # res=np.hstack((img,erosion))
+
+    # cv_show(&quot;res&quot;,res)
+
+    # pie=cv.imread(path+&quot;\pie.png&quot;)
+
+    # kernel=np.ones((10,10))
+
+    # erosion=cv.erode(pie,kernel,iterations=1)
+
+    # res=np.hstack((pie,erosion))
+
+    # cv_show(&quot;ee&quot;,res)
+
+    # 形态学-膨胀操作，去除噪点过度处理的还原
+
+    dig_dilate=cv.dilate(erosion,np.ones((5,5)),iterations=1)
+    res=np.hstack((img,erosion,dig_dilate))
+    cv_show(&quot;erosion_dilate&quot;,res)
+</code></pre>
+<h2 id="开运算与闭运算"><a href="#开运算与闭运算" class="headerlink" title="开运算与闭运算"></a>开运算与闭运算</h2><pre><code class="python">def morphology_openAndClose():
+    # 开运算：先腐蚀再膨胀
+    res_open=cv.morphologyEx(img,cv.MORPH_OPEN,kernel=np.ones((5,5)))
+    cv_show(&quot;morphology_open&quot;,res_open)
+    # 闭运算：先膨胀再腐蚀
+    res_close=cv.morphologyEx(img,cv.MORPH_CLOSE,kernel=np.ones((5,5)))
+    cv_show(&quot;morphology_close&quot;,res_close)
+</code></pre>
+<h2 id="梯度运算-膨胀-腐蚀，得到边缘结果"><a href="#梯度运算-膨胀-腐蚀，得到边缘结果" class="headerlink" title="梯度运算:膨胀-腐蚀，得到边缘结果"></a>梯度运算:膨胀-腐蚀，得到边缘结果</h2><pre><code class="python">def morphology_gradient():
+    # pie=cv.imread(path+&quot;\pie.png&quot;)
+    res=cv.morphologyEx(img,cv.MORPH_GRADIENT,kernel=np.ones((5,5)))
+    cv_show(&quot;morphology_gradient&quot;,res)
+</code></pre>
+<h2 id="礼帽与黑帽"><a href="#礼帽与黑帽" class="headerlink" title="礼帽与黑帽"></a>礼帽与黑帽</h2><pre><code class="python">
+# 礼帽：原始输入-开运算，得到噪点,可突出更加明亮区域
+# 黑帽：闭运算-原始输入，得到噪点轮廓
+def tophatAndblackhat():
+    tophat=cv.morphologyEx(img,cv.MORPH_TOPHAT,np.ones((5,5)))
+    cv_show(&quot;tophat&quot;,tophat)
+    blackhat=cv.morphologyEx(img,cv.MORPH_BLACKHAT,np.ones((5,5)))
+    cv_show(&quot;blackhat&quot;,blackhat)
+</code></pre>
+<h1 id="梯度算子"><a href="#梯度算子" class="headerlink" title="梯度算子"></a>梯度算子</h1><pre><code class="python">import cv2 as cv
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+abs_path=os.path.abspath(&quot;..&quot;)
+path=abs_path+r&quot;\data\2-7data&quot;
+img=cv.imread(path+&quot;\lena.jpg&quot;,cv.IMREAD_GRAYSCALE)
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+# cv_show(&quot;img&quot;,img)
+</code></pre>
 <h2 id="sobel算子"><a href="#sobel算子" class="headerlink" title="sobel算子"></a>sobel算子</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC3yPs"><img src="https://s1.ax1x.com/2022/05/01/OC3yPs.png" alt="OC3yPs.png"></a></p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC3IIJ"><img src="https://s1.ax1x.com/2022/05/01/OC3IIJ.png" alt="OC3IIJ.png"></a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#     [-1 0 1     [-1 -2 -1</span></span><br><span class="line"><span class="comment"># Gx=  -2 0 2  Gy=  0  0  0</span></span><br><span class="line"><span class="comment">#      -1 0 1]      1  2  1]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sobel_grad_test</span>(<span class="params">img=cv.imread(<span class="params">path+<span class="string">&quot;\pie.png&quot;</span></span>)</span>):</span><br><span class="line">    <span class="comment"># 参数</span></span><br><span class="line">    <span class="comment"># src</span></span><br><span class="line">    <span class="comment"># ddepth：图像深度，cv.CV_64F可使色值保留负数而不使其截断</span></span><br><span class="line">    <span class="comment"># dx：横轴变换，1表示在横轴变换，0表示不变换</span></span><br><span class="line">    <span class="comment"># dy：纵轴变换</span></span><br><span class="line">    <span class="comment"># ksize表示卷积核大小</span></span><br><span class="line">    sobelx=cv.Sobel(img,cv.CV_64F,<span class="number">1</span>,<span class="number">0</span>,ksize=<span class="number">3</span>)</span><br><span class="line">    sobelx=cv.convertScaleAbs(sobelx)<span class="comment">#将计算到的矩阵结果取绝对值</span></span><br><span class="line">    sobely=cv.Sobel(img,cv.CV_64F,<span class="number">0</span>,<span class="number">1</span>,ksize=<span class="number">3</span>)</span><br><span class="line">    sobely=cv.convertScaleAbs(sobely)</span><br><span class="line">    sobel=cv.addWeighted(sobelx,<span class="number">0.5</span>,sobely,<span class="number">0.5</span>,<span class="number">0</span>)</span><br><span class="line">    res=np.hstack((img,sobel))</span><br><span class="line">    cv_show(<span class="string">&quot;res&quot;</span>,res)</span><br><span class="line"></span><br><span class="line"><span class="comment"># sobel_grad_test(img)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Scharr算子</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     [ -3  0  3     [-3 -10  -3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Gx=  -10  0 10  Gy=  0   0   0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#       -3  0  3]      3  10   3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># laplacian算子</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     [ 0   1  0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Gx=   1  -4  1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#       0   1  0]</span></span><br></pre></td></tr></table></figure>
+<pre><code class="python">
+#     [-1 0 1     [-1 -2 -1
+# Gx=  -2 0 2  Gy=  0  0  0
+#      -1 0 1]      1  2  1]
 
+def sobel_grad_test(img=cv.imread(path+&quot;\pie.png&quot;)):
+    # 参数
+    # src
+    # ddepth：图像深度，cv.CV_64F可使色值保留负数而不使其截断
+    # dx：横轴变换，1表示在横轴变换，0表示不变换
+    # dy：纵轴变换
+    # ksize表示卷积核大小
+    sobelx=cv.Sobel(img,cv.CV_64F,1,0,ksize=3)
+    sobelx=cv.convertScaleAbs(sobelx)#将计算到的矩阵结果取绝对值
+    sobely=cv.Sobel(img,cv.CV_64F,0,1,ksize=3)
+    sobely=cv.convertScaleAbs(sobely)
+    sobel=cv.addWeighted(sobelx,0.5,sobely,0.5,0)
+    res=np.hstack((img,sobel))
+    cv_show(&quot;res&quot;,res)
+
+# sobel_grad_test(img)
+
+# Scharr算子
+
+#     [ -3  0  3     [-3 -10  -3
+
+# Gx=  -10  0 10  Gy=  0   0   0
+
+#       -3  0  3]      3  10   3]
+
+# laplacian算子
+
+#     [ 0   1  0
+
+# Gx=   1  -4  1
+
+#       0   1  0]
+</code></pre>
 <h2 id="Scharr算子"><a href="#Scharr算子" class="headerlink" title="Scharr算子"></a>Scharr算子</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC3HR1"><img src="https://s1.ax1x.com/2022/05/01/OC3HR1.png" alt="OC3HR1.png"></a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sobelx=cv.Sobel(img,cv.CV_64F,<span class="number">1</span>,<span class="number">0</span>,ksize=<span class="number">3</span>)</span><br><span class="line">sobely=cv.Sobel(img,cv.CV_64F,<span class="number">0</span>,<span class="number">1</span>,ksize=<span class="number">3</span>)</span><br><span class="line">sobelx=cv.convertScaleAbs(sobelx)</span><br><span class="line">sobely=cv.convertScaleAbs(sobely)</span><br><span class="line">sobel=cv.addWeighted(sobelx,<span class="number">0.5</span>,sobely,<span class="number">0.5</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># scharr算子</span></span><br><span class="line"></span><br><span class="line">scharrx=cv.Scharr(img,cv.CV_64F,<span class="number">1</span>,<span class="number">0</span>)</span><br><span class="line">scharry=cv.Scharr(img,cv.CV_64F,<span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">scharrx=cv.convertScaleAbs(scharrx)</span><br><span class="line">scharry=cv.convertScaleAbs(scharry)</span><br><span class="line">scharr=cv.addWeighted(scharrx,<span class="number">0.5</span>,scharry,<span class="number">0.5</span>,<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="python">sobelx=cv.Sobel(img,cv.CV_64F,1,0,ksize=3)
+sobely=cv.Sobel(img,cv.CV_64F,0,1,ksize=3)
+sobelx=cv.convertScaleAbs(sobelx)
+sobely=cv.convertScaleAbs(sobely)
+sobel=cv.addWeighted(sobelx,0.5,sobely,0.5,0)
 
+# scharr算子
+
+scharrx=cv.Scharr(img,cv.CV_64F,1,0)
+scharry=cv.Scharr(img,cv.CV_64F,0,1)
+scharrx=cv.convertScaleAbs(scharrx)
+scharry=cv.convertScaleAbs(scharry)
+scharr=cv.addWeighted(scharrx,0.5,scharry,0.5,0)
+</code></pre>
 <h2 id="laplacian算子"><a href="#laplacian算子" class="headerlink" title="laplacian算子"></a>laplacian算子</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC3bxx"><img src="https://s1.ax1x.com/2022/05/01/OC3bxx.png" alt="OC3bxx.png"></a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">laplacian=cv.Laplacian(img,cv.CV_64F)</span><br><span class="line">laplacian=cv.convertScaleAbs(laplacian)</span><br><span class="line"></span><br><span class="line">res=np.hstack((img,sobel,scharr,laplacian))</span><br><span class="line">cv_show(<span class="string">&quot;img-sobel-scharr-laplacian&quot;</span>,res)</span><br></pre></td></tr></table></figure>
+<pre><code class="python">
+laplacian=cv.Laplacian(img,cv.CV_64F)
+laplacian=cv.convertScaleAbs(laplacian)
 
+res=np.hstack((img,sobel,scharr,laplacian))
+cv_show(&quot;img-sobel-scharr-laplacian&quot;,res)
+</code></pre>
 <h1 id="canny边缘检测"><a href="#canny边缘检测" class="headerlink" title="canny边缘检测"></a>canny边缘检测</h1><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC8uJs"><img src="https://s1.ax1x.com/2022/05/01/OC8uJs.png" alt="OC8uJs.png"></a><br><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC8KWn"><img src="https://s1.ax1x.com/2022/05/01/OC8KWn.png" alt="OC8KWn.png"></a><br><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC8nij"><img src="https://s1.ax1x.com/2022/05/01/OC8nij.png" alt="OC8nij.png"></a><br><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC8eoQ"><img src="https://s1.ax1x.com/2022/05/01/OC8eoQ.png" alt="OC8eoQ.png"></a><br><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC8Zdg"><img src="https://s1.ax1x.com/2022/05/01/OC8Zdg.png" alt="OC8Zdg.png"></a><br><a target="_blank" rel="noopener" href="https://imgtu.com/i/OC8Mzq"><img src="https://s1.ax1x.com/2022/05/01/OC8Mzq.png" alt="OC8Mzq.png"></a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">abs_path=os.path.abspath(<span class="string">&quot;..&quot;</span>)</span><br><span class="line">path=abs_path+<span class="string">r&quot;\data\2-7data&quot;</span></span><br><span class="line">img=cv.imread(path+<span class="string">&quot;\lena.jpg&quot;</span>,cv.IMREAD_GRAYSCALE)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cv_show</span>(<span class="params">name,img</span>):</span><br><span class="line">    cv.imshow(name,img)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    cv.destroyAllWindows()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.图像平滑处理：高斯滤波去除影响检测的噪点</span></span><br><span class="line"><span class="comment"># 2.利用sobel算子计算各像素点的梯度及其方向</span></span><br><span class="line"><span class="comment"># 3.非极大值抑制：找出在某一领域内梯度极大的像素点并保留，其余的像素点去除</span></span><br><span class="line"><span class="comment"># 4.双阈值检测，检测确定真实的和潜在的边缘</span></span><br><span class="line"><span class="comment"># 5.通过抑制孤立的弱边缘最终完成边缘检测</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 阈值范围较大会导致边缘检测效果较差</span></span><br><span class="line"><span class="comment"># 阈值范围较小会检测出部分噪点</span></span><br><span class="line">cv1=cv.Canny(img,<span class="number">80</span>,<span class="number">150</span>)<span class="comment">#参数：src，下阈值，上阈值</span></span><br><span class="line">cv2=cv.Canny(img,<span class="number">50</span>,<span class="number">100</span>)</span><br><span class="line">res1=np.hstack((cv1,cv2))</span><br><span class="line">cv_show(<span class="string">&quot;lena&quot;</span>,res1)</span><br><span class="line"></span><br><span class="line">car=cv.imread(path+<span class="string">&quot;\car.png&quot;</span>,cv.IMREAD_GRAYSCALE)</span><br><span class="line">car1=cv.Canny(car,<span class="number">120</span>,<span class="number">250</span>)</span><br><span class="line">car2=cv.Canny(car,<span class="number">50</span>,<span class="number">100</span>)</span><br><span class="line">res2=np.hstack((car1,car2))</span><br><span class="line">cv_show(<span class="string">&quot;car&quot;</span>,res2)</span><br></pre></td></tr></table></figure>
-    </div>
+<pre><code class="python">import os
+import cv2 as cv
+import matplotlib.pyplot as plt
+import numpy as np
 
-    
-    
-    
+abs_path=os.path.abspath(&quot;..&quot;)
+path=abs_path+r&quot;\data\2-7data&quot;
+img=cv.imread(path+&quot;\lena.jpg&quot;,cv.IMREAD_GRAYSCALE)
 
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/opencv/" rel="tag"># opencv</a>
-              <a href="/tags/python/" rel="tag"># python</a>
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2022/05/01/git%E5%B7%A5%E5%85%B7/" rel="prev" title="git工具">
-                  <i class="fa fa-chevron-left"></i> git工具
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2023/01/31/mysql%E5%9F%BA%E7%A1%80/" rel="next" title="MySQL基础">
-                  MySQL基础 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 
+# 1.图像平滑处理：高斯滤波去除影响检测的噪点
+# 2.利用sobel算子计算各像素点的梯度及其方向
+# 3.非极大值抑制：找出在某一领域内梯度极大的像素点并保留，其余的像素点去除
+# 4.双阈值检测，检测确定真实的和潜在的边缘
+# 5.通过抑制孤立的弱边缘最终完成边缘检测
 
+# 阈值范围较大会导致边缘检测效果较差
+# 阈值范围较小会检测出部分噪点
+cv1=cv.Canny(img,80,150)#参数：src，下阈值，上阈值
+cv2=cv.Canny(img,50,100)
+res1=np.hstack((cv1,cv2))
+cv_show(&quot;lena&quot;,res1)
 
+car=cv.imread(path+&quot;\car.png&quot;,cv.IMREAD_GRAYSCALE)
+car1=cv.Canny(car,120,250)
+car2=cv.Canny(car,50,100)
+res2=np.hstack((car1,car2))
+cv_show(&quot;car&quot;,res2)
+</code></pre>
 
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">千钧</span>
-</div>
-
-<!--
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
--->
+  <div id="gitalk-container"></div>
+</div>
 
-    </div>
-  </footer>
-
+<script>
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
 
-  
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/2023/01/31/mysql%E5%9F%BA%E7%A1%80/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>MySQL基础</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/2022/05/01/git%E5%B7%A5%E5%85%B7/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>git工具</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
 
 
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
 
 
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
 
-  
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
 
 
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
 
-
-
-
-  <!--樱花雨-->
-  <!-- <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/sakura.js"></script> -->
-
-
-</body>
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
 </html>
 
