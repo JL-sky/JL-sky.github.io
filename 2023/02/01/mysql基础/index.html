@@ -61,7 +61,7 @@
 						
 								<li>
 									<a href="/archives">
-										文章目录
+										目录
 									</a>
 									<span class="dot"></span>
 								</li>
@@ -70,7 +70,7 @@
 						
 								<li>
 									<a href="/categories">
-										分类
+										文章分类
 									</a>
 									<span class="dot"></span>
 								</li>
@@ -79,7 +79,7 @@
 						
 								<li>
 									<a href="/tags">
-										标签
+										技术标签
 									</a>
 									<span class="dot"></span>
 								</li>
@@ -88,7 +88,7 @@
 						
 								<li>
 									<a href="/about">
-										关于
+										个人简介
 									</a>
 									<span class="dot"></span>
 								</li>
@@ -115,19 +115,19 @@
         </li>
         
         <li>
-            <a href="/archives">文章目录</a>
+            <a href="/archives">目录</a>
         </li>
         
         <li>
-            <a href="/categories">分类</a>
+            <a href="/categories">文章分类</a>
         </li>
         
         <li>
-            <a href="/tags">标签</a>
+            <a href="/tags">技术标签</a>
         </li>
         
         <li>
-            <a href="/about">关于</a>
+            <a href="/about">个人简介</a>
         </li>
         
     </ul>
@@ -295,7 +295,7 @@
                          <a href="../../categories/数据库/" target="_blank" >数据库</a>
                     
                 </div>
-                <p>2023-01-31 16:27:33</p>
+                <p>2023-02-01 17:52:12</p>
             </div>
         </div>
     </div>
@@ -310,9 +310,7 @@
       </div>
     
 
-    <!-- more -->
-
-<h1 id="SQL分类"><a href="#SQL分类" class="headerlink" title="SQL分类"></a>SQL分类</h1><p>DDL（数据定义语言）：create、alter、drop、rename、truncate</p>
+    <h1 id="SQL分类"><a href="#SQL分类" class="headerlink" title="SQL分类"></a>SQL分类</h1><p>DDL（数据定义语言）：create、alter、drop、rename、truncate</p>
 <p>DML（数据操作语言）:insert、delete、update、select</p>
 <p>DCL（数据控制语言）:commit、rollback、savepoint、grant、revoke</p>
 <h1 id="基本语句"><a href="#基本语句" class="headerlink" title="基本语句"></a>基本语句</h1><h2 id="select语句"><a href="#select语句" class="headerlink" title="select语句"></a>select语句</h2><h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><h4 id="全查询"><a href="#全查询" class="headerlink" title="全查询"></a>全查询</h4><pre><code class="sql">SELECT * FROM employees;
@@ -571,7 +569,7 @@ FROM employees
 LIMIT 20 OFFSET 40;
 </code></pre>
 <p><strong>注</strong>：limit语句写在整个select语句之后！</p>
-<h1 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h1><h3 id="基本多表查询"><a href="#基本多表查询" class="headerlink" title="基本多表查询"></a>基本多表查询</h3><p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230106131303283.png" alt="image-20230106131303283"></p>
+<h1 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h1><h3 id="基本多表查询"><a href="#基本多表查询" class="headerlink" title="基本多表查询"></a>基本多表查询</h3><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSrVh80"><img src="https://s1.ax1x.com/2023/02/02/pSrVh80.png" alt="pSrVh80.png"></a></p>
 <p><strong>练习</strong>：查询员工号及部门名称</p>
 <pre><code class="sql">SELECT employee_id,department_name
 FROM employees,departments
@@ -604,7 +602,7 @@ WHERE e.department_id=d.department_id
 AND d.location_id=l.location_id;
 </code></pre>
 <h3 id="多表查询的分类"><a href="#多表查询的分类" class="headerlink" title="多表查询的分类"></a>多表查询的分类</h3><h4 id="等值连接与非等值连接"><a href="#等值连接与非等值连接" class="headerlink" title="等值连接与非等值连接"></a>等值连接与非等值连接</h4><p><strong>非等值连接</strong>如下</p>
-<p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230107092704928.png" alt="image-20230107092704928"></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSrV5vT"><img src="https://s1.ax1x.com/2023/02/02/pSrV5vT.png" alt="pSrV5vT.png"></a></p>
 <p><strong>练习</strong>：求每个员工的姓名，工资，以及对应工资等级</p>
 <pre><code class="sql">SELECT last_name,salary,grade_level
 FROM employees e,job_grades j
@@ -619,7 +617,7 @@ WHERE emp.manager_id=mgr.employee_id;
 </code></pre>
 <p><strong>分析</strong>：由于员工的id和姓名以及他的管理者的id和姓名均在employees表中，此时需要使用自连接</p>
 <p><strong>注</strong>：自连接即同一张表自己连接，连接时要将该表视为两张表并用不同的别名代替进行等值连接</p>
-<h4 id="内连接与外连接"><a href="#内连接与外连接" class="headerlink" title="内连接与外连接"></a>内连接与外连接</h4><p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230107102342947.png" alt="image-20230107102342947"></p>
+<h4 id="内连接与外连接"><a href="#内连接与外连接" class="headerlink" title="内连接与外连接"></a>内连接与外连接</h4><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSrVoKU"><img src="https://s1.ax1x.com/2023/02/02/pSrVoKU.png" alt="pSrVoKU.png"></a></p>
 <p><strong>内连接</strong>：满足两表连接条件的连接，如下当两表满足employees.department_id&#x3D;departments.department_id条件时查询出的结果（中图，A∩B）</p>
 <pre><code class="sql">SELECT last_name,department_name
 FROM employees,departments
