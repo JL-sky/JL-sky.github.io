@@ -1617,678 +1617,6 @@ int main(int args,char*argc[])
       </tags>
   </entry>
   <entry>
-    <title>Qt</title>
-    <url>/2022/04/28/Qt/</url>
-    <content><![CDATA[<!-- more -->
-
-
-<h1 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h1><h2 id="按钮控件与信号"><a href="#按钮控件与信号" class="headerlink" title="按钮控件与信号"></a>按钮控件与信号</h2><pre><code class="c++">//    创建按钮对象及其实例，参数一为按钮名称，参数二为将按钮控件镶嵌到主窗口当中
-    QPushButton* btn=new QPushButton(&quot;close&quot;,this);
-//   重新设置主窗口大小
-    resize(600,400);
-//    移动按钮位置，按钮创建时默认为原点
-    btn-&gt;move(width()/2,height()/2);
-//    设置主窗口名称
-    this-&gt;setObjectName(&quot;按钮实验&quot;);
-//   信号控件，参数：发送信号者，发送的信号，接受信号者，接受的信号
-    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::close);
-</code></pre>
-<h2 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h2><pre><code class="c++">#include &quot;mywidget.h&quot;
-#include &quot;ui_mywidget.h&quot;
-#include&lt;QPushButton&gt;
-
-myWidget::myWidget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::myWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //创建教师对象
-    this-&gt;zt=new Teacher(this);
-   //创建学生对象
-    this-&gt;st=new Student(this);
-
-    connect(zt,&amp;Teacher::hungry,st,&amp;Student::treat);
-    classIsOver();
-    classIsOver();
-
-&#125;
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit zt-&gt;hungry();
-&#125;
-
-myWidget::~myWidget()
-&#123;
-    delete ui;
-&#125;
-
-</code></pre>
-<pre><code class="c++">#include &quot;student.h&quot;
-#include&lt;QDebug&gt;
-
-Student::Student(QObject *parent) : QObject(parent)
-&#123;
-
-&#125;
-void Student::treat()
-&#123;
-     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
-&#125;
-</code></pre>
-<h2 id="自定义信号与槽发生重载的问题"><a href="#自定义信号与槽发生重载的问题" class="headerlink" title="自定义信号与槽发生重载的问题"></a>自定义信号与槽发生重载的问题</h2><pre><code class="c++">   //创建教师对象
-    this-&gt;zt=new Teacher(this);
-   //创建学生对象
-    this-&gt;st=new Student(this);
-    //函数指针-&gt;函数地址
-    void(Teacher::*teacherSingal)(QString)=&amp;Teacher::hungry;
-    void(Student::*studentSingal)(QString)=&amp;Student::treat;
-
-    connect(zt,teacherSingal,st,studentSingal);
-    classIsOver();
-</code></pre>
-<pre><code class="c++">#include &quot;student.h&quot;
-#include&lt;QDebug&gt;
-
-Student::Student(QObject *parent) : QObject(parent)
-&#123;
-
-&#125;
-void Student::treat()
-&#123;
-     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
-&#125;
-void Student::treat(QString foodName)
-&#123;
-    qDebug()&lt;&lt;&quot;请老师吃：&quot;&lt;&lt;foodName&lt;&lt;endl;
-&#125;
-
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
-&#125;
-</code></pre>
-<h2 id="按钮触发信号"><a href="#按钮触发信号" class="headerlink" title="按钮触发信号"></a>按钮触发信号</h2><pre><code class="c++"> QPushButton* btn=new QPushButton(&quot;下课&quot;,this);
-    this-&gt;resize(600,400);
-    //点击下课按钮触发宫保鸡丁时间
-    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::classIsOver);
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
-&#125;
-</code></pre>
-<h2 id="信号链接信号"><a href="#信号链接信号" class="headerlink" title="信号链接信号"></a>信号链接信号</h2><pre><code class="c++">//    无参信号与槽链接
-    void(Teacher::*teacherSingal)(void)=&amp;Teacher::hungry;
-    void(Student::*studentSingal)(void)=&amp;Student::treat;
-    connect(zt,teacherSingal,st,studentSingal);
-
-//    信号链接信号,按钮信号链接教师信号 
-    connect(btn,&amp;QPushButton::clicked,zt,teacherSingal);
-&#125;
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit zt-&gt;hungry();
-//    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
-//    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
-&#125;
-</code></pre>
-<h2 id="lamdba表达式"><a href="#lamdba表达式" class="headerlink" title="lamdba表达式"></a>lamdba表达式</h2><pre><code class="c++">//    lamdba表达式
-//    [外部变量捕获方式](形参)mutable-&gt;返回类型&#123;函数体&#125;(实参);
-//    [外部变量捕获方式]：当&#123;&#125;中使用外部变量时，需要在此声明使用的外部变量，称其为捕获，捕获方式有，
-//              值传递[a]：该方式传递外部变量进入lamdba表达式内部使用时，默认为const方式，即不可改变传递进来的外部变量的值，
-//                                若需要改变，则需要使用关键字mutable，但注意，此刻改变的并非外部变量本体的值，而是拷贝进lamdba的值
-//              引用传递[&amp;]：使用引用方式传递外部变量进入lamdba表达式，将lamdba表达式内使用的外部变量与本体外部变量进行绑定
-//              自推导方式[=]
-
-
-//    （形参）：lamdba表达式函数形参
-//      &#123;函数体&#125;：lamdba表达式具体实现
-//    （实参）：传递给形参的值，&#123;&#125;中使用return语句时必须使用该实参
-    
-
-    QPushButton* btn1=new QPushButton(&quot;btn1&quot;,this);
-    QPushButton* btn2=new QPushButton(&quot;btn2&quot;,this);
-    QPushButton* btn3=new QPushButton(&quot;btn3&quot;,this);
-    resize(600,400);
-    btn2-&gt;move(300,200);
-    btn3-&gt;move(200,300);
-    int m=10;
-    qDebug()&lt;&lt;&quot;start:&quot;&lt;&lt;m&lt;&lt;endl;
-    connect(btn1,&amp;QPushButton::clicked,this,[=]()&#123;qDebug()&lt;&lt;m+10&lt;&lt;endl;&#125;);
-    connect(btn2,&amp;QPushButton::clicked,this,[m]()mutable&#123;qDebug()&lt;&lt;m+20&lt;&lt;endl;&#125;);
-    qDebug()&lt;&lt;&quot;next:&quot;&lt;&lt;m&lt;&lt;endl;
-
-#if 1
-    int ret;
-    ret=[m]()mutable-&gt;int&#123;return m+30;&#125;();//值传递
-    qDebug()&lt;&lt;&quot;ret_m:&quot;&lt;&lt;ret&lt;&lt;endl;//40
-    ret=[=]()-&gt;int&#123;return m+40;&#125;();//自推导传递
-    qDebug()&lt;&lt;&quot;ret_=:&quot;&lt;&lt;ret&lt;&lt;endl;//50
-    ret=[](int a,int b)-&gt;int&#123;return a+b;&#125;(2,3);
-    qDebug()&lt;&lt;&quot;ret_a+b:&quot;&lt;&lt;ret&lt;&lt;endl;//5
-    ret=[](int x)-&gt;int&#123;return [](int y)-&gt;int&#123;return y*2;&#125;(x)+6;&#125;(5);
-    qDebug()&lt;&lt;ret&lt;&lt;endl;//16
-#endif
-</code></pre>
-<pre><code class="c++">//利用lamdba表达式进行信号传递
-    QPushButton* btn_lam=new QPushButton(&quot;关闭&quot;,this);
-    btn_lam-&gt;move(100,0);
-    connect(btn_lam,&amp;QPushButton::clicked,this,[=]()&#123;
-     this-&gt;close();
-//        emit st-&gt;treat(&quot;宫保鸡丁&quot;);
-//        btn_lam-&gt;setText(&quot;aaa&quot;);//效果：点击“关闭”按钮后，按钮名称自动改为“aaa”
-    &#125;);
-</code></pre>
-<h1 id="控件"><a href="#控件" class="headerlink" title="控件"></a>控件</h1><h2 id="菜单栏与工具栏"><a href="#菜单栏与工具栏" class="headerlink" title="菜单栏与工具栏"></a>菜单栏与工具栏</h2><pre><code class="c++">
-    resize(600,400);
-
-//    创建菜单栏QMenuBar,最多有一个
-    QMenuBar* bar=menuBar();
-//    将菜单栏放入窗口中
-    setMenuBar(bar);
-//    创建菜单QMenu
-   QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
-   QMenu* editMenu=bar-&gt;addMenu(&quot;编辑&quot;);
-//   创建菜单项QAction
-   fileMenu-&gt;addAction(&quot;新建&quot;);
-   fileMenu-&gt;addSeparator();//添加菜单栏分割线
-   fileMenu-&gt;addAction(&quot;打开&quot;);
-   fileMenu-&gt;addSeparator();//添加菜单栏分割线
-   fileMenu-&gt;addAction(&quot;保存&quot;);
-   fileMenu-&gt;addSeparator();//添加菜单栏分割线
-   fileMenu-&gt;addAction(&quot;关闭&quot;);
-   fileMenu-&gt;addSeparator();
-
-   //工具栏
-     QToolBar* toolBar=new QToolBar(this);
-//设置默认停靠区域
-     addToolBar(Qt::LeftToolBarArea,toolBar);
-
-// 后期设置，左右停靠
-    toolBar-&gt;setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
-
-// 设置浮动
-    toolBar-&gt;setFloatable(false);//工具栏将不能浮动在窗口表面
-
-//设置移动
-     toolBar-&gt;setMovable(false);//工具栏将不能移动，此时上边左右停靠的设置将失效
-
-// 工具栏中添加内容
-// 创建内容
-     QAction* helpAction=fileMenu-&gt;addAction(&quot;帮助&quot;);//将菜单栏中的内容添加到工具栏中
-     QAction* processAction=fileMenu-&gt;addAction(&quot;项目&quot;);
-// 将内容添加到工具栏中
-     toolBar-&gt;addAction(helpAction);
-     toolBar-&gt;addSeparator();//添加工具栏分割线
-     toolBar-&gt;addAction(processAction);
-     toolBar-&gt;addSeparator();//添加工具栏分割线
-
-//在工具栏中添加控件
-     QPushButton* btn=new QPushButton(&quot;设置&quot;,this);
-     toolBar-&gt;addWidget(btn);
-
-
-
-tips：
-    //菜单栏，最多有一个
-    QMenuBar* bar=menuBar();
-    setMenuBar(bar);
-    //添加菜单内容
-    QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
-    //添加菜单项
-    QAction* newAction=fileMenu-&gt;addAction(&quot;创建&quot;);
-    //添加分割线
-    fileMenu-&gt;addSeparator(newAction);
-
-
-    //工具栏，可以有多个
-    QToolBar* toolBar=new QToolBar(&quot;this&quot;);
-    //设置默认停靠区域
-    addToolBar(Qt::leftBarArea,toolBar);
-    //后期设置停靠区域，浮动，移动，在工具栏中添加内容，控件
-</code></pre>
-<h2 id="模态与非模态对话框"><a href="#模态与非模态对话框" class="headerlink" title="模态与非模态对话框"></a>模态与非模态对话框</h2><pre><code class="c++">  //点击创建按钮，弹出一个对话框
-    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
-        //模态对话框，不可以对其他窗口进行操作
-#if 0
-        QDialog dlg(this);
-        dlg.resize(200,100);
-        dlg.exec();
-#endif
-#if 0
-        //非模态对话框,可以对其他窗口进行操作
-        QDialog* dlg2=new QDialog(this);
-        dlg2-&gt;resize(200,100);
-        dlg2-&gt;show();
-#endif
-</code></pre>
-<h2 id="消息对话框"><a href="#消息对话框" class="headerlink" title="消息对话框"></a>消息对话框</h2><pre><code class="c++">//点击创建按钮，弹出一个对话框
-    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
-        //错误对话框,参数：父类，标题，提示内容
-//        QMessageBox::critical(this,&quot;critical&quot;,&quot;错误&quot;);
-        //信息对话框
-//        QMessageBox::information(this,&quot;info&quot;,&quot;信息&quot;);
-        //提问对话框,参数：1.父类，2.标题，3.提示内容,4.按键类型，5.默认关联回车键
-//        QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);
-
-//        if(QMessageBox::Save==QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))
-//        &#123;
-//            qDebug()&lt;&lt;&quot;选择的按键类型是保存&quot;&lt;&lt;endl;
-//        &#125;
-//        else
-//        &#123;
-//            qDebug()&lt;&lt;&quot;选择的按键类型是选择取消&quot;&lt;&lt;endl;
-//        &#125;
-
-        //警告对话框
-        QMessageBox::warning(this,&quot;warning&quot;,&quot;警告&quot;);
-</code></pre>
-<h2 id="其他对话框"><a href="#其他对话框" class="headerlink" title="其他对话框"></a>其他对话框</h2><pre><code class="c++">connect(ui-&gt;actionnew,&amp;QAction::triggered,[=]()&#123;
-        //颜色对话框
-//        QColor color=QColorDialog::getColor(QColor(0,255,0));
-//        qDebug()&lt;&lt;&quot;red:&quot;&lt;&lt;color.red()&lt;&lt;&quot;green:&quot;&lt;&lt;color.green()&lt;&lt;&quot;blue:&quot;&lt;&lt;color.blue()&lt;&lt;endl;
-
-        //文件对话框，参数：父亲，标题，默认文件路径，筛选的文件类型
-        //返回值为文件路径
-//        QString str=QFileDialog::getOpenFileName(this,&quot;openFile&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*.md&quot;);
-//        qDebug()&lt;&lt;str&lt;&lt;endl;
-
-        //字体对话框
-        bool flag;
-        QFont font=QFontDialog::getFont(&amp;flag,QFont(&quot;仿宋&quot;,36));
-        qDebug()&lt;&lt;&quot;字体 &quot;&lt;&lt;font.family()&lt;&lt;&quot;大小 &quot;&lt;&lt;font.pointSize()&lt;&lt;&quot;是否加粗 &quot;&lt;&lt;font.bold()&lt;&lt;&quot;是否倾斜 &quot;&lt;&lt;font.italic()&lt;&lt;endl;
-    &#125;);
-</code></pre>
-<h2 id="UI布局设计"><a href="#UI布局设计" class="headerlink" title="UI布局设计"></a>UI布局设计</h2><p><a href="https://imgtu.com/i/LX5eAI"><img src="https://s1.ax1x.com/2022/04/28/LX5eAI.png" alt="LX5eAI.png"></a></p>
-<pre><code class="c++">tips：
-    1.选取widget进行布局，水平、垂直、栅格
-    2.默认窗口与控件之间存在9的间隙，可以调整layoutLeftMargin
-    3.利用弹簧进行布局
-</code></pre>
-<h2 id="按钮控件组"><a href="#按钮控件组" class="headerlink" title="按钮控件组"></a>按钮控件组</h2><p><a href="https://imgtu.com/i/LX5mNt"><img src="https://s1.ax1x.com/2022/04/28/LX5mNt.png" alt="LX5mNt.png"></a></p>
-<pre><code class="c++"> //默认性别单选框为男
-    ui-&gt;rBtnMan-&gt;setChecked(true);
-
-    //点击”女“，打印信息
-    connect(ui-&gt;rBtnWoman,&amp;QRadioButton::clicked,[=]()&#123;
-//        qDebug()&lt;&lt;QString::fromUtf8(&quot;女&quot;)&lt;&lt;endl;
-         qDebug()&lt;&lt;&quot;女&quot;&lt;&lt;endl;
-    &#125;);
-
-    //点击”操作系统“显示状态码,0表示未选中，2表示选中
-    connect(ui-&gt;boxOS,&amp;QCheckBox::stateChanged,[=](int state)&#123;
-        qDebug()&lt;&lt;state&lt;&lt;endl;
-    &#125;);
-
-
-
-
-tips:
-    按钮组：
-        QPushButton：常用按钮
-        QToolButton：工具按钮，用于显示图片，如想显示文字，修改风格toolButtonStyle，凸起风格：autoRaise
-        QRadioButton：单选按钮，ui-&gt;rBtnMan-&gt;setChecked(true);//设置默认选项
-        QCheckBox:多选按钮，监听状态QStateChecked,0未选中，1半选，2选中
-</code></pre>
-<h2 id="QListWidget列表容器"><a href="#QListWidget列表容器" class="headerlink" title="QListWidget列表容器"></a>QListWidget列表容器</h2><pre><code class="c++">//利用listwidget写诗
-    QListWidgetItem* item=new QListWidgetItem(&quot;锄禾日当午&quot;);
-    ui-&gt;listWidget-&gt;addItem(item);//添加一句话
-    item-&gt;setTextAlignment(Qt::AlignHCenter);//设置对其方式为居中
-
-    QStringList list;
-    list&lt;&lt;&quot;我见青山多妩媚&quot;&lt;&lt;&quot;料青山见我应如是！&quot;;
-    ui-&gt;listWidget-&gt;addItems(list);//添加多句话
-    ui-&gt;listWidget-&gt;addItems(QStringList()&lt;&lt;&quot;自其变者而观之，则天地曾不能以一瞬&quot;&lt;&lt;&quot;自其不变者而观之，则物与我皆无尽也&quot;);
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5n4P"><img src="https://s1.ax1x.com/2022/04/28/LX5n4P.png" alt="LX5n4P.png"></a></p>
-<h2 id="treeWidget树控件"><a href="#treeWidget树控件" class="headerlink" title="treeWidget树控件"></a>treeWidget树控件</h2><pre><code class="c++">//设置水平头
-    ui-&gt;treeWidget-&gt;setHeaderLabels(QStringList()&lt;&lt;&quot;英雄&quot;&lt;&lt;&quot;英雄自我介绍&quot;);
-
-    //设置顶层节点
-    QTreeWidgetItem* strongItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;力量&quot;);
-    QTreeWidgetItem* speedItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;速度&quot;);
-    QTreeWidgetItem* inteligenceItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;智力&quot;);
-    //加载顶层节点
-    ui-&gt;treeWidget-&gt;addTopLevelItem(strongItem);
-    ui-&gt;treeWidget-&gt;addTopLevelItem(speedItem);
-    ui-&gt;treeWidget-&gt;addTopLevelItem(inteligenceItem);
-
-    //追加子节点
-    QTreeWidgetItem* l1=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;刚被猪&quot;&lt;&lt;&quot;前排坦克。。。。。。&quot;);
-    strongItem-&gt;addChild(l1); 
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5VHA"><img src="https://s1.ax1x.com/2022/04/28/LX5VHA.png" alt="LX5VHA.png"></a></p>
-<h2 id="tableWidget表格控件"><a href="#tableWidget表格控件" class="headerlink" title="tableWidget表格控件"></a>tableWidget表格控件</h2><pre><code class="c++">//设置列数
-    ui-&gt;tableWidget-&gt;setColumnCount(3);
-    //设置水平表头
-    ui-&gt;tableWidget-&gt;setHorizontalHeaderLabels(QStringList()&lt;&lt;&quot;姓名&quot;&lt;&lt;&quot;性别&quot;&lt;&lt;&quot;年龄&quot;);
-    //设置行数
-    ui-&gt;tableWidget-&gt;setRowCount(5);
-
-    //设置正文
-    QStringList nameList;
-    nameList&lt;&lt;&quot;张三&quot;&lt;&lt;&quot;李四&quot;&lt;&lt;&quot;王五&quot;&lt;&lt;&quot;赵六&quot;&lt;&lt;&quot;丁丁&quot;;
-    QList&lt;QString&gt; sexList;
-    sexList&lt;&lt;&quot;男&quot;&lt;&lt;&quot;男&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;男&quot;;
-    for(int i=0;i&lt;5;i++)
-    &#123;
-        int col=0;
-       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(nameList[i]));
-       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(sexList.at(i)));
-        //将数字转换为QString
-        ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(QString::number(i+18)));
-    &#125;
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5EBd"><img src="https://s1.ax1x.com/2022/04/28/LX5EBd.png" alt="LX5EBd.png"></a></p>
-<h2 id="其他控件介绍"><a href="#其他控件介绍" class="headerlink" title="其他控件介绍"></a>其他控件介绍</h2><pre><code class="c++">//栈控件使用
-    //设置默认定位
-    ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
-    //点击按钮跳转到TabWidget控件页面
-    connect(ui-&gt;btnTab,&amp;QPushButton::clicked,[=]()&#123;
-       ui-&gt;stackedWidget-&gt;setCurrentIndex(0);
-    &#125;);
-    //点击按钮跳转到scrollArea控件页面
-    connect(ui-&gt;btnScroll,&amp;QPushButton::clicked,[=]()&#123;
-        ui-&gt;stackedWidget-&gt;setCurrentIndex(1);
-    &#125;);
-    //点击按钮跳转到toolBox控件页面
-    connect(ui-&gt;btnTool,&amp;QPushButton::clicked,[=]()&#123;
-        ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
-    &#125;);
-
-    //下拉框
-    ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;宝马&quot;&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;拖拉机&quot;);
-    //选中“拖拉机”按钮跳转到下拉框拖拉机
-    connect(ui-&gt;btnSelect,&amp;QPushButton::clicked,[=]()&#123;
-//        ui-&gt;comboBox-&gt;setCurrentIndex(2);
-        ui-&gt;comboBox-&gt;setCurrentText(&quot;拖拉机&quot;);
-    &#125;);
-
-
-tips:
-    栈控件：ui-&gt;stackedWidget-&gt;setCurrentIndex();
-    下拉框：ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;宝马&quot;);
-    Qlabel显示图片：ui-&gt;labelImage-&gt;setPixmap(&quot;图片路径&quot;);
-    Qlabel显示动图：ui-&gt;LabenImage-&gt;setMoive();
-</code></pre>
-<h2 id="自定义控件"><a href="#自定义控件" class="headerlink" title="自定义控件"></a>自定义控件</h2><pre><code class="c++">class smallWidget : public QWidget
-&#123;
-    Q_OBJECT
-
-public:
-    explicit smallWidget(QWidget *parent = nullptr);
-    ~smallWidget();
-
-    //设置数值
-    void setNum(int num);
-    //获取数值
-    int getNum();
-
-private:
-    Ui::smallWidget *ui;
-&#125;;
-</code></pre>
-<pre><code class="c++">smallWidget::smallWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::smallWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //QSpinBox翻滚，QSlider跟着移动
-    void(QSpinBox::* spSingal)(int)=&amp;QSpinBox::valueChanged;
-    connect(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);
-
-    //QSlider移动，QSpinBox跟着翻滚
-    connect(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);
-&#125;
-
-void smallWidget::setNum(int num)
-&#123;
-    ui-&gt;spinBox-&gt;setValue(num);
-&#125;
-int smallWidget::getNum()
-&#123;
-    return ui-&gt;spinBox-&gt;value();
-&#125;
-
-
-smallWidget::~smallWidget()
-&#123;
-    delete ui;
-&#125;
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5K9f"><img src="https://s1.ax1x.com/2022/04/28/LX5K9f.png" alt="LX5K9f.png"></a></p>
-<pre><code class="c++">myWidget::myWidget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::myWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //点击按钮获取数值
-    connect(ui-&gt;btnGetNum,&amp;QPushButton::clicked,[=]()
-    &#123;
-       qDebug()&lt;&lt;ui-&gt;widget-&gt;getNum();
-    &#125;);
-
-    //点击按钮设置进度条到一半数值
-    connect(ui-&gt;btnSetNum,&amp;QPushButton::clicked,[=]()&#123;
-        ui-&gt;widget-&gt;setNum(50);
-    &#125;);
-
-&#125;
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5M38"><img src="https://s1.ax1x.com/2022/04/28/LX5M38.png" alt="LX5M38.png"></a></p>
-<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><h2 id="鼠标事件"><a href="#鼠标事件" class="headerlink" title="鼠标事件"></a>鼠标事件</h2><pre><code class="c++">#include &quot;mylabel.h&quot;
-#include&lt;QDebug&gt;
-#pragma execution_character_set(&quot;utf-8&quot;)
-#include&lt;QMouseEvent&gt;
-myLabel::myLabel(QWidget *parent) : QLabel(parent)
-&#123;
-    //设置鼠标跟踪状态
-    setMouseTracking(true);//此时只要是鼠标事件其状态都会被监听
-&#125;
-void myLabel::enterEvent(QEvent *event)
-&#123;
-//    qDebug()&lt;&lt;&quot;鼠标进入了!&quot;&lt;&lt;endl;
-&#125;
-void myLabel::leaveEvent(QEvent *)
-&#123;
-//    qDebug()&lt;&lt;&quot;鼠标离开了!&quot;&lt;&lt;endl;
-&#125;
-void myLabel::mousePressEvent(QMouseEvent *ev)
-&#123;
-    //鼠标左键按下，则显示信息
-    if(ev-&gt;button()==Qt::LeftButton)
-    &#123;
-        //返回鼠标在指定区域内的坐标值以及在整个窗口内的坐标值
-        //QString::arg()//用字符串变量参数依次替代字符串中最小数值
-        QString str=QString(&quot;鼠标按下了  x=%1  y=%2 gloalX=%3  globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
-        qDebug()&lt;&lt;str;
-    &#125;
-&#125;
-
-void myLabel::mouseReleaseEvent(QMouseEvent *ev)
-&#123;
-//    if(ev-&gt;button()==Qt::LeftButton)
-    &#123;
-        QString str=QString(&quot;鼠标释放了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
-        qDebug()&lt;&lt;str;
-    &#125;
-&#125;
-
-void myLabel::mouseMoveEvent(QMouseEvent *ev)
-&#123;
-//    if(ev-&gt;buttons()&amp;Qt::LeftButton)//组合键
-    &#123;
-        QString str=QString(&quot;鼠标移动了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
-        qDebug()&lt;&lt;str;
-    &#125;
-&#125;
-
-
-
-tips:
-    在UI中添加一个label ,选中label右键-&gt;提升 -&gt;输入类名myLabel.
-    这就完成了对label控件的鼠标事件的重写.
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5QgS"><img src="https://s1.ax1x.com/2022/04/28/LX5QgS.png" alt="LX5QgS.png"></a></p>
-<h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><pre><code class="c++">class myWidget : public QWidget
-&#123;
-    Q_OBJECT
-
-public:
-    myWidget(QWidget *parent = nullptr);
-    ~myWidget();
-
-    int id1;
-    int id2;
-    //重写定时器事件
-    void timerEvent(QTimerEvent* ev );
-
-private:
-    Ui::myWidget *ui;
-
-    Teacher* zt;
-    Student* st;
-    void classIsOver();
-&#125;;
-</code></pre>
-<pre><code class="c++">myWidget::myWidget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::myWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //启动定时器,startTimer(定时器间隔时长),返回定时器的唯一ID号
-    id1=startTimer(1000);
-    id2=startTimer(2000);
-
-
-    //定时器的第二种启动方式
-   QTimer* timer=new QTimer(this);
-   timer-&gt;start(500);
-   connect(timer,&amp;QTimer::timeout,[=]()&#123;
-       static int num=1;
-       ui-&gt;label_3-&gt;setText(QString::number(num++));
-   &#125;);
-
-   //点击按钮停止定时器
-   connect(ui-&gt;btn,&amp;QPushButton::clicked,[=]()&#123;
-       timer-&gt;stop();
-   &#125;);
-&#125;
-
-//重写定时器事件
-void myWidget::timerEvent(QTimerEvent* ev)//当定时器启动后，系统会自动调用该定时器事件函数
-&#123;
-    if(ev-&gt;timerId()==id1)
-    &#123;
-        static int num=1;
-        //定时器启动后自动调用该函数，若启动的定时器ID号为1号，则在label上每隔1s自动加1并显示，QString::number将数字转换为Qstring类型数据
-        ui-&gt;label-&gt;setText(QString::number(num++));
-    &#125;
-    if(ev-&gt;timerId()==id2)
-    &#123;
-        static int num=1;
-        ui-&gt;label_2-&gt;setText(QString::number(num++));
-    &#125;
-&#125;
-</code></pre>
-<h2 id="事件分发器"><a href="#事件分发器" class="headerlink" title="事件分发器"></a>事件分发器</h2><h2 id="事件过滤器"><a href="#事件过滤器" class="headerlink" title="事件过滤器"></a>事件过滤器</h2><h2 id="绘图事件"><a href="#绘图事件" class="headerlink" title="绘图事件"></a>绘图事件</h2><pre><code class="c++">void myWidget::paintEvent(QPaintEvent*)
-&#123;
-   QPainter*painter=new QPainter(this);//实例化画家对象
-
-   //设置画笔
-   QPen pen(QColor(255,0,0));
-   //设置画笔宽度
-   pen.setWidth(2);
-   //设置画笔风格
-   pen.setStyle(Qt::DotLine);
-
-   //让画家使用画笔
-    painter-&gt;setPen(pen);
-
-    //设置画刷
-    QBrush brush(Qt::cyan);
-    //设置画刷风格
-    brush.setStyle(Qt::Dense7Pattern);
-    
-    //让画家使用画刷
-   painter-&gt;setBrush(brush);
-
-   //画线
-    painter-&gt;drawLine(QPoint(0,0),QPoint(100,100));
-    //画椭圆
-    painter-&gt;drawEllipse(QPoint(100,100),50,50);
-    //画矩形
-    painter-&gt;drawRect(QRect(150,150,100,50));
-    //画文字
-    painter-&gt;drawText(QRect(300,400,300,300),&quot;好好学习，天天向上&quot;);
-&#125;
-</code></pre>
-<h2 id="QFile文件读写操作"><a href="#QFile文件读写操作" class="headerlink" title="QFile文件读写操作"></a>QFile文件读写操作</h2><p><a href="https://imgtu.com/i/LX5ljg"><img src="https://s1.ax1x.com/2022/04/28/LX5ljg.png" alt="LX5ljg.png"></a></p>
-<pre><code class="c++">//点击按钮，打开文件
-    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
-        //获取文件路径
-       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
-       //将文件路径放入到ui窗口内的lineEdit控件中
-       ui-&gt;lineEdit-&gt;setText(path);
-       
-       //在textEdit控件中显示内容
-       QFile file(path);
-       //打开文件，设置打开方式
-       file.open(QIODevice::ReadOnly);
-       //读取文件内容
-       QByteArray array=file.readAll();
-       ui-&gt;textEdit-&gt;setText(array);//将内容显示到textEdit控件中    
-       file.close();
-        
-        
-       //写文件
-       file.open(QIODevice::Append);//以追加方式写入文件
-       file.write(&quot;hello world&quot;);
-       file.close();
-    &#125;);
-</code></pre>
-<pre><code class="c++">//点击按钮，打开文件
-    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
-        //获取文件路径
-       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
-       //将文件路径放入到ui窗口内的lineEdit控件中
-       ui-&gt;lineEdit-&gt;setText(path);
-
-       //编码格式类
-       QTextCodec* codec=QTextCodec::codecForName(&quot;gbk&quot;);//文件编码默认为utf-8，人为设定文件打开编码格式为gbk
-       //在textEdit控件中显示内容
-       QFile file(path);
-       //打开文件，设置打开方式
-       file.open(QIODevice::ReadOnly);
-       //读取文件内容
-       QByteArray array=file.readAll();
-       //将内容显示到textEdit控件中
-       ui-&gt;textEdit-&gt;setText(codec-&gt;toUnicode(array));
-    &#125;);
-</code></pre>
-<h2 id="QFileIno文件信息读取"><a href="#QFileIno文件信息读取" class="headerlink" title="QFileIno文件信息读取"></a>QFileIno文件信息读取</h2><pre><code class="c++"> //文件信息类
-       QFileInfo info(文件路径);
-       qDebug()&lt;&lt;&quot;大小：&quot;&lt;&lt;info.size()&lt;&lt;&quot;   文件后缀名称：&quot;&lt;&lt;info.suffix()&lt;&lt;&quot;   文件名称：&quot;&lt;&lt;info.fileName();
-       qDebug()&lt;&lt;&quot;创建日期：&quot;&lt;&lt;info.created().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
-       qDebug()&lt;&lt;&quot;最后修改日期&quot;&lt;&lt;info.lastModified().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
-</code></pre>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>c++</tag>
-        <tag>Qt</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>c++系统编程</title>
     <url>/2022/04/20/c++%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<!-- more -->
@@ -3662,8 +2990,680 @@ int main()
         <category>系统编程</category>
       </categories>
       <tags>
-        <tag>c++</tag>
         <tag>系统编程</tag>
+        <tag>c++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Qt</title>
+    <url>/2022/04/28/Qt/</url>
+    <content><![CDATA[<!-- more -->
+
+
+<h1 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h1><h2 id="按钮控件与信号"><a href="#按钮控件与信号" class="headerlink" title="按钮控件与信号"></a>按钮控件与信号</h2><pre><code class="c++">//    创建按钮对象及其实例，参数一为按钮名称，参数二为将按钮控件镶嵌到主窗口当中
+    QPushButton* btn=new QPushButton(&quot;close&quot;,this);
+//   重新设置主窗口大小
+    resize(600,400);
+//    移动按钮位置，按钮创建时默认为原点
+    btn-&gt;move(width()/2,height()/2);
+//    设置主窗口名称
+    this-&gt;setObjectName(&quot;按钮实验&quot;);
+//   信号控件，参数：发送信号者，发送的信号，接受信号者，接受的信号
+    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::close);
+</code></pre>
+<h2 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h2><pre><code class="c++">#include &quot;mywidget.h&quot;
+#include &quot;ui_mywidget.h&quot;
+#include&lt;QPushButton&gt;
+
+myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //创建教师对象
+    this-&gt;zt=new Teacher(this);
+   //创建学生对象
+    this-&gt;st=new Student(this);
+
+    connect(zt,&amp;Teacher::hungry,st,&amp;Student::treat);
+    classIsOver();
+    classIsOver();
+
+&#125;
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry();
+&#125;
+
+myWidget::~myWidget()
+&#123;
+    delete ui;
+&#125;
+
+</code></pre>
+<pre><code class="c++">#include &quot;student.h&quot;
+#include&lt;QDebug&gt;
+
+Student::Student(QObject *parent) : QObject(parent)
+&#123;
+
+&#125;
+void Student::treat()
+&#123;
+     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
+&#125;
+</code></pre>
+<h2 id="自定义信号与槽发生重载的问题"><a href="#自定义信号与槽发生重载的问题" class="headerlink" title="自定义信号与槽发生重载的问题"></a>自定义信号与槽发生重载的问题</h2><pre><code class="c++">   //创建教师对象
+    this-&gt;zt=new Teacher(this);
+   //创建学生对象
+    this-&gt;st=new Student(this);
+    //函数指针-&gt;函数地址
+    void(Teacher::*teacherSingal)(QString)=&amp;Teacher::hungry;
+    void(Student::*studentSingal)(QString)=&amp;Student::treat;
+
+    connect(zt,teacherSingal,st,studentSingal);
+    classIsOver();
+</code></pre>
+<pre><code class="c++">#include &quot;student.h&quot;
+#include&lt;QDebug&gt;
+
+Student::Student(QObject *parent) : QObject(parent)
+&#123;
+
+&#125;
+void Student::treat()
+&#123;
+     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
+&#125;
+void Student::treat(QString foodName)
+&#123;
+    qDebug()&lt;&lt;&quot;请老师吃：&quot;&lt;&lt;foodName&lt;&lt;endl;
+&#125;
+
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="按钮触发信号"><a href="#按钮触发信号" class="headerlink" title="按钮触发信号"></a>按钮触发信号</h2><pre><code class="c++"> QPushButton* btn=new QPushButton(&quot;下课&quot;,this);
+    this-&gt;resize(600,400);
+    //点击下课按钮触发宫保鸡丁时间
+    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::classIsOver);
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="信号链接信号"><a href="#信号链接信号" class="headerlink" title="信号链接信号"></a>信号链接信号</h2><pre><code class="c++">//    无参信号与槽链接
+    void(Teacher::*teacherSingal)(void)=&amp;Teacher::hungry;
+    void(Student::*studentSingal)(void)=&amp;Student::treat;
+    connect(zt,teacherSingal,st,studentSingal);
+
+//    信号链接信号,按钮信号链接教师信号 
+    connect(btn,&amp;QPushButton::clicked,zt,teacherSingal);
+&#125;
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry();
+//    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
+//    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="lamdba表达式"><a href="#lamdba表达式" class="headerlink" title="lamdba表达式"></a>lamdba表达式</h2><pre><code class="c++">//    lamdba表达式
+//    [外部变量捕获方式](形参)mutable-&gt;返回类型&#123;函数体&#125;(实参);
+//    [外部变量捕获方式]：当&#123;&#125;中使用外部变量时，需要在此声明使用的外部变量，称其为捕获，捕获方式有，
+//              值传递[a]：该方式传递外部变量进入lamdba表达式内部使用时，默认为const方式，即不可改变传递进来的外部变量的值，
+//                                若需要改变，则需要使用关键字mutable，但注意，此刻改变的并非外部变量本体的值，而是拷贝进lamdba的值
+//              引用传递[&amp;]：使用引用方式传递外部变量进入lamdba表达式，将lamdba表达式内使用的外部变量与本体外部变量进行绑定
+//              自推导方式[=]
+
+
+//    （形参）：lamdba表达式函数形参
+//      &#123;函数体&#125;：lamdba表达式具体实现
+//    （实参）：传递给形参的值，&#123;&#125;中使用return语句时必须使用该实参
+    
+
+    QPushButton* btn1=new QPushButton(&quot;btn1&quot;,this);
+    QPushButton* btn2=new QPushButton(&quot;btn2&quot;,this);
+    QPushButton* btn3=new QPushButton(&quot;btn3&quot;,this);
+    resize(600,400);
+    btn2-&gt;move(300,200);
+    btn3-&gt;move(200,300);
+    int m=10;
+    qDebug()&lt;&lt;&quot;start:&quot;&lt;&lt;m&lt;&lt;endl;
+    connect(btn1,&amp;QPushButton::clicked,this,[=]()&#123;qDebug()&lt;&lt;m+10&lt;&lt;endl;&#125;);
+    connect(btn2,&amp;QPushButton::clicked,this,[m]()mutable&#123;qDebug()&lt;&lt;m+20&lt;&lt;endl;&#125;);
+    qDebug()&lt;&lt;&quot;next:&quot;&lt;&lt;m&lt;&lt;endl;
+
+#if 1
+    int ret;
+    ret=[m]()mutable-&gt;int&#123;return m+30;&#125;();//值传递
+    qDebug()&lt;&lt;&quot;ret_m:&quot;&lt;&lt;ret&lt;&lt;endl;//40
+    ret=[=]()-&gt;int&#123;return m+40;&#125;();//自推导传递
+    qDebug()&lt;&lt;&quot;ret_=:&quot;&lt;&lt;ret&lt;&lt;endl;//50
+    ret=[](int a,int b)-&gt;int&#123;return a+b;&#125;(2,3);
+    qDebug()&lt;&lt;&quot;ret_a+b:&quot;&lt;&lt;ret&lt;&lt;endl;//5
+    ret=[](int x)-&gt;int&#123;return [](int y)-&gt;int&#123;return y*2;&#125;(x)+6;&#125;(5);
+    qDebug()&lt;&lt;ret&lt;&lt;endl;//16
+#endif
+</code></pre>
+<pre><code class="c++">//利用lamdba表达式进行信号传递
+    QPushButton* btn_lam=new QPushButton(&quot;关闭&quot;,this);
+    btn_lam-&gt;move(100,0);
+    connect(btn_lam,&amp;QPushButton::clicked,this,[=]()&#123;
+     this-&gt;close();
+//        emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+//        btn_lam-&gt;setText(&quot;aaa&quot;);//效果：点击“关闭”按钮后，按钮名称自动改为“aaa”
+    &#125;);
+</code></pre>
+<h1 id="控件"><a href="#控件" class="headerlink" title="控件"></a>控件</h1><h2 id="菜单栏与工具栏"><a href="#菜单栏与工具栏" class="headerlink" title="菜单栏与工具栏"></a>菜单栏与工具栏</h2><pre><code class="c++">
+    resize(600,400);
+
+//    创建菜单栏QMenuBar,最多有一个
+    QMenuBar* bar=menuBar();
+//    将菜单栏放入窗口中
+    setMenuBar(bar);
+//    创建菜单QMenu
+   QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
+   QMenu* editMenu=bar-&gt;addMenu(&quot;编辑&quot;);
+//   创建菜单项QAction
+   fileMenu-&gt;addAction(&quot;新建&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;打开&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;保存&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;关闭&quot;);
+   fileMenu-&gt;addSeparator();
+
+   //工具栏
+     QToolBar* toolBar=new QToolBar(this);
+//设置默认停靠区域
+     addToolBar(Qt::LeftToolBarArea,toolBar);
+
+// 后期设置，左右停靠
+    toolBar-&gt;setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+
+// 设置浮动
+    toolBar-&gt;setFloatable(false);//工具栏将不能浮动在窗口表面
+
+//设置移动
+     toolBar-&gt;setMovable(false);//工具栏将不能移动，此时上边左右停靠的设置将失效
+
+// 工具栏中添加内容
+// 创建内容
+     QAction* helpAction=fileMenu-&gt;addAction(&quot;帮助&quot;);//将菜单栏中的内容添加到工具栏中
+     QAction* processAction=fileMenu-&gt;addAction(&quot;项目&quot;);
+// 将内容添加到工具栏中
+     toolBar-&gt;addAction(helpAction);
+     toolBar-&gt;addSeparator();//添加工具栏分割线
+     toolBar-&gt;addAction(processAction);
+     toolBar-&gt;addSeparator();//添加工具栏分割线
+
+//在工具栏中添加控件
+     QPushButton* btn=new QPushButton(&quot;设置&quot;,this);
+     toolBar-&gt;addWidget(btn);
+
+
+
+tips：
+    //菜单栏，最多有一个
+    QMenuBar* bar=menuBar();
+    setMenuBar(bar);
+    //添加菜单内容
+    QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
+    //添加菜单项
+    QAction* newAction=fileMenu-&gt;addAction(&quot;创建&quot;);
+    //添加分割线
+    fileMenu-&gt;addSeparator(newAction);
+
+
+    //工具栏，可以有多个
+    QToolBar* toolBar=new QToolBar(&quot;this&quot;);
+    //设置默认停靠区域
+    addToolBar(Qt::leftBarArea,toolBar);
+    //后期设置停靠区域，浮动，移动，在工具栏中添加内容，控件
+</code></pre>
+<h2 id="模态与非模态对话框"><a href="#模态与非模态对话框" class="headerlink" title="模态与非模态对话框"></a>模态与非模态对话框</h2><pre><code class="c++">  //点击创建按钮，弹出一个对话框
+    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
+        //模态对话框，不可以对其他窗口进行操作
+#if 0
+        QDialog dlg(this);
+        dlg.resize(200,100);
+        dlg.exec();
+#endif
+#if 0
+        //非模态对话框,可以对其他窗口进行操作
+        QDialog* dlg2=new QDialog(this);
+        dlg2-&gt;resize(200,100);
+        dlg2-&gt;show();
+#endif
+</code></pre>
+<h2 id="消息对话框"><a href="#消息对话框" class="headerlink" title="消息对话框"></a>消息对话框</h2><pre><code class="c++">//点击创建按钮，弹出一个对话框
+    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
+        //错误对话框,参数：父类，标题，提示内容
+//        QMessageBox::critical(this,&quot;critical&quot;,&quot;错误&quot;);
+        //信息对话框
+//        QMessageBox::information(this,&quot;info&quot;,&quot;信息&quot;);
+        //提问对话框,参数：1.父类，2.标题，3.提示内容,4.按键类型，5.默认关联回车键
+//        QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);
+
+//        if(QMessageBox::Save==QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))
+//        &#123;
+//            qDebug()&lt;&lt;&quot;选择的按键类型是保存&quot;&lt;&lt;endl;
+//        &#125;
+//        else
+//        &#123;
+//            qDebug()&lt;&lt;&quot;选择的按键类型是选择取消&quot;&lt;&lt;endl;
+//        &#125;
+
+        //警告对话框
+        QMessageBox::warning(this,&quot;warning&quot;,&quot;警告&quot;);
+</code></pre>
+<h2 id="其他对话框"><a href="#其他对话框" class="headerlink" title="其他对话框"></a>其他对话框</h2><pre><code class="c++">connect(ui-&gt;actionnew,&amp;QAction::triggered,[=]()&#123;
+        //颜色对话框
+//        QColor color=QColorDialog::getColor(QColor(0,255,0));
+//        qDebug()&lt;&lt;&quot;red:&quot;&lt;&lt;color.red()&lt;&lt;&quot;green:&quot;&lt;&lt;color.green()&lt;&lt;&quot;blue:&quot;&lt;&lt;color.blue()&lt;&lt;endl;
+
+        //文件对话框，参数：父亲，标题，默认文件路径，筛选的文件类型
+        //返回值为文件路径
+//        QString str=QFileDialog::getOpenFileName(this,&quot;openFile&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*.md&quot;);
+//        qDebug()&lt;&lt;str&lt;&lt;endl;
+
+        //字体对话框
+        bool flag;
+        QFont font=QFontDialog::getFont(&amp;flag,QFont(&quot;仿宋&quot;,36));
+        qDebug()&lt;&lt;&quot;字体 &quot;&lt;&lt;font.family()&lt;&lt;&quot;大小 &quot;&lt;&lt;font.pointSize()&lt;&lt;&quot;是否加粗 &quot;&lt;&lt;font.bold()&lt;&lt;&quot;是否倾斜 &quot;&lt;&lt;font.italic()&lt;&lt;endl;
+    &#125;);
+</code></pre>
+<h2 id="UI布局设计"><a href="#UI布局设计" class="headerlink" title="UI布局设计"></a>UI布局设计</h2><p><a href="https://imgtu.com/i/LX5eAI"><img src="https://s1.ax1x.com/2022/04/28/LX5eAI.png" alt="LX5eAI.png"></a></p>
+<pre><code class="c++">tips：
+    1.选取widget进行布局，水平、垂直、栅格
+    2.默认窗口与控件之间存在9的间隙，可以调整layoutLeftMargin
+    3.利用弹簧进行布局
+</code></pre>
+<h2 id="按钮控件组"><a href="#按钮控件组" class="headerlink" title="按钮控件组"></a>按钮控件组</h2><p><a href="https://imgtu.com/i/LX5mNt"><img src="https://s1.ax1x.com/2022/04/28/LX5mNt.png" alt="LX5mNt.png"></a></p>
+<pre><code class="c++"> //默认性别单选框为男
+    ui-&gt;rBtnMan-&gt;setChecked(true);
+
+    //点击”女“，打印信息
+    connect(ui-&gt;rBtnWoman,&amp;QRadioButton::clicked,[=]()&#123;
+//        qDebug()&lt;&lt;QString::fromUtf8(&quot;女&quot;)&lt;&lt;endl;
+         qDebug()&lt;&lt;&quot;女&quot;&lt;&lt;endl;
+    &#125;);
+
+    //点击”操作系统“显示状态码,0表示未选中，2表示选中
+    connect(ui-&gt;boxOS,&amp;QCheckBox::stateChanged,[=](int state)&#123;
+        qDebug()&lt;&lt;state&lt;&lt;endl;
+    &#125;);
+
+
+
+
+tips:
+    按钮组：
+        QPushButton：常用按钮
+        QToolButton：工具按钮，用于显示图片，如想显示文字，修改风格toolButtonStyle，凸起风格：autoRaise
+        QRadioButton：单选按钮，ui-&gt;rBtnMan-&gt;setChecked(true);//设置默认选项
+        QCheckBox:多选按钮，监听状态QStateChecked,0未选中，1半选，2选中
+</code></pre>
+<h2 id="QListWidget列表容器"><a href="#QListWidget列表容器" class="headerlink" title="QListWidget列表容器"></a>QListWidget列表容器</h2><pre><code class="c++">//利用listwidget写诗
+    QListWidgetItem* item=new QListWidgetItem(&quot;锄禾日当午&quot;);
+    ui-&gt;listWidget-&gt;addItem(item);//添加一句话
+    item-&gt;setTextAlignment(Qt::AlignHCenter);//设置对其方式为居中
+
+    QStringList list;
+    list&lt;&lt;&quot;我见青山多妩媚&quot;&lt;&lt;&quot;料青山见我应如是！&quot;;
+    ui-&gt;listWidget-&gt;addItems(list);//添加多句话
+    ui-&gt;listWidget-&gt;addItems(QStringList()&lt;&lt;&quot;自其变者而观之，则天地曾不能以一瞬&quot;&lt;&lt;&quot;自其不变者而观之，则物与我皆无尽也&quot;);
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5n4P"><img src="https://s1.ax1x.com/2022/04/28/LX5n4P.png" alt="LX5n4P.png"></a></p>
+<h2 id="treeWidget树控件"><a href="#treeWidget树控件" class="headerlink" title="treeWidget树控件"></a>treeWidget树控件</h2><pre><code class="c++">//设置水平头
+    ui-&gt;treeWidget-&gt;setHeaderLabels(QStringList()&lt;&lt;&quot;英雄&quot;&lt;&lt;&quot;英雄自我介绍&quot;);
+
+    //设置顶层节点
+    QTreeWidgetItem* strongItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;力量&quot;);
+    QTreeWidgetItem* speedItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;速度&quot;);
+    QTreeWidgetItem* inteligenceItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;智力&quot;);
+    //加载顶层节点
+    ui-&gt;treeWidget-&gt;addTopLevelItem(strongItem);
+    ui-&gt;treeWidget-&gt;addTopLevelItem(speedItem);
+    ui-&gt;treeWidget-&gt;addTopLevelItem(inteligenceItem);
+
+    //追加子节点
+    QTreeWidgetItem* l1=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;刚被猪&quot;&lt;&lt;&quot;前排坦克。。。。。。&quot;);
+    strongItem-&gt;addChild(l1); 
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5VHA"><img src="https://s1.ax1x.com/2022/04/28/LX5VHA.png" alt="LX5VHA.png"></a></p>
+<h2 id="tableWidget表格控件"><a href="#tableWidget表格控件" class="headerlink" title="tableWidget表格控件"></a>tableWidget表格控件</h2><pre><code class="c++">//设置列数
+    ui-&gt;tableWidget-&gt;setColumnCount(3);
+    //设置水平表头
+    ui-&gt;tableWidget-&gt;setHorizontalHeaderLabels(QStringList()&lt;&lt;&quot;姓名&quot;&lt;&lt;&quot;性别&quot;&lt;&lt;&quot;年龄&quot;);
+    //设置行数
+    ui-&gt;tableWidget-&gt;setRowCount(5);
+
+    //设置正文
+    QStringList nameList;
+    nameList&lt;&lt;&quot;张三&quot;&lt;&lt;&quot;李四&quot;&lt;&lt;&quot;王五&quot;&lt;&lt;&quot;赵六&quot;&lt;&lt;&quot;丁丁&quot;;
+    QList&lt;QString&gt; sexList;
+    sexList&lt;&lt;&quot;男&quot;&lt;&lt;&quot;男&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;男&quot;;
+    for(int i=0;i&lt;5;i++)
+    &#123;
+        int col=0;
+       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(nameList[i]));
+       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(sexList.at(i)));
+        //将数字转换为QString
+        ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(QString::number(i+18)));
+    &#125;
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5EBd"><img src="https://s1.ax1x.com/2022/04/28/LX5EBd.png" alt="LX5EBd.png"></a></p>
+<h2 id="其他控件介绍"><a href="#其他控件介绍" class="headerlink" title="其他控件介绍"></a>其他控件介绍</h2><pre><code class="c++">//栈控件使用
+    //设置默认定位
+    ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
+    //点击按钮跳转到TabWidget控件页面
+    connect(ui-&gt;btnTab,&amp;QPushButton::clicked,[=]()&#123;
+       ui-&gt;stackedWidget-&gt;setCurrentIndex(0);
+    &#125;);
+    //点击按钮跳转到scrollArea控件页面
+    connect(ui-&gt;btnScroll,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;stackedWidget-&gt;setCurrentIndex(1);
+    &#125;);
+    //点击按钮跳转到toolBox控件页面
+    connect(ui-&gt;btnTool,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
+    &#125;);
+
+    //下拉框
+    ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;宝马&quot;&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;拖拉机&quot;);
+    //选中“拖拉机”按钮跳转到下拉框拖拉机
+    connect(ui-&gt;btnSelect,&amp;QPushButton::clicked,[=]()&#123;
+//        ui-&gt;comboBox-&gt;setCurrentIndex(2);
+        ui-&gt;comboBox-&gt;setCurrentText(&quot;拖拉机&quot;);
+    &#125;);
+
+
+tips:
+    栈控件：ui-&gt;stackedWidget-&gt;setCurrentIndex();
+    下拉框：ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;宝马&quot;);
+    Qlabel显示图片：ui-&gt;labelImage-&gt;setPixmap(&quot;图片路径&quot;);
+    Qlabel显示动图：ui-&gt;LabenImage-&gt;setMoive();
+</code></pre>
+<h2 id="自定义控件"><a href="#自定义控件" class="headerlink" title="自定义控件"></a>自定义控件</h2><pre><code class="c++">class smallWidget : public QWidget
+&#123;
+    Q_OBJECT
+
+public:
+    explicit smallWidget(QWidget *parent = nullptr);
+    ~smallWidget();
+
+    //设置数值
+    void setNum(int num);
+    //获取数值
+    int getNum();
+
+private:
+    Ui::smallWidget *ui;
+&#125;;
+</code></pre>
+<pre><code class="c++">smallWidget::smallWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::smallWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //QSpinBox翻滚，QSlider跟着移动
+    void(QSpinBox::* spSingal)(int)=&amp;QSpinBox::valueChanged;
+    connect(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);
+
+    //QSlider移动，QSpinBox跟着翻滚
+    connect(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);
+&#125;
+
+void smallWidget::setNum(int num)
+&#123;
+    ui-&gt;spinBox-&gt;setValue(num);
+&#125;
+int smallWidget::getNum()
+&#123;
+    return ui-&gt;spinBox-&gt;value();
+&#125;
+
+
+smallWidget::~smallWidget()
+&#123;
+    delete ui;
+&#125;
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5K9f"><img src="https://s1.ax1x.com/2022/04/28/LX5K9f.png" alt="LX5K9f.png"></a></p>
+<pre><code class="c++">myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //点击按钮获取数值
+    connect(ui-&gt;btnGetNum,&amp;QPushButton::clicked,[=]()
+    &#123;
+       qDebug()&lt;&lt;ui-&gt;widget-&gt;getNum();
+    &#125;);
+
+    //点击按钮设置进度条到一半数值
+    connect(ui-&gt;btnSetNum,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;widget-&gt;setNum(50);
+    &#125;);
+
+&#125;
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5M38"><img src="https://s1.ax1x.com/2022/04/28/LX5M38.png" alt="LX5M38.png"></a></p>
+<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><h2 id="鼠标事件"><a href="#鼠标事件" class="headerlink" title="鼠标事件"></a>鼠标事件</h2><pre><code class="c++">#include &quot;mylabel.h&quot;
+#include&lt;QDebug&gt;
+#pragma execution_character_set(&quot;utf-8&quot;)
+#include&lt;QMouseEvent&gt;
+myLabel::myLabel(QWidget *parent) : QLabel(parent)
+&#123;
+    //设置鼠标跟踪状态
+    setMouseTracking(true);//此时只要是鼠标事件其状态都会被监听
+&#125;
+void myLabel::enterEvent(QEvent *event)
+&#123;
+//    qDebug()&lt;&lt;&quot;鼠标进入了!&quot;&lt;&lt;endl;
+&#125;
+void myLabel::leaveEvent(QEvent *)
+&#123;
+//    qDebug()&lt;&lt;&quot;鼠标离开了!&quot;&lt;&lt;endl;
+&#125;
+void myLabel::mousePressEvent(QMouseEvent *ev)
+&#123;
+    //鼠标左键按下，则显示信息
+    if(ev-&gt;button()==Qt::LeftButton)
+    &#123;
+        //返回鼠标在指定区域内的坐标值以及在整个窗口内的坐标值
+        //QString::arg()//用字符串变量参数依次替代字符串中最小数值
+        QString str=QString(&quot;鼠标按下了  x=%1  y=%2 gloalX=%3  globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+void myLabel::mouseReleaseEvent(QMouseEvent *ev)
+&#123;
+//    if(ev-&gt;button()==Qt::LeftButton)
+    &#123;
+        QString str=QString(&quot;鼠标释放了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+void myLabel::mouseMoveEvent(QMouseEvent *ev)
+&#123;
+//    if(ev-&gt;buttons()&amp;Qt::LeftButton)//组合键
+    &#123;
+        QString str=QString(&quot;鼠标移动了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+
+
+tips:
+    在UI中添加一个label ,选中label右键-&gt;提升 -&gt;输入类名myLabel.
+    这就完成了对label控件的鼠标事件的重写.
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5QgS"><img src="https://s1.ax1x.com/2022/04/28/LX5QgS.png" alt="LX5QgS.png"></a></p>
+<h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><pre><code class="c++">class myWidget : public QWidget
+&#123;
+    Q_OBJECT
+
+public:
+    myWidget(QWidget *parent = nullptr);
+    ~myWidget();
+
+    int id1;
+    int id2;
+    //重写定时器事件
+    void timerEvent(QTimerEvent* ev );
+
+private:
+    Ui::myWidget *ui;
+
+    Teacher* zt;
+    Student* st;
+    void classIsOver();
+&#125;;
+</code></pre>
+<pre><code class="c++">myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //启动定时器,startTimer(定时器间隔时长),返回定时器的唯一ID号
+    id1=startTimer(1000);
+    id2=startTimer(2000);
+
+
+    //定时器的第二种启动方式
+   QTimer* timer=new QTimer(this);
+   timer-&gt;start(500);
+   connect(timer,&amp;QTimer::timeout,[=]()&#123;
+       static int num=1;
+       ui-&gt;label_3-&gt;setText(QString::number(num++));
+   &#125;);
+
+   //点击按钮停止定时器
+   connect(ui-&gt;btn,&amp;QPushButton::clicked,[=]()&#123;
+       timer-&gt;stop();
+   &#125;);
+&#125;
+
+//重写定时器事件
+void myWidget::timerEvent(QTimerEvent* ev)//当定时器启动后，系统会自动调用该定时器事件函数
+&#123;
+    if(ev-&gt;timerId()==id1)
+    &#123;
+        static int num=1;
+        //定时器启动后自动调用该函数，若启动的定时器ID号为1号，则在label上每隔1s自动加1并显示，QString::number将数字转换为Qstring类型数据
+        ui-&gt;label-&gt;setText(QString::number(num++));
+    &#125;
+    if(ev-&gt;timerId()==id2)
+    &#123;
+        static int num=1;
+        ui-&gt;label_2-&gt;setText(QString::number(num++));
+    &#125;
+&#125;
+</code></pre>
+<h2 id="事件分发器"><a href="#事件分发器" class="headerlink" title="事件分发器"></a>事件分发器</h2><h2 id="事件过滤器"><a href="#事件过滤器" class="headerlink" title="事件过滤器"></a>事件过滤器</h2><h2 id="绘图事件"><a href="#绘图事件" class="headerlink" title="绘图事件"></a>绘图事件</h2><pre><code class="c++">void myWidget::paintEvent(QPaintEvent*)
+&#123;
+   QPainter*painter=new QPainter(this);//实例化画家对象
+
+   //设置画笔
+   QPen pen(QColor(255,0,0));
+   //设置画笔宽度
+   pen.setWidth(2);
+   //设置画笔风格
+   pen.setStyle(Qt::DotLine);
+
+   //让画家使用画笔
+    painter-&gt;setPen(pen);
+
+    //设置画刷
+    QBrush brush(Qt::cyan);
+    //设置画刷风格
+    brush.setStyle(Qt::Dense7Pattern);
+    
+    //让画家使用画刷
+   painter-&gt;setBrush(brush);
+
+   //画线
+    painter-&gt;drawLine(QPoint(0,0),QPoint(100,100));
+    //画椭圆
+    painter-&gt;drawEllipse(QPoint(100,100),50,50);
+    //画矩形
+    painter-&gt;drawRect(QRect(150,150,100,50));
+    //画文字
+    painter-&gt;drawText(QRect(300,400,300,300),&quot;好好学习，天天向上&quot;);
+&#125;
+</code></pre>
+<h2 id="QFile文件读写操作"><a href="#QFile文件读写操作" class="headerlink" title="QFile文件读写操作"></a>QFile文件读写操作</h2><p><a href="https://imgtu.com/i/LX5ljg"><img src="https://s1.ax1x.com/2022/04/28/LX5ljg.png" alt="LX5ljg.png"></a></p>
+<pre><code class="c++">//点击按钮，打开文件
+    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
+        //获取文件路径
+       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
+       //将文件路径放入到ui窗口内的lineEdit控件中
+       ui-&gt;lineEdit-&gt;setText(path);
+       
+       //在textEdit控件中显示内容
+       QFile file(path);
+       //打开文件，设置打开方式
+       file.open(QIODevice::ReadOnly);
+       //读取文件内容
+       QByteArray array=file.readAll();
+       ui-&gt;textEdit-&gt;setText(array);//将内容显示到textEdit控件中    
+       file.close();
+        
+        
+       //写文件
+       file.open(QIODevice::Append);//以追加方式写入文件
+       file.write(&quot;hello world&quot;);
+       file.close();
+    &#125;);
+</code></pre>
+<pre><code class="c++">//点击按钮，打开文件
+    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
+        //获取文件路径
+       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
+       //将文件路径放入到ui窗口内的lineEdit控件中
+       ui-&gt;lineEdit-&gt;setText(path);
+
+       //编码格式类
+       QTextCodec* codec=QTextCodec::codecForName(&quot;gbk&quot;);//文件编码默认为utf-8，人为设定文件打开编码格式为gbk
+       //在textEdit控件中显示内容
+       QFile file(path);
+       //打开文件，设置打开方式
+       file.open(QIODevice::ReadOnly);
+       //读取文件内容
+       QByteArray array=file.readAll();
+       //将内容显示到textEdit控件中
+       ui-&gt;textEdit-&gt;setText(codec-&gt;toUnicode(array));
+    &#125;);
+</code></pre>
+<h2 id="QFileIno文件信息读取"><a href="#QFileIno文件信息读取" class="headerlink" title="QFileIno文件信息读取"></a>QFileIno文件信息读取</h2><pre><code class="c++"> //文件信息类
+       QFileInfo info(文件路径);
+       qDebug()&lt;&lt;&quot;大小：&quot;&lt;&lt;info.size()&lt;&lt;&quot;   文件后缀名称：&quot;&lt;&lt;info.suffix()&lt;&lt;&quot;   文件名称：&quot;&lt;&lt;info.fileName();
+       qDebug()&lt;&lt;&quot;创建日期：&quot;&lt;&lt;info.created().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
+       qDebug()&lt;&lt;&quot;最后修改日期&quot;&lt;&lt;info.lastModified().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
+</code></pre>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
+        <tag>Qt</tag>
       </tags>
   </entry>
   <entry>
