@@ -576,6 +576,1746 @@ This is a &#123;\Large new&#125; book\\
       </tags>
   </entry>
   <entry>
+    <title>Linux基础命令</title>
+    <url>/2022/04/20/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<!-- more -->
+
+<h1 id="linux命令"><a href="#linux命令" class="headerlink" title="linux命令"></a>linux命令</h1><h2 id="常用终端命令"><a href="#常用终端命令" class="headerlink" title="常用终端命令"></a>常用终端命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ls</td>
+<td>list</td>
+<td>查看当前文件夹内容</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>print work directory</td>
+<td>查看当前所在文件夹</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>change directory</td>
+<td>进入文件夹</td>
+</tr>
+<tr>
+<td>cd ..</td>
+<td>.代表当前目录     ..代表上一级目录</td>
+<td>返回上一级文件夹</td>
+</tr>
+<tr>
+<td>cd ~</td>
+<td></td>
+<td>默认返回根目录</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>make director</td>
+<td>创建文件夹</td>
+</tr>
+<tr>
+<td>rmdir</td>
+<td>remove director</td>
+<td>删除文件夹</td>
+</tr>
+<tr>
+<td>touch</td>
+<td>touch</td>
+<td>创建文件</td>
+</tr>
+<tr>
+<td>rm</td>
+<td>remove</td>
+<td>删除文件</td>
+</tr>
+<tr>
+<td>clear</td>
+<td></td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>cp</td>
+<td>copy</td>
+<td>拷贝文件</td>
+</tr>
+<tr>
+<td>mv</td>
+<td>move</td>
+<td>移动文件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>tips:</p>
+<ul>
+<li>ctrl+shift+&#x3D;	放大终端窗口字体显示</li>
+<li>ctrl+-   缩小终端窗口字体显示</li>
+</ul>
+<h2 id="终端命令格式"><a href="#终端命令格式" class="headerlink" title="终端命令格式"></a>终端命令格式</h2><p>command [-options] [parameter]</p>
+<p>如：rm -r 111	删除名为111的文件夹</p>
+<h2 id="查阅终端命令帮助文档"><a href="#查阅终端命令帮助文档" class="headerlink" title="查阅终端命令帮助文档"></a>查阅终端命令帮助文档</h2><p>command –help</p>
+<p>man command	命令使用手册</p>
+<h1 id="文件和目录命令"><a href="#文件和目录命令" class="headerlink" title="文件和目录命令"></a>文件和目录命令</h1><h2 id="ls命令说明"><a href="#ls命令说明" class="headerlink" title="ls命令说明"></a>ls命令说明</h2><p>功能：显示当前目录文件，对应于DOS下的dir命令</p>
+<p>linux文件特点：<br>以.开头的文件为隐藏文件，需要用-a参数才能显示，如下：</p>
+<p><img src="https://s2.loli.net/2022/04/20/VGk9boiSsXlYvKn.png" alt="image-20220322153918108.png"></p>
+<h2 id="ls常用选项"><a href="#ls常用选项" class="headerlink" title="ls常用选项"></a><strong>ls</strong>常用选项</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a</td>
+<td>显示指定目录下所有子目录及其文件，包括隐藏文件</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>以列表方式显示文件详细信息</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>与-l配合以人性化的方式显示文件大小</td>
+</tr>
+</tbody></table>
+<p>如下：</p>
+<p><img src="https://s2.loli.net/2022/04/20/dGz3uwjYTQftVcg.png" alt="image-20220322154755553.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/ODikzv7Rh41eyQP.png" alt="image-20220322154904581.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/NcoAjmasRJPWGC2.png" alt="image-20220322154951860.png"></p>
+<h2 id="ls通配符"><a href="#ls通配符" class="headerlink" title="ls通配符"></a>ls通配符</h2><table>
+<thead>
+<tr>
+<th>通配符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>匹配任意个数的字符</td>
+</tr>
+<tr>
+<td>？</td>
+<td>匹配某一个字符，但不能代表0个字符</td>
+</tr>
+<tr>
+<td>[abc]</td>
+<td>匹配abc中任意一个字符</td>
+</tr>
+<tr>
+<td>[a-f]</td>
+<td>匹配a-f字母中任意一个字符</td>
+</tr>
+</tbody></table>
+<h2 id="cd切换目录"><a href="#cd切换目录" class="headerlink" title="cd切换目录"></a>cd切换目录</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cd</td>
+<td>切换到目录</td>
+</tr>
+<tr>
+<td>cd ~</td>
+<td>切换到当前用户的家目录</td>
+</tr>
+<tr>
+<td>cd ..</td>
+<td>退出当前目录到上一级目录</td>
+</tr>
+<tr>
+<td>cd -</td>
+<td>在最近两次访问的目录之间切换</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/Tf2wJXoirjuPHk5.png" alt="image-20220322162200576.png"></p>
+<h2 id="touch创建文件"><a href="#touch创建文件" class="headerlink" title="touch创建文件"></a>touch创建文件</h2><p>1.文件不存在时，创建新的空白文件</p>
+<p>2.文件存在时，可修改文件最后一次修改时间</p>
+<p><img src="https://s2.loli.net/2022/04/20/zWiETkc1HasMLF4.png" alt="image-20220322162957159.png"></p>
+<h2 id="mkdir创建文件夹"><a href="#mkdir创建文件夹" class="headerlink" title="mkdir创建文件夹"></a>mkdir创建文件夹</h2><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-p</td>
+<td>递归创建文件夹</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/IbB5ErRfu4gj7Uh.png" alt="image-20220322163650769.png"></p>
+<h2 id="rm-删除文件或文件夹"><a href="#rm-删除文件或文件夹" class="headerlink" title="rm 删除文件或文件夹"></a>rm 删除文件或文件夹</h2><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-f</td>
+<td>强制删除</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>递归删除，删除文件夹时必须使用该参数</td>
+</tr>
+</tbody></table>
+<h1 id="文件拷贝与移动命令"><a href="#文件拷贝与移动命令" class="headerlink" title="文件拷贝与移动命令"></a>文件拷贝与移动命令</h1><h2 id="tree显示文件树形结构"><a href="#tree显示文件树形结构" class="headerlink" title="tree显示文件树形结构"></a>tree显示文件树形结构</h2><p><strong>功能：</strong>以树形结构显示当前目录下所有文件</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-d</td>
+<td>只显示文件夹</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/wLlgDJXsBpqGdKY.png" alt="image-20220322171941510.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/7JSpxHuhqIzLCsr.png" alt="image-20220322172013314.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/R2hu6SprVnBo3E7.png" alt="image-20220322172031362.png"></p>
+<h2 id="cp复制文件"><a href="#cp复制文件" class="headerlink" title="cp复制文件"></a>cp复制文件</h2><p><strong>命令：</strong>cp 源文件 目标文件</p>
+<p><strong>作用：</strong>将给出的源文件复制到目标文件或目录中</p>
+<p><img src="https://s2.loli.net/2022/04/20/K2zBNUXMV8Sm6ef.png" alt="image-20220322173405369.png"></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i</td>
+<td>覆盖文件前提示</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>复制文件夹</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/GxyneHsBhwOdTXv.png" alt="image-20220322174537680.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/54Ke8Vo61l2sEHn.png" alt="image-20220322174617008.png"><img src="https://s2.loli.net/2022/04/20/zhmbqneT4RGgoEu.png" alt="image-20220322174656349.png"></p>
+<h2 id="mv移动文件-x2F-目录或重命名文件-x2F-目录"><a href="#mv移动文件-x2F-目录或重命名文件-x2F-目录" class="headerlink" title="mv移动文件&#x2F;目录或重命名文件&#x2F;目录"></a>mv移动文件&#x2F;目录或重命名文件&#x2F;目录</h2><p><strong>命令：</strong>mv 源文件 目标文件</p>
+<p>1.<strong>移动文件夹</strong></p>
+<p><img src="https://s2.loli.net/2022/04/20/Vy8vRcjHEKLTdDq.png" alt="image-20220322175123337.png"><img src="https://s2.loli.net/2022/04/20/8trNh7OsJyGvXf9.png" alt="image-20220322175305836.png"></p>
+<p>2.<strong>移动文件</strong></p>
+<p><img src="https://s2.loli.net/2022/04/20/A1EFvnCkOWwhfs6.png" alt="image-20220322175437927.png"></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i</td>
+<td>覆盖文件前提示</td>
+</tr>
+</tbody></table>
+<h1 id="文件内容命令"><a href="#文件内容命令" class="headerlink" title="文件内容命令"></a>文件内容命令</h1><h2 id="cat查看文件内容"><a href="#cat查看文件内容" class="headerlink" title="cat查看文件内容"></a>cat查看文件内容</h2><p><strong>功能：</strong>查看文件内容、创建文件、合并文件、追加文件内容等，适合查看较少内容的文件</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-b</td>
+<td>对非空输出行编号</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>对所有输出行编号</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/789MKrcO1XNYqlG.png" alt="image-20220323163405091.png"><img src="https://s2.loli.net/2022/04/20/vFX7Cs1oHQJZ6q2.png" alt="image-20220323163428189.png"><img src="https://s2.loli.net/2022/04/20/zlnjg7EtdsifOGX.png" alt="image-20220323163538070.png"><img src="https://s2.loli.net/2022/04/20/DfN4LeWAk53RXFt.png" alt="image-20220323163453550.png"></p>
+<h2 id="more查看文件内容"><a href="#more查看文件内容" class="headerlink" title="more查看文件内容"></a>more查看文件内容</h2><p><strong>功能：</strong>分屏显示文件内容。适合查看较多内容的文件</p>
+<table>
+<thead>
+<tr>
+<th>操作键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>空格键</td>
+<td>显示手册的下一屏</td>
+</tr>
+<tr>
+<td>Enter键</td>
+<td>显示下一行</td>
+</tr>
+<tr>
+<td>b</td>
+<td>回滚一屏</td>
+</tr>
+<tr>
+<td>f</td>
+<td>前滚一屏</td>
+</tr>
+<tr>
+<td>q</td>
+<td>退出</td>
+</tr>
+<tr>
+<td>&#x2F;word</td>
+<td>搜索word字符串</td>
+</tr>
+</tbody></table>
+<h2 id="grep文本搜索工具"><a href="#grep文本搜索工具" class="headerlink" title="grep文本搜索工具"></a>grep文本搜索工具</h2><p><strong>功能：</strong>查找匹配的文本内容</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-n</td>
+<td>显示匹配的行与行号</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>显示不包含匹配文本的所有行</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>不区分大小写</td>
+</tr>
+</tbody></table>
+<p>常用的两种模式查找：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>^a</td>
+<td>查找以字符a为开头的行</td>
+</tr>
+<tr>
+<td>a$</td>
+<td>查找以字符a为结尾的行</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/AWNorzebOamkpgQ.png" alt="image-20220323165923263.png"><img src="https://s2.loli.net/2022/04/20/a5cJmnhGICvRP9i.png" alt="image-20220323165954584.png"><img src="https://s2.loli.net/2022/04/20/S4GDhUknqBQ1LZj.png" alt="image-20220323170011732.png"></p>
+<h1 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h1><h2 id="echo终端打印与-gt-、-gt-gt-重定向"><a href="#echo终端打印与-gt-、-gt-gt-重定向" class="headerlink" title="echo终端打印与&gt;、&gt;&gt;重定向"></a>echo终端打印与&gt;、&gt;&gt;重定向</h2><p><strong>echo</strong> hello相当于cout&lt;&lt;”hello”，即将hello字符串在终端打印出来</p>
+<p><strong>重定向</strong>：将文本内容写入到文件当中</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&gt;</td>
+<td>覆盖源文件所有内容</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>在源文件中追加内容</td>
+</tr>
+</tbody></table>
+<p><img src="https://s2.loli.net/2022/04/20/uAmnaQB2LlsvrYD.png" alt="image-20220323171443541.png"></p>
+<h2 id="cat写文件"><a href="#cat写文件" class="headerlink" title="cat写文件"></a>cat写文件</h2><p>cat &gt;&gt; 文件名称<br>回车写入文件内容<br>Ctrl+D结束写入</p>
+<h2 id="管道命令"><a href="#管道命令" class="headerlink" title="管道命令 |"></a>管道命令 |</h2><p>Linux允许通过管道命令|将一个命令的输出作为另一个命令的输入</p>
+<p>如：<img src="https://s2.loli.net/2022/04/20/m41fTBpnXtYE5iU.png" alt="image-20220323172709900.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/RnJ2AUuMzDbwjrQ.png" alt="image-20220323172821104.png"></p>
+<p><img src="https://s2.loli.net/2022/04/20/qpRTnjfzD6degEx.png" alt="image-20220323173026914.png"></p>
+<h1 id="远程管理命令"><a href="#远程管理命令" class="headerlink" title="远程管理命令"></a>远程管理命令</h1><h2 id="关机-重启"><a href="#关机-重启" class="headerlink" title="关机\重启"></a>关机\重启</h2><pre><code class="c++">shutdown //默认1分钟后关机
+shutdown 22:22 //在今天的22：22关机
+shutdown +10 //10分钟后关机
+shutdown now //现在立刻关机
+shutdown -c //取消关机命令
+shutdown -r now//现在重启操作系统
+</code></pre>
+<h2 id="查看-x2F-配置网卡信息"><a href="#查看-x2F-配置网卡信息" class="headerlink" title="查看&#x2F;配置网卡信息"></a>查看&#x2F;配置网卡信息</h2><ul>
+<li><strong>ifconfig</strong>查看网卡配置信息（<strong>DOS</strong>下为<strong>ipconfig</strong>）</li>
+<li>ifconfig | grep inet 查看网卡对应的IP地址</li>
+<li>注意：一台电脑可能有一个物理网卡和多个虚拟网卡，Linux中物理网卡以ensXX表示</li>
+<li>127.0.0.1为本地环回地址，一般用来测试本地网卡是否正常</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/Pw2AiMJfaL4981F.png" alt="image-20220323180126895.png"></p>
+<ul>
+<li><p><strong>ping</strong> IP地址，测试目标IP地址的主机是否连接通常</p>
+</li>
+<li><p>ping 127.0.0.1，测试本机是否连接通畅</p>
+</li>
+<li><p>终止终端程序执行：<strong>CTRL+C</strong></p>
+<p><img src="https://s2.loli.net/2022/04/20/Z2HLjadMqm4QIyW.png" alt="image-20220323180615700.png"></p>
+</li>
+</ul>
+<h2 id="ssh基础"><a href="#ssh基础" class="headerlink" title="ssh基础"></a>ssh基础</h2><p><img src="https://s2.loli.net/2022/04/20/AQblGB2y8XtuFv6.png" alt="image-20220324092715654.png"></p>
+<ul>
+<li><strong>ssh客户端</strong>是一种使用<strong>secure shell协议</strong>连接到远程计算机的软件程序</li>
+<li>ssh是目前可靠，<strong>专为远程登录会话和其他网络服务</strong>提供安全性的协议<ul>
+<li>通过ssh协议可以有效<strong>防止远程原理过程中的信息泄露</strong></li>
+<li>通过ssh协议可以对所有传输的数据进行加密，也能够<strong>防止DNS欺骗和IP欺骗</strong></li>
+</ul>
+</li>
+<li>ssh协议传输的<strong>数据是经过压缩</strong>的，可以<strong>加快传输速度</strong></li>
+</ul>
+<h3 id="6-3-1-域名与端口号"><a href="#6-3-1-域名与端口号" class="headerlink" title="6.3.1 域名与端口号"></a>6.3.1 域名与端口号</h3><p><strong>域名：</strong>IP地址的别名，如：<a href="http://www.baidu.com/">www.baidu.com</a></p>
+<p><img src="https://s2.loli.net/2022/04/20/GzmYxeXNCEU4qr6.png" alt="image-20220324093342913.png"></p>
+<p><strong>端口号</strong></p>
+<ul>
+<li>通过<strong>IP</strong>地址找到<strong>计算机</strong></li>
+<li>通过<strong>端口号</strong>找到<strong>计算机上运行的应用程序</strong><ul>
+<li>SSH服务器的默认端口号是22，如果是默认端口号，在连接时可以省略</li>
+</ul>
+</li>
+<li>常见服务端口号列表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>服务</th>
+<th>端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>SSH服务器</td>
+<td>22</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Web服务器</td>
+<td>80</td>
+</tr>
+<tr>
+<td>03</td>
+<td>HTTPS</td>
+<td>443</td>
+</tr>
+<tr>
+<td>04</td>
+<td>FTP服务器</td>
+<td>21</td>
+</tr>
+</tbody></table>
+<h3 id="6-3-2-SSH客户端的简单使用"><a href="#6-3-2-SSH客户端的简单使用" class="headerlink" title="6.3.2  SSH客户端的简单使用"></a>6.3.2  SSH客户端的简单使用</h3><p><strong>ssh -p sort user@IP&#x2F;域名</strong></p>
+<p><strong>sort：</strong>端口号，默认为SSH服务器端口号22</p>
+<p><strong>user：</strong>远程机器上的用户名</p>
+<p>（1）查询本地虚拟机Linux的IP地址</p>
+<p><img src="https://s2.loli.net/2022/04/20/9k5aqwW6xpB8AcH.png" alt="image-20220324101003815.png"></p>
+<p>（2）通过DOS窗口连接本地虚拟机，并通过DOS窗口远程对虚拟机进行操作</p>
+<p><img src="https://s2.loli.net/2022/04/20/URST34h2vdnNICu.png" alt="image-20220324101712161.png"></p>
+<pre><code class="c++">//注：SSH命令只能在Linux系统和UNIX系统下使用c++
+//在Windows系统下使用需要安装PUTTY或者Xshell软件
+</code></pre>
+<h2 id="scp远程拷贝命令"><a href="#scp远程拷贝命令" class="headerlink" title="scp远程拷贝命令"></a>scp远程拷贝命令</h2><ul>
+<li><strong>scp-scure copy</strong>,在Linux下的远程拷贝命令</li>
+<li>其地址格式与ssh命令相同，但选项**-P为大写字母**</li>
+</ul>
+<pre><code class="c++">scp -P port 01.py user@IP:Desktop/01.py   //将本地01.py文件拷贝到远程桌面上
+scp -P port user@IP:Desktop/01.py 01.py   //将远程文件拷贝到本地桌面上
+加上-r选项可以拷贝文件夹
+</code></pre>
+<pre><code>将虚拟机Desktop文件夹里的123.txt文件拷贝到本地Desktop文件夹下
+</code></pre>
+<p><img src="https://s2.loli.net/2022/04/20/iKaZdk5y2rftJVT.png" alt="image-20220324151546457.png"></p>
+<pre><code>将本地桌面文件夹的123.txt文件拷贝到虚拟机上的桌面文件夹下
+</code></pre>
+<p><img src="https://s2.loli.net/2022/04/20/Cf79iL1B3tbwVJZ.png" alt="image-20220324151653275.png"></p>
+<pre><code>将虚拟机桌面文件夹下的aaa文件夹拷贝到本地桌面文件夹下
+</code></pre>
+<p><img src="https://s2.loli.net/2022/04/20/k8uaWJGl7VMKqj6.png" alt="image-20220324151829083.png"></p>
+<pre><code>将本地桌面文件夹下的aaa文件拷贝到虚拟机的桌面文件夹下
+</code></pre>
+<p><img src="https://s2.loli.net/2022/04/20/TUIEm9K8SwRux7N.png" alt="image-20220324152035116.png"></p>
+<h1 id="SSH高级"><a href="#SSH高级" class="headerlink" title="SSH高级"></a>SSH高级</h1><h1 id="用户权限"><a href="#用户权限" class="headerlink" title="用户权限"></a>用户权限</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
+<li>对<strong>文件&#x2F;目录</strong>的权限</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>英文</th>
+<th>缩写</th>
+<th>代号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读</td>
+<td>read</td>
+<td>r</td>
+<td>4</td>
+</tr>
+<tr>
+<td>写</td>
+<td>write</td>
+<td>w</td>
+<td>2</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>excute</td>
+<td>x</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<ul>
+<li>组：由几个不同的用户组成，实际应用中，可以对组设置权限，从而避免对每一个用户依次设置权限</li>
+</ul>
+<h2 id="ls-l详细信息"><a href="#ls-l详细信息" class="headerlink" title="ls -l详细信息"></a>ls -l详细信息</h2><ul>
+<li>权限：第一个字符以d为开头表示目录</li>
+<li>硬连接数：表示有几种方式可以访问当前目录&#x2F;文件</li>
+<li>拥有者：</li>
+<li>组：</li>
+<li>大小：</li>
+<li>时间：</li>
+<li>名称：</li>
+<li><img src="https://s2.loli.net/2022/04/20/fRPD7c8MrAoBFVC.png" alt="image-20220324160218211.png"></li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/94hNoiPbIHEUXWm.png" alt="image-20220324160402306.png"></p>
+<h2 id="chmod修改权限命令"><a href="#chmod修改权限命令" class="headerlink" title="chmod修改权限命令"></a>chmod修改权限命令</h2><p><strong>作用：</strong>修改<strong>用户&#x2F;组</strong>对<strong>文件&#x2F;目录</strong>的权限</p>
+<pre><code class="c++">chmod +r/w/x 文件名  //给文件增加权限
+</code></pre>
+<pre><code class="c++">chmod -r/w/x 文件名  //给文件取消权限
+</code></pre>
+<ul>
+<li>给<strong>文件</strong>增加<strong>执行</strong>权限</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/nyD2WzRxpHfbT7C.png" alt="image-20220324165539972.png"></p>
+<ul>
+<li>给<strong>文件</strong>取消<strong>执行、读取</strong>权限</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/5Qr6RStHWh9Ppaw.png" alt="image-20220324165704094.png"><img src="https://s2.loli.net/2022/04/20/pKUvWwyqb1hTxZ6.png" alt="image-20220324165717075.png"></p>
+<ul>
+<li>给<strong>文件夹</strong>取消<strong>执行</strong>权限</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/oXdABO3TQPMu7ac.png" alt="image-20220324170653231.png"></p>
+<h2 id="超级用户介绍"><a href="#超级用户介绍" class="headerlink" title="超级用户介绍"></a>超级用户介绍</h2><ul>
+<li><p>Linux系统中存在一个<strong>root</strong>用户用于<strong>对系统的维护和管理</strong>，对操作系统的资源<strong>具有所有访问权限</strong></p>
+</li>
+<li><p>Linux安装过程中，会自动创建一个用户账号，该账号称为<strong>标准用户</strong></p>
+</li>
+<li><p><strong>su</strong>为<strong>substitute user</strong>的缩写，表示用另一个用户的身份</p>
+</li>
+<li><p><strong>sudo</strong>命令意为用其他身份执行命令，预设身份为<strong>root</strong></p>
+</li>
+</ul>
+<h1 id="组管理"><a href="#组管理" class="headerlink" title="组管理"></a>组管理</h1><p>注：<strong>创建组&#x2F;删除组</strong>都需要<strong>sudo</strong>执行</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>groupadd 组名</td>
+<td>添加组</td>
+</tr>
+<tr>
+<td>groupdel  组名</td>
+<td>删除组</td>
+</tr>
+<tr>
+<td>cat &#x2F;etc&#x2F;group</td>
+<td>确认组信息</td>
+</tr>
+<tr>
+<td>chgrp -R 组名 文件&#x2F;目录名</td>
+<td>修改文件&#x2F;目录所在组</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>组信息</strong>都保存在<strong>etc&#x2F;group</strong>中</li>
+<li><strong>&#x2F;etc</strong>是专门用来<strong>保存系统配置文件信息</strong>的目录</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/20/9csAJPGTLbxyp5w.png" alt="image-20220325160837125.png"><a href="https://imgtu.com/i/LrPniR"><img src="https://s1.ax1x.com/2022/04/20/LrPniR.png" alt="LrPniR.png"></a></p>
+<p><strong>修改文件目录所在组实操：</strong></p>
+<ul>
+<li>创建pythonStudy文件目录</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPKRx"><img src="https://s1.ax1x.com/2022/04/20/LrPKRx.png" alt="LrPKRx.png"></a></p>
+<ul>
+<li>创建dev组</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPeo9"><img src="https://s1.ax1x.com/2022/04/20/LrPeo9.png" alt="LrPeo9.png"></a></p>
+<ul>
+<li>将pythonStudy目录所在组修改为dev</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPZdJ"><img src="https://s1.ax1x.com/2022/04/20/LrPZdJ.png" alt="LrPZdJ.png"></a></p>
+<h1 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h1><h2 id="终端命令"><a href="#终端命令" class="headerlink" title="终端命令"></a>终端命令</h2><p><strong>注：创建&#x2F;删除用户以及修改用户密码</strong>的终端命令都需要<strong>sudo</strong>执行</p>
+<ul>
+<li><p>创建用户&#x2F;设置密码&#x2F;删除用户</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>useradd -m -g 组 新建用户名</td>
+<td>添加新用户</td>
+<td><strong>-m</strong>自动建立用户家目录<br /><strong>-g</strong>指定用户所在组，否则会建立一个同名的组</td>
+</tr>
+<tr>
+<td>passwd 用户名</td>
+<td>设置用户密码</td>
+<td>如果是普通用户，直接用passwd可以直接修改用户密码</td>
+</tr>
+<tr>
+<td>userdel -r 用户名</td>
+<td>删除用户</td>
+<td><strong>-r</strong>选项会自动删除用户家目录</td>
+</tr>
+<tr>
+<td>cat&#x2F;etc&#x2F;passwd|grep 用户名</td>
+<td>确认用户信息</td>
+<td>新建用户后，用户信息会保存在etc&#x2F;passwd文件中</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p><strong>测试</strong></p>
+<ul>
+<li>创建新用户myuser</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrP1sO"><img src="https://s1.ax1x.com/2022/04/20/LrP1sO.png" alt="LrP1sO.png"></a></p>
+<ul>
+<li>修改myuser密码（输入密码时在屏幕上不打印）</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPMz6"><img src="https://s1.ax1x.com/2022/04/20/LrPMz6.png" alt="LrPMz6.png"></a></p>
+<ul>
+<li>在Windows下的putty远程登录软件上登录myuser用户进行测试</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPlQK"><img src="https://s1.ax1x.com/2022/04/20/LrPlQK.png" alt="LrPlQK.png"></a></p>
+<h2 id="查看用户信息"><a href="#查看用户信息" class="headerlink" title="查看用户信息"></a>查看用户信息</h2><h1 id="查看系统信息"><a href="#查看系统信息" class="headerlink" title="查看系统信息"></a>查看系统信息</h1><ul>
+<li>时间日期<ul>
+<li>date</li>
+<li>cal</li>
+</ul>
+</li>
+<li>磁盘和目录空间<ul>
+<li>df</li>
+<li>du</li>
+</ul>
+</li>
+<li>进程信息<ul>
+<li>ps</li>
+<li>top</li>
+<li>kill</li>
+</ul>
+</li>
+</ul>
+<h2 id="时间日期"><a href="#时间日期" class="headerlink" title="时间日期"></a>时间日期</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>date</td>
+<td>查看系统时间</td>
+</tr>
+<tr>
+<td>cal</td>
+<td>calendar查看日历，-y 选项可以查看一年的日历</td>
+</tr>
+</tbody></table>
+<p><a href="https://imgtu.com/i/LrPqYR"><img src="https://s1.ax1x.com/2022/04/20/LrPqYR.png" alt="LrPqYR.png"></a></p>
+<h2 id="磁盘信息"><a href="#磁盘信息" class="headerlink" title="磁盘信息"></a>磁盘信息</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>df -h</td>
+<td>disk free 显示磁盘剩余空间</td>
+</tr>
+<tr>
+<td>du -h[目录名]</td>
+<td>disk usage 显示磁盘目录下的文件大小</td>
+</tr>
+</tbody></table>
+<ul>
+<li>-h表示以人性化的方式显示文件大小</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPLf1"><img src="https://s1.ax1x.com/2022/04/20/LrPLf1.png" alt="LrPLf1.png"></a></p>
+<h2 id="进程信息"><a href="#进程信息" class="headerlink" title="进程信息"></a>进程信息</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ps aux</td>
+<td>process status 查看进程的详细状态</td>
+</tr>
+<tr>
+<td>top</td>
+<td>动态显示正在运行中的进程</td>
+</tr>
+<tr>
+<td>kill [-9] 进程代号</td>
+<td>终止指定代号的进程，-9表示强制终止</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>ps选项</strong>说明功能</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>显示终端所有进程，包括没有控制终端的进程</td>
+</tr>
+<tr>
+<td>u</td>
+<td>显示进程的详细状态</td>
+</tr>
+<tr>
+<td>x</td>
+<td>显示没有控制终端的进程</td>
+</tr>
+</tbody></table>
+<p>​	</p>
+<h1 id="其他命令-1"><a href="#其他命令-1" class="headerlink" title="其他命令"></a>其他命令</h1><ul>
+<li>查找文件<ul>
+<li>find</li>
+</ul>
+</li>
+<li>软链接<ul>
+<li>ln</li>
+</ul>
+</li>
+<li>打包压缩<ul>
+<li>tar</li>
+</ul>
+</li>
+<li>软件安装<ul>
+<li>apt-get</li>
+</ul>
+</li>
+</ul>
+<h2 id="查找文件"><a href="#查找文件" class="headerlink" title="查找文件"></a>查找文件</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>find [路径] -name .py</td>
+<td>查找指定路径下扩展名为.py的文件，包括子目录</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>省略路径名，表示在当前目录下查找</p>
+</li>
+<li><p>正则查找</p>
+</li>
+<li><p>搜索桌面文件下，包含“1”的文件</p>
+</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPbk9"><img src="https://s1.ax1x.com/2022/04/20/LrPbk9.png" alt="LrPbk9.png"></a></p>
+<ul>
+<li>搜索桌面文件下，所有以“.txt”为扩展名的文件</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrP7TJ"><img src="https://s1.ax1x.com/2022/04/20/LrP7TJ.png" alt="LrP7TJ.png"></a></p>
+<ul>
+<li>搜索桌面文件下，以数字“1”为开头的文件</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPTw4"><img src="https://s1.ax1x.com/2022/04/20/LrPTw4.png" alt="LrPTw4.png"></a></p>
+<h2 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h2><p>​	</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ln -s</td>
+<td>建立该文件的软链接，类似与Windows下的快捷方式</td>
+</tr>
+</tbody></table>
+<ul>
+<li>若没有-s表示建立的是一个硬链接</li>
+<li><strong>源文件</strong>要使用<strong>绝对路径</strong></li>
+</ul>
+<p><strong>演练</strong></p>
+<ul>
+<li>在桌面创建01.py文件与demo&#x2F;b&#x2F;c文件夹，并在01.py文件内写入内容</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPv6K"><img src="https://s1.ax1x.com/2022/04/20/LrPv6K.png" alt="LrPv6K.png"></a></p>
+<ul>
+<li>将01.py文件移动到demo&#x2F;b&#x2F;c文件夹下</li>
+</ul>
+<p><a href="https://imgtu.com/i/LrPxOO"><img src="https://s1.ax1x.com/2022/04/20/LrPxOO.png" alt="LrPxOO.png"></a></p>
+<ul>
+<li>在桌面分别创建01.py软链接的相对路径与绝对路径，并分别访问这两个软链接</li>
+</ul>
+<p><a href="https://imgtu.com/i/LriSmD"><img src="https://s1.ax1x.com/2022/04/20/LriSmD.png" alt="LriSmD.png"></a><a href="https://imgtu.com/i/Lrip0e"><img src="https://s1.ax1x.com/2022/04/20/Lrip0e.png" alt="Lrip0e.png"></a></p>
+<ul>
+<li>将01.py相对路径的软链接与硬链接移动到demo&#x2F;b&#x2F;c文件夹下，并分别访问这两个软链接，比较两者差异</li>
+</ul>
+<p><a href="https://imgtu.com/i/Lri9TH"><img src="https://s1.ax1x.com/2022/04/20/Lri9TH.png" alt="Lri9TH.png"></a></p>
+<p><a href="https://imgtu.com/i/LriPkd"><img src="https://s1.ax1x.com/2022/04/20/LriPkd.png" alt="LriPkd.png"></a></p>
+<h2 id="打包压缩"><a href="#打包压缩" class="headerlink" title="打包压缩"></a>打包压缩</h2><ul>
+<li><p><strong>windows</strong> 下使用 <strong>rar</strong></p>
+</li>
+<li><p><strong>mac</strong> 下使用 <strong>zip</strong></p>
+<ul>
+<li><strong>linux</strong> 下使用 <strong>tar.gz</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="GDB调试"><a href="#GDB调试" class="headerlink" title="GDB调试"></a>GDB调试</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>gdb 可执行程序</td>
+<td>启动</td>
+</tr>
+<tr>
+<td>quit（q）</td>
+<td>退出</td>
+</tr>
+<tr>
+<td>set args***        show args</td>
+<td>给主函数设置参数</td>
+</tr>
+<tr>
+<td>list&#x2F;l</td>
+<td>显示当前文件内容</td>
+</tr>
+<tr>
+<td>list&#x2F;l 行号</td>
+<td>显示某一行前后内容</td>
+</tr>
+<tr>
+<td>list&#x2F;l 函数名</td>
+<td>显示某函数前后内容</td>
+</tr>
+<tr>
+<td>list&#x2F;l 文件名:行号</td>
+<td>显示其他文件内容</td>
+</tr>
+<tr>
+<td>list&#x2F;l 文件名:函数名</td>
+<td>显示其他文件内容</td>
+</tr>
+<tr>
+<td>set listsize 行数</td>
+<td>设置显示行数</td>
+</tr>
+<tr>
+<td>b&#x2F;break 行号、函数名、文件名：行号、文件名：函数</td>
+<td>设置断点</td>
+</tr>
+<tr>
+<td>i&#x2F;info b&#x2F;break</td>
+<td>查看断点</td>
+</tr>
+<tr>
+<td>d&#x2F;del&#x2F;delete 断点编号</td>
+<td>删除断点</td>
+</tr>
+<tr>
+<td>dis&#x2F;disable 断点编号</td>
+<td>设置断点无效</td>
+</tr>
+<tr>
+<td>ena&#x2F;enable 断点编号</td>
+<td>设置断点生效</td>
+</tr>
+<tr>
+<td>b&#x2F;break 10 if i&#x3D;5</td>
+<td>设置条件断点，一般再在循环体内设置</td>
+</tr>
+<tr>
+<td>start</td>
+<td>启动程序从第一行开始</td>
+</tr>
+<tr>
+<td>run</td>
+<td>运行程序直到断点</td>
+</tr>
+<tr>
+<td>c&#x2F;continue</td>
+<td>继续运行到下一个断点</td>
+</tr>
+<tr>
+<td>n&#x2F;next</td>
+<td>向下执行，不会进入函数体</td>
+</tr>
+<tr>
+<td>p&#x2F;print</td>
+<td>打印变量值</td>
+</tr>
+<tr>
+<td>ptype</td>
+<td>打印变量类型</td>
+</tr>
+<tr>
+<td>s&#x2F;step</td>
+<td>单步调试，可以进入函数体</td>
+</tr>
+<tr>
+<td>finish</td>
+<td>跳出函数体</td>
+</tr>
+<tr>
+<td>until</td>
+<td>跳出循环</td>
+</tr>
+<tr>
+<td>display num</td>
+<td>设置自动变量（自动打印变量值）5</td>
+</tr>
+<tr>
+<td>i&#x2F;info display</td>
+<td>显示自动变量信息</td>
+</tr>
+<tr>
+<td>undisplay 编号</td>
+<td>移除自动变量</td>
+</tr>
+</tbody></table>
+<h1 id="open函数"><a href="#open函数" class="headerlink" title="open函数"></a>open函数</h1><pre><code class="c++">#include &lt;sys/types.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;fcntl.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+int main(int args,char*argc[])
+&#123;
+    //int open(const char* pathname, int flags);
+    //文件打开模式参数flags
+    //	必选参数：O_RDONLY, O_WRONLY, or O_RDWR
+    //	可选参数：O_APPEND（追加）、O_CREAT（创建新文件）
+    
+    int fd = open(&quot;a.txt&quot;, O_WRONLY);
+    if (fd = -1)//fd=-1表示会打开失败
+        perror(&quot;open&quot;);//打印错误信息
+    close(fd);//关闭文件描述符
+
+    
+//    int open(const char *pathname, int flags, mode_t mode);
+
+    int fd = open(&quot;create.txt&quot;, O_WRONLY | O_CREAT, 0777);
+    if (fd = -1)
+        perror(&quot;open&quot;);
+    close(fd);	
+
+    return 1;
+&#125;
+</code></pre>
+<h1 id="read-x2F-write函数"><a href="#read-x2F-write函数" class="headerlink" title="read&#x2F;write函数"></a>read&#x2F;write函数</h1><pre><code class="c++">//#include &lt;unistd.h&gt;
+//ssize_t read(int fd, void* buf, size_t count);
+// read() attempts to read up to count bytes 
+// from file descriptor fd into the buffer starting at buf.
+//参数：
+//	-fd：open打开的文件描述符
+//	-buf：将文件内容读取到buf中
+//	-count：设置buf字节数
+//返回值：
+//	&gt;0 已经读取的字节数
+//	-1 读取失败
+//	0  读取结束
+
+//#include &lt;unistd.h&gt;
+//ssize_t write(int fd, const void* buf, size_t count);
+//write() writes up to count bytes from the buffer 
+//starting at buf to the file referred to by the file descriptor fd.
+
+#include &lt;sys/types.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;fcntl.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;string.h&gt;
+#include&lt;iostream&gt;
+using namespace std;
+int main(int args,char*argc[])
+&#123;
+    //打开文件create.txt
+    int srcfd = open(&quot;create.txt&quot;,O_RDONLY);
+    if (srcfd == -1)//如果文件不存在或文件打开失败则返回错误信息
+        perror(&quot;open&quot;);
+
+    char buf[1024];
+    memset(&amp;buf, 0, sizeof(buf));//初始化buf
+    int len = read(srcfd, buf, sizeof(buf));//将create.txt文件中的信息读取到buf中
+    if (len &lt; 0)
+        perror(&quot;read&quot;);//显示读取错误信息
+    cout &lt;&lt; &quot;接受&quot;;
+    cout &lt;&lt; len &lt;&lt; &quot;个字符&quot; &lt;&lt; endl;
+    cout&lt;&lt;buf&lt;&lt;endl;
+    //新建一个文件cp.txt
+    int desfd = open(&quot;cp.txt&quot;, O_WRONLY | O_CREAT, 0777);
+    if (desfd == -1)
+        perror(&quot;open&quot;);//显示新建错误信息
+    write(desfd, buf, sizeof(buf));//将buf中的信息写入cp.txt中
+    close(srcfd);
+    close(desfd);
+    return 1;
+&#125;
+</code></pre>
+<h1 id="vim命令"><a href="#vim命令" class="headerlink" title="vim命令"></a>vim命令</h1><h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><ul>
+<li><p>vim 【filename】 进入命令模式</p>
+<h2 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h2></li>
+<li><p>i 在光标前进行插入</p>
+</li>
+<li><p>x 删除光标字符</p>
+</li>
+<li><p>o 在光标下一行进行插入</p>
+</li>
+<li><p>O 在光标上一行进行插入</p>
+</li>
+<li><p>a 从光标所在处下一个字符输入</p>
+</li>
+<li><p>A 从光标所在行最后一个字符输入</p>
+<h2 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h2><p>按ESC退出输入模式，进入末行模式</p>
+</li>
+<li><p>:w 保存文件并退出vi编辑器</p>
+</li>
+<li><p>:q 退出编辑器</p>
+</li>
+<li><p>:wq 保存并退出</p>
+</li>
+<li><p>:set nu 设置行号</p>
+</li>
+<li><p>:set nonu 取消行号</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Qt</title>
+    <url>/2022/04/28/Qt/</url>
+    <content><![CDATA[<!-- more -->
+
+
+<h1 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h1><h2 id="按钮控件与信号"><a href="#按钮控件与信号" class="headerlink" title="按钮控件与信号"></a>按钮控件与信号</h2><pre><code class="c++">//    创建按钮对象及其实例，参数一为按钮名称，参数二为将按钮控件镶嵌到主窗口当中
+    QPushButton* btn=new QPushButton(&quot;close&quot;,this);
+//   重新设置主窗口大小
+    resize(600,400);
+//    移动按钮位置，按钮创建时默认为原点
+    btn-&gt;move(width()/2,height()/2);
+//    设置主窗口名称
+    this-&gt;setObjectName(&quot;按钮实验&quot;);
+//   信号控件，参数：发送信号者，发送的信号，接受信号者，接受的信号
+    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::close);
+</code></pre>
+<h2 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h2><pre><code class="c++">#include &quot;mywidget.h&quot;
+#include &quot;ui_mywidget.h&quot;
+#include&lt;QPushButton&gt;
+
+myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //创建教师对象
+    this-&gt;zt=new Teacher(this);
+   //创建学生对象
+    this-&gt;st=new Student(this);
+
+    connect(zt,&amp;Teacher::hungry,st,&amp;Student::treat);
+    classIsOver();
+    classIsOver();
+
+&#125;
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry();
+&#125;
+
+myWidget::~myWidget()
+&#123;
+    delete ui;
+&#125;
+
+</code></pre>
+<pre><code class="c++">#include &quot;student.h&quot;
+#include&lt;QDebug&gt;
+
+Student::Student(QObject *parent) : QObject(parent)
+&#123;
+
+&#125;
+void Student::treat()
+&#123;
+     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
+&#125;
+</code></pre>
+<h2 id="自定义信号与槽发生重载的问题"><a href="#自定义信号与槽发生重载的问题" class="headerlink" title="自定义信号与槽发生重载的问题"></a>自定义信号与槽发生重载的问题</h2><pre><code class="c++">   //创建教师对象
+    this-&gt;zt=new Teacher(this);
+   //创建学生对象
+    this-&gt;st=new Student(this);
+    //函数指针-&gt;函数地址
+    void(Teacher::*teacherSingal)(QString)=&amp;Teacher::hungry;
+    void(Student::*studentSingal)(QString)=&amp;Student::treat;
+
+    connect(zt,teacherSingal,st,studentSingal);
+    classIsOver();
+</code></pre>
+<pre><code class="c++">#include &quot;student.h&quot;
+#include&lt;QDebug&gt;
+
+Student::Student(QObject *parent) : QObject(parent)
+&#123;
+
+&#125;
+void Student::treat()
+&#123;
+     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
+&#125;
+void Student::treat(QString foodName)
+&#123;
+    qDebug()&lt;&lt;&quot;请老师吃：&quot;&lt;&lt;foodName&lt;&lt;endl;
+&#125;
+
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="按钮触发信号"><a href="#按钮触发信号" class="headerlink" title="按钮触发信号"></a>按钮触发信号</h2><pre><code class="c++"> QPushButton* btn=new QPushButton(&quot;下课&quot;,this);
+    this-&gt;resize(600,400);
+    //点击下课按钮触发宫保鸡丁时间
+    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::classIsOver);
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="信号链接信号"><a href="#信号链接信号" class="headerlink" title="信号链接信号"></a>信号链接信号</h2><pre><code class="c++">//    无参信号与槽链接
+    void(Teacher::*teacherSingal)(void)=&amp;Teacher::hungry;
+    void(Student::*studentSingal)(void)=&amp;Student::treat;
+    connect(zt,teacherSingal,st,studentSingal);
+
+//    信号链接信号,按钮信号链接教师信号 
+    connect(btn,&amp;QPushButton::clicked,zt,teacherSingal);
+&#125;
+void myWidget::classIsOver()
+&#123;
+    //emit发射信号
+    emit zt-&gt;hungry();
+//    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
+//    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+&#125;
+</code></pre>
+<h2 id="lamdba表达式"><a href="#lamdba表达式" class="headerlink" title="lamdba表达式"></a>lamdba表达式</h2><pre><code class="c++">//    lamdba表达式
+//    [外部变量捕获方式](形参)mutable-&gt;返回类型&#123;函数体&#125;(实参);
+//    [外部变量捕获方式]：当&#123;&#125;中使用外部变量时，需要在此声明使用的外部变量，称其为捕获，捕获方式有，
+//              值传递[a]：该方式传递外部变量进入lamdba表达式内部使用时，默认为const方式，即不可改变传递进来的外部变量的值，
+//                                若需要改变，则需要使用关键字mutable，但注意，此刻改变的并非外部变量本体的值，而是拷贝进lamdba的值
+//              引用传递[&amp;]：使用引用方式传递外部变量进入lamdba表达式，将lamdba表达式内使用的外部变量与本体外部变量进行绑定
+//              自推导方式[=]
+
+
+//    （形参）：lamdba表达式函数形参
+//      &#123;函数体&#125;：lamdba表达式具体实现
+//    （实参）：传递给形参的值，&#123;&#125;中使用return语句时必须使用该实参
+    
+
+    QPushButton* btn1=new QPushButton(&quot;btn1&quot;,this);
+    QPushButton* btn2=new QPushButton(&quot;btn2&quot;,this);
+    QPushButton* btn3=new QPushButton(&quot;btn3&quot;,this);
+    resize(600,400);
+    btn2-&gt;move(300,200);
+    btn3-&gt;move(200,300);
+    int m=10;
+    qDebug()&lt;&lt;&quot;start:&quot;&lt;&lt;m&lt;&lt;endl;
+    connect(btn1,&amp;QPushButton::clicked,this,[=]()&#123;qDebug()&lt;&lt;m+10&lt;&lt;endl;&#125;);
+    connect(btn2,&amp;QPushButton::clicked,this,[m]()mutable&#123;qDebug()&lt;&lt;m+20&lt;&lt;endl;&#125;);
+    qDebug()&lt;&lt;&quot;next:&quot;&lt;&lt;m&lt;&lt;endl;
+
+#if 1
+    int ret;
+    ret=[m]()mutable-&gt;int&#123;return m+30;&#125;();//值传递
+    qDebug()&lt;&lt;&quot;ret_m:&quot;&lt;&lt;ret&lt;&lt;endl;//40
+    ret=[=]()-&gt;int&#123;return m+40;&#125;();//自推导传递
+    qDebug()&lt;&lt;&quot;ret_=:&quot;&lt;&lt;ret&lt;&lt;endl;//50
+    ret=[](int a,int b)-&gt;int&#123;return a+b;&#125;(2,3);
+    qDebug()&lt;&lt;&quot;ret_a+b:&quot;&lt;&lt;ret&lt;&lt;endl;//5
+    ret=[](int x)-&gt;int&#123;return [](int y)-&gt;int&#123;return y*2;&#125;(x)+6;&#125;(5);
+    qDebug()&lt;&lt;ret&lt;&lt;endl;//16
+#endif
+</code></pre>
+<pre><code class="c++">//利用lamdba表达式进行信号传递
+    QPushButton* btn_lam=new QPushButton(&quot;关闭&quot;,this);
+    btn_lam-&gt;move(100,0);
+    connect(btn_lam,&amp;QPushButton::clicked,this,[=]()&#123;
+     this-&gt;close();
+//        emit st-&gt;treat(&quot;宫保鸡丁&quot;);
+//        btn_lam-&gt;setText(&quot;aaa&quot;);//效果：点击“关闭”按钮后，按钮名称自动改为“aaa”
+    &#125;);
+</code></pre>
+<h1 id="控件"><a href="#控件" class="headerlink" title="控件"></a>控件</h1><h2 id="菜单栏与工具栏"><a href="#菜单栏与工具栏" class="headerlink" title="菜单栏与工具栏"></a>菜单栏与工具栏</h2><pre><code class="c++">
+    resize(600,400);
+
+//    创建菜单栏QMenuBar,最多有一个
+    QMenuBar* bar=menuBar();
+//    将菜单栏放入窗口中
+    setMenuBar(bar);
+//    创建菜单QMenu
+   QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
+   QMenu* editMenu=bar-&gt;addMenu(&quot;编辑&quot;);
+//   创建菜单项QAction
+   fileMenu-&gt;addAction(&quot;新建&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;打开&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;保存&quot;);
+   fileMenu-&gt;addSeparator();//添加菜单栏分割线
+   fileMenu-&gt;addAction(&quot;关闭&quot;);
+   fileMenu-&gt;addSeparator();
+
+   //工具栏
+     QToolBar* toolBar=new QToolBar(this);
+//设置默认停靠区域
+     addToolBar(Qt::LeftToolBarArea,toolBar);
+
+// 后期设置，左右停靠
+    toolBar-&gt;setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+
+// 设置浮动
+    toolBar-&gt;setFloatable(false);//工具栏将不能浮动在窗口表面
+
+//设置移动
+     toolBar-&gt;setMovable(false);//工具栏将不能移动，此时上边左右停靠的设置将失效
+
+// 工具栏中添加内容
+// 创建内容
+     QAction* helpAction=fileMenu-&gt;addAction(&quot;帮助&quot;);//将菜单栏中的内容添加到工具栏中
+     QAction* processAction=fileMenu-&gt;addAction(&quot;项目&quot;);
+// 将内容添加到工具栏中
+     toolBar-&gt;addAction(helpAction);
+     toolBar-&gt;addSeparator();//添加工具栏分割线
+     toolBar-&gt;addAction(processAction);
+     toolBar-&gt;addSeparator();//添加工具栏分割线
+
+//在工具栏中添加控件
+     QPushButton* btn=new QPushButton(&quot;设置&quot;,this);
+     toolBar-&gt;addWidget(btn);
+
+
+
+tips：
+    //菜单栏，最多有一个
+    QMenuBar* bar=menuBar();
+    setMenuBar(bar);
+    //添加菜单内容
+    QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
+    //添加菜单项
+    QAction* newAction=fileMenu-&gt;addAction(&quot;创建&quot;);
+    //添加分割线
+    fileMenu-&gt;addSeparator(newAction);
+
+
+    //工具栏，可以有多个
+    QToolBar* toolBar=new QToolBar(&quot;this&quot;);
+    //设置默认停靠区域
+    addToolBar(Qt::leftBarArea,toolBar);
+    //后期设置停靠区域，浮动，移动，在工具栏中添加内容，控件
+</code></pre>
+<h2 id="模态与非模态对话框"><a href="#模态与非模态对话框" class="headerlink" title="模态与非模态对话框"></a>模态与非模态对话框</h2><pre><code class="c++">  //点击创建按钮，弹出一个对话框
+    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
+        //模态对话框，不可以对其他窗口进行操作
+#if 0
+        QDialog dlg(this);
+        dlg.resize(200,100);
+        dlg.exec();
+#endif
+#if 0
+        //非模态对话框,可以对其他窗口进行操作
+        QDialog* dlg2=new QDialog(this);
+        dlg2-&gt;resize(200,100);
+        dlg2-&gt;show();
+#endif
+</code></pre>
+<h2 id="消息对话框"><a href="#消息对话框" class="headerlink" title="消息对话框"></a>消息对话框</h2><pre><code class="c++">//点击创建按钮，弹出一个对话框
+    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
+        //错误对话框,参数：父类，标题，提示内容
+//        QMessageBox::critical(this,&quot;critical&quot;,&quot;错误&quot;);
+        //信息对话框
+//        QMessageBox::information(this,&quot;info&quot;,&quot;信息&quot;);
+        //提问对话框,参数：1.父类，2.标题，3.提示内容,4.按键类型，5.默认关联回车键
+//        QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);
+
+//        if(QMessageBox::Save==QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))
+//        &#123;
+//            qDebug()&lt;&lt;&quot;选择的按键类型是保存&quot;&lt;&lt;endl;
+//        &#125;
+//        else
+//        &#123;
+//            qDebug()&lt;&lt;&quot;选择的按键类型是选择取消&quot;&lt;&lt;endl;
+//        &#125;
+
+        //警告对话框
+        QMessageBox::warning(this,&quot;warning&quot;,&quot;警告&quot;);
+</code></pre>
+<h2 id="其他对话框"><a href="#其他对话框" class="headerlink" title="其他对话框"></a>其他对话框</h2><pre><code class="c++">connect(ui-&gt;actionnew,&amp;QAction::triggered,[=]()&#123;
+        //颜色对话框
+//        QColor color=QColorDialog::getColor(QColor(0,255,0));
+//        qDebug()&lt;&lt;&quot;red:&quot;&lt;&lt;color.red()&lt;&lt;&quot;green:&quot;&lt;&lt;color.green()&lt;&lt;&quot;blue:&quot;&lt;&lt;color.blue()&lt;&lt;endl;
+
+        //文件对话框，参数：父亲，标题，默认文件路径，筛选的文件类型
+        //返回值为文件路径
+//        QString str=QFileDialog::getOpenFileName(this,&quot;openFile&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*.md&quot;);
+//        qDebug()&lt;&lt;str&lt;&lt;endl;
+
+        //字体对话框
+        bool flag;
+        QFont font=QFontDialog::getFont(&amp;flag,QFont(&quot;仿宋&quot;,36));
+        qDebug()&lt;&lt;&quot;字体 &quot;&lt;&lt;font.family()&lt;&lt;&quot;大小 &quot;&lt;&lt;font.pointSize()&lt;&lt;&quot;是否加粗 &quot;&lt;&lt;font.bold()&lt;&lt;&quot;是否倾斜 &quot;&lt;&lt;font.italic()&lt;&lt;endl;
+    &#125;);
+</code></pre>
+<h2 id="UI布局设计"><a href="#UI布局设计" class="headerlink" title="UI布局设计"></a>UI布局设计</h2><p><a href="https://imgtu.com/i/LX5eAI"><img src="https://s1.ax1x.com/2022/04/28/LX5eAI.png" alt="LX5eAI.png"></a></p>
+<pre><code class="c++">tips：
+    1.选取widget进行布局，水平、垂直、栅格
+    2.默认窗口与控件之间存在9的间隙，可以调整layoutLeftMargin
+    3.利用弹簧进行布局
+</code></pre>
+<h2 id="按钮控件组"><a href="#按钮控件组" class="headerlink" title="按钮控件组"></a>按钮控件组</h2><p><a href="https://imgtu.com/i/LX5mNt"><img src="https://s1.ax1x.com/2022/04/28/LX5mNt.png" alt="LX5mNt.png"></a></p>
+<pre><code class="c++"> //默认性别单选框为男
+    ui-&gt;rBtnMan-&gt;setChecked(true);
+
+    //点击”女“，打印信息
+    connect(ui-&gt;rBtnWoman,&amp;QRadioButton::clicked,[=]()&#123;
+//        qDebug()&lt;&lt;QString::fromUtf8(&quot;女&quot;)&lt;&lt;endl;
+         qDebug()&lt;&lt;&quot;女&quot;&lt;&lt;endl;
+    &#125;);
+
+    //点击”操作系统“显示状态码,0表示未选中，2表示选中
+    connect(ui-&gt;boxOS,&amp;QCheckBox::stateChanged,[=](int state)&#123;
+        qDebug()&lt;&lt;state&lt;&lt;endl;
+    &#125;);
+
+
+
+
+tips:
+    按钮组：
+        QPushButton：常用按钮
+        QToolButton：工具按钮，用于显示图片，如想显示文字，修改风格toolButtonStyle，凸起风格：autoRaise
+        QRadioButton：单选按钮，ui-&gt;rBtnMan-&gt;setChecked(true);//设置默认选项
+        QCheckBox:多选按钮，监听状态QStateChecked,0未选中，1半选，2选中
+</code></pre>
+<h2 id="QListWidget列表容器"><a href="#QListWidget列表容器" class="headerlink" title="QListWidget列表容器"></a>QListWidget列表容器</h2><pre><code class="c++">//利用listwidget写诗
+    QListWidgetItem* item=new QListWidgetItem(&quot;锄禾日当午&quot;);
+    ui-&gt;listWidget-&gt;addItem(item);//添加一句话
+    item-&gt;setTextAlignment(Qt::AlignHCenter);//设置对其方式为居中
+
+    QStringList list;
+    list&lt;&lt;&quot;我见青山多妩媚&quot;&lt;&lt;&quot;料青山见我应如是！&quot;;
+    ui-&gt;listWidget-&gt;addItems(list);//添加多句话
+    ui-&gt;listWidget-&gt;addItems(QStringList()&lt;&lt;&quot;自其变者而观之，则天地曾不能以一瞬&quot;&lt;&lt;&quot;自其不变者而观之，则物与我皆无尽也&quot;);
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5n4P"><img src="https://s1.ax1x.com/2022/04/28/LX5n4P.png" alt="LX5n4P.png"></a></p>
+<h2 id="treeWidget树控件"><a href="#treeWidget树控件" class="headerlink" title="treeWidget树控件"></a>treeWidget树控件</h2><pre><code class="c++">//设置水平头
+    ui-&gt;treeWidget-&gt;setHeaderLabels(QStringList()&lt;&lt;&quot;英雄&quot;&lt;&lt;&quot;英雄自我介绍&quot;);
+
+    //设置顶层节点
+    QTreeWidgetItem* strongItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;力量&quot;);
+    QTreeWidgetItem* speedItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;速度&quot;);
+    QTreeWidgetItem* inteligenceItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;智力&quot;);
+    //加载顶层节点
+    ui-&gt;treeWidget-&gt;addTopLevelItem(strongItem);
+    ui-&gt;treeWidget-&gt;addTopLevelItem(speedItem);
+    ui-&gt;treeWidget-&gt;addTopLevelItem(inteligenceItem);
+
+    //追加子节点
+    QTreeWidgetItem* l1=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;刚被猪&quot;&lt;&lt;&quot;前排坦克。。。。。。&quot;);
+    strongItem-&gt;addChild(l1); 
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5VHA"><img src="https://s1.ax1x.com/2022/04/28/LX5VHA.png" alt="LX5VHA.png"></a></p>
+<h2 id="tableWidget表格控件"><a href="#tableWidget表格控件" class="headerlink" title="tableWidget表格控件"></a>tableWidget表格控件</h2><pre><code class="c++">//设置列数
+    ui-&gt;tableWidget-&gt;setColumnCount(3);
+    //设置水平表头
+    ui-&gt;tableWidget-&gt;setHorizontalHeaderLabels(QStringList()&lt;&lt;&quot;姓名&quot;&lt;&lt;&quot;性别&quot;&lt;&lt;&quot;年龄&quot;);
+    //设置行数
+    ui-&gt;tableWidget-&gt;setRowCount(5);
+
+    //设置正文
+    QStringList nameList;
+    nameList&lt;&lt;&quot;张三&quot;&lt;&lt;&quot;李四&quot;&lt;&lt;&quot;王五&quot;&lt;&lt;&quot;赵六&quot;&lt;&lt;&quot;丁丁&quot;;
+    QList&lt;QString&gt; sexList;
+    sexList&lt;&lt;&quot;男&quot;&lt;&lt;&quot;男&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;男&quot;;
+    for(int i=0;i&lt;5;i++)
+    &#123;
+        int col=0;
+       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(nameList[i]));
+       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(sexList.at(i)));
+        //将数字转换为QString
+        ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(QString::number(i+18)));
+    &#125;
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5EBd"><img src="https://s1.ax1x.com/2022/04/28/LX5EBd.png" alt="LX5EBd.png"></a></p>
+<h2 id="其他控件介绍"><a href="#其他控件介绍" class="headerlink" title="其他控件介绍"></a>其他控件介绍</h2><pre><code class="c++">//栈控件使用
+    //设置默认定位
+    ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
+    //点击按钮跳转到TabWidget控件页面
+    connect(ui-&gt;btnTab,&amp;QPushButton::clicked,[=]()&#123;
+       ui-&gt;stackedWidget-&gt;setCurrentIndex(0);
+    &#125;);
+    //点击按钮跳转到scrollArea控件页面
+    connect(ui-&gt;btnScroll,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;stackedWidget-&gt;setCurrentIndex(1);
+    &#125;);
+    //点击按钮跳转到toolBox控件页面
+    connect(ui-&gt;btnTool,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
+    &#125;);
+
+    //下拉框
+    ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;宝马&quot;&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;拖拉机&quot;);
+    //选中“拖拉机”按钮跳转到下拉框拖拉机
+    connect(ui-&gt;btnSelect,&amp;QPushButton::clicked,[=]()&#123;
+//        ui-&gt;comboBox-&gt;setCurrentIndex(2);
+        ui-&gt;comboBox-&gt;setCurrentText(&quot;拖拉机&quot;);
+    &#125;);
+
+
+tips:
+    栈控件：ui-&gt;stackedWidget-&gt;setCurrentIndex();
+    下拉框：ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;宝马&quot;);
+    Qlabel显示图片：ui-&gt;labelImage-&gt;setPixmap(&quot;图片路径&quot;);
+    Qlabel显示动图：ui-&gt;LabenImage-&gt;setMoive();
+</code></pre>
+<h2 id="自定义控件"><a href="#自定义控件" class="headerlink" title="自定义控件"></a>自定义控件</h2><pre><code class="c++">class smallWidget : public QWidget
+&#123;
+    Q_OBJECT
+
+public:
+    explicit smallWidget(QWidget *parent = nullptr);
+    ~smallWidget();
+
+    //设置数值
+    void setNum(int num);
+    //获取数值
+    int getNum();
+
+private:
+    Ui::smallWidget *ui;
+&#125;;
+</code></pre>
+<pre><code class="c++">smallWidget::smallWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::smallWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //QSpinBox翻滚，QSlider跟着移动
+    void(QSpinBox::* spSingal)(int)=&amp;QSpinBox::valueChanged;
+    connect(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);
+
+    //QSlider移动，QSpinBox跟着翻滚
+    connect(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);
+&#125;
+
+void smallWidget::setNum(int num)
+&#123;
+    ui-&gt;spinBox-&gt;setValue(num);
+&#125;
+int smallWidget::getNum()
+&#123;
+    return ui-&gt;spinBox-&gt;value();
+&#125;
+
+
+smallWidget::~smallWidget()
+&#123;
+    delete ui;
+&#125;
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5K9f"><img src="https://s1.ax1x.com/2022/04/28/LX5K9f.png" alt="LX5K9f.png"></a></p>
+<pre><code class="c++">myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //点击按钮获取数值
+    connect(ui-&gt;btnGetNum,&amp;QPushButton::clicked,[=]()
+    &#123;
+       qDebug()&lt;&lt;ui-&gt;widget-&gt;getNum();
+    &#125;);
+
+    //点击按钮设置进度条到一半数值
+    connect(ui-&gt;btnSetNum,&amp;QPushButton::clicked,[=]()&#123;
+        ui-&gt;widget-&gt;setNum(50);
+    &#125;);
+
+&#125;
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5M38"><img src="https://s1.ax1x.com/2022/04/28/LX5M38.png" alt="LX5M38.png"></a></p>
+<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><h2 id="鼠标事件"><a href="#鼠标事件" class="headerlink" title="鼠标事件"></a>鼠标事件</h2><pre><code class="c++">#include &quot;mylabel.h&quot;
+#include&lt;QDebug&gt;
+#pragma execution_character_set(&quot;utf-8&quot;)
+#include&lt;QMouseEvent&gt;
+myLabel::myLabel(QWidget *parent) : QLabel(parent)
+&#123;
+    //设置鼠标跟踪状态
+    setMouseTracking(true);//此时只要是鼠标事件其状态都会被监听
+&#125;
+void myLabel::enterEvent(QEvent *event)
+&#123;
+//    qDebug()&lt;&lt;&quot;鼠标进入了!&quot;&lt;&lt;endl;
+&#125;
+void myLabel::leaveEvent(QEvent *)
+&#123;
+//    qDebug()&lt;&lt;&quot;鼠标离开了!&quot;&lt;&lt;endl;
+&#125;
+void myLabel::mousePressEvent(QMouseEvent *ev)
+&#123;
+    //鼠标左键按下，则显示信息
+    if(ev-&gt;button()==Qt::LeftButton)
+    &#123;
+        //返回鼠标在指定区域内的坐标值以及在整个窗口内的坐标值
+        //QString::arg()//用字符串变量参数依次替代字符串中最小数值
+        QString str=QString(&quot;鼠标按下了  x=%1  y=%2 gloalX=%3  globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+void myLabel::mouseReleaseEvent(QMouseEvent *ev)
+&#123;
+//    if(ev-&gt;button()==Qt::LeftButton)
+    &#123;
+        QString str=QString(&quot;鼠标释放了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+void myLabel::mouseMoveEvent(QMouseEvent *ev)
+&#123;
+//    if(ev-&gt;buttons()&amp;Qt::LeftButton)//组合键
+    &#123;
+        QString str=QString(&quot;鼠标移动了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
+        qDebug()&lt;&lt;str;
+    &#125;
+&#125;
+
+
+
+tips:
+    在UI中添加一个label ,选中label右键-&gt;提升 -&gt;输入类名myLabel.
+    这就完成了对label控件的鼠标事件的重写.
+</code></pre>
+<p><a href="https://imgtu.com/i/LX5QgS"><img src="https://s1.ax1x.com/2022/04/28/LX5QgS.png" alt="LX5QgS.png"></a></p>
+<h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><pre><code class="c++">class myWidget : public QWidget
+&#123;
+    Q_OBJECT
+
+public:
+    myWidget(QWidget *parent = nullptr);
+    ~myWidget();
+
+    int id1;
+    int id2;
+    //重写定时器事件
+    void timerEvent(QTimerEvent* ev );
+
+private:
+    Ui::myWidget *ui;
+
+    Teacher* zt;
+    Student* st;
+    void classIsOver();
+&#125;;
+</code></pre>
+<pre><code class="c++">myWidget::myWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::myWidget)
+&#123;
+    ui-&gt;setupUi(this);
+
+    //启动定时器,startTimer(定时器间隔时长),返回定时器的唯一ID号
+    id1=startTimer(1000);
+    id2=startTimer(2000);
+
+
+    //定时器的第二种启动方式
+   QTimer* timer=new QTimer(this);
+   timer-&gt;start(500);
+   connect(timer,&amp;QTimer::timeout,[=]()&#123;
+       static int num=1;
+       ui-&gt;label_3-&gt;setText(QString::number(num++));
+   &#125;);
+
+   //点击按钮停止定时器
+   connect(ui-&gt;btn,&amp;QPushButton::clicked,[=]()&#123;
+       timer-&gt;stop();
+   &#125;);
+&#125;
+
+//重写定时器事件
+void myWidget::timerEvent(QTimerEvent* ev)//当定时器启动后，系统会自动调用该定时器事件函数
+&#123;
+    if(ev-&gt;timerId()==id1)
+    &#123;
+        static int num=1;
+        //定时器启动后自动调用该函数，若启动的定时器ID号为1号，则在label上每隔1s自动加1并显示，QString::number将数字转换为Qstring类型数据
+        ui-&gt;label-&gt;setText(QString::number(num++));
+    &#125;
+    if(ev-&gt;timerId()==id2)
+    &#123;
+        static int num=1;
+        ui-&gt;label_2-&gt;setText(QString::number(num++));
+    &#125;
+&#125;
+</code></pre>
+<h2 id="事件分发器"><a href="#事件分发器" class="headerlink" title="事件分发器"></a>事件分发器</h2><h2 id="事件过滤器"><a href="#事件过滤器" class="headerlink" title="事件过滤器"></a>事件过滤器</h2><h2 id="绘图事件"><a href="#绘图事件" class="headerlink" title="绘图事件"></a>绘图事件</h2><pre><code class="c++">void myWidget::paintEvent(QPaintEvent*)
+&#123;
+   QPainter*painter=new QPainter(this);//实例化画家对象
+
+   //设置画笔
+   QPen pen(QColor(255,0,0));
+   //设置画笔宽度
+   pen.setWidth(2);
+   //设置画笔风格
+   pen.setStyle(Qt::DotLine);
+
+   //让画家使用画笔
+    painter-&gt;setPen(pen);
+
+    //设置画刷
+    QBrush brush(Qt::cyan);
+    //设置画刷风格
+    brush.setStyle(Qt::Dense7Pattern);
+    
+    //让画家使用画刷
+   painter-&gt;setBrush(brush);
+
+   //画线
+    painter-&gt;drawLine(QPoint(0,0),QPoint(100,100));
+    //画椭圆
+    painter-&gt;drawEllipse(QPoint(100,100),50,50);
+    //画矩形
+    painter-&gt;drawRect(QRect(150,150,100,50));
+    //画文字
+    painter-&gt;drawText(QRect(300,400,300,300),&quot;好好学习，天天向上&quot;);
+&#125;
+</code></pre>
+<h2 id="QFile文件读写操作"><a href="#QFile文件读写操作" class="headerlink" title="QFile文件读写操作"></a>QFile文件读写操作</h2><p><a href="https://imgtu.com/i/LX5ljg"><img src="https://s1.ax1x.com/2022/04/28/LX5ljg.png" alt="LX5ljg.png"></a></p>
+<pre><code class="c++">//点击按钮，打开文件
+    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
+        //获取文件路径
+       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
+       //将文件路径放入到ui窗口内的lineEdit控件中
+       ui-&gt;lineEdit-&gt;setText(path);
+       
+       //在textEdit控件中显示内容
+       QFile file(path);
+       //打开文件，设置打开方式
+       file.open(QIODevice::ReadOnly);
+       //读取文件内容
+       QByteArray array=file.readAll();
+       ui-&gt;textEdit-&gt;setText(array);//将内容显示到textEdit控件中    
+       file.close();
+        
+        
+       //写文件
+       file.open(QIODevice::Append);//以追加方式写入文件
+       file.write(&quot;hello world&quot;);
+       file.close();
+    &#125;);
+</code></pre>
+<pre><code class="c++">//点击按钮，打开文件
+    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
+        //获取文件路径
+       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
+       //将文件路径放入到ui窗口内的lineEdit控件中
+       ui-&gt;lineEdit-&gt;setText(path);
+
+       //编码格式类
+       QTextCodec* codec=QTextCodec::codecForName(&quot;gbk&quot;);//文件编码默认为utf-8，人为设定文件打开编码格式为gbk
+       //在textEdit控件中显示内容
+       QFile file(path);
+       //打开文件，设置打开方式
+       file.open(QIODevice::ReadOnly);
+       //读取文件内容
+       QByteArray array=file.readAll();
+       //将内容显示到textEdit控件中
+       ui-&gt;textEdit-&gt;setText(codec-&gt;toUnicode(array));
+    &#125;);
+</code></pre>
+<h2 id="QFileIno文件信息读取"><a href="#QFileIno文件信息读取" class="headerlink" title="QFileIno文件信息读取"></a>QFileIno文件信息读取</h2><pre><code class="c++"> //文件信息类
+       QFileInfo info(文件路径);
+       qDebug()&lt;&lt;&quot;大小：&quot;&lt;&lt;info.size()&lt;&lt;&quot;   文件后缀名称：&quot;&lt;&lt;info.suffix()&lt;&lt;&quot;   文件名称：&quot;&lt;&lt;info.fileName();
+       qDebug()&lt;&lt;&quot;创建日期：&quot;&lt;&lt;info.created().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
+       qDebug()&lt;&lt;&quot;最后修改日期&quot;&lt;&lt;info.lastModified().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
+</code></pre>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
+        <tag>Qt</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++核心编程</title>
     <url>/2023/02/05/C++%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="C-核心编程"><a href="#C-核心编程" class="headerlink" title="C++核心编程"></a>C++核心编程</h1><h2 id="1-内存分区模型"><a href="#1-内存分区模型" class="headerlink" title="1 内存分区模型"></a>1 内存分区模型</h2><p>C++程序在执行时，将内存大方向划分为<strong>4个区域</strong></p>
@@ -5541,1076 +7281,36 @@ int main()
         <category>系统编程</category>
       </categories>
       <tags>
-        <tag>系统编程</tag>
         <tag>c++</tag>
+        <tag>系统编程</tag>
       </tags>
   </entry>
   <entry>
-    <title>Linux基础命令</title>
-    <url>/2022/04/20/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/</url>
+    <title>git工具</title>
+    <url>/2022/05/01/git%E5%B7%A5%E5%85%B7/</url>
     <content><![CDATA[<!-- more -->
 
-<h1 id="linux命令"><a href="#linux命令" class="headerlink" title="linux命令"></a>linux命令</h1><h2 id="常用终端命令"><a href="#常用终端命令" class="headerlink" title="常用终端命令"></a>常用终端命令</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>英文</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ls</td>
-<td>list</td>
-<td>查看当前文件夹内容</td>
-</tr>
-<tr>
-<td>pwd</td>
-<td>print work directory</td>
-<td>查看当前所在文件夹</td>
-</tr>
-<tr>
-<td>cd</td>
-<td>change directory</td>
-<td>进入文件夹</td>
-</tr>
-<tr>
-<td>cd ..</td>
-<td>.代表当前目录     ..代表上一级目录</td>
-<td>返回上一级文件夹</td>
-</tr>
-<tr>
-<td>cd ~</td>
-<td></td>
-<td>默认返回根目录</td>
-</tr>
-<tr>
-<td>mkdir</td>
-<td>make director</td>
-<td>创建文件夹</td>
-</tr>
-<tr>
-<td>rmdir</td>
-<td>remove director</td>
-<td>删除文件夹</td>
-</tr>
-<tr>
-<td>touch</td>
-<td>touch</td>
-<td>创建文件</td>
-</tr>
-<tr>
-<td>rm</td>
-<td>remove</td>
-<td>删除文件</td>
-</tr>
-<tr>
-<td>clear</td>
-<td></td>
-<td>清屏</td>
-</tr>
-<tr>
-<td>cp</td>
-<td>copy</td>
-<td>拷贝文件</td>
-</tr>
-<tr>
-<td>mv</td>
-<td>move</td>
-<td>移动文件</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>tips:</p>
-<ul>
-<li>ctrl+shift+&#x3D;	放大终端窗口字体显示</li>
-<li>ctrl+-   缩小终端窗口字体显示</li>
+<h1 id="github提交"><a href="#github提交" class="headerlink" title="github提交"></a>github提交</h1><ul>
+<li>github创建项目</li>
+<li>复制SSH链接</li>
+<li>git clone “链接”（克隆项目到本地）</li>
+<li>将项目文件复制到克隆的文件夹中</li>
+<li>使用git进入项目文件夹</li>
+<li>git add . (将项目文件添加到仓库)</li>
+<li>git commit -m “提交提示信息”（提交项目文件到仓库）</li>
+<li>git push -u origin main</li>
 </ul>
-<h2 id="终端命令格式"><a href="#终端命令格式" class="headerlink" title="终端命令格式"></a>终端命令格式</h2><p>command [-options] [parameter]</p>
-<p>如：rm -r 111	删除名为111的文件夹</p>
-<h2 id="查阅终端命令帮助文档"><a href="#查阅终端命令帮助文档" class="headerlink" title="查阅终端命令帮助文档"></a>查阅终端命令帮助文档</h2><p>command –help</p>
-<p>man command	命令使用手册</p>
-<h1 id="文件和目录命令"><a href="#文件和目录命令" class="headerlink" title="文件和目录命令"></a>文件和目录命令</h1><h2 id="ls命令说明"><a href="#ls命令说明" class="headerlink" title="ls命令说明"></a>ls命令说明</h2><p>功能：显示当前目录文件，对应于DOS下的dir命令</p>
-<p>linux文件特点：<br>以.开头的文件为隐藏文件，需要用-a参数才能显示，如下：</p>
-<p><img src="https://s2.loli.net/2022/04/20/VGk9boiSsXlYvKn.png" alt="image-20220322153918108.png"></p>
-<h2 id="ls常用选项"><a href="#ls常用选项" class="headerlink" title="ls常用选项"></a><strong>ls</strong>常用选项</h2><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-a</td>
-<td>显示指定目录下所有子目录及其文件，包括隐藏文件</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>以列表方式显示文件详细信息</td>
-</tr>
-<tr>
-<td>-h</td>
-<td>与-l配合以人性化的方式显示文件大小</td>
-</tr>
-</tbody></table>
-<p>如下：</p>
-<p><img src="https://s2.loli.net/2022/04/20/dGz3uwjYTQftVcg.png" alt="image-20220322154755553.png"></p>
-<p><img src="https://s2.loli.net/2022/04/20/ODikzv7Rh41eyQP.png" alt="image-20220322154904581.png"></p>
-<p><img src="https://s2.loli.net/2022/04/20/NcoAjmasRJPWGC2.png" alt="image-20220322154951860.png"></p>
-<h2 id="ls通配符"><a href="#ls通配符" class="headerlink" title="ls通配符"></a>ls通配符</h2><table>
-<thead>
-<tr>
-<th>通配符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>*</td>
-<td>匹配任意个数的字符</td>
-</tr>
-<tr>
-<td>？</td>
-<td>匹配某一个字符，但不能代表0个字符</td>
-</tr>
-<tr>
-<td>[abc]</td>
-<td>匹配abc中任意一个字符</td>
-</tr>
-<tr>
-<td>[a-f]</td>
-<td>匹配a-f字母中任意一个字符</td>
-</tr>
-</tbody></table>
-<h2 id="cd切换目录"><a href="#cd切换目录" class="headerlink" title="cd切换目录"></a>cd切换目录</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>cd</td>
-<td>切换到目录</td>
-</tr>
-<tr>
-<td>cd ~</td>
-<td>切换到当前用户的家目录</td>
-</tr>
-<tr>
-<td>cd ..</td>
-<td>退出当前目录到上一级目录</td>
-</tr>
-<tr>
-<td>cd -</td>
-<td>在最近两次访问的目录之间切换</td>
-</tr>
-</tbody></table>
-<p><img src="https://s2.loli.net/2022/04/20/Tf2wJXoirjuPHk5.png" alt="image-20220322162200576.png"></p>
-<h2 id="touch创建文件"><a href="#touch创建文件" class="headerlink" title="touch创建文件"></a>touch创建文件</h2><p>1.文件不存在时，创建新的空白文件</p>
-<p>2.文件存在时，可修改文件最后一次修改时间</p>
-<p><img src="https://s2.loli.net/2022/04/20/zWiETkc1HasMLF4.png" alt="image-20220322162957159.png"></p>
-<h2 id="mkdir创建文件夹"><a href="#mkdir创建文件夹" class="headerlink" title="mkdir创建文件夹"></a>mkdir创建文件夹</h2><table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-p</td>
-<td>递归创建文件夹</td>
-</tr>
-</tbody></table>
-<p><img src="https://s2.loli.net/2022/04/20/IbB5ErRfu4gj7Uh.png" alt="image-20220322163650769.png"></p>
-<h2 id="rm-删除文件或文件夹"><a href="#rm-删除文件或文件夹" class="headerlink" title="rm 删除文件或文件夹"></a>rm 删除文件或文件夹</h2><table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-f</td>
-<td>强制删除</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>递归删除，删除文件夹时必须使用该参数</td>
-</tr>
-</tbody></table>
-<h1 id="文件拷贝与移动命令"><a href="#文件拷贝与移动命令" class="headerlink" title="文件拷贝与移动命令"></a>文件拷贝与移动命令</h1><h2 id="tree显示文件树形结构"><a href="#tree显示文件树形结构" class="headerlink" title="tree显示文件树形结构"></a>tree显示文件树形结构</h2><p><strong>功能：</strong>以树形结构显示当前目录下所有文件</p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-d</td>
-<td>只显示文件夹</td>
-</tr>
-</tbody></table>
-<p><img src="https://s2.loli.net/2022/04/20/wLlgDJXsBpqGdKY.png" alt="image-20220322171941510.png"></p>
-<p><img src="https://s2.loli.net/2022/04/20/7JSpxHuhqIzLCsr.png" alt="image-20220322172013314.png"></p>
-<p><img src="https://s2.loli.net/2022/04/20/R2hu6SprVnBo3E7.png" alt="image-20220322172031362.png"></p>
-<h2 id="cp复制文件"><a href="#cp复制文件" class="headerlink" title="cp复制文件"></a>cp复制文件</h2><p><strong>命令：</strong>cp 源文件 目标文件</p>
-<p><strong>作用：</strong>将给出的源文件复制到目标文件或目录中</p>
-<p><img src="https://s2.loli.net/2022/04/20/K2zBNUXMV8Sm6ef.png" alt="image-20220322173405369.png"></p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-i</td>
-<td>覆盖文件前提示</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>复制文件夹</td>
-</tr>
-</tbody></table>
-<p><img src="https://s2.loli.net/2022/04/20/GxyneHsBhwOdTXv.png" alt="image-20220322174537680.png"></p>
-<p><img src="https://s2.loli.net/2022/04/20/54Ke8Vo61l2sEHn.png" alt="image-20220322174617008.png"><img src="https://s2.loli.net/2022/04/20/zhmbqneT4RGgoEu.png" alt="image-20220322174656349.png"></p>
-<h2 id="mv移动文件-x2F-目录或重命名文件-x2F-目录"><a href="#mv移动文件-x2F-目录或重命名文件-x2F-目录" class="headerlink" title="mv移动文件&#x2F;目录或重命名文件&#x2F;目录"></a>mv移动文件&#x2F;目录或重命名文件&#x2F;目录</h2><p><strong>命令：</strong>mv 源文件 目标文件</p>
-<p>1.<strong>移动文件夹</strong></p>
-<p><img src="https://s2.loli.net/2022/04/20/Vy8vRcjHEKLTdDq.png" alt="image-20220322175123337.png"><img src="https://s2.loli.net/2022/04/20/8trNh7OsJyGvXf9.png" alt="image-20220322175305836.png"></p>
-<p>2.<strong>移动文件</strong></p>
-<p><img src="https://s2.loli.net/2022/04/20/A1EFvnCkOWwhfs6.png" alt="image-20220322175437927.png"></p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-i</td>
-<td>覆盖文件前提示</td>
-</tr>
-</tbody></table>
-<h1 id="文件内容命令"><a href="#文件内容命令" class="headerlink" title="文件内容命令"></a>文件内容命令</h1><h2 id="cat查看文件内容"><a href="#cat查看文件内容" class="headerlink" title="cat查看文件内容"></a>cat查看文件内容</h2><p><strong>功能：</strong>查看文件内容、创建文件、合并文件、追加文件内容等，适合查看较少内容的文件</p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-b</td>
-<td>对非空输出行编号</td>
-</tr>
-<tr>
-<td>-n</td>
-<td>对所有输出行编号</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p><img src="https://s2.loli.net/2022/04/20/789MKrcO1XNYqlG.png" alt="image-20220323163405091.png"><img src="https://s2.loli.net/2022/04/20/vFX7Cs1oHQJZ6q2.png" alt="image-20220323163428189.png"><img src="https://s2.loli.net/2022/04/20/zlnjg7EtdsifOGX.png" alt="image-20220323163538070.png"><img src="https://s2.loli.net/2022/04/20/DfN4LeWAk53RXFt.png" alt="image-20220323163453550.png"></p>
-<h2 id="more查看文件内容"><a href="#more查看文件内容" class="headerlink" title="more查看文件内容"></a>more查看文件内容</h2><p><strong>功能：</strong>分屏显示文件内容。适合查看较多内容的文件</p>
-<table>
-<thead>
-<tr>
-<th>操作键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>空格键</td>
-<td>显示手册的下一屏</td>
-</tr>
-<tr>
-<td>Enter键</td>
-<td>显示下一行</td>
-</tr>
-<tr>
-<td>b</td>
-<td>回滚一屏</td>
-</tr>
-<tr>
-<td>f</td>
-<td>前滚一屏</td>
-</tr>
-<tr>
-<td>q</td>
-<td>退出</td>
-</tr>
-<tr>
-<td>&#x2F;word</td>
-<td>搜索word字符串</td>
-</tr>
-</tbody></table>
-<h2 id="grep文本搜索工具"><a href="#grep文本搜索工具" class="headerlink" title="grep文本搜索工具"></a>grep文本搜索工具</h2><p><strong>功能：</strong>查找匹配的文本内容</p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-n</td>
-<td>显示匹配的行与行号</td>
-</tr>
-<tr>
-<td>-b</td>
-<td>显示不包含匹配文本的所有行</td>
-</tr>
-<tr>
-<td>-i</td>
-<td>不区分大小写</td>
-</tr>
-</tbody></table>
-<p>常用的两种模式查找：</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>^a</td>
-<td>查找以字符a为开头的行</td>
-</tr>
-<tr>
-<td>a$</td>
-<td>查找以字符a为结尾的行</td>
-</tr>
-</tbody></table>
-<p><img src="https://s2.loli.net/2022/04/20/AWNorzebOamkpgQ.png" alt="image-20220323165923263.png"><img src="https://s2.loli.net/2022/04/20/a5cJmnhGICvRP9i.png" alt="image-20220323165954584.png"><img src="https://s2.loli.net/2022/04/20/S4GDhUknqBQ1LZj.png" alt="image-20220323170011732.png"></p>
-<h1 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h1><h2 id="echo终端打印与-gt-、-gt-gt-重定向"><a href="#echo终端打印与-gt-、-gt-gt-重定向" class="headerlink" title="echo终端打印与&gt;、&gt;&gt;重定向"></a>echo终端打印与&gt;、&gt;&gt;重定向</h2><p><strong>echo</strong> hello相当于cout&lt;&lt;”hello”，即将hello字符串在终端打印出来</p>
-<p><strong>重定向</strong>：将文本内容写入到文件当中</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&gt;</td>
-<td>覆盖源文件所有内容</td>
-</tr>
-<tr>
-<td>&gt;&gt;</td>
-<td>在源文件中追加内容</td>
-</tr>
-</tbody></table>
-<p><img src="https://s2.loli.net/2022/04/20/uAmnaQB2LlsvrYD.png" alt="image-20220323171443541.png"></p>
-<h2 id="cat写文件"><a href="#cat写文件" class="headerlink" title="cat写文件"></a>cat写文件</h2><p>cat &gt;&gt; 文件名称<br>回车写入文件内容<br>Ctrl+D结束写入</p>
-<h2 id="管道命令"><a href="#管道命令" class="headerlink" title="管道命令 |"></a>管道命令 |</h2><p>Linux允许通过管道命令|将一个命令的输出作为另一个命令的输入</p>
-<p>如：<img src="https://s2.loli.net/2022/04/20/m41fTBpnXtYE5iU.png" alt="image-20220323172709900.png"></p>
-<p><img src="https://s2.loli.net/2022/04/20/RnJ2AUuMzDbwjrQ.png" alt="image-20220323172821104.png"></p>
-<p><img src="https://s2.loli.net/2022/04/20/qpRTnjfzD6degEx.png" alt="image-20220323173026914.png"></p>
-<h1 id="远程管理命令"><a href="#远程管理命令" class="headerlink" title="远程管理命令"></a>远程管理命令</h1><h2 id="关机-重启"><a href="#关机-重启" class="headerlink" title="关机\重启"></a>关机\重启</h2><pre><code class="c++">shutdown //默认1分钟后关机
-shutdown 22:22 //在今天的22：22关机
-shutdown +10 //10分钟后关机
-shutdown now //现在立刻关机
-shutdown -c //取消关机命令
-shutdown -r now//现在重启操作系统
-</code></pre>
-<h2 id="查看-x2F-配置网卡信息"><a href="#查看-x2F-配置网卡信息" class="headerlink" title="查看&#x2F;配置网卡信息"></a>查看&#x2F;配置网卡信息</h2><ul>
-<li><strong>ifconfig</strong>查看网卡配置信息（<strong>DOS</strong>下为<strong>ipconfig</strong>）</li>
-<li>ifconfig | grep inet 查看网卡对应的IP地址</li>
-<li>注意：一台电脑可能有一个物理网卡和多个虚拟网卡，Linux中物理网卡以ensXX表示</li>
-<li>127.0.0.1为本地环回地址，一般用来测试本地网卡是否正常</li>
-</ul>
-<p><img src="https://s2.loli.net/2022/04/20/Pw2AiMJfaL4981F.png" alt="image-20220323180126895.png"></p>
-<ul>
-<li><p><strong>ping</strong> IP地址，测试目标IP地址的主机是否连接通常</p>
-</li>
-<li><p>ping 127.0.0.1，测试本机是否连接通畅</p>
-</li>
-<li><p>终止终端程序执行：<strong>CTRL+C</strong></p>
-<p><img src="https://s2.loli.net/2022/04/20/Z2HLjadMqm4QIyW.png" alt="image-20220323180615700.png"></p>
-</li>
-</ul>
-<h2 id="ssh基础"><a href="#ssh基础" class="headerlink" title="ssh基础"></a>ssh基础</h2><p><img src="https://s2.loli.net/2022/04/20/AQblGB2y8XtuFv6.png" alt="image-20220324092715654.png"></p>
-<ul>
-<li><strong>ssh客户端</strong>是一种使用<strong>secure shell协议</strong>连接到远程计算机的软件程序</li>
-<li>ssh是目前可靠，<strong>专为远程登录会话和其他网络服务</strong>提供安全性的协议<ul>
-<li>通过ssh协议可以有效<strong>防止远程原理过程中的信息泄露</strong></li>
-<li>通过ssh协议可以对所有传输的数据进行加密，也能够<strong>防止DNS欺骗和IP欺骗</strong></li>
-</ul>
-</li>
-<li>ssh协议传输的<strong>数据是经过压缩</strong>的，可以<strong>加快传输速度</strong></li>
-</ul>
-<h3 id="6-3-1-域名与端口号"><a href="#6-3-1-域名与端口号" class="headerlink" title="6.3.1 域名与端口号"></a>6.3.1 域名与端口号</h3><p><strong>域名：</strong>IP地址的别名，如：<a href="http://www.baidu.com/">www.baidu.com</a></p>
-<p><img src="https://s2.loli.net/2022/04/20/GzmYxeXNCEU4qr6.png" alt="image-20220324093342913.png"></p>
-<p><strong>端口号</strong></p>
-<ul>
-<li>通过<strong>IP</strong>地址找到<strong>计算机</strong></li>
-<li>通过<strong>端口号</strong>找到<strong>计算机上运行的应用程序</strong><ul>
-<li>SSH服务器的默认端口号是22，如果是默认端口号，在连接时可以省略</li>
-</ul>
-</li>
-<li>常见服务端口号列表</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>服务</th>
-<th>端口号</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>01</td>
-<td>SSH服务器</td>
-<td>22</td>
-</tr>
-<tr>
-<td>02</td>
-<td>Web服务器</td>
-<td>80</td>
-</tr>
-<tr>
-<td>03</td>
-<td>HTTPS</td>
-<td>443</td>
-</tr>
-<tr>
-<td>04</td>
-<td>FTP服务器</td>
-<td>21</td>
-</tr>
-</tbody></table>
-<h3 id="6-3-2-SSH客户端的简单使用"><a href="#6-3-2-SSH客户端的简单使用" class="headerlink" title="6.3.2  SSH客户端的简单使用"></a>6.3.2  SSH客户端的简单使用</h3><p><strong>ssh -p sort user@IP&#x2F;域名</strong></p>
-<p><strong>sort：</strong>端口号，默认为SSH服务器端口号22</p>
-<p><strong>user：</strong>远程机器上的用户名</p>
-<p>（1）查询本地虚拟机Linux的IP地址</p>
-<p><img src="https://s2.loli.net/2022/04/20/9k5aqwW6xpB8AcH.png" alt="image-20220324101003815.png"></p>
-<p>（2）通过DOS窗口连接本地虚拟机，并通过DOS窗口远程对虚拟机进行操作</p>
-<p><img src="https://s2.loli.net/2022/04/20/URST34h2vdnNICu.png" alt="image-20220324101712161.png"></p>
-<pre><code class="c++">//注：SSH命令只能在Linux系统和UNIX系统下使用c++
-//在Windows系统下使用需要安装PUTTY或者Xshell软件
-</code></pre>
-<h2 id="scp远程拷贝命令"><a href="#scp远程拷贝命令" class="headerlink" title="scp远程拷贝命令"></a>scp远程拷贝命令</h2><ul>
-<li><strong>scp-scure copy</strong>,在Linux下的远程拷贝命令</li>
-<li>其地址格式与ssh命令相同，但选项**-P为大写字母**</li>
-</ul>
-<pre><code class="c++">scp -P port 01.py user@IP:Desktop/01.py   //将本地01.py文件拷贝到远程桌面上
-scp -P port user@IP:Desktop/01.py 01.py   //将远程文件拷贝到本地桌面上
-加上-r选项可以拷贝文件夹
-</code></pre>
-<pre><code>将虚拟机Desktop文件夹里的123.txt文件拷贝到本地Desktop文件夹下
-</code></pre>
-<p><img src="https://s2.loli.net/2022/04/20/iKaZdk5y2rftJVT.png" alt="image-20220324151546457.png"></p>
-<pre><code>将本地桌面文件夹的123.txt文件拷贝到虚拟机上的桌面文件夹下
-</code></pre>
-<p><img src="https://s2.loli.net/2022/04/20/Cf79iL1B3tbwVJZ.png" alt="image-20220324151653275.png"></p>
-<pre><code>将虚拟机桌面文件夹下的aaa文件夹拷贝到本地桌面文件夹下
-</code></pre>
-<p><img src="https://s2.loli.net/2022/04/20/k8uaWJGl7VMKqj6.png" alt="image-20220324151829083.png"></p>
-<pre><code>将本地桌面文件夹下的aaa文件拷贝到虚拟机的桌面文件夹下
-</code></pre>
-<p><img src="https://s2.loli.net/2022/04/20/TUIEm9K8SwRux7N.png" alt="image-20220324152035116.png"></p>
-<h1 id="SSH高级"><a href="#SSH高级" class="headerlink" title="SSH高级"></a>SSH高级</h1><h1 id="用户权限"><a href="#用户权限" class="headerlink" title="用户权限"></a>用户权限</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
-<li>对<strong>文件&#x2F;目录</strong>的权限</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>权限</th>
-<th>英文</th>
-<th>缩写</th>
-<th>代号</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>读</td>
-<td>read</td>
-<td>r</td>
-<td>4</td>
-</tr>
-<tr>
-<td>写</td>
-<td>write</td>
-<td>w</td>
-<td>2</td>
-</tr>
-<tr>
-<td>执行</td>
-<td>excute</td>
-<td>x</td>
-<td>1</td>
-</tr>
-</tbody></table>
-<ul>
-<li>组：由几个不同的用户组成，实际应用中，可以对组设置权限，从而避免对每一个用户依次设置权限</li>
-</ul>
-<h2 id="ls-l详细信息"><a href="#ls-l详细信息" class="headerlink" title="ls -l详细信息"></a>ls -l详细信息</h2><ul>
-<li>权限：第一个字符以d为开头表示目录</li>
-<li>硬连接数：表示有几种方式可以访问当前目录&#x2F;文件</li>
-<li>拥有者：</li>
-<li>组：</li>
-<li>大小：</li>
-<li>时间：</li>
-<li>名称：</li>
-<li><img src="https://s2.loli.net/2022/04/20/fRPD7c8MrAoBFVC.png" alt="image-20220324160218211.png"></li>
-</ul>
-<p><img src="https://s2.loli.net/2022/04/20/94hNoiPbIHEUXWm.png" alt="image-20220324160402306.png"></p>
-<h2 id="chmod修改权限命令"><a href="#chmod修改权限命令" class="headerlink" title="chmod修改权限命令"></a>chmod修改权限命令</h2><p><strong>作用：</strong>修改<strong>用户&#x2F;组</strong>对<strong>文件&#x2F;目录</strong>的权限</p>
-<pre><code class="c++">chmod +r/w/x 文件名  //给文件增加权限
-</code></pre>
-<pre><code class="c++">chmod -r/w/x 文件名  //给文件取消权限
-</code></pre>
-<ul>
-<li>给<strong>文件</strong>增加<strong>执行</strong>权限</li>
-</ul>
-<p><img src="https://s2.loli.net/2022/04/20/nyD2WzRxpHfbT7C.png" alt="image-20220324165539972.png"></p>
-<ul>
-<li>给<strong>文件</strong>取消<strong>执行、读取</strong>权限</li>
-</ul>
-<p><img src="https://s2.loli.net/2022/04/20/5Qr6RStHWh9Ppaw.png" alt="image-20220324165704094.png"><img src="https://s2.loli.net/2022/04/20/pKUvWwyqb1hTxZ6.png" alt="image-20220324165717075.png"></p>
-<ul>
-<li>给<strong>文件夹</strong>取消<strong>执行</strong>权限</li>
-</ul>
-<p><img src="https://s2.loli.net/2022/04/20/oXdABO3TQPMu7ac.png" alt="image-20220324170653231.png"></p>
-<h2 id="超级用户介绍"><a href="#超级用户介绍" class="headerlink" title="超级用户介绍"></a>超级用户介绍</h2><ul>
-<li><p>Linux系统中存在一个<strong>root</strong>用户用于<strong>对系统的维护和管理</strong>，对操作系统的资源<strong>具有所有访问权限</strong></p>
-</li>
-<li><p>Linux安装过程中，会自动创建一个用户账号，该账号称为<strong>标准用户</strong></p>
-</li>
-<li><p><strong>su</strong>为<strong>substitute user</strong>的缩写，表示用另一个用户的身份</p>
-</li>
-<li><p><strong>sudo</strong>命令意为用其他身份执行命令，预设身份为<strong>root</strong></p>
-</li>
-</ul>
-<h1 id="组管理"><a href="#组管理" class="headerlink" title="组管理"></a>组管理</h1><p>注：<strong>创建组&#x2F;删除组</strong>都需要<strong>sudo</strong>执行</p>
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>groupadd 组名</td>
-<td>添加组</td>
-</tr>
-<tr>
-<td>groupdel  组名</td>
-<td>删除组</td>
-</tr>
-<tr>
-<td>cat &#x2F;etc&#x2F;group</td>
-<td>确认组信息</td>
-</tr>
-<tr>
-<td>chgrp -R 组名 文件&#x2F;目录名</td>
-<td>修改文件&#x2F;目录所在组</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>组信息</strong>都保存在<strong>etc&#x2F;group</strong>中</li>
-<li><strong>&#x2F;etc</strong>是专门用来<strong>保存系统配置文件信息</strong>的目录</li>
-</ul>
-<p><img src="https://s2.loli.net/2022/04/20/9csAJPGTLbxyp5w.png" alt="image-20220325160837125.png"><a href="https://imgtu.com/i/LrPniR"><img src="https://s1.ax1x.com/2022/04/20/LrPniR.png" alt="LrPniR.png"></a></p>
-<p><strong>修改文件目录所在组实操：</strong></p>
-<ul>
-<li>创建pythonStudy文件目录</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPKRx"><img src="https://s1.ax1x.com/2022/04/20/LrPKRx.png" alt="LrPKRx.png"></a></p>
-<ul>
-<li>创建dev组</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPeo9"><img src="https://s1.ax1x.com/2022/04/20/LrPeo9.png" alt="LrPeo9.png"></a></p>
-<ul>
-<li>将pythonStudy目录所在组修改为dev</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPZdJ"><img src="https://s1.ax1x.com/2022/04/20/LrPZdJ.png" alt="LrPZdJ.png"></a></p>
-<h1 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h1><h2 id="终端命令"><a href="#终端命令" class="headerlink" title="终端命令"></a>终端命令</h2><p><strong>注：创建&#x2F;删除用户以及修改用户密码</strong>的终端命令都需要<strong>sudo</strong>执行</p>
-<ul>
-<li><p>创建用户&#x2F;设置密码&#x2F;删除用户</p>
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>useradd -m -g 组 新建用户名</td>
-<td>添加新用户</td>
-<td><strong>-m</strong>自动建立用户家目录<br /><strong>-g</strong>指定用户所在组，否则会建立一个同名的组</td>
-</tr>
-<tr>
-<td>passwd 用户名</td>
-<td>设置用户密码</td>
-<td>如果是普通用户，直接用passwd可以直接修改用户密码</td>
-</tr>
-<tr>
-<td>userdel -r 用户名</td>
-<td>删除用户</td>
-<td><strong>-r</strong>选项会自动删除用户家目录</td>
-</tr>
-<tr>
-<td>cat&#x2F;etc&#x2F;passwd|grep 用户名</td>
-<td>确认用户信息</td>
-<td>新建用户后，用户信息会保存在etc&#x2F;passwd文件中</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<p><strong>测试</strong></p>
-<ul>
-<li>创建新用户myuser</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrP1sO"><img src="https://s1.ax1x.com/2022/04/20/LrP1sO.png" alt="LrP1sO.png"></a></p>
-<ul>
-<li>修改myuser密码（输入密码时在屏幕上不打印）</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPMz6"><img src="https://s1.ax1x.com/2022/04/20/LrPMz6.png" alt="LrPMz6.png"></a></p>
-<ul>
-<li>在Windows下的putty远程登录软件上登录myuser用户进行测试</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPlQK"><img src="https://s1.ax1x.com/2022/04/20/LrPlQK.png" alt="LrPlQK.png"></a></p>
-<h2 id="查看用户信息"><a href="#查看用户信息" class="headerlink" title="查看用户信息"></a>查看用户信息</h2><h1 id="查看系统信息"><a href="#查看系统信息" class="headerlink" title="查看系统信息"></a>查看系统信息</h1><ul>
-<li>时间日期<ul>
-<li>date</li>
-<li>cal</li>
-</ul>
-</li>
-<li>磁盘和目录空间<ul>
-<li>df</li>
-<li>du</li>
-</ul>
-</li>
-<li>进程信息<ul>
-<li>ps</li>
-<li>top</li>
-<li>kill</li>
-</ul>
-</li>
-</ul>
-<h2 id="时间日期"><a href="#时间日期" class="headerlink" title="时间日期"></a>时间日期</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>date</td>
-<td>查看系统时间</td>
-</tr>
-<tr>
-<td>cal</td>
-<td>calendar查看日历，-y 选项可以查看一年的日历</td>
-</tr>
-</tbody></table>
-<p><a href="https://imgtu.com/i/LrPqYR"><img src="https://s1.ax1x.com/2022/04/20/LrPqYR.png" alt="LrPqYR.png"></a></p>
-<h2 id="磁盘信息"><a href="#磁盘信息" class="headerlink" title="磁盘信息"></a>磁盘信息</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>df -h</td>
-<td>disk free 显示磁盘剩余空间</td>
-</tr>
-<tr>
-<td>du -h[目录名]</td>
-<td>disk usage 显示磁盘目录下的文件大小</td>
-</tr>
-</tbody></table>
-<ul>
-<li>-h表示以人性化的方式显示文件大小</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPLf1"><img src="https://s1.ax1x.com/2022/04/20/LrPLf1.png" alt="LrPLf1.png"></a></p>
-<h2 id="进程信息"><a href="#进程信息" class="headerlink" title="进程信息"></a>进程信息</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ps aux</td>
-<td>process status 查看进程的详细状态</td>
-</tr>
-<tr>
-<td>top</td>
-<td>动态显示正在运行中的进程</td>
-</tr>
-<tr>
-<td>kill [-9] 进程代号</td>
-<td>终止指定代号的进程，-9表示强制终止</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>ps选项</strong>说明功能</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>a</td>
-<td>显示终端所有进程，包括没有控制终端的进程</td>
-</tr>
-<tr>
-<td>u</td>
-<td>显示进程的详细状态</td>
-</tr>
-<tr>
-<td>x</td>
-<td>显示没有控制终端的进程</td>
-</tr>
-</tbody></table>
-<p>​	</p>
-<h1 id="其他命令-1"><a href="#其他命令-1" class="headerlink" title="其他命令"></a>其他命令</h1><ul>
-<li>查找文件<ul>
-<li>find</li>
-</ul>
-</li>
-<li>软链接<ul>
-<li>ln</li>
-</ul>
-</li>
-<li>打包压缩<ul>
-<li>tar</li>
-</ul>
-</li>
-<li>软件安装<ul>
-<li>apt-get</li>
-</ul>
-</li>
-</ul>
-<h2 id="查找文件"><a href="#查找文件" class="headerlink" title="查找文件"></a>查找文件</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>find [路径] -name .py</td>
-<td>查找指定路径下扩展名为.py的文件，包括子目录</td>
-</tr>
-</tbody></table>
-<ul>
-<li><p>省略路径名，表示在当前目录下查找</p>
-</li>
-<li><p>正则查找</p>
-</li>
-<li><p>搜索桌面文件下，包含“1”的文件</p>
-</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPbk9"><img src="https://s1.ax1x.com/2022/04/20/LrPbk9.png" alt="LrPbk9.png"></a></p>
-<ul>
-<li>搜索桌面文件下，所有以“.txt”为扩展名的文件</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrP7TJ"><img src="https://s1.ax1x.com/2022/04/20/LrP7TJ.png" alt="LrP7TJ.png"></a></p>
-<ul>
-<li>搜索桌面文件下，以数字“1”为开头的文件</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPTw4"><img src="https://s1.ax1x.com/2022/04/20/LrPTw4.png" alt="LrPTw4.png"></a></p>
-<h2 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h2><p>​	</p>
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ln -s</td>
-<td>建立该文件的软链接，类似与Windows下的快捷方式</td>
-</tr>
-</tbody></table>
-<ul>
-<li>若没有-s表示建立的是一个硬链接</li>
-<li><strong>源文件</strong>要使用<strong>绝对路径</strong></li>
-</ul>
-<p><strong>演练</strong></p>
-<ul>
-<li>在桌面创建01.py文件与demo&#x2F;b&#x2F;c文件夹，并在01.py文件内写入内容</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPv6K"><img src="https://s1.ax1x.com/2022/04/20/LrPv6K.png" alt="LrPv6K.png"></a></p>
-<ul>
-<li>将01.py文件移动到demo&#x2F;b&#x2F;c文件夹下</li>
-</ul>
-<p><a href="https://imgtu.com/i/LrPxOO"><img src="https://s1.ax1x.com/2022/04/20/LrPxOO.png" alt="LrPxOO.png"></a></p>
-<ul>
-<li>在桌面分别创建01.py软链接的相对路径与绝对路径，并分别访问这两个软链接</li>
-</ul>
-<p><a href="https://imgtu.com/i/LriSmD"><img src="https://s1.ax1x.com/2022/04/20/LriSmD.png" alt="LriSmD.png"></a><a href="https://imgtu.com/i/Lrip0e"><img src="https://s1.ax1x.com/2022/04/20/Lrip0e.png" alt="Lrip0e.png"></a></p>
-<ul>
-<li>将01.py相对路径的软链接与硬链接移动到demo&#x2F;b&#x2F;c文件夹下，并分别访问这两个软链接，比较两者差异</li>
-</ul>
-<p><a href="https://imgtu.com/i/Lri9TH"><img src="https://s1.ax1x.com/2022/04/20/Lri9TH.png" alt="Lri9TH.png"></a></p>
-<p><a href="https://imgtu.com/i/LriPkd"><img src="https://s1.ax1x.com/2022/04/20/LriPkd.png" alt="LriPkd.png"></a></p>
-<h2 id="打包压缩"><a href="#打包压缩" class="headerlink" title="打包压缩"></a>打包压缩</h2><ul>
-<li><p><strong>windows</strong> 下使用 <strong>rar</strong></p>
-</li>
-<li><p><strong>mac</strong> 下使用 <strong>zip</strong></p>
-<ul>
-<li><strong>linux</strong> 下使用 <strong>tar.gz</strong></li>
-</ul>
-</li>
-</ul>
-<h1 id="GDB调试"><a href="#GDB调试" class="headerlink" title="GDB调试"></a>GDB调试</h1><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>gdb 可执行程序</td>
-<td>启动</td>
-</tr>
-<tr>
-<td>quit（q）</td>
-<td>退出</td>
-</tr>
-<tr>
-<td>set args***        show args</td>
-<td>给主函数设置参数</td>
-</tr>
-<tr>
-<td>list&#x2F;l</td>
-<td>显示当前文件内容</td>
-</tr>
-<tr>
-<td>list&#x2F;l 行号</td>
-<td>显示某一行前后内容</td>
-</tr>
-<tr>
-<td>list&#x2F;l 函数名</td>
-<td>显示某函数前后内容</td>
-</tr>
-<tr>
-<td>list&#x2F;l 文件名:行号</td>
-<td>显示其他文件内容</td>
-</tr>
-<tr>
-<td>list&#x2F;l 文件名:函数名</td>
-<td>显示其他文件内容</td>
-</tr>
-<tr>
-<td>set listsize 行数</td>
-<td>设置显示行数</td>
-</tr>
-<tr>
-<td>b&#x2F;break 行号、函数名、文件名：行号、文件名：函数</td>
-<td>设置断点</td>
-</tr>
-<tr>
-<td>i&#x2F;info b&#x2F;break</td>
-<td>查看断点</td>
-</tr>
-<tr>
-<td>d&#x2F;del&#x2F;delete 断点编号</td>
-<td>删除断点</td>
-</tr>
-<tr>
-<td>dis&#x2F;disable 断点编号</td>
-<td>设置断点无效</td>
-</tr>
-<tr>
-<td>ena&#x2F;enable 断点编号</td>
-<td>设置断点生效</td>
-</tr>
-<tr>
-<td>b&#x2F;break 10 if i&#x3D;5</td>
-<td>设置条件断点，一般再在循环体内设置</td>
-</tr>
-<tr>
-<td>start</td>
-<td>启动程序从第一行开始</td>
-</tr>
-<tr>
-<td>run</td>
-<td>运行程序直到断点</td>
-</tr>
-<tr>
-<td>c&#x2F;continue</td>
-<td>继续运行到下一个断点</td>
-</tr>
-<tr>
-<td>n&#x2F;next</td>
-<td>向下执行，不会进入函数体</td>
-</tr>
-<tr>
-<td>p&#x2F;print</td>
-<td>打印变量值</td>
-</tr>
-<tr>
-<td>ptype</td>
-<td>打印变量类型</td>
-</tr>
-<tr>
-<td>s&#x2F;step</td>
-<td>单步调试，可以进入函数体</td>
-</tr>
-<tr>
-<td>finish</td>
-<td>跳出函数体</td>
-</tr>
-<tr>
-<td>until</td>
-<td>跳出循环</td>
-</tr>
-<tr>
-<td>display num</td>
-<td>设置自动变量（自动打印变量值）5</td>
-</tr>
-<tr>
-<td>i&#x2F;info display</td>
-<td>显示自动变量信息</td>
-</tr>
-<tr>
-<td>undisplay 编号</td>
-<td>移除自动变量</td>
-</tr>
-</tbody></table>
-<h1 id="open函数"><a href="#open函数" class="headerlink" title="open函数"></a>open函数</h1><pre><code class="c++">#include &lt;sys/types.h&gt;
-#include &lt;sys/stat.h&gt;
-#include &lt;fcntl.h&gt;
-#include&lt;stdio.h&gt;
-#include&lt;unistd.h&gt;
-int main(int args,char*argc[])
-&#123;
-    //int open(const char* pathname, int flags);
-    //文件打开模式参数flags
-    //	必选参数：O_RDONLY, O_WRONLY, or O_RDWR
-    //	可选参数：O_APPEND（追加）、O_CREAT（创建新文件）
-    
-    int fd = open(&quot;a.txt&quot;, O_WRONLY);
-    if (fd = -1)//fd=-1表示会打开失败
-        perror(&quot;open&quot;);//打印错误信息
-    close(fd);//关闭文件描述符
-
-    
-//    int open(const char *pathname, int flags, mode_t mode);
-
-    int fd = open(&quot;create.txt&quot;, O_WRONLY | O_CREAT, 0777);
-    if (fd = -1)
-        perror(&quot;open&quot;);
-    close(fd);	
-
-    return 1;
-&#125;
-</code></pre>
-<h1 id="read-x2F-write函数"><a href="#read-x2F-write函数" class="headerlink" title="read&#x2F;write函数"></a>read&#x2F;write函数</h1><pre><code class="c++">//#include &lt;unistd.h&gt;
-//ssize_t read(int fd, void* buf, size_t count);
-// read() attempts to read up to count bytes 
-// from file descriptor fd into the buffer starting at buf.
-//参数：
-//	-fd：open打开的文件描述符
-//	-buf：将文件内容读取到buf中
-//	-count：设置buf字节数
-//返回值：
-//	&gt;0 已经读取的字节数
-//	-1 读取失败
-//	0  读取结束
-
-//#include &lt;unistd.h&gt;
-//ssize_t write(int fd, const void* buf, size_t count);
-//write() writes up to count bytes from the buffer 
-//starting at buf to the file referred to by the file descriptor fd.
-
-#include &lt;sys/types.h&gt;
-#include &lt;sys/stat.h&gt;
-#include &lt;fcntl.h&gt;
-#include&lt;stdio.h&gt;
-#include&lt;unistd.h&gt;
-#include&lt;string.h&gt;
-#include&lt;iostream&gt;
-using namespace std;
-int main(int args,char*argc[])
-&#123;
-    //打开文件create.txt
-    int srcfd = open(&quot;create.txt&quot;,O_RDONLY);
-    if (srcfd == -1)//如果文件不存在或文件打开失败则返回错误信息
-        perror(&quot;open&quot;);
-
-    char buf[1024];
-    memset(&amp;buf, 0, sizeof(buf));//初始化buf
-    int len = read(srcfd, buf, sizeof(buf));//将create.txt文件中的信息读取到buf中
-    if (len &lt; 0)
-        perror(&quot;read&quot;);//显示读取错误信息
-    cout &lt;&lt; &quot;接受&quot;;
-    cout &lt;&lt; len &lt;&lt; &quot;个字符&quot; &lt;&lt; endl;
-    cout&lt;&lt;buf&lt;&lt;endl;
-    //新建一个文件cp.txt
-    int desfd = open(&quot;cp.txt&quot;, O_WRONLY | O_CREAT, 0777);
-    if (desfd == -1)
-        perror(&quot;open&quot;);//显示新建错误信息
-    write(desfd, buf, sizeof(buf));//将buf中的信息写入cp.txt中
-    close(srcfd);
-    close(desfd);
-    return 1;
-&#125;
-</code></pre>
-<h1 id="vim命令"><a href="#vim命令" class="headerlink" title="vim命令"></a>vim命令</h1><h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><ul>
-<li><p>vim 【filename】 进入命令模式</p>
-<h2 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h2></li>
-<li><p>i 在光标前进行插入</p>
-</li>
-<li><p>x 删除光标字符</p>
-</li>
-<li><p>o 在光标下一行进行插入</p>
-</li>
-<li><p>O 在光标上一行进行插入</p>
-</li>
-<li><p>a 从光标所在处下一个字符输入</p>
-</li>
-<li><p>A 从光标所在行最后一个字符输入</p>
-<h2 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h2><p>按ESC退出输入模式，进入末行模式</p>
-</li>
-<li><p>:w 保存文件并退出vi编辑器</p>
-</li>
-<li><p>:q 退出编辑器</p>
-</li>
-<li><p>:wq 保存并退出</p>
-</li>
-<li><p>:set nu 设置行号</p>
-</li>
-<li><p>:set nonu 取消行号</p>
-</li>
+<p>注：git可以一次提交多个项目文件，因此可以在本地添加多个项目文件后一次性提交</p>
+<h1 id="github使用技巧"><a href="#github使用技巧" class="headerlink" title="github使用技巧"></a>github使用技巧</h1><ul>
+<li>在线查看项目<br>进入项目详情页按下”.”键，GitHub会自行使用在线vscode查看项目文件代码而不需要下载到本地</li>
+<li>在线运行项目<br>在项目详情页地址栏”https:&#x2F;&#x2F;“后加入”gitpod.io&#x2F;“即可进入在线vscode运行查看的项目</li>
 </ul>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>git</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
@@ -7747,706 +8447,6 @@ int main()
       </tags>
   </entry>
   <entry>
-    <title>git工具</title>
-    <url>/2022/05/01/git%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<!-- more -->
-
-<h1 id="github提交"><a href="#github提交" class="headerlink" title="github提交"></a>github提交</h1><ul>
-<li>github创建项目</li>
-<li>复制SSH链接</li>
-<li>git clone “链接”（克隆项目到本地）</li>
-<li>将项目文件复制到克隆的文件夹中</li>
-<li>使用git进入项目文件夹</li>
-<li>git add . (将项目文件添加到仓库)</li>
-<li>git commit -m “提交提示信息”（提交项目文件到仓库）</li>
-<li>git push -u origin main</li>
-</ul>
-<p>注：git可以一次提交多个项目文件，因此可以在本地添加多个项目文件后一次性提交</p>
-<h1 id="github使用技巧"><a href="#github使用技巧" class="headerlink" title="github使用技巧"></a>github使用技巧</h1><ul>
-<li>在线查看项目<br>进入项目详情页按下”.”键，GitHub会自行使用在线vscode查看项目文件代码而不需要下载到本地</li>
-<li>在线运行项目<br>在项目详情页地址栏”https:&#x2F;&#x2F;“后加入”gitpod.io&#x2F;“即可进入在线vscode运行查看的项目</li>
-</ul>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Qt</title>
-    <url>/2022/04/28/Qt/</url>
-    <content><![CDATA[<!-- more -->
-
-
-<h1 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h1><h2 id="按钮控件与信号"><a href="#按钮控件与信号" class="headerlink" title="按钮控件与信号"></a>按钮控件与信号</h2><pre><code class="c++">//    创建按钮对象及其实例，参数一为按钮名称，参数二为将按钮控件镶嵌到主窗口当中
-    QPushButton* btn=new QPushButton(&quot;close&quot;,this);
-//   重新设置主窗口大小
-    resize(600,400);
-//    移动按钮位置，按钮创建时默认为原点
-    btn-&gt;move(width()/2,height()/2);
-//    设置主窗口名称
-    this-&gt;setObjectName(&quot;按钮实验&quot;);
-//   信号控件，参数：发送信号者，发送的信号，接受信号者，接受的信号
-    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::close);
-</code></pre>
-<h2 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h2><pre><code class="c++">#include &quot;mywidget.h&quot;
-#include &quot;ui_mywidget.h&quot;
-#include&lt;QPushButton&gt;
-
-myWidget::myWidget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::myWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //创建教师对象
-    this-&gt;zt=new Teacher(this);
-   //创建学生对象
-    this-&gt;st=new Student(this);
-
-    connect(zt,&amp;Teacher::hungry,st,&amp;Student::treat);
-    classIsOver();
-    classIsOver();
-
-&#125;
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit zt-&gt;hungry();
-&#125;
-
-myWidget::~myWidget()
-&#123;
-    delete ui;
-&#125;
-
-</code></pre>
-<pre><code class="c++">#include &quot;student.h&quot;
-#include&lt;QDebug&gt;
-
-Student::Student(QObject *parent) : QObject(parent)
-&#123;
-
-&#125;
-void Student::treat()
-&#123;
-     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
-&#125;
-</code></pre>
-<h2 id="自定义信号与槽发生重载的问题"><a href="#自定义信号与槽发生重载的问题" class="headerlink" title="自定义信号与槽发生重载的问题"></a>自定义信号与槽发生重载的问题</h2><pre><code class="c++">   //创建教师对象
-    this-&gt;zt=new Teacher(this);
-   //创建学生对象
-    this-&gt;st=new Student(this);
-    //函数指针-&gt;函数地址
-    void(Teacher::*teacherSingal)(QString)=&amp;Teacher::hungry;
-    void(Student::*studentSingal)(QString)=&amp;Student::treat;
-
-    connect(zt,teacherSingal,st,studentSingal);
-    classIsOver();
-</code></pre>
-<pre><code class="c++">#include &quot;student.h&quot;
-#include&lt;QDebug&gt;
-
-Student::Student(QObject *parent) : QObject(parent)
-&#123;
-
-&#125;
-void Student::treat()
-&#123;
-     qDebug()&lt;&lt;&quot;请老师吃饭&quot;&lt;&lt;endl;
-&#125;
-void Student::treat(QString foodName)
-&#123;
-    qDebug()&lt;&lt;&quot;请老师吃：&quot;&lt;&lt;foodName&lt;&lt;endl;
-&#125;
-
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
-&#125;
-</code></pre>
-<h2 id="按钮触发信号"><a href="#按钮触发信号" class="headerlink" title="按钮触发信号"></a>按钮触发信号</h2><pre><code class="c++"> QPushButton* btn=new QPushButton(&quot;下课&quot;,this);
-    this-&gt;resize(600,400);
-    //点击下课按钮触发宫保鸡丁时间
-    connect(btn,&amp;QPushButton::clicked,this,&amp;myWidget::classIsOver);
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
-&#125;
-</code></pre>
-<h2 id="信号链接信号"><a href="#信号链接信号" class="headerlink" title="信号链接信号"></a>信号链接信号</h2><pre><code class="c++">//    无参信号与槽链接
-    void(Teacher::*teacherSingal)(void)=&amp;Teacher::hungry;
-    void(Student::*studentSingal)(void)=&amp;Student::treat;
-    connect(zt,teacherSingal,st,studentSingal);
-
-//    信号链接信号,按钮信号链接教师信号 
-    connect(btn,&amp;QPushButton::clicked,zt,teacherSingal);
-&#125;
-void myWidget::classIsOver()
-&#123;
-    //emit发射信号
-    emit zt-&gt;hungry();
-//    emit zt-&gt;hungry(&quot;宫保鸡丁&quot;);
-//    emit st-&gt;treat(&quot;宫保鸡丁&quot;);
-&#125;
-</code></pre>
-<h2 id="lamdba表达式"><a href="#lamdba表达式" class="headerlink" title="lamdba表达式"></a>lamdba表达式</h2><pre><code class="c++">//    lamdba表达式
-//    [外部变量捕获方式](形参)mutable-&gt;返回类型&#123;函数体&#125;(实参);
-//    [外部变量捕获方式]：当&#123;&#125;中使用外部变量时，需要在此声明使用的外部变量，称其为捕获，捕获方式有，
-//              值传递[a]：该方式传递外部变量进入lamdba表达式内部使用时，默认为const方式，即不可改变传递进来的外部变量的值，
-//                                若需要改变，则需要使用关键字mutable，但注意，此刻改变的并非外部变量本体的值，而是拷贝进lamdba的值
-//              引用传递[&amp;]：使用引用方式传递外部变量进入lamdba表达式，将lamdba表达式内使用的外部变量与本体外部变量进行绑定
-//              自推导方式[=]
-
-
-//    （形参）：lamdba表达式函数形参
-//      &#123;函数体&#125;：lamdba表达式具体实现
-//    （实参）：传递给形参的值，&#123;&#125;中使用return语句时必须使用该实参
-    
-
-    QPushButton* btn1=new QPushButton(&quot;btn1&quot;,this);
-    QPushButton* btn2=new QPushButton(&quot;btn2&quot;,this);
-    QPushButton* btn3=new QPushButton(&quot;btn3&quot;,this);
-    resize(600,400);
-    btn2-&gt;move(300,200);
-    btn3-&gt;move(200,300);
-    int m=10;
-    qDebug()&lt;&lt;&quot;start:&quot;&lt;&lt;m&lt;&lt;endl;
-    connect(btn1,&amp;QPushButton::clicked,this,[=]()&#123;qDebug()&lt;&lt;m+10&lt;&lt;endl;&#125;);
-    connect(btn2,&amp;QPushButton::clicked,this,[m]()mutable&#123;qDebug()&lt;&lt;m+20&lt;&lt;endl;&#125;);
-    qDebug()&lt;&lt;&quot;next:&quot;&lt;&lt;m&lt;&lt;endl;
-
-#if 1
-    int ret;
-    ret=[m]()mutable-&gt;int&#123;return m+30;&#125;();//值传递
-    qDebug()&lt;&lt;&quot;ret_m:&quot;&lt;&lt;ret&lt;&lt;endl;//40
-    ret=[=]()-&gt;int&#123;return m+40;&#125;();//自推导传递
-    qDebug()&lt;&lt;&quot;ret_=:&quot;&lt;&lt;ret&lt;&lt;endl;//50
-    ret=[](int a,int b)-&gt;int&#123;return a+b;&#125;(2,3);
-    qDebug()&lt;&lt;&quot;ret_a+b:&quot;&lt;&lt;ret&lt;&lt;endl;//5
-    ret=[](int x)-&gt;int&#123;return [](int y)-&gt;int&#123;return y*2;&#125;(x)+6;&#125;(5);
-    qDebug()&lt;&lt;ret&lt;&lt;endl;//16
-#endif
-</code></pre>
-<pre><code class="c++">//利用lamdba表达式进行信号传递
-    QPushButton* btn_lam=new QPushButton(&quot;关闭&quot;,this);
-    btn_lam-&gt;move(100,0);
-    connect(btn_lam,&amp;QPushButton::clicked,this,[=]()&#123;
-     this-&gt;close();
-//        emit st-&gt;treat(&quot;宫保鸡丁&quot;);
-//        btn_lam-&gt;setText(&quot;aaa&quot;);//效果：点击“关闭”按钮后，按钮名称自动改为“aaa”
-    &#125;);
-</code></pre>
-<h1 id="控件"><a href="#控件" class="headerlink" title="控件"></a>控件</h1><h2 id="菜单栏与工具栏"><a href="#菜单栏与工具栏" class="headerlink" title="菜单栏与工具栏"></a>菜单栏与工具栏</h2><pre><code class="c++">
-    resize(600,400);
-
-//    创建菜单栏QMenuBar,最多有一个
-    QMenuBar* bar=menuBar();
-//    将菜单栏放入窗口中
-    setMenuBar(bar);
-//    创建菜单QMenu
-   QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
-   QMenu* editMenu=bar-&gt;addMenu(&quot;编辑&quot;);
-//   创建菜单项QAction
-   fileMenu-&gt;addAction(&quot;新建&quot;);
-   fileMenu-&gt;addSeparator();//添加菜单栏分割线
-   fileMenu-&gt;addAction(&quot;打开&quot;);
-   fileMenu-&gt;addSeparator();//添加菜单栏分割线
-   fileMenu-&gt;addAction(&quot;保存&quot;);
-   fileMenu-&gt;addSeparator();//添加菜单栏分割线
-   fileMenu-&gt;addAction(&quot;关闭&quot;);
-   fileMenu-&gt;addSeparator();
-
-   //工具栏
-     QToolBar* toolBar=new QToolBar(this);
-//设置默认停靠区域
-     addToolBar(Qt::LeftToolBarArea,toolBar);
-
-// 后期设置，左右停靠
-    toolBar-&gt;setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
-
-// 设置浮动
-    toolBar-&gt;setFloatable(false);//工具栏将不能浮动在窗口表面
-
-//设置移动
-     toolBar-&gt;setMovable(false);//工具栏将不能移动，此时上边左右停靠的设置将失效
-
-// 工具栏中添加内容
-// 创建内容
-     QAction* helpAction=fileMenu-&gt;addAction(&quot;帮助&quot;);//将菜单栏中的内容添加到工具栏中
-     QAction* processAction=fileMenu-&gt;addAction(&quot;项目&quot;);
-// 将内容添加到工具栏中
-     toolBar-&gt;addAction(helpAction);
-     toolBar-&gt;addSeparator();//添加工具栏分割线
-     toolBar-&gt;addAction(processAction);
-     toolBar-&gt;addSeparator();//添加工具栏分割线
-
-//在工具栏中添加控件
-     QPushButton* btn=new QPushButton(&quot;设置&quot;,this);
-     toolBar-&gt;addWidget(btn);
-
-
-
-tips：
-    //菜单栏，最多有一个
-    QMenuBar* bar=menuBar();
-    setMenuBar(bar);
-    //添加菜单内容
-    QMenu* fileMenu=bar-&gt;addMenu(&quot;文件&quot;);
-    //添加菜单项
-    QAction* newAction=fileMenu-&gt;addAction(&quot;创建&quot;);
-    //添加分割线
-    fileMenu-&gt;addSeparator(newAction);
-
-
-    //工具栏，可以有多个
-    QToolBar* toolBar=new QToolBar(&quot;this&quot;);
-    //设置默认停靠区域
-    addToolBar(Qt::leftBarArea,toolBar);
-    //后期设置停靠区域，浮动，移动，在工具栏中添加内容，控件
-</code></pre>
-<h2 id="模态与非模态对话框"><a href="#模态与非模态对话框" class="headerlink" title="模态与非模态对话框"></a>模态与非模态对话框</h2><pre><code class="c++">  //点击创建按钮，弹出一个对话框
-    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
-        //模态对话框，不可以对其他窗口进行操作
-#if 0
-        QDialog dlg(this);
-        dlg.resize(200,100);
-        dlg.exec();
-#endif
-#if 0
-        //非模态对话框,可以对其他窗口进行操作
-        QDialog* dlg2=new QDialog(this);
-        dlg2-&gt;resize(200,100);
-        dlg2-&gt;show();
-#endif
-</code></pre>
-<h2 id="消息对话框"><a href="#消息对话框" class="headerlink" title="消息对话框"></a>消息对话框</h2><pre><code class="c++">//点击创建按钮，弹出一个对话框
-    connect(ui-&gt;actionNew,&amp;QAction::triggered,[=]()&#123;
-        //错误对话框,参数：父类，标题，提示内容
-//        QMessageBox::critical(this,&quot;critical&quot;,&quot;错误&quot;);
-        //信息对话框
-//        QMessageBox::information(this,&quot;info&quot;,&quot;信息&quot;);
-        //提问对话框,参数：1.父类，2.标题，3.提示内容,4.按键类型，5.默认关联回车键
-//        QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);
-
-//        if(QMessageBox::Save==QMessageBox::question(this,&quot;ques&quot;,&quot;提问&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))
-//        &#123;
-//            qDebug()&lt;&lt;&quot;选择的按键类型是保存&quot;&lt;&lt;endl;
-//        &#125;
-//        else
-//        &#123;
-//            qDebug()&lt;&lt;&quot;选择的按键类型是选择取消&quot;&lt;&lt;endl;
-//        &#125;
-
-        //警告对话框
-        QMessageBox::warning(this,&quot;warning&quot;,&quot;警告&quot;);
-</code></pre>
-<h2 id="其他对话框"><a href="#其他对话框" class="headerlink" title="其他对话框"></a>其他对话框</h2><pre><code class="c++">connect(ui-&gt;actionnew,&amp;QAction::triggered,[=]()&#123;
-        //颜色对话框
-//        QColor color=QColorDialog::getColor(QColor(0,255,0));
-//        qDebug()&lt;&lt;&quot;red:&quot;&lt;&lt;color.red()&lt;&lt;&quot;green:&quot;&lt;&lt;color.green()&lt;&lt;&quot;blue:&quot;&lt;&lt;color.blue()&lt;&lt;endl;
-
-        //文件对话框，参数：父亲，标题，默认文件路径，筛选的文件类型
-        //返回值为文件路径
-//        QString str=QFileDialog::getOpenFileName(this,&quot;openFile&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*.md&quot;);
-//        qDebug()&lt;&lt;str&lt;&lt;endl;
-
-        //字体对话框
-        bool flag;
-        QFont font=QFontDialog::getFont(&amp;flag,QFont(&quot;仿宋&quot;,36));
-        qDebug()&lt;&lt;&quot;字体 &quot;&lt;&lt;font.family()&lt;&lt;&quot;大小 &quot;&lt;&lt;font.pointSize()&lt;&lt;&quot;是否加粗 &quot;&lt;&lt;font.bold()&lt;&lt;&quot;是否倾斜 &quot;&lt;&lt;font.italic()&lt;&lt;endl;
-    &#125;);
-</code></pre>
-<h2 id="UI布局设计"><a href="#UI布局设计" class="headerlink" title="UI布局设计"></a>UI布局设计</h2><p><a href="https://imgtu.com/i/LX5eAI"><img src="https://s1.ax1x.com/2022/04/28/LX5eAI.png" alt="LX5eAI.png"></a></p>
-<pre><code class="c++">tips：
-    1.选取widget进行布局，水平、垂直、栅格
-    2.默认窗口与控件之间存在9的间隙，可以调整layoutLeftMargin
-    3.利用弹簧进行布局
-</code></pre>
-<h2 id="按钮控件组"><a href="#按钮控件组" class="headerlink" title="按钮控件组"></a>按钮控件组</h2><p><a href="https://imgtu.com/i/LX5mNt"><img src="https://s1.ax1x.com/2022/04/28/LX5mNt.png" alt="LX5mNt.png"></a></p>
-<pre><code class="c++"> //默认性别单选框为男
-    ui-&gt;rBtnMan-&gt;setChecked(true);
-
-    //点击”女“，打印信息
-    connect(ui-&gt;rBtnWoman,&amp;QRadioButton::clicked,[=]()&#123;
-//        qDebug()&lt;&lt;QString::fromUtf8(&quot;女&quot;)&lt;&lt;endl;
-         qDebug()&lt;&lt;&quot;女&quot;&lt;&lt;endl;
-    &#125;);
-
-    //点击”操作系统“显示状态码,0表示未选中，2表示选中
-    connect(ui-&gt;boxOS,&amp;QCheckBox::stateChanged,[=](int state)&#123;
-        qDebug()&lt;&lt;state&lt;&lt;endl;
-    &#125;);
-
-
-
-
-tips:
-    按钮组：
-        QPushButton：常用按钮
-        QToolButton：工具按钮，用于显示图片，如想显示文字，修改风格toolButtonStyle，凸起风格：autoRaise
-        QRadioButton：单选按钮，ui-&gt;rBtnMan-&gt;setChecked(true);//设置默认选项
-        QCheckBox:多选按钮，监听状态QStateChecked,0未选中，1半选，2选中
-</code></pre>
-<h2 id="QListWidget列表容器"><a href="#QListWidget列表容器" class="headerlink" title="QListWidget列表容器"></a>QListWidget列表容器</h2><pre><code class="c++">//利用listwidget写诗
-    QListWidgetItem* item=new QListWidgetItem(&quot;锄禾日当午&quot;);
-    ui-&gt;listWidget-&gt;addItem(item);//添加一句话
-    item-&gt;setTextAlignment(Qt::AlignHCenter);//设置对其方式为居中
-
-    QStringList list;
-    list&lt;&lt;&quot;我见青山多妩媚&quot;&lt;&lt;&quot;料青山见我应如是！&quot;;
-    ui-&gt;listWidget-&gt;addItems(list);//添加多句话
-    ui-&gt;listWidget-&gt;addItems(QStringList()&lt;&lt;&quot;自其变者而观之，则天地曾不能以一瞬&quot;&lt;&lt;&quot;自其不变者而观之，则物与我皆无尽也&quot;);
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5n4P"><img src="https://s1.ax1x.com/2022/04/28/LX5n4P.png" alt="LX5n4P.png"></a></p>
-<h2 id="treeWidget树控件"><a href="#treeWidget树控件" class="headerlink" title="treeWidget树控件"></a>treeWidget树控件</h2><pre><code class="c++">//设置水平头
-    ui-&gt;treeWidget-&gt;setHeaderLabels(QStringList()&lt;&lt;&quot;英雄&quot;&lt;&lt;&quot;英雄自我介绍&quot;);
-
-    //设置顶层节点
-    QTreeWidgetItem* strongItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;力量&quot;);
-    QTreeWidgetItem* speedItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;速度&quot;);
-    QTreeWidgetItem* inteligenceItem=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;智力&quot;);
-    //加载顶层节点
-    ui-&gt;treeWidget-&gt;addTopLevelItem(strongItem);
-    ui-&gt;treeWidget-&gt;addTopLevelItem(speedItem);
-    ui-&gt;treeWidget-&gt;addTopLevelItem(inteligenceItem);
-
-    //追加子节点
-    QTreeWidgetItem* l1=new QTreeWidgetItem(QStringList()&lt;&lt;&quot;刚被猪&quot;&lt;&lt;&quot;前排坦克。。。。。。&quot;);
-    strongItem-&gt;addChild(l1); 
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5VHA"><img src="https://s1.ax1x.com/2022/04/28/LX5VHA.png" alt="LX5VHA.png"></a></p>
-<h2 id="tableWidget表格控件"><a href="#tableWidget表格控件" class="headerlink" title="tableWidget表格控件"></a>tableWidget表格控件</h2><pre><code class="c++">//设置列数
-    ui-&gt;tableWidget-&gt;setColumnCount(3);
-    //设置水平表头
-    ui-&gt;tableWidget-&gt;setHorizontalHeaderLabels(QStringList()&lt;&lt;&quot;姓名&quot;&lt;&lt;&quot;性别&quot;&lt;&lt;&quot;年龄&quot;);
-    //设置行数
-    ui-&gt;tableWidget-&gt;setRowCount(5);
-
-    //设置正文
-    QStringList nameList;
-    nameList&lt;&lt;&quot;张三&quot;&lt;&lt;&quot;李四&quot;&lt;&lt;&quot;王五&quot;&lt;&lt;&quot;赵六&quot;&lt;&lt;&quot;丁丁&quot;;
-    QList&lt;QString&gt; sexList;
-    sexList&lt;&lt;&quot;男&quot;&lt;&lt;&quot;男&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;女&quot;&lt;&lt;&quot;男&quot;;
-    for(int i=0;i&lt;5;i++)
-    &#123;
-        int col=0;
-       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(nameList[i]));
-       ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(sexList.at(i)));
-        //将数字转换为QString
-        ui-&gt;tableWidget-&gt;setItem(i,col++,new QTableWidgetItem(QString::number(i+18)));
-    &#125;
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5EBd"><img src="https://s1.ax1x.com/2022/04/28/LX5EBd.png" alt="LX5EBd.png"></a></p>
-<h2 id="其他控件介绍"><a href="#其他控件介绍" class="headerlink" title="其他控件介绍"></a>其他控件介绍</h2><pre><code class="c++">//栈控件使用
-    //设置默认定位
-    ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
-    //点击按钮跳转到TabWidget控件页面
-    connect(ui-&gt;btnTab,&amp;QPushButton::clicked,[=]()&#123;
-       ui-&gt;stackedWidget-&gt;setCurrentIndex(0);
-    &#125;);
-    //点击按钮跳转到scrollArea控件页面
-    connect(ui-&gt;btnScroll,&amp;QPushButton::clicked,[=]()&#123;
-        ui-&gt;stackedWidget-&gt;setCurrentIndex(1);
-    &#125;);
-    //点击按钮跳转到toolBox控件页面
-    connect(ui-&gt;btnTool,&amp;QPushButton::clicked,[=]()&#123;
-        ui-&gt;stackedWidget-&gt;setCurrentIndex(2);
-    &#125;);
-
-    //下拉框
-    ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;宝马&quot;&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;拖拉机&quot;);
-    //选中“拖拉机”按钮跳转到下拉框拖拉机
-    connect(ui-&gt;btnSelect,&amp;QPushButton::clicked,[=]()&#123;
-//        ui-&gt;comboBox-&gt;setCurrentIndex(2);
-        ui-&gt;comboBox-&gt;setCurrentText(&quot;拖拉机&quot;);
-    &#125;);
-
-
-tips:
-    栈控件：ui-&gt;stackedWidget-&gt;setCurrentIndex();
-    下拉框：ui-&gt;comboBox-&gt;addItems(QStringList()&lt;&lt;&quot;奔驰&quot;&lt;&lt;&quot;宝马&quot;);
-    Qlabel显示图片：ui-&gt;labelImage-&gt;setPixmap(&quot;图片路径&quot;);
-    Qlabel显示动图：ui-&gt;LabenImage-&gt;setMoive();
-</code></pre>
-<h2 id="自定义控件"><a href="#自定义控件" class="headerlink" title="自定义控件"></a>自定义控件</h2><pre><code class="c++">class smallWidget : public QWidget
-&#123;
-    Q_OBJECT
-
-public:
-    explicit smallWidget(QWidget *parent = nullptr);
-    ~smallWidget();
-
-    //设置数值
-    void setNum(int num);
-    //获取数值
-    int getNum();
-
-private:
-    Ui::smallWidget *ui;
-&#125;;
-</code></pre>
-<pre><code class="c++">smallWidget::smallWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::smallWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //QSpinBox翻滚，QSlider跟着移动
-    void(QSpinBox::* spSingal)(int)=&amp;QSpinBox::valueChanged;
-    connect(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);
-
-    //QSlider移动，QSpinBox跟着翻滚
-    connect(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);
-&#125;
-
-void smallWidget::setNum(int num)
-&#123;
-    ui-&gt;spinBox-&gt;setValue(num);
-&#125;
-int smallWidget::getNum()
-&#123;
-    return ui-&gt;spinBox-&gt;value();
-&#125;
-
-
-smallWidget::~smallWidget()
-&#123;
-    delete ui;
-&#125;
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5K9f"><img src="https://s1.ax1x.com/2022/04/28/LX5K9f.png" alt="LX5K9f.png"></a></p>
-<pre><code class="c++">myWidget::myWidget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::myWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //点击按钮获取数值
-    connect(ui-&gt;btnGetNum,&amp;QPushButton::clicked,[=]()
-    &#123;
-       qDebug()&lt;&lt;ui-&gt;widget-&gt;getNum();
-    &#125;);
-
-    //点击按钮设置进度条到一半数值
-    connect(ui-&gt;btnSetNum,&amp;QPushButton::clicked,[=]()&#123;
-        ui-&gt;widget-&gt;setNum(50);
-    &#125;);
-
-&#125;
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5M38"><img src="https://s1.ax1x.com/2022/04/28/LX5M38.png" alt="LX5M38.png"></a></p>
-<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><h2 id="鼠标事件"><a href="#鼠标事件" class="headerlink" title="鼠标事件"></a>鼠标事件</h2><pre><code class="c++">#include &quot;mylabel.h&quot;
-#include&lt;QDebug&gt;
-#pragma execution_character_set(&quot;utf-8&quot;)
-#include&lt;QMouseEvent&gt;
-myLabel::myLabel(QWidget *parent) : QLabel(parent)
-&#123;
-    //设置鼠标跟踪状态
-    setMouseTracking(true);//此时只要是鼠标事件其状态都会被监听
-&#125;
-void myLabel::enterEvent(QEvent *event)
-&#123;
-//    qDebug()&lt;&lt;&quot;鼠标进入了!&quot;&lt;&lt;endl;
-&#125;
-void myLabel::leaveEvent(QEvent *)
-&#123;
-//    qDebug()&lt;&lt;&quot;鼠标离开了!&quot;&lt;&lt;endl;
-&#125;
-void myLabel::mousePressEvent(QMouseEvent *ev)
-&#123;
-    //鼠标左键按下，则显示信息
-    if(ev-&gt;button()==Qt::LeftButton)
-    &#123;
-        //返回鼠标在指定区域内的坐标值以及在整个窗口内的坐标值
-        //QString::arg()//用字符串变量参数依次替代字符串中最小数值
-        QString str=QString(&quot;鼠标按下了  x=%1  y=%2 gloalX=%3  globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
-        qDebug()&lt;&lt;str;
-    &#125;
-&#125;
-
-void myLabel::mouseReleaseEvent(QMouseEvent *ev)
-&#123;
-//    if(ev-&gt;button()==Qt::LeftButton)
-    &#123;
-        QString str=QString(&quot;鼠标释放了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
-        qDebug()&lt;&lt;str;
-    &#125;
-&#125;
-
-void myLabel::mouseMoveEvent(QMouseEvent *ev)
-&#123;
-//    if(ev-&gt;buttons()&amp;Qt::LeftButton)//组合键
-    &#123;
-        QString str=QString(&quot;鼠标移动了！x=%1 y=%2 globalX=%3 globalY=%4&quot;).arg(ev-&gt;x()).arg(ev-&gt;y()).arg(ev-&gt;globalX()).arg(ev-&gt;globalY());
-        qDebug()&lt;&lt;str;
-    &#125;
-&#125;
-
-
-
-tips:
-    在UI中添加一个label ,选中label右键-&gt;提升 -&gt;输入类名myLabel.
-    这就完成了对label控件的鼠标事件的重写.
-</code></pre>
-<p><a href="https://imgtu.com/i/LX5QgS"><img src="https://s1.ax1x.com/2022/04/28/LX5QgS.png" alt="LX5QgS.png"></a></p>
-<h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><pre><code class="c++">class myWidget : public QWidget
-&#123;
-    Q_OBJECT
-
-public:
-    myWidget(QWidget *parent = nullptr);
-    ~myWidget();
-
-    int id1;
-    int id2;
-    //重写定时器事件
-    void timerEvent(QTimerEvent* ev );
-
-private:
-    Ui::myWidget *ui;
-
-    Teacher* zt;
-    Student* st;
-    void classIsOver();
-&#125;;
-</code></pre>
-<pre><code class="c++">myWidget::myWidget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::myWidget)
-&#123;
-    ui-&gt;setupUi(this);
-
-    //启动定时器,startTimer(定时器间隔时长),返回定时器的唯一ID号
-    id1=startTimer(1000);
-    id2=startTimer(2000);
-
-
-    //定时器的第二种启动方式
-   QTimer* timer=new QTimer(this);
-   timer-&gt;start(500);
-   connect(timer,&amp;QTimer::timeout,[=]()&#123;
-       static int num=1;
-       ui-&gt;label_3-&gt;setText(QString::number(num++));
-   &#125;);
-
-   //点击按钮停止定时器
-   connect(ui-&gt;btn,&amp;QPushButton::clicked,[=]()&#123;
-       timer-&gt;stop();
-   &#125;);
-&#125;
-
-//重写定时器事件
-void myWidget::timerEvent(QTimerEvent* ev)//当定时器启动后，系统会自动调用该定时器事件函数
-&#123;
-    if(ev-&gt;timerId()==id1)
-    &#123;
-        static int num=1;
-        //定时器启动后自动调用该函数，若启动的定时器ID号为1号，则在label上每隔1s自动加1并显示，QString::number将数字转换为Qstring类型数据
-        ui-&gt;label-&gt;setText(QString::number(num++));
-    &#125;
-    if(ev-&gt;timerId()==id2)
-    &#123;
-        static int num=1;
-        ui-&gt;label_2-&gt;setText(QString::number(num++));
-    &#125;
-&#125;
-</code></pre>
-<h2 id="事件分发器"><a href="#事件分发器" class="headerlink" title="事件分发器"></a>事件分发器</h2><h2 id="事件过滤器"><a href="#事件过滤器" class="headerlink" title="事件过滤器"></a>事件过滤器</h2><h2 id="绘图事件"><a href="#绘图事件" class="headerlink" title="绘图事件"></a>绘图事件</h2><pre><code class="c++">void myWidget::paintEvent(QPaintEvent*)
-&#123;
-   QPainter*painter=new QPainter(this);//实例化画家对象
-
-   //设置画笔
-   QPen pen(QColor(255,0,0));
-   //设置画笔宽度
-   pen.setWidth(2);
-   //设置画笔风格
-   pen.setStyle(Qt::DotLine);
-
-   //让画家使用画笔
-    painter-&gt;setPen(pen);
-
-    //设置画刷
-    QBrush brush(Qt::cyan);
-    //设置画刷风格
-    brush.setStyle(Qt::Dense7Pattern);
-    
-    //让画家使用画刷
-   painter-&gt;setBrush(brush);
-
-   //画线
-    painter-&gt;drawLine(QPoint(0,0),QPoint(100,100));
-    //画椭圆
-    painter-&gt;drawEllipse(QPoint(100,100),50,50);
-    //画矩形
-    painter-&gt;drawRect(QRect(150,150,100,50));
-    //画文字
-    painter-&gt;drawText(QRect(300,400,300,300),&quot;好好学习，天天向上&quot;);
-&#125;
-</code></pre>
-<h2 id="QFile文件读写操作"><a href="#QFile文件读写操作" class="headerlink" title="QFile文件读写操作"></a>QFile文件读写操作</h2><p><a href="https://imgtu.com/i/LX5ljg"><img src="https://s1.ax1x.com/2022/04/28/LX5ljg.png" alt="LX5ljg.png"></a></p>
-<pre><code class="c++">//点击按钮，打开文件
-    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
-        //获取文件路径
-       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
-       //将文件路径放入到ui窗口内的lineEdit控件中
-       ui-&gt;lineEdit-&gt;setText(path);
-       
-       //在textEdit控件中显示内容
-       QFile file(path);
-       //打开文件，设置打开方式
-       file.open(QIODevice::ReadOnly);
-       //读取文件内容
-       QByteArray array=file.readAll();
-       ui-&gt;textEdit-&gt;setText(array);//将内容显示到textEdit控件中    
-       file.close();
-        
-        
-       //写文件
-       file.open(QIODevice::Append);//以追加方式写入文件
-       file.write(&quot;hello world&quot;);
-       file.close();
-    &#125;);
-</code></pre>
-<pre><code class="c++">//点击按钮，打开文件
-    connect(ui-&gt;btn,&amp;QPushButton::clicked,this,[=]()&#123;
-        //获取文件路径
-       QString path=QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;C:\Users\Administrator\Desktop&quot;,&quot;*md&quot;);
-       //将文件路径放入到ui窗口内的lineEdit控件中
-       ui-&gt;lineEdit-&gt;setText(path);
-
-       //编码格式类
-       QTextCodec* codec=QTextCodec::codecForName(&quot;gbk&quot;);//文件编码默认为utf-8，人为设定文件打开编码格式为gbk
-       //在textEdit控件中显示内容
-       QFile file(path);
-       //打开文件，设置打开方式
-       file.open(QIODevice::ReadOnly);
-       //读取文件内容
-       QByteArray array=file.readAll();
-       //将内容显示到textEdit控件中
-       ui-&gt;textEdit-&gt;setText(codec-&gt;toUnicode(array));
-    &#125;);
-</code></pre>
-<h2 id="QFileIno文件信息读取"><a href="#QFileIno文件信息读取" class="headerlink" title="QFileIno文件信息读取"></a>QFileIno文件信息读取</h2><pre><code class="c++"> //文件信息类
-       QFileInfo info(文件路径);
-       qDebug()&lt;&lt;&quot;大小：&quot;&lt;&lt;info.size()&lt;&lt;&quot;   文件后缀名称：&quot;&lt;&lt;info.suffix()&lt;&lt;&quot;   文件名称：&quot;&lt;&lt;info.fileName();
-       qDebug()&lt;&lt;&quot;创建日期：&quot;&lt;&lt;info.created().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
-       qDebug()&lt;&lt;&quot;最后修改日期&quot;&lt;&lt;info.lastModified().toString(&quot;yyyy/MM/dd hh::mm::ss&quot;)&lt;&lt;endl;
-</code></pre>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>c++</tag>
-        <tag>Qt</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LeetCode</title>
     <url>/2022/04/30/leetCode/</url>
     <content><![CDATA[<!-- more -->
@@ -9495,6 +9495,619 @@ public:
       </categories>
       <tags>
         <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内部排序</title>
+    <url>/2022/04/05/%E5%86%85%E9%83%A8%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<!-- more -->
+<h1 id="直接插入排序"><a href="#直接插入排序" class="headerlink" title="直接插入排序"></a>直接插入排序</h1><p>算法思想：</p>
+<pre><code class="c++">vector&lt;int&gt; insertSort(vector&lt;int&gt; num)
+&#123;
+    int i, j, temp;
+    for (i = 1; i &lt; num.size(); i++)
+    &#123;
+        temp = num[i];
+        for (j = i - 1; j &gt;= 0 &amp;&amp; temp&lt;num[j]; j--)//易错点，&amp;&amp;前后不可拆分为if语句，这是一个连续的循环
+        &#123;
+            num[j + 1] = num[j];
+        &#125;
+        num[j + 1] = temp;
+    &#125;
+
+    return num;
+&#125;
+</code></pre>
+<h1 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h1><p>算法思想：</p>
+<pre><code class="c++">vector&lt;int&gt; shellSort(vector&lt;int&gt; num)
+&#123;
+    int i, j, temp;
+    int n = num.size();
+    for (int gap = n / 2; gap &gt; 0; gap = gap / 2)//增量设置的边界条件不能等于0
+    &#123;
+        for (i = gap; i &lt; n; i++)
+        &#123;
+            temp = num[i];
+            for (j = i - gap; j &gt;= 0 &amp;&amp; temp&lt;num[j]; j -= gap)
+                num[j + gap] = num[j];
+            num[j + gap] = temp;
+        &#125;
+    &#125;
+    return num;
+
+&#125;
+</code></pre>
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>算法思想：</p>
+<pre><code class="c++">vector&lt;int&gt; bubbleSort(vector&lt;int&gt; num)
+&#123;
+    int n = num.size();
+    for (int i = 0; i &lt; n; i++)
+    &#123;
+        bool flag = false;
+        for (int j = 0; j &lt; n - i - 1; j++)
+        &#123;
+            if (num[j + 1] &lt; num[j])
+            &#123;
+                swap(num[j], num[j + 1]);
+                flag = true;
+            &#125;
+        &#125;
+        if (!flag)
+            break;
+    &#125;
+    return num;
+&#125;
+</code></pre>
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>算法思想：</p>
+<pre><code class="c++">int paratition(vector&lt;int&gt;&amp; num, int low, int high)
+&#123;
+    int base = num[low];//选择基准元素
+    while (low &lt; high)
+    &#123;
+        //num[high] &gt;= base中的=判断不能省略
+        while (num[high] &gt;= base  &amp;&amp; low &lt; high   ) high--;//该循环跳出语句中&amp;&amp;前后衔接可互换，但由于&amp;&amp;的短路特性，更建议先判断low&lt;high
+        num[low] = num[high];
+        while (low &lt; high &amp;&amp; num[low] &lt;= base ) low++;
+        num[high] = num[low];
+    &#125;
+    num[low] = base;
+    return low;
+&#125;
+
+void quickSort(vector&lt;int&gt;&amp; num,int low,int high)
+&#123;
+
+    if (low &lt; high)//该语句不可少，只有在low&lt;high时的交换才起作用，否则在递归时会出现错误
+    &#123;
+        int j = paratition(num, low, high);
+        quickSort(num, low, j - 1);
+        quickSort(num, j + 1, high);
+    &#125;
+
+&#125;
+</code></pre>
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>算法思想：</p>
+<pre><code class="c++">vector&lt;int&gt; selectSort(vector&lt;int&gt; num)
+&#123;
+    int n = num.size();
+    for (int i = 0; i &lt; n; i++)
+    &#123;
+        int min = i;
+        for (int j = i + 1; j &lt; n; j++)
+        &#123;
+            if (num[j] &lt; num[min])
+            &#123;
+                min = j;
+            &#125;
+        &#125;
+        if (min != i)
+        &#123;
+            swap(num[min], num[i]);
+        &#125;
+    &#125;
+    return num;
+&#125;
+</code></pre>
+<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><p>算法思想：</p>
+<pre><code class="c++">void heapAdjust(vector&lt;int&gt;&amp; num, int p, int n)
+&#123;
+    int temp = num[p];//取出根节点，待找到该根节点的子树中最大的节点之后与该根节点进行交换
+    for (int i = 2 * p + 1; i &lt; n; i = 2*i+1)//遍历子树，寻找最大节点
+    &#123;
+        if (i + 1 &lt; n &amp;&amp; num[i + 1] &gt; num[i]) i++;//首先比较父节点的两个孩子的最大值
+        if (temp &gt;= num[i]) break;//如果父节点比两个孩子节点都大，则不需要交换，说明当前子树已经是大根堆
+        num[p] = num[i];//将最大孩子进行上移为父节点
+        p = i;//继续遍历子树，保证其子树也是大根堆
+    &#125;
+    num[p] = temp;
+&#125;
+void heapSort(vector&lt;int&gt;&amp; num)
+&#123;
+    //构建初始大根堆
+    int n = num.size();
+    for (int i = n / 2 - 1; i &gt;= 0; i--)//从最后一个非叶子节点向上构造大根堆
+        heapAdjust(num, i, n);
+
+    for (int j = n - 1; j &gt;= 0; j--)
+    &#123;
+        //大根堆的第一个数字是最大的,将大根与最后一个数字进行交换，则该数组的最后一个数一定是最大的
+        swap(num[0], num[j]);
+        //将数组长度减去1后，调整堆，重新进行交换
+        heapAdjust(num, 0, j);
+    &#125;
+
+&#125;
+</code></pre>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>算法思想：</p>
+<pre><code class="c++">void merge(vector&lt;int&gt;&amp; num, int low, int mid, int high)
+&#123;
+    vector&lt;int&gt; help;//定义辅助数组
+    help.resize(high - low + 1);
+    int i = low, j = mid + 1, k = 0;//i为第一序列的扫描指针，j为第二序列的扫描指针，k为辅助数组的扫描指针
+    while (i &lt;= mid &amp;&amp; j &lt;= high)// = 不能省略
+    &#123;
+        if (num[i] &lt; num[j]) help[k++] = num[i++];
+        else help[k++] = num[j++];
+    &#125;
+    while (i &lt;= mid) help[k++] = num[i++];
+    while (j &lt;= high) help[k++] = num[j++];
+    for (int i = low, k = 0; i &lt;= high; i++, k++)
+    &#123;
+        num[i] = help[k];
+    &#125;
+&#125;
+
+void mergeSort(vector&lt;int&gt;&amp; num, int low, int high)
+&#123;
+    if (low == high)//递归跳出条件，即当子序列长度为1时终止递归
+        return;
+    int mid = (low + high) / 2;
+    mergeSort(num, low, mid);//递归划分左区间，直到区间序列个数为1时终止递归
+    mergeSort(num, mid + 1, high);//递归划分右区间，知道区间序列个数为1时终止递归
+    merge(num, low, mid, high);//合并
+&#125;
+</code></pre>
+<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>算法思想：</p>
+<pre><code>定义一个编号为[0,max]的桶，其中max为待排序数组当中的最大值
+遍历数组，将数组的中的元素值放到该元素对应编号的桶中，桶数组的值代表放入桶中的个数，初始时桶中个数为0
+按照桶的编号顺序依次取出桶中的元素
+</code></pre>
+<pre><code class="c++">//桶排序
+void bucketSort(vector&lt;int&gt;&amp; nums) 
+&#123;
+    //思想：
+
+    int n = nums.size();
+    int max=0;
+    for (int i = 0; i &lt; n; i++)
+    &#123;
+        if (nums[i] &gt; max)
+            max = nums[i];
+    &#125;
+    vector&lt;int&gt; bucket(max+1, 0);//初始化桶
+    for (int i = 0; i &lt; n; i++)//将数组中的数放到对应编号的桶中
+        bucket[nums[i]]++;
+    for (int i = 0,j=0; i &lt;= max; i++)
+    &#123;
+        while (bucket[i]--&gt; 0)
+            nums[j++] = i;
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+        <tag>数据结构与算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图像处理基础</title>
+    <url>/2022/05/01/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<!-- more -->
+
+<h1 id="图像处理基础"><a href="#图像处理基础" class="headerlink" title="图像处理基础"></a>图像处理基础</h1><pre><code class="python">import os
+import cv2 as cv
+import numpy as np
+import matplotlib.pyplot as plt
+
+获取上一级文件路径
+
+abs_path=os.path.abspath(&quot;..&quot;)
+path = abs_path + r&quot;\data\2-7data&quot;
+
+print(path)
+</code></pre>
+<h2 id="图像显示"><a href="#图像显示" class="headerlink" title="图像显示"></a>图像显示</h2><pre><code class="python">def cv_show(name, img):
+    cv.imshow(name, img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+</code></pre>
+<h2 id="图像读取"><a href="#图像读取" class="headerlink" title="图像读取"></a>图像读取</h2><pre><code class="python">def img_test():
+
+abs_path=r&quot;D:\pythonProject1\opencv_code\2-7data\data&quot;
+
+​    img = cv.imread(path+r&quot;\lena.jpg&quot;)
+​    cv_show(&quot;lena&quot;, img)
+​    #灰度图
+​    cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
+​    cv_show(&quot;cat&quot;,cat)
+img_test()
+
+## 
+</code></pre>
+<h2 id="视频读取"><a href="#视频读取" class="headerlink" title="视频读取"></a>视频读取</h2><pre><code class="python">def video_show():
+    video=cv.VideoCapture(path+r&quot;\test.mp4&quot;)
+    while open:
+        ret,frame=video.read()#ret返回是否能够读取每一帧图像，frame返回视频中的每一帧图像
+        gray=cv.cvtColor(frame,cv.COLOR_BGR2GRAY)#将BGR图像转为灰度图
+        if frame is None:
+            break
+        if ret==True:
+            cv.imshow(&quot;video&quot;,gray)
+        c=cv.waitKey(50)#每帧图像延迟100ms
+        if c==27:
+            break
+    cv.destroyAllWindows()
+</code></pre>
+<h2 id="图像切片与通道提取分离"><a href="#图像切片与通道提取分离" class="headerlink" title="图像切片与通道提取分离"></a>图像切片与通道提取分离</h2><h3 id="图像切片"><a href="#图像切片" class="headerlink" title="图像切片"></a>图像切片</h3><pre><code class="python">def cut_img():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;)
+    #图像切片
+    img=cat[0:100,0:200]#分别截取高度，宽度
+
+print(img.shape)#顺序：高、宽
+</code></pre>
+<h3 id="通道提取"><a href="#通道提取" class="headerlink" title="通道提取"></a>通道提取</h3><p>​    </p>
+<pre><code class="python">#保留R通道
+cat[:,:,0]=0#关闭b通道
+cat[:,:,1]=0#关闭g通道
+
+b,g,r=cv.split(cat)
+    print(r)
+    cv.imshow(&quot;cut_img&quot;,img)
+    cv.imshow(&quot;cat&quot;,cat)
+    cv.imshow(&quot;b_cat&quot;,b)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+cut_img()
+</code></pre>
+<h2 id="边界填充"><a href="#边界填充" class="headerlink" title="边界填充"></a>边界填充</h2><pre><code class="python">def border_caplicate():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
+    top_size,bottom_size,left_size,right_size=(100,100,100,100)#设置边界范围（上下左右）
+</code></pre>
+<h3 id="复制法，直接借助原图边缘区域作为填充区域"><a href="#复制法，直接借助原图边缘区域作为填充区域" class="headerlink" title="复制法，直接借助原图边缘区域作为填充区域"></a>复制法，直接借助原图边缘区域作为填充区域</h3><pre><code class="python"> replicate=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REPLICATE)
+</code></pre>
+<h3 id="反射法，gfdecba-abcdefg-gfdecba"><a href="#反射法，gfdecba-abcdefg-gfdecba" class="headerlink" title="反射法，gfdecba|abcdefg|gfdecba"></a>反射法，gfdecba|abcdefg|gfdecba</h3><pre><code class="python">    reflect=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT)
+</code></pre>
+<h3 id="反射法2，gfdecb-abcdefg-fdecba"><a href="#反射法2，gfdecb-abcdefg-fdecba" class="headerlink" title="#反射法2，gfdecb|abcdefg|fdecba"></a>#反射法2，gfdecb|abcdefg|fdecba</h3><pre><code class="python">    reflect101=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT101)
+</code></pre>
+<pre><code>### 外包装法,abcdefg|abcdefg|abcdefg
+</code></pre>
+<pre><code class="python">  wrap=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_WRAP)
+</code></pre>
+<pre><code>### 常量法，直接设置填充色值
+</code></pre>
+<pre><code class="python">const=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_CONSTANT,value=25)
+cv_show(&#39;cat&#39;,cat)
+plt.subplot(231),plt.imshow(cat,&#39;gray&#39;),plt.title(&#39;gray&#39;)
+plt.subplot(232),plt.imshow(replicate,&#39;gray&#39;),plt.title(&#39;replicate&#39;)
+plt.subplot(233),plt.imshow(reflect,&#39;gray&#39;),plt.title(&#39;reflect&#39;)
+plt.subplot(234),plt.imshow(reflect101,&#39;gray&#39;),plt.title(&#39;reflect101&#39;)
+plt.subplot(235),plt.imshow(wrap,&#39;gray&#39;),plt.title(&#39;wrap&#39;)
+plt.subplot(236),plt.imshow(const,&#39;gray&#39;),plt.title(&#39;const&#39;)
+plt.show()
+
+## 
+</code></pre>
+<h2 id="数值计算"><a href="#数值计算" class="headerlink" title="数值计算"></a>数值计算</h2><pre><code class="python">def img_numpy_calculate():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;)
+    add_cat=cat+50#将图像三个通道的色值均加50，越界时（255）自动对256取余
+    super_cat=cat+add_cat
+    print(cat[:5,:,0])
+    print(add_cat[:5,:,0])
+    print(super_cat[:5,:,0])
+    cv_show(&#39;cat&#39;,cat)
+    cv_show(&#39;add_cat&#39;,add_cat)
+    cv_show(&#39;super_cat&#39;,super_cat)
+</code></pre>
+<h2 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h2><pre><code class="python">def img_add():
+    cat=cv.imread(path+&quot;\cat.jpg&quot;)
+    print(cat.shape)
+
+cv_show(&quot;cat&quot;,cat)
+
+res=cv.resize(cat,(400,224))#重新指定图像大小
+
+print(res.shape)
+
+cv_show(&quot;cat&quot;,res)
+
+res1=cv.resize(cat,(0,0),fx=3,fy=2)#横轴扩大3倍，纵轴扩大2倍
+
+cv_show(&#39;res1&#39;,res1)
+</code></pre>
+<h3 id="直接相加"><a href="#直接相加" class="headerlink" title="直接相加"></a>直接相加</h3><pre><code class="python">dog=cv.imread(path+&quot;\dog.jpg&quot;)
+print(dog.shape)
+dog=cv.resize(dog,(cat.shape[1],cat.shape[0]))
+print(dog.shape)
+cat_add_dog=cat+dog#越界取余
+cv_show(&quot;cat_add_dog&quot;,cat_add_dog)
+add=cv.add(cat,dog)#越界直接赋值为255
+cv_show(&quot;add&quot;,add)
+</code></pre>
+<pre><code>### 设置权重相加
+</code></pre>
+<pre><code class="python">res=0.6*cat+0.4*dog+0
+res=cv.addWeighted(cat,0.6,dog,0.4,0)
+cv_show(&quot;res&quot;,res)
+</code></pre>
+<h1 id="二值化与平滑处理"><a href="#二值化与平滑处理" class="headerlink" title="二值化与平滑处理"></a>二值化与平滑处理</h1><pre><code class="python">import os
+import cv2 as cv
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 获取上一级文件路径
+
+abs_path=os.path.abspath(&quot;..&quot;)
+path = abs_path + r&quot;\data\2-7data&quot;
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
+</code></pre>
+<h2 id="图像二值化"><a href="#图像二值化" class="headerlink" title="图像二值化"></a>图像二值化</h2><pre><code class="python">def src_thresh():
+
+    # 参数
+
+    # src:图像
+
+    # thresh:阈值
+
+    # marval:超出阈值所赋的值
+
+    # type： 二值化操作类型
+
+    # 返回值
+
+    # ret：阈值
+
+    # thresh：阈值化处理后的图像
+
+    #图像二值化：大于阈值的数取最大值255，否则为0
+    ret1,thresh1=cv.threshold(cat,127,255,cv.THRESH_BINARY)
+    #图像二值化：大于阈值设置为0，否则为255
+    ret2,thresh2=cv.threshold(cat,127,255,cv.THRESH_BINARY_INV)
+    #大于阈值的部分赋值为该阈值，否则不变
+    ret3,thresh3=cv.threshold(cat,127,255,cv.THRESH_TRUNC)
+    #小于阈值的部分设置为0，否则不变
+    ret4,thresh4=cv.threshold(cat,127,255,cv.THRESH_TOZERO)
+    #大于阈值的部分设置为0，否则不变
+    ret5,thresh5=cv.threshold(cat,127,255,cv.THRESH_TOZERO_INV)
+
+    title=[&quot;cat&quot;,&quot;THRESH_BINARY&quot;,&quot;THRESH_BINARY_INV&quot;,&quot;THRESH_TRUNC&quot;,&quot;THRESH_TOZERO&quot;,&quot;THRESH_TOZERO_INV&quot;]
+    img=[cat,thresh1,thresh2,thresh3,thresh4,thresh5]
+    for i in range(6):
+        plt.subplot(2,3,i+1),plt.imshow(img[i],&quot;gray&quot;)
+        plt.title(title[i])
+    plt.show()
+</code></pre>
+<h2 id="图像平滑处理"><a href="#图像平滑处理" class="headerlink" title="图像平滑处理"></a>图像平滑处理</h2><pre><code class="python">def blur():
+    img=cv.imread(path+&quot;\lenaNoise.png&quot;)
+    # cv_show(&quot;img&quot;,img)
+    # 均值滤波，取3*3矩阵的均值作为矩阵中心像素点的色值
+    blur=cv.blur(img,(3,3))
+    # cv_show(&quot;blur&quot;,blur)
+
+    # 方框滤波
+    # 归一化为true，即将处理后的色值归一到0-255之间，与均值滤波效果等同，
+    box1=cv.boxFilter(img,-1,(3,3),normalize=True)
+    # cv_show(&quot;box1&quot;,box1)
+    # 若normalize为false，则直接对卷积核求和，越界直接截断为255
+    box2=cv.boxFilter(img,-1,(3,3),normalize=False)
+    # cv_show(&quot;box2&quot;,box2)
+
+    # 高斯滤波，利用正态分布，距离正态分布均值近的数值权重大，距离均值远的数值权重小
+    # 参数：src，卷积核大小，标准差
+    gaussian=cv.GaussianBlur(img,(3,3),1)
+    # cv_show(&quot;gaussian_blur&quot;,gaussian)
+
+    # 中值滤波，取矩阵的中值作为矩阵中心像素点的色值，对于椒盐噪声而言，中值滤波的效果最好
+    median=cv.medianBlur(img,3)
+    # cv_show(&quot;median&quot;,median)
+
+    res=np.hstack((blur,gaussian,median))#横向拼接矩阵
+    cv.imshow(&quot;blur,gaussian,median&quot;,res)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+blur()
+</code></pre>
+<h1 id="图像形态学处理"><a href="#图像形态学处理" class="headerlink" title="图像形态学处理"></a>图像形态学处理</h1><pre><code class="python">import cv2 as cv
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+abs_path=os.path.abspath(&quot;..&quot;)
+path=abs_path+r&quot;\data\2-7data&quot;
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+img=cv.imread(path+&quot;\dige.png&quot;)
+</code></pre>
+<h2 id="腐蚀与膨胀"><a href="#腐蚀与膨胀" class="headerlink" title="腐蚀与膨胀"></a>腐蚀与膨胀</h2><pre><code class="python">def erosion_dilate():
+
+    # 形态学-腐蚀操作,去除多余噪点
+
+    kernel=np.ones((5,5))
+    erosion=cv.erode(img,kernel,iterations=1)
+
+    # res=np.hstack((img,erosion))
+
+    # cv_show(&quot;res&quot;,res)
+
+    # pie=cv.imread(path+&quot;\pie.png&quot;)
+
+    # kernel=np.ones((10,10))
+
+    # erosion=cv.erode(pie,kernel,iterations=1)
+
+    # res=np.hstack((pie,erosion))
+
+    # cv_show(&quot;ee&quot;,res)
+
+    # 形态学-膨胀操作，去除噪点过度处理的还原
+
+    dig_dilate=cv.dilate(erosion,np.ones((5,5)),iterations=1)
+    res=np.hstack((img,erosion,dig_dilate))
+    cv_show(&quot;erosion_dilate&quot;,res)
+</code></pre>
+<h2 id="开运算与闭运算"><a href="#开运算与闭运算" class="headerlink" title="开运算与闭运算"></a>开运算与闭运算</h2><pre><code class="python">def morphology_openAndClose():
+    # 开运算：先腐蚀再膨胀
+    res_open=cv.morphologyEx(img,cv.MORPH_OPEN,kernel=np.ones((5,5)))
+    cv_show(&quot;morphology_open&quot;,res_open)
+    # 闭运算：先膨胀再腐蚀
+    res_close=cv.morphologyEx(img,cv.MORPH_CLOSE,kernel=np.ones((5,5)))
+    cv_show(&quot;morphology_close&quot;,res_close)
+</code></pre>
+<h2 id="梯度运算-膨胀-腐蚀，得到边缘结果"><a href="#梯度运算-膨胀-腐蚀，得到边缘结果" class="headerlink" title="梯度运算:膨胀-腐蚀，得到边缘结果"></a>梯度运算:膨胀-腐蚀，得到边缘结果</h2><pre><code class="python">def morphology_gradient():
+    # pie=cv.imread(path+&quot;\pie.png&quot;)
+    res=cv.morphologyEx(img,cv.MORPH_GRADIENT,kernel=np.ones((5,5)))
+    cv_show(&quot;morphology_gradient&quot;,res)
+</code></pre>
+<h2 id="礼帽与黑帽"><a href="#礼帽与黑帽" class="headerlink" title="礼帽与黑帽"></a>礼帽与黑帽</h2><pre><code class="python">
+# 礼帽：原始输入-开运算，得到噪点,可突出更加明亮区域
+# 黑帽：闭运算-原始输入，得到噪点轮廓
+def tophatAndblackhat():
+    tophat=cv.morphologyEx(img,cv.MORPH_TOPHAT,np.ones((5,5)))
+    cv_show(&quot;tophat&quot;,tophat)
+    blackhat=cv.morphologyEx(img,cv.MORPH_BLACKHAT,np.ones((5,5)))
+    cv_show(&quot;blackhat&quot;,blackhat)
+</code></pre>
+<h1 id="梯度算子"><a href="#梯度算子" class="headerlink" title="梯度算子"></a>梯度算子</h1><pre><code class="python">import cv2 as cv
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+abs_path=os.path.abspath(&quot;..&quot;)
+path=abs_path+r&quot;\data\2-7data&quot;
+img=cv.imread(path+&quot;\lena.jpg&quot;,cv.IMREAD_GRAYSCALE)
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+# cv_show(&quot;img&quot;,img)
+</code></pre>
+<h2 id="sobel算子"><a href="#sobel算子" class="headerlink" title="sobel算子"></a>sobel算子</h2><p><a href="https://imgtu.com/i/OC3yPs"><img src="https://s1.ax1x.com/2022/05/01/OC3yPs.png" alt="OC3yPs.png"></a></p>
+<p><a href="https://imgtu.com/i/OC3IIJ"><img src="https://s1.ax1x.com/2022/05/01/OC3IIJ.png" alt="OC3IIJ.png"></a></p>
+<pre><code class="python">
+#     [-1 0 1     [-1 -2 -1
+# Gx=  -2 0 2  Gy=  0  0  0
+#      -1 0 1]      1  2  1]
+
+def sobel_grad_test(img=cv.imread(path+&quot;\pie.png&quot;)):
+    # 参数
+    # src
+    # ddepth：图像深度，cv.CV_64F可使色值保留负数而不使其截断
+    # dx：横轴变换，1表示在横轴变换，0表示不变换
+    # dy：纵轴变换
+    # ksize表示卷积核大小
+    sobelx=cv.Sobel(img,cv.CV_64F,1,0,ksize=3)
+    sobelx=cv.convertScaleAbs(sobelx)#将计算到的矩阵结果取绝对值
+    sobely=cv.Sobel(img,cv.CV_64F,0,1,ksize=3)
+    sobely=cv.convertScaleAbs(sobely)
+    sobel=cv.addWeighted(sobelx,0.5,sobely,0.5,0)
+    res=np.hstack((img,sobel))
+    cv_show(&quot;res&quot;,res)
+
+# sobel_grad_test(img)
+
+# Scharr算子
+
+#     [ -3  0  3     [-3 -10  -3
+
+# Gx=  -10  0 10  Gy=  0   0   0
+
+#       -3  0  3]      3  10   3]
+
+# laplacian算子
+
+#     [ 0   1  0
+
+# Gx=   1  -4  1
+
+#       0   1  0]
+</code></pre>
+<h2 id="Scharr算子"><a href="#Scharr算子" class="headerlink" title="Scharr算子"></a>Scharr算子</h2><p><a href="https://imgtu.com/i/OC3HR1"><img src="https://s1.ax1x.com/2022/05/01/OC3HR1.png" alt="OC3HR1.png"></a></p>
+<pre><code class="python">sobelx=cv.Sobel(img,cv.CV_64F,1,0,ksize=3)
+sobely=cv.Sobel(img,cv.CV_64F,0,1,ksize=3)
+sobelx=cv.convertScaleAbs(sobelx)
+sobely=cv.convertScaleAbs(sobely)
+sobel=cv.addWeighted(sobelx,0.5,sobely,0.5,0)
+
+# scharr算子
+
+scharrx=cv.Scharr(img,cv.CV_64F,1,0)
+scharry=cv.Scharr(img,cv.CV_64F,0,1)
+scharrx=cv.convertScaleAbs(scharrx)
+scharry=cv.convertScaleAbs(scharry)
+scharr=cv.addWeighted(scharrx,0.5,scharry,0.5,0)
+</code></pre>
+<h2 id="laplacian算子"><a href="#laplacian算子" class="headerlink" title="laplacian算子"></a>laplacian算子</h2><p><a href="https://imgtu.com/i/OC3bxx"><img src="https://s1.ax1x.com/2022/05/01/OC3bxx.png" alt="OC3bxx.png"></a></p>
+<pre><code class="python">
+laplacian=cv.Laplacian(img,cv.CV_64F)
+laplacian=cv.convertScaleAbs(laplacian)
+
+res=np.hstack((img,sobel,scharr,laplacian))
+cv_show(&quot;img-sobel-scharr-laplacian&quot;,res)
+</code></pre>
+<h1 id="canny边缘检测"><a href="#canny边缘检测" class="headerlink" title="canny边缘检测"></a>canny边缘检测</h1><p><a href="https://imgtu.com/i/OC8uJs"><img src="https://s1.ax1x.com/2022/05/01/OC8uJs.png" alt="OC8uJs.png"></a><br><a href="https://imgtu.com/i/OC8KWn"><img src="https://s1.ax1x.com/2022/05/01/OC8KWn.png" alt="OC8KWn.png"></a><br><a href="https://imgtu.com/i/OC8nij"><img src="https://s1.ax1x.com/2022/05/01/OC8nij.png" alt="OC8nij.png"></a><br><a href="https://imgtu.com/i/OC8eoQ"><img src="https://s1.ax1x.com/2022/05/01/OC8eoQ.png" alt="OC8eoQ.png"></a><br><a href="https://imgtu.com/i/OC8Zdg"><img src="https://s1.ax1x.com/2022/05/01/OC8Zdg.png" alt="OC8Zdg.png"></a><br><a href="https://imgtu.com/i/OC8Mzq"><img src="https://s1.ax1x.com/2022/05/01/OC8Mzq.png" alt="OC8Mzq.png"></a></p>
+<pre><code class="python">import os
+import cv2 as cv
+import matplotlib.pyplot as plt
+import numpy as np
+
+abs_path=os.path.abspath(&quot;..&quot;)
+path=abs_path+r&quot;\data\2-7data&quot;
+img=cv.imread(path+&quot;\lena.jpg&quot;,cv.IMREAD_GRAYSCALE)
+
+def cv_show(name,img):
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+
+# 1.图像平滑处理：高斯滤波去除影响检测的噪点
+# 2.利用sobel算子计算各像素点的梯度及其方向
+# 3.非极大值抑制：找出在某一领域内梯度极大的像素点并保留，其余的像素点去除
+# 4.双阈值检测，检测确定真实的和潜在的边缘
+# 5.通过抑制孤立的弱边缘最终完成边缘检测
+
+# 阈值范围较大会导致边缘检测效果较差
+# 阈值范围较小会检测出部分噪点
+cv1=cv.Canny(img,80,150)#参数：src，下阈值，上阈值
+cv2=cv.Canny(img,50,100)
+res1=np.hstack((cv1,cv2))
+cv_show(&quot;lena&quot;,res1)
+
+car=cv.imread(path+&quot;\car.png&quot;,cv.IMREAD_GRAYSCALE)
+car1=cv.Canny(car,120,250)
+car2=cv.Canny(car,50,100)
+res2=np.hstack((car1,car2))
+cv_show(&quot;car&quot;,res2)
+</code></pre>
+]]></content>
+      <categories>
+        <category>计算机视觉</category>
+      </categories>
+      <tags>
+        <tag>opencv</tag>
+        <tag>python</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -11201,619 +11814,6 @@ SELECT show_number(@dept_id)
       <tags>
         <tag>数据库</tag>
         <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>图像处理基础</title>
-    <url>/2022/05/01/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<!-- more -->
-
-<h1 id="图像处理基础"><a href="#图像处理基础" class="headerlink" title="图像处理基础"></a>图像处理基础</h1><pre><code class="python">import os
-import cv2 as cv
-import numpy as np
-import matplotlib.pyplot as plt
-
-获取上一级文件路径
-
-abs_path=os.path.abspath(&quot;..&quot;)
-path = abs_path + r&quot;\data\2-7data&quot;
-
-print(path)
-</code></pre>
-<h2 id="图像显示"><a href="#图像显示" class="headerlink" title="图像显示"></a>图像显示</h2><pre><code class="python">def cv_show(name, img):
-    cv.imshow(name, img)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-</code></pre>
-<h2 id="图像读取"><a href="#图像读取" class="headerlink" title="图像读取"></a>图像读取</h2><pre><code class="python">def img_test():
-
-abs_path=r&quot;D:\pythonProject1\opencv_code\2-7data\data&quot;
-
-​    img = cv.imread(path+r&quot;\lena.jpg&quot;)
-​    cv_show(&quot;lena&quot;, img)
-​    #灰度图
-​    cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
-​    cv_show(&quot;cat&quot;,cat)
-img_test()
-
-## 
-</code></pre>
-<h2 id="视频读取"><a href="#视频读取" class="headerlink" title="视频读取"></a>视频读取</h2><pre><code class="python">def video_show():
-    video=cv.VideoCapture(path+r&quot;\test.mp4&quot;)
-    while open:
-        ret,frame=video.read()#ret返回是否能够读取每一帧图像，frame返回视频中的每一帧图像
-        gray=cv.cvtColor(frame,cv.COLOR_BGR2GRAY)#将BGR图像转为灰度图
-        if frame is None:
-            break
-        if ret==True:
-            cv.imshow(&quot;video&quot;,gray)
-        c=cv.waitKey(50)#每帧图像延迟100ms
-        if c==27:
-            break
-    cv.destroyAllWindows()
-</code></pre>
-<h2 id="图像切片与通道提取分离"><a href="#图像切片与通道提取分离" class="headerlink" title="图像切片与通道提取分离"></a>图像切片与通道提取分离</h2><h3 id="图像切片"><a href="#图像切片" class="headerlink" title="图像切片"></a>图像切片</h3><pre><code class="python">def cut_img():
-    cat=cv.imread(path+&quot;\cat.jpg&quot;)
-    #图像切片
-    img=cat[0:100,0:200]#分别截取高度，宽度
-
-print(img.shape)#顺序：高、宽
-</code></pre>
-<h3 id="通道提取"><a href="#通道提取" class="headerlink" title="通道提取"></a>通道提取</h3><p>​    </p>
-<pre><code class="python">#保留R通道
-cat[:,:,0]=0#关闭b通道
-cat[:,:,1]=0#关闭g通道
-
-b,g,r=cv.split(cat)
-    print(r)
-    cv.imshow(&quot;cut_img&quot;,img)
-    cv.imshow(&quot;cat&quot;,cat)
-    cv.imshow(&quot;b_cat&quot;,b)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-cut_img()
-</code></pre>
-<h2 id="边界填充"><a href="#边界填充" class="headerlink" title="边界填充"></a>边界填充</h2><pre><code class="python">def border_caplicate():
-    cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
-    top_size,bottom_size,left_size,right_size=(100,100,100,100)#设置边界范围（上下左右）
-</code></pre>
-<h3 id="复制法，直接借助原图边缘区域作为填充区域"><a href="#复制法，直接借助原图边缘区域作为填充区域" class="headerlink" title="复制法，直接借助原图边缘区域作为填充区域"></a>复制法，直接借助原图边缘区域作为填充区域</h3><pre><code class="python"> replicate=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REPLICATE)
-</code></pre>
-<h3 id="反射法，gfdecba-abcdefg-gfdecba"><a href="#反射法，gfdecba-abcdefg-gfdecba" class="headerlink" title="反射法，gfdecba|abcdefg|gfdecba"></a>反射法，gfdecba|abcdefg|gfdecba</h3><pre><code class="python">    reflect=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT)
-</code></pre>
-<h3 id="反射法2，gfdecb-abcdefg-fdecba"><a href="#反射法2，gfdecb-abcdefg-fdecba" class="headerlink" title="#反射法2，gfdecb|abcdefg|fdecba"></a>#反射法2，gfdecb|abcdefg|fdecba</h3><pre><code class="python">    reflect101=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_REFLECT101)
-</code></pre>
-<pre><code>### 外包装法,abcdefg|abcdefg|abcdefg
-</code></pre>
-<pre><code class="python">  wrap=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_WRAP)
-</code></pre>
-<pre><code>### 常量法，直接设置填充色值
-</code></pre>
-<pre><code class="python">const=cv.copyMakeBorder(cat,top_size,bottom_size,left_size,right_size,borderType=cv.BORDER_CONSTANT,value=25)
-cv_show(&#39;cat&#39;,cat)
-plt.subplot(231),plt.imshow(cat,&#39;gray&#39;),plt.title(&#39;gray&#39;)
-plt.subplot(232),plt.imshow(replicate,&#39;gray&#39;),plt.title(&#39;replicate&#39;)
-plt.subplot(233),plt.imshow(reflect,&#39;gray&#39;),plt.title(&#39;reflect&#39;)
-plt.subplot(234),plt.imshow(reflect101,&#39;gray&#39;),plt.title(&#39;reflect101&#39;)
-plt.subplot(235),plt.imshow(wrap,&#39;gray&#39;),plt.title(&#39;wrap&#39;)
-plt.subplot(236),plt.imshow(const,&#39;gray&#39;),plt.title(&#39;const&#39;)
-plt.show()
-
-## 
-</code></pre>
-<h2 id="数值计算"><a href="#数值计算" class="headerlink" title="数值计算"></a>数值计算</h2><pre><code class="python">def img_numpy_calculate():
-    cat=cv.imread(path+&quot;\cat.jpg&quot;)
-    add_cat=cat+50#将图像三个通道的色值均加50，越界时（255）自动对256取余
-    super_cat=cat+add_cat
-    print(cat[:5,:,0])
-    print(add_cat[:5,:,0])
-    print(super_cat[:5,:,0])
-    cv_show(&#39;cat&#39;,cat)
-    cv_show(&#39;add_cat&#39;,add_cat)
-    cv_show(&#39;super_cat&#39;,super_cat)
-</code></pre>
-<h2 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h2><pre><code class="python">def img_add():
-    cat=cv.imread(path+&quot;\cat.jpg&quot;)
-    print(cat.shape)
-
-cv_show(&quot;cat&quot;,cat)
-
-res=cv.resize(cat,(400,224))#重新指定图像大小
-
-print(res.shape)
-
-cv_show(&quot;cat&quot;,res)
-
-res1=cv.resize(cat,(0,0),fx=3,fy=2)#横轴扩大3倍，纵轴扩大2倍
-
-cv_show(&#39;res1&#39;,res1)
-</code></pre>
-<h3 id="直接相加"><a href="#直接相加" class="headerlink" title="直接相加"></a>直接相加</h3><pre><code class="python">dog=cv.imread(path+&quot;\dog.jpg&quot;)
-print(dog.shape)
-dog=cv.resize(dog,(cat.shape[1],cat.shape[0]))
-print(dog.shape)
-cat_add_dog=cat+dog#越界取余
-cv_show(&quot;cat_add_dog&quot;,cat_add_dog)
-add=cv.add(cat,dog)#越界直接赋值为255
-cv_show(&quot;add&quot;,add)
-</code></pre>
-<pre><code>### 设置权重相加
-</code></pre>
-<pre><code class="python">res=0.6*cat+0.4*dog+0
-res=cv.addWeighted(cat,0.6,dog,0.4,0)
-cv_show(&quot;res&quot;,res)
-</code></pre>
-<h1 id="二值化与平滑处理"><a href="#二值化与平滑处理" class="headerlink" title="二值化与平滑处理"></a>二值化与平滑处理</h1><pre><code class="python">import os
-import cv2 as cv
-import numpy as np
-import matplotlib.pyplot as plt
-
-# 获取上一级文件路径
-
-abs_path=os.path.abspath(&quot;..&quot;)
-path = abs_path + r&quot;\data\2-7data&quot;
-def cv_show(name,img):
-    cv.imshow(name,img)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-cat=cv.imread(path+&quot;\cat.jpg&quot;,cv.IMREAD_GRAYSCALE)
-</code></pre>
-<h2 id="图像二值化"><a href="#图像二值化" class="headerlink" title="图像二值化"></a>图像二值化</h2><pre><code class="python">def src_thresh():
-
-    # 参数
-
-    # src:图像
-
-    # thresh:阈值
-
-    # marval:超出阈值所赋的值
-
-    # type： 二值化操作类型
-
-    # 返回值
-
-    # ret：阈值
-
-    # thresh：阈值化处理后的图像
-
-    #图像二值化：大于阈值的数取最大值255，否则为0
-    ret1,thresh1=cv.threshold(cat,127,255,cv.THRESH_BINARY)
-    #图像二值化：大于阈值设置为0，否则为255
-    ret2,thresh2=cv.threshold(cat,127,255,cv.THRESH_BINARY_INV)
-    #大于阈值的部分赋值为该阈值，否则不变
-    ret3,thresh3=cv.threshold(cat,127,255,cv.THRESH_TRUNC)
-    #小于阈值的部分设置为0，否则不变
-    ret4,thresh4=cv.threshold(cat,127,255,cv.THRESH_TOZERO)
-    #大于阈值的部分设置为0，否则不变
-    ret5,thresh5=cv.threshold(cat,127,255,cv.THRESH_TOZERO_INV)
-
-    title=[&quot;cat&quot;,&quot;THRESH_BINARY&quot;,&quot;THRESH_BINARY_INV&quot;,&quot;THRESH_TRUNC&quot;,&quot;THRESH_TOZERO&quot;,&quot;THRESH_TOZERO_INV&quot;]
-    img=[cat,thresh1,thresh2,thresh3,thresh4,thresh5]
-    for i in range(6):
-        plt.subplot(2,3,i+1),plt.imshow(img[i],&quot;gray&quot;)
-        plt.title(title[i])
-    plt.show()
-</code></pre>
-<h2 id="图像平滑处理"><a href="#图像平滑处理" class="headerlink" title="图像平滑处理"></a>图像平滑处理</h2><pre><code class="python">def blur():
-    img=cv.imread(path+&quot;\lenaNoise.png&quot;)
-    # cv_show(&quot;img&quot;,img)
-    # 均值滤波，取3*3矩阵的均值作为矩阵中心像素点的色值
-    blur=cv.blur(img,(3,3))
-    # cv_show(&quot;blur&quot;,blur)
-
-    # 方框滤波
-    # 归一化为true，即将处理后的色值归一到0-255之间，与均值滤波效果等同，
-    box1=cv.boxFilter(img,-1,(3,3),normalize=True)
-    # cv_show(&quot;box1&quot;,box1)
-    # 若normalize为false，则直接对卷积核求和，越界直接截断为255
-    box2=cv.boxFilter(img,-1,(3,3),normalize=False)
-    # cv_show(&quot;box2&quot;,box2)
-
-    # 高斯滤波，利用正态分布，距离正态分布均值近的数值权重大，距离均值远的数值权重小
-    # 参数：src，卷积核大小，标准差
-    gaussian=cv.GaussianBlur(img,(3,3),1)
-    # cv_show(&quot;gaussian_blur&quot;,gaussian)
-
-    # 中值滤波，取矩阵的中值作为矩阵中心像素点的色值，对于椒盐噪声而言，中值滤波的效果最好
-    median=cv.medianBlur(img,3)
-    # cv_show(&quot;median&quot;,median)
-
-    res=np.hstack((blur,gaussian,median))#横向拼接矩阵
-    cv.imshow(&quot;blur,gaussian,median&quot;,res)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-blur()
-</code></pre>
-<h1 id="图像形态学处理"><a href="#图像形态学处理" class="headerlink" title="图像形态学处理"></a>图像形态学处理</h1><pre><code class="python">import cv2 as cv
-import numpy as np
-import matplotlib.pyplot as plt
-import os
-abs_path=os.path.abspath(&quot;..&quot;)
-path=abs_path+r&quot;\data\2-7data&quot;
-def cv_show(name,img):
-    cv.imshow(name,img)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-img=cv.imread(path+&quot;\dige.png&quot;)
-</code></pre>
-<h2 id="腐蚀与膨胀"><a href="#腐蚀与膨胀" class="headerlink" title="腐蚀与膨胀"></a>腐蚀与膨胀</h2><pre><code class="python">def erosion_dilate():
-
-    # 形态学-腐蚀操作,去除多余噪点
-
-    kernel=np.ones((5,5))
-    erosion=cv.erode(img,kernel,iterations=1)
-
-    # res=np.hstack((img,erosion))
-
-    # cv_show(&quot;res&quot;,res)
-
-    # pie=cv.imread(path+&quot;\pie.png&quot;)
-
-    # kernel=np.ones((10,10))
-
-    # erosion=cv.erode(pie,kernel,iterations=1)
-
-    # res=np.hstack((pie,erosion))
-
-    # cv_show(&quot;ee&quot;,res)
-
-    # 形态学-膨胀操作，去除噪点过度处理的还原
-
-    dig_dilate=cv.dilate(erosion,np.ones((5,5)),iterations=1)
-    res=np.hstack((img,erosion,dig_dilate))
-    cv_show(&quot;erosion_dilate&quot;,res)
-</code></pre>
-<h2 id="开运算与闭运算"><a href="#开运算与闭运算" class="headerlink" title="开运算与闭运算"></a>开运算与闭运算</h2><pre><code class="python">def morphology_openAndClose():
-    # 开运算：先腐蚀再膨胀
-    res_open=cv.morphologyEx(img,cv.MORPH_OPEN,kernel=np.ones((5,5)))
-    cv_show(&quot;morphology_open&quot;,res_open)
-    # 闭运算：先膨胀再腐蚀
-    res_close=cv.morphologyEx(img,cv.MORPH_CLOSE,kernel=np.ones((5,5)))
-    cv_show(&quot;morphology_close&quot;,res_close)
-</code></pre>
-<h2 id="梯度运算-膨胀-腐蚀，得到边缘结果"><a href="#梯度运算-膨胀-腐蚀，得到边缘结果" class="headerlink" title="梯度运算:膨胀-腐蚀，得到边缘结果"></a>梯度运算:膨胀-腐蚀，得到边缘结果</h2><pre><code class="python">def morphology_gradient():
-    # pie=cv.imread(path+&quot;\pie.png&quot;)
-    res=cv.morphologyEx(img,cv.MORPH_GRADIENT,kernel=np.ones((5,5)))
-    cv_show(&quot;morphology_gradient&quot;,res)
-</code></pre>
-<h2 id="礼帽与黑帽"><a href="#礼帽与黑帽" class="headerlink" title="礼帽与黑帽"></a>礼帽与黑帽</h2><pre><code class="python">
-# 礼帽：原始输入-开运算，得到噪点,可突出更加明亮区域
-# 黑帽：闭运算-原始输入，得到噪点轮廓
-def tophatAndblackhat():
-    tophat=cv.morphologyEx(img,cv.MORPH_TOPHAT,np.ones((5,5)))
-    cv_show(&quot;tophat&quot;,tophat)
-    blackhat=cv.morphologyEx(img,cv.MORPH_BLACKHAT,np.ones((5,5)))
-    cv_show(&quot;blackhat&quot;,blackhat)
-</code></pre>
-<h1 id="梯度算子"><a href="#梯度算子" class="headerlink" title="梯度算子"></a>梯度算子</h1><pre><code class="python">import cv2 as cv
-import matplotlib.pyplot as plt
-import numpy as np
-import os
-abs_path=os.path.abspath(&quot;..&quot;)
-path=abs_path+r&quot;\data\2-7data&quot;
-img=cv.imread(path+&quot;\lena.jpg&quot;,cv.IMREAD_GRAYSCALE)
-def cv_show(name,img):
-    cv.imshow(name,img)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-# cv_show(&quot;img&quot;,img)
-</code></pre>
-<h2 id="sobel算子"><a href="#sobel算子" class="headerlink" title="sobel算子"></a>sobel算子</h2><p><a href="https://imgtu.com/i/OC3yPs"><img src="https://s1.ax1x.com/2022/05/01/OC3yPs.png" alt="OC3yPs.png"></a></p>
-<p><a href="https://imgtu.com/i/OC3IIJ"><img src="https://s1.ax1x.com/2022/05/01/OC3IIJ.png" alt="OC3IIJ.png"></a></p>
-<pre><code class="python">
-#     [-1 0 1     [-1 -2 -1
-# Gx=  -2 0 2  Gy=  0  0  0
-#      -1 0 1]      1  2  1]
-
-def sobel_grad_test(img=cv.imread(path+&quot;\pie.png&quot;)):
-    # 参数
-    # src
-    # ddepth：图像深度，cv.CV_64F可使色值保留负数而不使其截断
-    # dx：横轴变换，1表示在横轴变换，0表示不变换
-    # dy：纵轴变换
-    # ksize表示卷积核大小
-    sobelx=cv.Sobel(img,cv.CV_64F,1,0,ksize=3)
-    sobelx=cv.convertScaleAbs(sobelx)#将计算到的矩阵结果取绝对值
-    sobely=cv.Sobel(img,cv.CV_64F,0,1,ksize=3)
-    sobely=cv.convertScaleAbs(sobely)
-    sobel=cv.addWeighted(sobelx,0.5,sobely,0.5,0)
-    res=np.hstack((img,sobel))
-    cv_show(&quot;res&quot;,res)
-
-# sobel_grad_test(img)
-
-# Scharr算子
-
-#     [ -3  0  3     [-3 -10  -3
-
-# Gx=  -10  0 10  Gy=  0   0   0
-
-#       -3  0  3]      3  10   3]
-
-# laplacian算子
-
-#     [ 0   1  0
-
-# Gx=   1  -4  1
-
-#       0   1  0]
-</code></pre>
-<h2 id="Scharr算子"><a href="#Scharr算子" class="headerlink" title="Scharr算子"></a>Scharr算子</h2><p><a href="https://imgtu.com/i/OC3HR1"><img src="https://s1.ax1x.com/2022/05/01/OC3HR1.png" alt="OC3HR1.png"></a></p>
-<pre><code class="python">sobelx=cv.Sobel(img,cv.CV_64F,1,0,ksize=3)
-sobely=cv.Sobel(img,cv.CV_64F,0,1,ksize=3)
-sobelx=cv.convertScaleAbs(sobelx)
-sobely=cv.convertScaleAbs(sobely)
-sobel=cv.addWeighted(sobelx,0.5,sobely,0.5,0)
-
-# scharr算子
-
-scharrx=cv.Scharr(img,cv.CV_64F,1,0)
-scharry=cv.Scharr(img,cv.CV_64F,0,1)
-scharrx=cv.convertScaleAbs(scharrx)
-scharry=cv.convertScaleAbs(scharry)
-scharr=cv.addWeighted(scharrx,0.5,scharry,0.5,0)
-</code></pre>
-<h2 id="laplacian算子"><a href="#laplacian算子" class="headerlink" title="laplacian算子"></a>laplacian算子</h2><p><a href="https://imgtu.com/i/OC3bxx"><img src="https://s1.ax1x.com/2022/05/01/OC3bxx.png" alt="OC3bxx.png"></a></p>
-<pre><code class="python">
-laplacian=cv.Laplacian(img,cv.CV_64F)
-laplacian=cv.convertScaleAbs(laplacian)
-
-res=np.hstack((img,sobel,scharr,laplacian))
-cv_show(&quot;img-sobel-scharr-laplacian&quot;,res)
-</code></pre>
-<h1 id="canny边缘检测"><a href="#canny边缘检测" class="headerlink" title="canny边缘检测"></a>canny边缘检测</h1><p><a href="https://imgtu.com/i/OC8uJs"><img src="https://s1.ax1x.com/2022/05/01/OC8uJs.png" alt="OC8uJs.png"></a><br><a href="https://imgtu.com/i/OC8KWn"><img src="https://s1.ax1x.com/2022/05/01/OC8KWn.png" alt="OC8KWn.png"></a><br><a href="https://imgtu.com/i/OC8nij"><img src="https://s1.ax1x.com/2022/05/01/OC8nij.png" alt="OC8nij.png"></a><br><a href="https://imgtu.com/i/OC8eoQ"><img src="https://s1.ax1x.com/2022/05/01/OC8eoQ.png" alt="OC8eoQ.png"></a><br><a href="https://imgtu.com/i/OC8Zdg"><img src="https://s1.ax1x.com/2022/05/01/OC8Zdg.png" alt="OC8Zdg.png"></a><br><a href="https://imgtu.com/i/OC8Mzq"><img src="https://s1.ax1x.com/2022/05/01/OC8Mzq.png" alt="OC8Mzq.png"></a></p>
-<pre><code class="python">import os
-import cv2 as cv
-import matplotlib.pyplot as plt
-import numpy as np
-
-abs_path=os.path.abspath(&quot;..&quot;)
-path=abs_path+r&quot;\data\2-7data&quot;
-img=cv.imread(path+&quot;\lena.jpg&quot;,cv.IMREAD_GRAYSCALE)
-
-def cv_show(name,img):
-    cv.imshow(name,img)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-
-# 1.图像平滑处理：高斯滤波去除影响检测的噪点
-# 2.利用sobel算子计算各像素点的梯度及其方向
-# 3.非极大值抑制：找出在某一领域内梯度极大的像素点并保留，其余的像素点去除
-# 4.双阈值检测，检测确定真实的和潜在的边缘
-# 5.通过抑制孤立的弱边缘最终完成边缘检测
-
-# 阈值范围较大会导致边缘检测效果较差
-# 阈值范围较小会检测出部分噪点
-cv1=cv.Canny(img,80,150)#参数：src，下阈值，上阈值
-cv2=cv.Canny(img,50,100)
-res1=np.hstack((cv1,cv2))
-cv_show(&quot;lena&quot;,res1)
-
-car=cv.imread(path+&quot;\car.png&quot;,cv.IMREAD_GRAYSCALE)
-car1=cv.Canny(car,120,250)
-car2=cv.Canny(car,50,100)
-res2=np.hstack((car1,car2))
-cv_show(&quot;car&quot;,res2)
-</code></pre>
-]]></content>
-      <categories>
-        <category>计算机视觉</category>
-      </categories>
-      <tags>
-        <tag>opencv</tag>
-        <tag>python</tag>
-        <tag>计算机视觉</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>内部排序</title>
-    <url>/2022/04/05/%E5%86%85%E9%83%A8%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<!-- more -->
-<h1 id="直接插入排序"><a href="#直接插入排序" class="headerlink" title="直接插入排序"></a>直接插入排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; insertSort(vector&lt;int&gt; num)
-&#123;
-    int i, j, temp;
-    for (i = 1; i &lt; num.size(); i++)
-    &#123;
-        temp = num[i];
-        for (j = i - 1; j &gt;= 0 &amp;&amp; temp&lt;num[j]; j--)//易错点，&amp;&amp;前后不可拆分为if语句，这是一个连续的循环
-        &#123;
-            num[j + 1] = num[j];
-        &#125;
-        num[j + 1] = temp;
-    &#125;
-
-    return num;
-&#125;
-</code></pre>
-<h1 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; shellSort(vector&lt;int&gt; num)
-&#123;
-    int i, j, temp;
-    int n = num.size();
-    for (int gap = n / 2; gap &gt; 0; gap = gap / 2)//增量设置的边界条件不能等于0
-    &#123;
-        for (i = gap; i &lt; n; i++)
-        &#123;
-            temp = num[i];
-            for (j = i - gap; j &gt;= 0 &amp;&amp; temp&lt;num[j]; j -= gap)
-                num[j + gap] = num[j];
-            num[j + gap] = temp;
-        &#125;
-    &#125;
-    return num;
-
-&#125;
-</code></pre>
-<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; bubbleSort(vector&lt;int&gt; num)
-&#123;
-    int n = num.size();
-    for (int i = 0; i &lt; n; i++)
-    &#123;
-        bool flag = false;
-        for (int j = 0; j &lt; n - i - 1; j++)
-        &#123;
-            if (num[j + 1] &lt; num[j])
-            &#123;
-                swap(num[j], num[j + 1]);
-                flag = true;
-            &#125;
-        &#125;
-        if (!flag)
-            break;
-    &#125;
-    return num;
-&#125;
-</code></pre>
-<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>算法思想：</p>
-<pre><code class="c++">int paratition(vector&lt;int&gt;&amp; num, int low, int high)
-&#123;
-    int base = num[low];//选择基准元素
-    while (low &lt; high)
-    &#123;
-        //num[high] &gt;= base中的=判断不能省略
-        while (num[high] &gt;= base  &amp;&amp; low &lt; high   ) high--;//该循环跳出语句中&amp;&amp;前后衔接可互换，但由于&amp;&amp;的短路特性，更建议先判断low&lt;high
-        num[low] = num[high];
-        while (low &lt; high &amp;&amp; num[low] &lt;= base ) low++;
-        num[high] = num[low];
-    &#125;
-    num[low] = base;
-    return low;
-&#125;
-
-void quickSort(vector&lt;int&gt;&amp; num,int low,int high)
-&#123;
-
-    if (low &lt; high)//该语句不可少，只有在low&lt;high时的交换才起作用，否则在递归时会出现错误
-    &#123;
-        int j = paratition(num, low, high);
-        quickSort(num, low, j - 1);
-        quickSort(num, j + 1, high);
-    &#125;
-
-&#125;
-</code></pre>
-<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; selectSort(vector&lt;int&gt; num)
-&#123;
-    int n = num.size();
-    for (int i = 0; i &lt; n; i++)
-    &#123;
-        int min = i;
-        for (int j = i + 1; j &lt; n; j++)
-        &#123;
-            if (num[j] &lt; num[min])
-            &#123;
-                min = j;
-            &#125;
-        &#125;
-        if (min != i)
-        &#123;
-            swap(num[min], num[i]);
-        &#125;
-    &#125;
-    return num;
-&#125;
-</code></pre>
-<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><p>算法思想：</p>
-<pre><code class="c++">void heapAdjust(vector&lt;int&gt;&amp; num, int p, int n)
-&#123;
-    int temp = num[p];//取出根节点，待找到该根节点的子树中最大的节点之后与该根节点进行交换
-    for (int i = 2 * p + 1; i &lt; n; i = 2*i+1)//遍历子树，寻找最大节点
-    &#123;
-        if (i + 1 &lt; n &amp;&amp; num[i + 1] &gt; num[i]) i++;//首先比较父节点的两个孩子的最大值
-        if (temp &gt;= num[i]) break;//如果父节点比两个孩子节点都大，则不需要交换，说明当前子树已经是大根堆
-        num[p] = num[i];//将最大孩子进行上移为父节点
-        p = i;//继续遍历子树，保证其子树也是大根堆
-    &#125;
-    num[p] = temp;
-&#125;
-void heapSort(vector&lt;int&gt;&amp; num)
-&#123;
-    //构建初始大根堆
-    int n = num.size();
-    for (int i = n / 2 - 1; i &gt;= 0; i--)//从最后一个非叶子节点向上构造大根堆
-        heapAdjust(num, i, n);
-
-    for (int j = n - 1; j &gt;= 0; j--)
-    &#123;
-        //大根堆的第一个数字是最大的,将大根与最后一个数字进行交换，则该数组的最后一个数一定是最大的
-        swap(num[0], num[j]);
-        //将数组长度减去1后，调整堆，重新进行交换
-        heapAdjust(num, 0, j);
-    &#125;
-
-&#125;
-</code></pre>
-<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>算法思想：</p>
-<pre><code class="c++">void merge(vector&lt;int&gt;&amp; num, int low, int mid, int high)
-&#123;
-    vector&lt;int&gt; help;//定义辅助数组
-    help.resize(high - low + 1);
-    int i = low, j = mid + 1, k = 0;//i为第一序列的扫描指针，j为第二序列的扫描指针，k为辅助数组的扫描指针
-    while (i &lt;= mid &amp;&amp; j &lt;= high)// = 不能省略
-    &#123;
-        if (num[i] &lt; num[j]) help[k++] = num[i++];
-        else help[k++] = num[j++];
-    &#125;
-    while (i &lt;= mid) help[k++] = num[i++];
-    while (j &lt;= high) help[k++] = num[j++];
-    for (int i = low, k = 0; i &lt;= high; i++, k++)
-    &#123;
-        num[i] = help[k];
-    &#125;
-&#125;
-
-void mergeSort(vector&lt;int&gt;&amp; num, int low, int high)
-&#123;
-    if (low == high)//递归跳出条件，即当子序列长度为1时终止递归
-        return;
-    int mid = (low + high) / 2;
-    mergeSort(num, low, mid);//递归划分左区间，直到区间序列个数为1时终止递归
-    mergeSort(num, mid + 1, high);//递归划分右区间，知道区间序列个数为1时终止递归
-    merge(num, low, mid, high);//合并
-&#125;
-</code></pre>
-<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>算法思想：</p>
-<pre><code>定义一个编号为[0,max]的桶，其中max为待排序数组当中的最大值
-遍历数组，将数组的中的元素值放到该元素对应编号的桶中，桶数组的值代表放入桶中的个数，初始时桶中个数为0
-按照桶的编号顺序依次取出桶中的元素
-</code></pre>
-<pre><code class="c++">//桶排序
-void bucketSort(vector&lt;int&gt;&amp; nums) 
-&#123;
-    //思想：
-
-    int n = nums.size();
-    int max=0;
-    for (int i = 0; i &lt; n; i++)
-    &#123;
-        if (nums[i] &gt; max)
-            max = nums[i];
-    &#125;
-    vector&lt;int&gt; bucket(max+1, 0);//初始化桶
-    for (int i = 0; i &lt; n; i++)//将数组中的数放到对应编号的桶中
-        bucket[nums[i]]++;
-    for (int i = 0,j=0; i &lt;= max; i++)
-    &#123;
-        while (bucket[i]--&gt; 0)
-            nums[j++] = i;
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>排序</tag>
-        <tag>数据结构与算法</tag>
       </tags>
   </entry>
   <entry>
