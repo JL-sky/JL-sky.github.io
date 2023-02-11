@@ -12,7 +12,7 @@
 
 
 
-<meta name="keywords" content="c++,系统编程,">
+<meta name="keywords" content="系统编程,c++,">
 <meta name="description" content="本文介绍了多进程编程和多线程编程；其中多进程编程介绍了子进程的创建与GDB调试、execl函数族、孤儿进程与僵尸进程和进程间通信与回收;多线程编程介绍了线程的创建、分离、回收及线程同步和锁机制">
 
 
@@ -271,9 +271,9 @@
         <ul class="post-header-tag">
             
             
-            <li><a href="/tags/c++">c++</a></li>
-            
             <li><a href="/tags/系统编程">系统编程</a></li>
+            
+            <li><a href="/tags/c++">c++</a></li>
             
             
         </ul>
@@ -295,7 +295,7 @@
                          <a href="../../categories/系统编程/" target="_blank" >系统编程</a>
                     
                 </div>
-                <p>2022-04-20 18:55:28</p>
+                <p>2023-02-09 00:00:00</p>
             </div>
         </div>
     </div>
@@ -1362,9 +1362,12 @@ int main()
 &#125;
 </code></pre>
 <p><strong>加锁前：</strong></p>
-<p><img src="https://s2.loli.net/2022/04/19/2g61hQAtdsXeBEZ.png" alt="image-20220411172728414.png"></p>
+<img src="https://s2.loli.net/2022/04/19/2g61hQAtdsXeBEZ.png" alt="image-20220411172728414.png" style="zoom:50%;" />
+
 <p><strong>加锁后：</strong></p>
-<p><img src="https://s2.loli.net/2022/04/19/1RFXThacAfGJwUo.png" alt="image-20220411172523719.png"></p>
+<img src="https://s2.loli.net/2022/04/19/1RFXThacAfGJwUo.png" alt="image-20220411172523719.png" style="zoom:50%;" />
+
+
 <h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><h4 id="单生产者消费者线程"><a href="#单生产者消费者线程" class="headerlink" title="单生产者消费者线程"></a>单生产者消费者线程</h4><pre><code class="c++">#include&lt;iostream&gt;
 #include&lt;string&gt;
 #include&lt;sys/types.h&gt;
@@ -1479,7 +1482,6 @@ int main()
 
 3.若竞争到互斥索则加锁。
 </code></pre>
-<p><img src="https://s2.loli.net/2022/04/19/zwARMPNqJ4LaoHi.png" alt="image-20220412142530152.png"></p>
 <h4 id="多生产者消费者线程"><a href="#多生产者消费者线程" class="headerlink" title="多生产者消费者线程"></a>多生产者消费者线程</h4><pre><code class="c++">#include&lt;iostream&gt;
 #include&lt;string&gt;
 #include&lt;sys/types.h&gt;
@@ -1598,7 +1600,6 @@ int main()
     return 1;
 &#125;
 </code></pre>
-<p><img src="https://s2.loli.net/2022/04/19/eH78TNj5b1Xwof9.png" alt="image-20220412124128152.png"></p>
 <h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><pre><code class="c++">#include&lt;iostream&gt;
 #include&lt;string&gt;
 #include&lt;sys/types.h&gt;
@@ -1674,7 +1675,6 @@ int main()
     return 1;
 &#125;
 </code></pre>
-<p><img src="https://s2.loli.net/2022/04/19/8KuOnj2Bx3r7gJm.png" alt="image-20220413102851778.png"></p>
 <p>​	</p>
 
   </div>
@@ -1736,19 +1736,19 @@ Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
 
     <div class="post-paging">
     
-    <a href="/2022/04/20/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/">
+    <a href="/2023/02/11/c++%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
         <div class="post-paging-last">
             <span>上一篇</span>
-            <p>Linux基础命令</p>
+            <p>c++网络编程</p>
         </div>
     </a>
     
 
     
-    <a href="/2022/04/05/Latex/">
+    <a href="/2023/02/05/C++%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/">
         <div class="post-paging-next">
             <span>下一篇</span>
-            <p>Latex</p>
+            <p>C++核心编程</p>
         </div>
     </a>
     
