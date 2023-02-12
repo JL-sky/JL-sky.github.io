@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>数据爬虫之Xpath-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="python,爬虫,Xpath,">
+<meta name="description" content="本文介绍了网络请求中的get方式和post方式以及多线程爬虫，着重介绍了爬虫过程中重要数据解析工具Xpath的简单使用，最后用抓取豆瓣热门电影信息和58二手房信息两个案例，加深对Xpath的使用理解">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文档目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										文章分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										技术标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										个人简介
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文档目录</a>
+        </li>
+        
+        <li>
+            <a href="/categories">文章分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">技术标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">个人简介</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/python">python</a></li>
+            
+            <li><a href="/tags/爬虫">爬虫</a></li>
+            
+            <li><a href="/tags/Xpath">Xpath</a></li>
+            
+            
+        </ul>
+        
+        <h1>数据爬虫之Xpath</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/爬虫/" target="_blank" >爬虫</a>
+                    
+                </div>
+                <p>2023-02-12 19:37:16</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
+  
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%BD%91%E9%A1%B5%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-text">获取网页源代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#get%E6%96%B9%E5%BC%8F%E4%B8%8Epost%E6%96%B9%E5%BC%8F"><span class="toc-text">get方式与post方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%88%AC%E8%99%AB"><span class="toc-text">多线程爬虫</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E4%B9%8BXpath"><span class="toc-text">数据解析之Xpath</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9A%E6%8A%93%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E4%BF%A1%E6%81%AF"><span class="toc-text">案例1：抓取豆瓣电影信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A58%E4%BA%8C%E6%89%8B%E6%88%BF%E4%BF%A1%E6%81%AF"><span class="toc-text">案例2：58二手房信息</span></a></li></ol>
+      </div>
+    
+
+    <h1 id="获取网页源代码"><a href="#获取网页源代码" class="headerlink" title="获取网页源代码"></a>获取网页源代码</h1><h2 id="get方式与post方式"><a href="#get方式与post方式" class="headerlink" title="get方式与post方式"></a>get方式与post方式</h2><ul>
+<li><strong>get方式</strong></li>
+</ul>
+<p>在GET方法中，数据将作为URL的参数发送，这些参数通常是由＆符号分隔的名称和值对的字符串。通常，具有GET数据的URL将如下所示：</p>
+<pre><code class="html">http://www.php.cn/action.php?name = john&amp;age = 24
+</code></pre>
+<p><strong>使用GET方法的优点和缺点</strong></p>
+<p>1、由于GET方法发送的数据显示在URL中，因此可以使用特定查询字符串值为页面添加书签。</p>
+<p>2、GET方法不适合传递用户名和密码等敏感信息，因为这些信息在URL查询字符串中完全可见，并且可能作为访问页存储在客户端浏览器的内存中。</p>
+<p>3、由于GET方法将数据分配给服务器环境变量，因此URL的长度是有限的。因此，要发送的总数据存在限制。</p>
+<ul>
+<li><strong>post方式</strong></li>
+</ul>
+<p>在POST方法中，数据作为包在与处理脚本的单独通信中发送到服务器；通过POST方法发送的数据在URL中不可见。</p>
+<p>POST方法适用于可以传递大量信息的情况。当服务器通过采用POST的表单接收请求时，它在对URL进行请求之后立即传输表单输入的所有相关信息。</p>
+<p>如一些页面，只能通过从另一个页面单击某个链接或者某个按钮以后跳过来，不能直接通过在浏览器输入网址访问，这种网页就是使用了POST方式。</p>
+<p><strong>使用POST方法的优点和缺点</strong></p>
+<p>1、它比GET更安全，因为用户输入的信息在URL查询字符串或服务器日志中永远不可见。</p>
+<p>2、可以传递的数据量有一个更大的限制，一个人可以使用POST发送文本数据和二进制数据（上传文件）。</p>
+<p>3、由于POST方法发送的数据在URL中不可见，因此无法使用特定查询为页面添加书签。</p>
+<blockquote>
+<p>GET方法主要用于获取信息。而，POST方法主要用于更新数据</p>
+</blockquote>
+<ul>
+<li><p>使用get方式请求数据</p>
+<pre><code class="python">    import requests
+    html = requests.get(URL)
+    html_bytes = html.content#获取网页源代码的二进制数据
+    html_str = html_bytes.decode()#对二进制数据进行解码，常见解码方式有GBK,GB2312,GB18030,默认为UTF-8
+</code></pre>
+</li>
+<li><p>使用post方式请求数据</p>
+<pre><code class="python">    import requests
+    data = &#123;&#39;key1&#39;: &#39;value1&#39;,
+          &#39;key2&#39;: &#39;value2&#39;&#125;
+    html_formdata = requests.post(’网址’, data=data).content.decode()
+    #用formdata提交数据
+</code></pre>
+</li>
+</ul>
+<h2 id="多线程爬虫"><a href="#多线程爬虫" class="headerlink" title="多线程爬虫"></a>多线程爬虫</h2><ul>
+<li><p>API介绍</p>
+<blockquote>
+<p>from multiprocessing.dummy import Pool</p>
+<p>Pool类可创建一个线程池</p>
+<p>Pool下的map方法可让线程池的所有线程都支持同一个“函数”</p>
+</blockquote>
+</li>
+<li><p>代码实例</p>
+<pre><code class="python">    from multiprocessing.dummy import Pool
+    def calc_power2(num):
+        return num * num
+    pool = Pool(3)#创建三个线程池
+    origin_num = [x for x in range(10)]
+    result = pool.map(calc_power2, origin_num)#第一个参数是执行函数名称，第二个参数是给该函数传入的参数列表，必须为可迭代对象
+    print(f’计算0-9的平方分别为：&#123;result&#125;&#39;)
+</code></pre>
+</li>
+</ul>
+<h1 id="数据解析之Xpath"><a href="#数据解析之Xpath" class="headerlink" title="数据解析之Xpath"></a>数据解析之Xpath</h1><ul>
+<li><p>xpath解析原理</p>
+<ul>
+<li><p>实例化一个etree对象，将源码数据放到etree对象</p>
+</li>
+<li><p>调用etree对象的xpath方法对元素进行定位和数据捕捉</p>
+<p>实例化etree对象</p>
+</li>
+<li><p>​	加载本地html文件</p>
+<pre><code class="python">from lxml import etree
+etree.parse(filepath)
+</code></pre>
+</li>
+<li><p>加载从网站中响应到的源码数据</p>
+<pre><code class="python">etree.HTML(page_text)
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>Xpath表达式</p>
+<ul>
+<li><p>&#x2F;</p>
+<p>从根节点开始定位，表示单个层级</p>
+</li>
+<li><p>&#x2F;&#x2F;</p>
+<p>从某标签节点下的任意节点定位，表示多层级</p>
+</li>
+<li><p><strong>属性定位</strong></p>
+<p>&#x2F;&#x2F;div[@class&#x3D;’属性值’]</p>
+<p>&#x2F;&#x2F;div[@id&#x3D;’属性值’]</p>
+</li>
+<li><p><strong>索引定位</strong></p>
+<p>&#x2F;&#x2F;div[@class&#x3D;’song’]&#x2F;p[3]#获取class属性为song的div标签下的第三个p标签</p>
+</li>
+<li><p><strong>范围定位</strong></p>
+<p>&#x2F;&#x2F;div[position()&lt;n]#获取前n-1个div标签</p>
+<p>&#x2F;&#x2F;div[last()]#获取最后一个div标签</p>
+</li>
+<li><p><strong>获取标签文本</strong></p>
+<p>&#x2F;text() 获取标签中的直系文本</p>
+<p>&#x2F;&#x2F;text() 获取标签下的所有文本内容</p>
+</li>
+<li><p><strong>获取标签属性</strong></p>
+<p>&#x2F;@attrNAME</p>
+<p>​	如：&#x2F;div&#x2F;@class   &#x2F;a&#x2F;@href</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="案例1：抓取豆瓣电影信息"><a href="#案例1：抓取豆瓣电影信息" class="headerlink" title="案例1：抓取豆瓣电影信息"></a>案例1：抓取豆瓣电影信息</h1><pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+import requests
+# import lxml.html as lh
+from lxml import etree
+import chardet
+from multiprocessing.dummy import Pool
+
+times=input(&#39;输入抓取页面数：&#39;)
+startUrl=&#39;https://movie.douban.com/top250?start=&#39;
+
+urls=[]
+for page in range(int(times)):
+    urls.append(startUrl+str(25*page))
+
+#获取网页源代码
+def getHtml(url):
+    headers = &#123;
+        &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.622&quot;
+    &#125;
+    # requests.get(url)获取响应，.content获取网页二进制编码内容
+    html_b = requests.get(url,headers=headers).content
+    # chardet.detect(html_b)#检测二进制代码的编码方式
+    # print(chardet.detect(html_b))
+    html = html_b.decode()
+    return html
+
+html=getHtml(startUrl)
+# print(html)
+
+# 多线程访问多个页面
+pool=Pool(5)
+htmls=pool.map(getHtml,urls)
+pool.close()
+pool.join()
+
+# 抓取页面信息
+def XpathGetInfo(html):
+    html_xpath=etree.HTML(html)#将html页面转换为xpath结构
+    data=html_xpath.xpath(&#39;//ol[@class=&quot;grid_view&quot;]/li&#39;)
+    results=[]
+    # 获取一页的电影信息
+    for i in range(len(data)):
+        res = &#123;&#125;
+        info=data[i].xpath(&#39;.//div[@class=&quot;hd&quot;]&#39;)
+        # print(blockInfo)
+        # 获取电影链接
+        href=info[0].xpath(&#39;.//a/@href&#39;)[0]
+        # 获取电影名称
+        name=info[0].xpath(&#39;.//a/span[@class=&quot;title&quot;]/text()&#39;)[0]
+
+        starInfo=data[i].xpath(&#39;.//div[@class=&quot;bd&quot;]&#39;)
+        star=starInfo[0].xpath(&#39;.//span[@class=&quot;rating_num&quot; and @property=&quot;v:average&quot;]/text()&#39;)[0]
+        res[&#39;name&#39;]=name
+        res[&#39;href&#39;]=href
+        res[&#39;star&#39;]=star
+        results.append(res)
+    return results
+
+pool=Pool(5)
+res=pool.map(XpathGetInfo,htmls)
+#抓取times页电影信息
+for i in range(int(times)):
+    print(res[i])
+</code></pre>
+<h1 id="案例2：58二手房信息"><a href="#案例2：58二手房信息" class="headerlink" title="案例2：58二手房信息"></a>案例2：58二手房信息</h1><pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+import requests
+from lxml import etree
+import re
+import pandas as pd
+
+url=&#39;https://bj.58.com/ershoufang/&#39;
+headers=&#123;
+&#39;user-agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77&#39;
+&#125;
+# 获取网页源代码
+html=requests.get(url,headers=headers).text
+# 构造xpath对象
+tree=etree.HTML(html)
+homes=tree.xpath(&#39;//*[@id=&quot;esfMain&quot;]/section/section[3]/section[1]/section[2]/div&#39;)
+res=[]
+for home in homes:
+    house=[]
+    home_essage=home.xpath(&#39;./a/div[2]/div[1]/section&#39;)[0]
+
+    # 房子结构
+    structMessage=home_essage.xpath(&#39;./div[1]/p[1]/span/text()&#39;)
+    struct=&#39;&#39;.join(structMessage)
+    # print(struct)
+
+    # 房子大小
+    size=home_essage.xpath(&#39;./div[1]/p[2]/text()&#39;)[0].strip()#strip()函数用于清除换行符
+    # print(size)
+
+    # 方向
+    direction=home_essage.xpath(&#39;./div[1]/p[3]/text()&#39;)[0].strip()
+    # print(direction)
+
+    # 所在楼层
+    floors=home_essage.xpath(&#39;./div[1]/p[4]/text()&#39;)
+    if len(floors)&gt;0:
+        floor=floors[0].strip()
+    else:
+        floor=&#39;&#39;
+
+    # 建造时间
+    madetimes=home_essage.xpath(&#39;./div[1]/p[5]/text()&#39;)
+    if len(madetimes)&gt;0:
+        madetime=madetimes[0].strip()
+    else:
+        madetime=&#39;&#39;
+        # print(madetime)
+
+    # 房子名称
+    name=home_essage.xpath(&#39;./div[2]/p[1]/text()&#39;)[0]
+    # print(name)
+
+    # 地址
+    addresMessage=home_essage.xpath(&#39;./div[2]/p[2]/span/text()&#39;)
+    # print(addresMessage)
+    addres=&#39;-&#39;.join(addresMessage)
+
+    house.extend([name,struct,size,direction,floor,madetime,addres])#构造单个房源信息列表
+    res.append(house)
+
+data=pd.DataFrame(res,columns=[&#39;名称&#39;,&#39;结构&#39;,&#39;大小&#39;,&#39;方向&#39;,&#39;楼层&#39;,&#39;建造时间&#39;,&#39;地理位置&#39;])
+print(data)
+# data.to_excel(&#39;res.xlsx&#39;,index=False,encoding=&#39;utf_8_sig&#39;)
+</code></pre>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
+  
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+
+    
+    <a href="/2023/02/12/%E6%95%B0%E6%8D%AE%E7%88%AC%E8%99%AB%E4%B9%8B%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>数据爬虫之异步加载</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
+
+
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
+</html>
+

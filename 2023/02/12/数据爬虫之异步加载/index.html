@@ -2,7 +2,7 @@
 <html>
 	<head>
 		
-<title>内部排序-Quiet</title>
+<title>数据爬虫之异步加载-Quiet</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,8 +12,8 @@
 
 
 
-<meta name="keywords" content="排序,">
-<meta name="description" content="本文总结了八种内部排序算法思想及各种适用优缺点（附c++代码）">
+<meta name="keywords" content="python,爬虫,">
+<meta name="description" content="本文介绍了爬虫过程中遇到的AJAX技术以及对JSON格式数据的相关处理，最后用破解百度翻译以及乐视视频评论信息抓取两个案例，从而加深对异步加载页面的抓取">
 
 
 <script src="/js/jquery.min.js"></script>
@@ -271,12 +271,14 @@
         <ul class="post-header-tag">
             
             
-            <li><a href="/tags/排序">排序</a></li>
+            <li><a href="/tags/python">python</a></li>
+            
+            <li><a href="/tags/爬虫">爬虫</a></li>
             
             
         </ul>
         
-        <h1>内部排序</h1>
+        <h1>数据爬虫之异步加载</h1>
         <div class="post-header-info">
             <div class="post-header-info-author">
                 
@@ -290,10 +292,10 @@
                 <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
                 <div class="post-header-info-author-categories">
                     
-                         <a href="../../categories/数据结构与算法/" target="_blank" >数据结构与算法</a>
+                         <a href="../../categories/爬虫/" target="_blank" >爬虫</a>
                     
                 </div>
-                <p>2022-04-05 18:47:55</p>
+                <p>2023-02-12 19:37:16</p>
             </div>
         </div>
     </div>
@@ -304,203 +306,122 @@
     
       <div id="post-toc">
         <span class="post-toc-title">文章目录</span>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-text">直接插入排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F"><span class="toc-text">希尔排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="toc-text">冒泡排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="toc-text">快速排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F"><span class="toc-text">选择排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A0%86%E6%8E%92%E5%BA%8F"><span class="toc-text">堆排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="toc-text">归并排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A1%B6%E6%8E%92%E5%BA%8F"><span class="toc-text">桶排序</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD"><span class="toc-text">异步加载</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AJAX%E6%8A%80%E6%9C%AF%E4%BB%8B%E7%BB%8D"><span class="toc-text">AJAX技术介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#json%E6%A0%BC%E5%BC%8F%E6%95%B0%E6%8D%AE"><span class="toc-text">json格式数据</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9A%E7%A0%B4%E8%A7%A3%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91"><span class="toc-text">案例1：破解百度翻译</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A%E6%8A%93%E5%8F%96%E4%B9%90%E8%A7%86%E8%A7%86%E9%A2%91%E8%AF%84%E8%AE%BA"><span class="toc-text">案例2：抓取乐视视频评论</span></a></li></ol>
       </div>
     
 
-    <!-- more -->
-<h1 id="直接插入排序"><a href="#直接插入排序" class="headerlink" title="直接插入排序"></a>直接插入排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; insertSort(vector&lt;int&gt; num)
-&#123;
-    int i, j, temp;
-    for (i = 1; i &lt; num.size(); i++)
-    &#123;
-        temp = num[i];
-        for (j = i - 1; j &gt;= 0 &amp;&amp; temp&lt;num[j]; j--)//易错点，&amp;&amp;前后不可拆分为if语句，这是一个连续的循环
-        &#123;
-            num[j + 1] = num[j];
-        &#125;
-        num[j + 1] = temp;
-    &#125;
-
-    return num;
+    <h1 id="异步加载"><a href="#异步加载" class="headerlink" title="异步加载"></a>异步加载</h1><h2 id="AJAX技术介绍"><a href="#AJAX技术介绍" class="headerlink" title="AJAX技术介绍"></a>AJAX技术介绍</h2><p>AJAX是Asynchronous JavaScript And XML的首字母缩写，意为异步JavaScript与XML。<strong>使用AJAX技术，可以在不刷新网页的情况下更新网页数据</strong>。使用AJAX技术的网页，一般会使用HTML编写网页的框架。在打开网页的时候，首先加载的是这个框架。剩下的部分将会在框架加载完成以后再通过JavaScript从后台加载。</p>
+<blockquote>
+<p>使用异步加载技术的网站，被加载的内容是不能在源代码中找到的，因此如果一个网页的文字在源代码中找不到，大多数情况下是使用的AJAX技术</p>
+</blockquote>
+<p><strong>案例分析</strong></p>
+<p>打开百度翻译页面</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSI9GCD"><img src="https://s1.ax1x.com/2023/02/12/pSI9GCD.png" alt="pSI9GCD.png" style="zoom:33%;" /></a></p>
+<p>按F12打开抓包工具，当在页面中输入英文（如dog）时，发现页面会进行刷新</p>
+<p>点击抓包工具的“network”选项卡，并点击Fetch&#x2F;XHR选项，则在该选项下方会出现异步加载请求包</p>
+<p>分析加载出来的请求包，发现在请求包“sug”中，其请求参数是我们输入的翻译英文“dog”</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSI9J8e"><img src="https://s1.ax1x.com/2023/02/12/pSI9J8e.png" alt="pSI9J8e.png" style="zoom:50%;" /></a></p>
+<p>分析请求头，发现该数据包向URL<a target="_blank" rel="noopener" href="https://fanyi.baidu.com/sug%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE%EF%BC%8C%E8%AF%B7%E6%B1%82%E6%96%B9%E5%BC%8F%E4%B8%BAPOST%EF%BC%8C%E5%BE%97%E5%88%B0%E7%9A%84%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E4%B8%BAJSON">https://fanyi.baidu.com/sug请求数据，请求方式为POST，得到的响应数据格式为JSON</a></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSI934O"><img src="https://s1.ax1x.com/2023/02/12/pSI934O.png" alt="pSI934O.png" style="zoom:33%;" /></a></p>
+<p>分析响应数据，发现得到的响应数据是JSON格式，尝试对其解析之后，发现得到的数据确实是我们对“dog”英文的翻译结果</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSI9YgH"><img src="https://s1.ax1x.com/2023/02/12/pSI9YgH.png" alt="pSI9YgH.png" style="zoom:50%;" /></a></p>
+<blockquote>
+<p>上述案例中通过输入请求参数，对服务器发起请求得到响应数据的过程是一种最简单的异步加载方式</p>
+<p>在有的网站中，开发者会将数据伪装成json数据放在JS代码中进行渲染，这样我们在看似确实在源代码中找不到想要的数据，因此开发者就制造了一种伪异步加载的效果</p>
+<p>除此以外，还有一些网页，显示在页面上的内容要经过多次异步请求才能得到。第1个AJAX请求返回的是第2个请求的参数，第2个请求的返回内容又是第3个请求的参数，只有得到了上一个请求里面的有用信息，才能发起下一个请求。</p>
+</blockquote>
+<h2 id="json格式数据"><a href="#json格式数据" class="headerlink" title="json格式数据"></a>json格式数据</h2><p>JSON是一种格式化字符串。JSON字符串与Python的字典或者列表非常相似。</p>
+<p>JSON的全称是JavaScript Object Notation，是一种轻量级的数据交换格式。网络之间使用HTTP方式传递数据的时候，绝大多数情况下传递的都是字符串。因此，当需要把Python里面的数据发送给网页或者其他编程语言的时候，可以先将Python的数据转化为JSON格式的字符串，然后将字符串传递给其他语言，其他语言再将JSON格式的字符串转换为它自己的数据格式。</p>
+<blockquote>
+<p>json格式数据其实是一种“中介语言”。举一个例子：一个会英语不会德语的中国人，和一个会英文不会中文的德国人，他们可以使用英语愉快地交谈。英语在他们的交流中扮演了一个中介的角色。JSON在网络通信里面就是这个中介。</p>
+</blockquote>
+<p>观察下述字典：</p>
+<pre><code class="python">person = &#123;
+    &#39;basic_info&#39;: &#123;&#39;name&#39;: &#39;kingname&#39;,
+                  &#39;age&#39;: 24,
+                  &#39;sex&#39;: &#39;male&#39;,
+                  &#39;merry&#39;: False&#125;,
+    &#39;work_info&#39;: &#123;&#39;salary&#39;: 99999,
+                  &#39;position&#39;: &#39;engineer&#39;,
+                  &#39;department&#39;: None&#125;
 &#125;
 </code></pre>
-<h1 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; shellSort(vector&lt;int&gt; num)
-&#123;
-    int i, j, temp;
-    int n = num.size();
-    for (int gap = n / 2; gap &gt; 0; gap = gap / 2)//增量设置的边界条件不能等于0
-    &#123;
-        for (i = gap; i &lt; n; i++)
-        &#123;
-            temp = num[i];
-            for (j = i - gap; j &gt;= 0 &amp;&amp; temp&lt;num[j]; j -= gap)
-                num[j + gap] = num[j];
-            num[j + gap] = temp;
-        &#125;
-    &#125;
-    return num;
-
-&#125;
+<p>我们可以直接使用json.dumps(person)<strong>将字典转换为json格式字符串</strong></p>
+<p>使用json.loads(person_json)也可以<strong>将json字符串转换为字典或者列表</strong></p>
+<pre><code class="python">import json
+person_json=json.dumps(person,indent=4)#将字典或者列表、列表字典等字符串转换为json格式，并为其添加4个空格的缩进
+person_str=json.loads(person_json)#将json数据转换为字符串
+print(person_json)
+print(type(person_json))
+print(person_str)
 </code></pre>
-<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; bubbleSort(vector&lt;int&gt; num)
-&#123;
-    int n = num.size();
-    for (int i = 0; i &lt; n; i++)
-    &#123;
-        bool flag = false;
-        for (int j = 0; j &lt; n - i - 1; j++)
-        &#123;
-            if (num[j + 1] &lt; num[j])
-            &#123;
-                swap(num[j], num[j + 1]);
-                flag = true;
-            &#125;
-        &#125;
-        if (!flag)
-            break;
-    &#125;
-    return num;
+<h1 id="案例1：破解百度翻译"><a href="#案例1：破解百度翻译" class="headerlink" title="案例1：破解百度翻译"></a>案例1：破解百度翻译</h1><pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火
+from lxml import etree
+import requests
+import json
+
+en=input(&#39;请输入您要翻译的英文:&#39;)
+# 异步加载的url
+url=&#39;https://fanyi.baidu.com/sug&#39;
+# UA伪装
+headers=&#123;
+    &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36 Edg/104.0.1293.47&#39;
 &#125;
+# 发起post请求提交的参数数据
+data=&#123;&#39;kw&#39;:en&#125;
+# 通过post方式请求数据，该案例中返回的结果是json格式存储，需要对json格式数据进行解析
+res=requests.post(url=url,headers=headers,data=data).json()
+print(res[&#39;data&#39;])
+&#39;&#39;&#39;
+# 存储翻译结果
+fp=open(en+&#39;.json&#39;,&#39;w&#39;,encoding=&#39;utf-8&#39;)
+json.dump(res,fp=fp,ensure_ascii=False)#写入json数据
+
+f=open(&#39;hello.json&#39;,&#39;r&#39;,encoding=&#39;utf-8&#39;)
+readJson=json.load(f)#读取json数据
+print(readJson)
+&#39;&#39;&#39;
 </code></pre>
-<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>算法思想：</p>
-<pre><code class="c++">int paratition(vector&lt;int&gt;&amp; num, int low, int high)
-&#123;
-    int base = num[low];//选择基准元素
-    while (low &lt; high)
-    &#123;
-        //num[high] &gt;= base中的=判断不能省略
-        while (num[high] &gt;= base  &amp;&amp; low &lt; high   ) high--;//该循环跳出语句中&amp;&amp;前后衔接可互换，但由于&amp;&amp;的短路特性，更建议先判断low&lt;high
-        num[low] = num[high];
-        while (low &lt; high &amp;&amp; num[low] &lt;= base ) low++;
-        num[high] = num[low];
-    &#125;
-    num[low] = base;
-    return low;
+<h1 id="案例2：抓取乐视视频评论"><a href="#案例2：抓取乐视视频评论" class="headerlink" title="案例2：抓取乐视视频评论"></a>案例2：抓取乐视视频评论</h1><p>打开乐视，随意点开一个视频，获取其源代码，通过开发者工具分析页面的异步加载请求，可以发现评论所在的请求在如下图所示</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSI91UK"><img src="https://s1.ax1x.com/2023/02/12/pSI91UK.png" alt="pSI91UK.png" style="zoom:33%;" /></a></p>
+<p>分析其请求的URL，发现评论信息通过请求URL返回，且在请求URL中需要两个参数pid和vid，这两个参数是可变的，但是我们可以在源代码中找到，于是我们就可以通过正则表达式提取出这两个参数，再请求评论信息</p>
+<pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+import requests
+import json
+import re
+
+# 异步评论网址
+url=&quot;http://api-my.le.com/vcm/api/list?jsonp=jQuery191020790219234869944_1659099483907&amp;type=video&amp;rows=20&amp;page=1&amp;sort=&amp;cid=1&amp;source=1&amp;xid=&#123;xid&#125;&amp;pid=&#123;pid&#125;&amp;ctype=cmt%2Cimg%2Cvote&amp;listType=1&amp;_=1659099483914&quot;
+headers=&#123;
+&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.71&#39;
 &#125;
 
-void quickSort(vector&lt;int&gt;&amp; num,int low,int high)
-&#123;
+idUrl=&#39;http://www.le.com/ptv/vplay/24553107.html&#39;
+def geturl(url,headers):
+    html_b=requests.get(url,headers=headers).content
+    html=html_b.decode()
+    return html
+# 访问原始页面
+idHtml=geturl(idUrl,headers)
+# print(idHtml)
+# 获取异步评论网址当中的vid与pid，其隐藏在原始html中
+vid=re.search(&quot;vid: (\d+)&quot;,idHtml).group(1)
+pid=re.search(&quot;pid: (\d+)&quot;,idHtml).group(1)
+comment_url=url.format(xid=vid,pid=pid)
 
-    if (low &lt; high)//该语句不可少，只有在low&lt;high时的交换才起作用，否则在递归时会出现错误
-    &#123;
-        int j = paratition(num, low, high);
-        quickSort(num, low, j - 1);
-        quickSort(num, j + 1, high);
-    &#125;
-
-&#125;
-</code></pre>
-<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>算法思想：</p>
-<pre><code class="c++">vector&lt;int&gt; selectSort(vector&lt;int&gt; num)
-&#123;
-    int n = num.size();
-    for (int i = 0; i &lt; n; i++)
-    &#123;
-        int min = i;
-        for (int j = i + 1; j &lt; n; j++)
-        &#123;
-            if (num[j] &lt; num[min])
-            &#123;
-                min = j;
-            &#125;
-        &#125;
-        if (min != i)
-        &#123;
-            swap(num[min], num[i]);
-        &#125;
-    &#125;
-    return num;
-&#125;
-</code></pre>
-<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><p>算法思想：</p>
-<pre><code class="c++">void heapAdjust(vector&lt;int&gt;&amp; num, int p, int n)
-&#123;
-    int temp = num[p];//取出根节点，待找到该根节点的子树中最大的节点之后与该根节点进行交换
-    for (int i = 2 * p + 1; i &lt; n; i = 2*i+1)//遍历子树，寻找最大节点
-    &#123;
-        if (i + 1 &lt; n &amp;&amp; num[i + 1] &gt; num[i]) i++;//首先比较父节点的两个孩子的最大值
-        if (temp &gt;= num[i]) break;//如果父节点比两个孩子节点都大，则不需要交换，说明当前子树已经是大根堆
-        num[p] = num[i];//将最大孩子进行上移为父节点
-        p = i;//继续遍历子树，保证其子树也是大根堆
-    &#125;
-    num[p] = temp;
-&#125;
-void heapSort(vector&lt;int&gt;&amp; num)
-&#123;
-    //构建初始大根堆
-    int n = num.size();
-    for (int i = n / 2 - 1; i &gt;= 0; i--)//从最后一个非叶子节点向上构造大根堆
-        heapAdjust(num, i, n);
-
-    for (int j = n - 1; j &gt;= 0; j--)
-    &#123;
-        //大根堆的第一个数字是最大的,将大根与最后一个数字进行交换，则该数组的最后一个数一定是最大的
-        swap(num[0], num[j]);
-        //将数组长度减去1后，调整堆，重新进行交换
-        heapAdjust(num, 0, j);
-    &#125;
-
-&#125;
-</code></pre>
-<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>算法思想：</p>
-<pre><code class="c++">void merge(vector&lt;int&gt;&amp; num, int low, int mid, int high)
-&#123;
-    vector&lt;int&gt; help;//定义辅助数组
-    help.resize(high - low + 1);
-    int i = low, j = mid + 1, k = 0;//i为第一序列的扫描指针，j为第二序列的扫描指针，k为辅助数组的扫描指针
-    while (i &lt;= mid &amp;&amp; j &lt;= high)// = 不能省略
-    &#123;
-        if (num[i] &lt; num[j]) help[k++] = num[i++];
-        else help[k++] = num[j++];
-    &#125;
-    while (i &lt;= mid) help[k++] = num[i++];
-    while (j &lt;= high) help[k++] = num[j++];
-    for (int i = low, k = 0; i &lt;= high; i++, k++)
-    &#123;
-        num[i] = help[k];
-    &#125;
-&#125;
-
-void mergeSort(vector&lt;int&gt;&amp; num, int low, int high)
-&#123;
-    if (low == high)//递归跳出条件，即当子序列长度为1时终止递归
-        return;
-    int mid = (low + high) / 2;
-    mergeSort(num, low, mid);//递归划分左区间，直到区间序列个数为1时终止递归
-    mergeSort(num, mid + 1, high);//递归划分右区间，知道区间序列个数为1时终止递归
-    merge(num, low, mid, high);//合并
-&#125;
-</code></pre>
-<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>算法思想：</p>
-<pre><code>定义一个编号为[0,max]的桶，其中max为待排序数组当中的最大值
-遍历数组，将数组的中的元素值放到该元素对应编号的桶中，桶数组的值代表放入桶中的个数，初始时桶中个数为0
-按照桶的编号顺序依次取出桶中的元素
-</code></pre>
-<pre><code class="c++">//桶排序
-void bucketSort(vector&lt;int&gt;&amp; nums) 
-&#123;
-    //思想：
-
-    int n = nums.size();
-    int max=0;
-    for (int i = 0; i &lt; n; i++)
-    &#123;
-        if (nums[i] &gt; max)
-            max = nums[i];
-    &#125;
-    vector&lt;int&gt; bucket(max+1, 0);//初始化桶
-    for (int i = 0; i &lt; n; i++)//将数组中的数放到对应编号的桶中
-        bucket[nums[i]]++;
-    for (int i = 0,j=0; i &lt;= max; i++)
-    &#123;
-        while (bucket[i]--&gt; 0)
-            nums[j++] = i;
-    &#125;
-&#125;
+# 评论内容
+html=geturl(comment_url,headers)
+# print(type(html))
+json_source=html[html.find(&#39;&#123;&quot;&#39;):-1]
+data_dict=json.loads(json_source)
+# print(data_dict)
+data=data_dict[&#39;data&#39;]
+for single_data in data:
+    print(single_data[&#39;content&#39;])
 </code></pre>
 
   </div>
@@ -562,14 +483,21 @@ Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
 
     <div class="post-paging">
     
-    <a href="/2022/04/05/Latex/">
+    <a href="/2023/02/12/%E6%95%B0%E6%8D%AE%E7%88%AC%E8%99%AB%E4%B9%8BXpath/">
         <div class="post-paging-last">
             <span>上一篇</span>
-            <p>Latex</p>
+            <p>数据爬虫之Xpath</p>
         </div>
     </a>
     
 
+    
+    <a href="/2023/02/11/c++%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>c++网络编程</p>
+        </div>
+    </a>
     
 </div>
 </div>
