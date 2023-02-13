@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>手势分割与提取-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="计算机视觉,python,">
+<meta name="description" content="本文介绍了色彩空间（RGB\HSV\YCrCb）以及图像形态学处理（图像膨胀与腐蚀）等肤色分割理论，并采用最大轮廓面积法和内切圆算法，对分割出的肤色区域进行了手势提取和手臂切除（附代码）">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文档目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										文章分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										技术标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										个人简介
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文档目录</a>
+        </li>
+        
+        <li>
+            <a href="/categories">文章分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">技术标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">个人简介</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/计算机视觉">计算机视觉</a></li>
+            
+            <li><a href="/tags/python">python</a></li>
+            
+            
+        </ul>
+        
+        <h1>手势分割与提取</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/计算机视觉/" target="_blank" >计算机视觉</a>
+                    
+                </div>
+                <p>2023-02-13 15:53:51</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
+  
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%82%A4%E8%89%B2%E5%88%86%E5%89%B2"><span class="toc-text">肤色分割</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%82%A4%E8%89%B2%E5%88%86%E5%89%B2%E6%A6%82%E8%BF%B0"><span class="toc-text">肤色分割概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E7%90%86%E8%AE%BA"><span class="toc-text">色彩空间理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RGB%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4"><span class="toc-text">RGB色彩空间</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E4%BE%8B"><span class="toc-text">代码实例</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RGB%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E8%82%A4%E8%89%B2%E6%A3%80%E6%B5%8B"><span class="toc-text">RGB色彩空间肤色检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#YCrCb%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4"><span class="toc-text">YCrCb色彩空间</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E4%BE%8B-1"><span class="toc-text">代码实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E4%BA%8C%E5%80%BC%E5%8C%96"><span class="toc-text">图像二值化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6%E5%A4%84%E7%90%86"><span class="toc-text">图像形态学处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E8%86%A8%E8%83%80"><span class="toc-text">图像膨胀</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E8%85%90%E8%9A%80"><span class="toc-text">图像腐蚀</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%8B%E5%8A%BF%E6%8F%90%E5%8F%96"><span class="toc-text">手势提取</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%A4%A7%E8%BD%AE%E5%BB%93%E9%9D%A2%E7%A7%AF%E6%8F%90%E5%8F%96%E6%89%8B%E5%8A%BF"><span class="toc-text">最大轮廓面积提取手势</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E4%BE%8B-2"><span class="toc-text">代码实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%88%87%E5%9C%86%E7%AE%97%E6%B3%95%E5%88%87%E9%99%A4%E6%89%8B%E8%87%82"><span class="toc-text">内切圆算法切除手臂</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E4%BE%8B-3"><span class="toc-text">代码实例</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <h1 id="肤色分割"><a href="#肤色分割" class="headerlink" title="肤色分割"></a>肤色分割</h1><h2 id="肤色分割概述"><a href="#肤色分割概述" class="headerlink" title="肤色分割概述"></a>肤色分割概述</h2><p>肤色分割技术，即从一幅图片中分割提取出图片中的肤色区域作为后续处理区域。其原理为：根据皮肤的颜色特性来设定阈值，满足该阈值的肤色区域即可判别为肤色区域。其中阈值法的关键是选择一个合适的颜色空间模型表示。目前常用的颜色空间模型主要有RGB颜色空间、HSV颜色空间、YCrCb颜色空间。</p>
+<h2 id="色彩空间理论"><a href="#色彩空间理论" class="headerlink" title="色彩空间理论"></a>色彩空间理论</h2><h3 id="RGB色彩空间"><a href="#RGB色彩空间" class="headerlink" title="RGB色彩空间"></a>RGB色彩空间</h3><p>RGB分别代表英文Red、Green、Blue三个单词的缩写，而物质世界的颜色均可由Red、Green、Blue三种颜色按照不同的比例混合得到，如下图所示，所谓RGB色彩空间模型就是将Red、Green、Blue三种抽象的颜色分别映射到0∼255这个范围的具体数字之间，继而将这三种颜色在三维空间中唯一对应的坐标点视为一种颜色。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSIzSsI"><img src="https://s1.ax1x.com/2023/02/13/pSIzSsI.png" alt="pSIzSsI.png"></a></p>
+<p>由该颜色模型所表达的物质世界里的任何颜色都与其线性组合的RGB三个颜色分量高度相关，其连续变换并不直观，当我们想要对图像的颜色进行调整时就需要更改三个颜色分量才行。我们知道自然环境容易受光照、遮挡等情况的影响，即物质世界的颜色容易受光照影响，而该模型未考虑到光照因素，一旦亮度变化，真实颜色就会发生变化，这样就对肤色提取造成了一定的困难。</p>
+<p>Kovac等人在2003年提出，肤色在RGB色彩空间下可满足以下条件：</p>
+<ul>
+<li><p>均匀光照下：<br>$$<br>\left{\begin{array}{c}<br>R&gt;95, G&gt;40, B&gt;20 \<br>\max (R, G, B)-\min (R, G, B)&gt;15 \<br>|R-G|&gt;15 \<br>R&gt;G \<br>R&gt;B<br>\end{array}\right.<br>$$</p>
+</li>
+<li><p>侧光拍照下：<br>$$<br>\left{\begin{array}{c}<br>R&gt;220, G&gt;210, B&gt;170 \<br>|R-G| \leq 15 \<br>R&gt;B \<br>G&gt;B<br>\end{array}\right.<br>$$</p>
+</li>
+<li><h4 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h4><p>&#96;&#96;&#96;python</p>
+</li>
+</ul>
+<h1 id="RGB色彩空间肤色检测"><a href="#RGB色彩空间肤色检测" class="headerlink" title="RGB色彩空间肤色检测"></a>RGB色彩空间肤色检测</h1><p>def skinRGB(img):<br>    x,y&#x3D;img.shape[0:2]<br>    skin&#x3D;np.zeros((x,y),np.uint8)#皮肤掩膜<br>    b,g,r&#x3D;cv.split(img)#通道分离<br>    for i in range(x):<br>        for j in range(y):<br>            # 均匀光照环境（检测效果较差）<br>            if int(r[i][j])&gt;95 and int(g[i][j])&gt;40 and int(b[i][j])&gt;20 and <br>            max(r[i][j],g[i][j],b[i][j])-min(r[i][j],g[i][j],b[i][j])&gt;15 <br>            and abs(int(r[i][j])-int(g[i][j]))&gt;15 and int(r[i][j])&gt;int(g[i][j]) and int(r[i][j])&gt;int(b[i][j]):<br>                skin[i][j]&#x3D;255<br>                #     侧光环境(全黑)<br>                #     if r[i][j]&gt;220 and g[i][j]&gt;210 and b[i][j]&gt;170 and <br>                #             abs(int(r[i][j])-int(g[i][j]))&lt;&#x3D;15 and <br>                #             r[i][j]&gt;b[i][j] and g[i][j]&gt;b[i][j]:<br>                #         skin[i][j]&#x3D;255<br>                res&#x3D;cv.bitwise_and(img,img,mask&#x3D;skin)<br>                return res</p>
+<pre><code>
+检测结果：
+
+[![pSIxzQA.png](https://s1.ax1x.com/2023/02/13/pSIxzQA.png)](https://imgse.com/i/pSIxzQA)
+
+
+
+### HSV色彩空间
+
+HSV，即Hue（色调、色相），Saturation（饱和度、色彩纯净度），Value（明度）。如图所示，在该模型中，色调H用角度度量，取值在0°~360°之间，其中红色为0°，按照逆时针旋转，绿色为120°，蓝色为124°；饱和度S指颜色接近光谱色的程度，饱和度越高，颜色就越深且艳，反之颜色就浅且淡，其取值范围为0%∼100%；明度V表示颜色的亮度，其取值同样在0%∼100%之间，其中明度为0%表示亮度为0，则颜色就为黑色，同理明度为100%时颜色就为白色。
+
+在HSV颜色空间中，可将易受光照影响的明度V分量分离出，颜色可由色调H和饱和度S确定。通常我们用如下约束方程来判定一块像素点是否为肤色点：
+$$
+\left\&#123;\begin&#123;array&#125;&#123;c&#125;
+0 \leq H \leq 20 \\
+S \geq 48 \\
+V \geq 50
+\end&#123;array&#125;\right.
+$$
+
+
+#### 代码实例
+
+```python
+# HSV色彩空间肤色检测
+def skinHSV(img):
+  x,y=img.shape[0:2]
+  skin=np.zeros((x,y),np.uint8)
+  hsv=cv.cvtColor(img,cv.COLOR_BGR2HSV)
+  h,s,v=cv.split(hsv)
+  for i in range(x):
+      for j in range(y):
+          if h[i][j]&gt;=0 and h[i][j]&lt;=20 and s[i][j]&gt;=48 and v[i][j]&gt;=50:
+              skin[i][j]=255
+  res=cv.bitwise_and(img,img,mask=skin)
+  return res
+</code></pre>
+<p>检测结果：</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSIxjRH"><img src="https://s1.ax1x.com/2023/02/13/pSIxjRH.png" alt="pSIxjRH.png"></a></p>
+<h3 id="YCrCb色彩空间"><a href="#YCrCb色彩空间" class="headerlink" title="YCrCb色彩空间"></a>YCrCb色彩空间</h3><p>YCrCb，其中Y指亮度，Cr表示亮度与RGB模型中红色分量的差异，Cb表示亮度与RGB模型中蓝色分量的差异。在该模型中，人类的肤色分布在一个由Cr、Cb分量组成的近似平面椭圆上。如图所示，当图像的Cr、Cb分量取值在该椭圆内时，我们就可判定图像的该像素点为肤色点。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSIxXJe"><img src="https://s1.ax1x.com/2023/02/13/pSIxXJe.png" alt="pSIxXJe.png"></a></p>
+<h4 id="代码实例-1"><a href="#代码实例-1" class="headerlink" title="代码实例"></a>代码实例</h4><pre><code class="python">
+# HSV色彩空间肤色检测
+def skinHSV(img):
+    x,y=img.shape[0:2]
+    skin=np.zeros((x,y),np.uint8)
+    hsv=cv.cvtColor(img,cv.COLOR_BGR2HSV)
+    h,s,v=cv.split(hsv)
+    for i in range(x):
+        for j in range(y):
+            if h[i][j]&gt;=0 and h[i][j]&lt;=20 and s[i][j]&gt;=48 and v[i][j]&gt;=50:
+                skin[i][j]=255
+    res=cv.bitwise_and(img,img,mask=skin)
+    return res
+
+# 椭圆肤色检测
+def skinMaskYCrCb(img):
+    skinCrCbHist=np.zeros((256,256),np.uint8)#创建一张全黑背景图
+    # 在图片上绘制椭圆曲线绘制椭圆弧线，-1表示填充，故该函数显示为在图片上绘制一个白色椭圆区域
+    # 该图像的横纵坐标值分别为cb，cr，椭圆区域内为采集的肤色样本点cb，cr值
+    cv.ellipse(skinCrCbHist, (113, 155), (23, 25), 43, 0, 360, (255, 255, 255), -1)
+#     参数：
+# 被绘制的图片
+# 轴心坐标
+# 长短轴
+# 椭圆和水平方向上的旋转夹角
+# 椭圆弧相对于水平轴的起始角度
+# 椭圆弧相对于水平轴的结束角度
+# 椭圆弧的颜色值
+# -1表示填充
+#     将图像转换到YCrCb颜色空间上
+    YCrCb=cv.cvtColor(img,cv.COLOR_BGR2YCrCb)
+    y,cr,cb=cv.split(YCrCb)#通道分离
+    skin=np.zeros(cr.shape,np.uint8)#创建皮肤掩膜
+    x,y=cr.shape
+    for i in range(x):
+        for j in range(y):
+            if(skinCrCbHist[cr[i][j],cb[i][j]]&gt;0):#当图像的cr，cb通道值在椭圆区域内，则判定该点即为皮肤像素点
+                skin[i][j]=255
+    # 与操作,函数将较小的值作为0，较大的值作为1进行逻辑操作，故黑色区域为黑色，白色区域为原图
+    res=cv.bitwise_and(img,img,mask=skin)
+    # cv_show(&quot;res&quot;,res)
+    # 图像二值化处理
+    return res
+
+# YCrCb颜色空间的Cr分量+Otsu法阈值分割算法
+def SkinMaskYCrCb_ostu(img):
+    YCrCb=cv.cvtColor(img,cv.COLOR_BGR2YCrCb)
+    y,cr,cb=cv.split(YCrCb)
+    _,skin=cv.threshold(cr,0,255,cv.THRESH_BINARY|cv.THRESH_OTSU)
+    skin=cv.morphologyEx(skin, cv.MORPH_OPEN, kernel=np.ones((3, 3)))
+    # cr = cv.GaussianBlur(cr, (3, 3), 0)
+    res=cv.bitwise_and(img,img,mask=skin)
+    return res
+</code></pre>
+<h2 id="图像二值化"><a href="#图像二值化" class="headerlink" title="图像二值化"></a>图像二值化</h2><p>在计算机中，彩色图像由多维矩阵构成，如RGB彩色图像由三维矩阵构成，每个维度分别代表图像的长宽和色彩通道，然而当我们对图像中的肤色区域进行提取之后，我们就对图像的色彩不感兴趣了，而这些色彩等信息会加大我们下一步对图像处理的工作量，因此一般情况下我们对图像进行处理时需要将图像转换为灰度图，灰度图在计算机中存储时是一个一维矩阵，矩阵中的数字大小代表了图像的灰度，其范围在0∼255之间，其中0代表纯黑色，255代表纯白色。</p>
+<p>所谓图像二值化即将灰度图像转换为黑白图像。图像二值化是为了进一步分离出我们感兴趣的区域与背景图像部分，并且通过二值化后的图像可以更加清晰的观察到图像的噪点及不光滑的部分。目前实现图像二值化的方法主要有两种，即固定阈值法和自适应阈值法。固定阈值法就是手动设置一个阈值，当图像的像素点大于该阈值时我们就将该像素点置为黑色（或白色），反之则置为白色（或黑色）。</p>
+<p>自适应阈值法即是根据图像整体的某一特征来自动设置该图像的阈值，相比于固定阈值法，自适应阈值法具有较好的灵活性。目前较好的自适应阈值法是由日本学者大津年提出的最大类间方差法，简称OTSU[7]。其原理为根据图像的灰度值的不同，将图像分割成背景和目标两大部分，构成图像的两部分之间的差别用背景和目标之间的方差表示。</p>
+<p>设图像为<em>I</em>（<em>x</em>，<em>y</em>），目标区域和背景的分割阈值为<em>T</em>，目标像素点数为<em>N<del>0</del><em>，占图像全体比例为</em>ω<del>0</del><em>，平均灰度为</em>µ<del>0</del><em>。背景像素点数为</em>N<del>1</del><em>，占图像全体比例为</em>ω<del>1</del><em>，平均灰度为</em>µ<del>1</del><em>。图像大小为</em>M×N</em>，总平均灰度记作<em>µ</em>，我们称<em>g</em>为类间方差，则有：<br>$$<br>\begin{array}{l}<br> \quad \omega_{0}&#x3D;N_{0} &#x2F;(M \times N) \quad \<br> \quad \omega_{1}&#x3D;N_{1} &#x2F;(M \times N) \quad  \<br> \quad N_{0}+N_{1}&#x3D;M \times N \quad  \<br> \quad \omega_{0}+\omega_{1}&#x3D;1 \<br> \quad g&#x3D;\omega_{0} <em>\left(\mu_{0}-\mu\right)^{2}+\omega_{1} <em>\left(\mu_{1}-\mu\right)^{2}&#x3D;\omega_{0} \omega_{1}\left(\mu_{0}-\mu_{1}\right)^{2} \<br>\end{array}<br>$$<br>遍历图像使得到类间方差最大的阈值</em>T</em>即为所求。设二值化后图像为<em>B</em>（<em>x</em>，<em>y</em>）：<br>$$<br>B(x, y)&#x3D;\left{\begin{array}{ll}<br>0, &amp; I(x, y)&lt;T \<br>1, &amp; I(x, y) \geq T<br>\end{array}\right.<br>$$</p>
+<h2 id="图像形态学处理"><a href="#图像形态学处理" class="headerlink" title="图像形态学处理"></a>图像形态学处理</h2><p>通常在二值化处理后的图像中，存在许多小孔和细线等使得图像不光滑的部分，为使图像中的手势部分更加完善并减少下一步图像处理的计算量，我们需要对图像进行形态学处理，形态学处理操作有两种，分别为膨胀操作和腐蚀操作</p>
+<h4 id="图像膨胀"><a href="#图像膨胀" class="headerlink" title="图像膨胀"></a>图像膨胀</h4><p>所谓图像膨胀，可简单理解为将图像各区域进行向外扩张，运行效果表现为图像的高亮区域比原始图像的高亮区域变的更大，故<strong>一般用于去除图像中的“毛刺”</strong>。其算法原理为：用适当的卷积核（该核由算法设计者自定义，可为矩形核或十字矩阵核，核内的值全为1，核大小由用户自定义，一般为3×3或5×5）遍历图像，并与原始图像进行与运算，当与运算的结果只要有一个为1，就将核心的像素值置为1，否则置为0。</p>
+<h4 id="图像腐蚀"><a href="#图像腐蚀" class="headerlink" title="图像腐蚀"></a>图像腐蚀</h4><p>同图像膨胀类似，图像腐蚀可简单理解为将图像的区域进行缩小蚕食，其效果表现为原始图像的高亮部分区域变的更小了，<strong>一般用于“锐化”图像高亮部分</strong>。其原理为：用适当大小的卷积核（核内各值均为1）遍历图像并与图像进行与运算，当核内运算结果均为1时我们才将核心像素值置为1，否则置为0。</p>
+<h1 id="手势提取"><a href="#手势提取" class="headerlink" title="手势提取"></a>手势提取</h1><h2 id="最大轮廓面积提取手势"><a href="#最大轮廓面积提取手势" class="headerlink" title="最大轮廓面积提取手势"></a>最大轮廓面积提取手势</h2><p>经肤色提取后的图像中存在脸部区域和手势区域，为提取图像中的手势部分去除脸部区域，我们需要使用一定的特征来筛选出图像中的手势，传统图像处理中的特征由图像轮廓周长、图像轮廓面积与图像轮廓外接矩形的长宽比等，在本论文中我们选取图像的轮廓面积作为筛选特征。opencv中的内置函数cv2.findContours可检测出二值化后图像的所有轮廓的位置信息，并返回用户一个轮廓矩阵，得到轮廓矩阵后再使用其内置函数cv2.contourArea来计算各轮廓的面积，并判定面积最大的轮廓区域就是手势区域，很显然，该判定方法需要测试者在视频中的手势区域足够大才能检测到。</p>
+<h4 id="代码实例-2"><a href="#代码实例-2" class="headerlink" title="代码实例"></a>代码实例</h4><pre><code class="python"># 遍历图片轮廓，取轮廓面积最大作为手势轮廓，并返回轮廓及其对应信息
+def contours_detect(img):
+    img_gray=cv.cvtColor(img,cv.COLOR_BGR2GRAY)
+    _,thresh=cv.threshold(img_gray,127,255,cv.THRESH_BINARY)
+    #轮廓检测
+    contours= cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)[0]
+    # 遍历轮廓获取轮廓面积
+    img_area=[]
+    for i,c in enumerate(contours):
+        (x,y,w,h)=cv.boundingRect(c)#获取图像轮廓外接矩形位置
+        area=cv.contourArea(c)#获取轮廓面积
+        # area=w*h#轮廓外接矩形面积
+        img_area.append([c,area,(x,y,w,h)])#获取轮廓外接矩形面积，以及对应轮廓信息
+    img_area=pd.DataFrame(img_area,columns=[&quot;cnt&quot;,&quot;area&quot;,&quot;location&quot;])#将获取的轮廓面积及其信息转换为DataFrame结构
+    max_location=np.argmax(img_area[&#39;area&#39;], axis=0)#获取最大轮廓面积的索引号
+    x,y,w,h=img_area.loc[max_location][&#39;location&#39;]#获取最大轮廓面积的轮廓信息
+    cnt=img_area.loc[max_location][&#39;cnt&#39;]
+
+    # draw_img = img.copy()
+    # cv.drawContours(draw_img,[cnt],-1,color=(0,0,255),thickness=2)
+    # img_boundrect = cv.rectangle(draw_img, (x, y), (x + w, y + h), (0, 0, 255), 2)#画出最大轮廓外接矩形
+    # cv_show(&quot;res&quot;,img_boundrect)
+    return cnt,(x,y,w,h)
+</code></pre>
+<p>效果如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSIxvzd"><img src="https://s1.ax1x.com/2023/02/13/pSIxvzd.png" alt="pSIxvzd.png"></a></p>
+<h2 id="内切圆算法切除手臂"><a href="#内切圆算法切除手臂" class="headerlink" title="内切圆算法切除手臂"></a>内切圆算法切除手臂</h2><p>进一步提取出的手势区域中仍然有可能存在手臂部分（当测试者穿短袖或者挽起衣袖时，而这是不可避免的），为此我们需要对可能出现的手臂进行切除，在这里我们使用内切圆算法对手臂部分进行切除。<br>如图所示，该算法原理为：遍历手势区域内的像素点（实际测试过程中遍历的像素点是手势区域外接矩形内的像素点），计算各点到轮廓的最短距离，记为<em>dist</em>，寻找各<em>dist</em>中的最大值，记为<em>r</em>，并以该<em>max</em>{<em>dist</em>}所对应的像素位置为圆心（图中<em>O</em>点），以<em>r</em>为半径画圆，并作该圆切线与手势轮廓外接矩形<em>ABCD</em>交与<em>MN</em>两点，最后将矩形<em>MNCD</em>区域内的所有像素值置为0，就达到了切除手臂的目的。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSIzpLt"><img src="https://s1.ax1x.com/2023/02/13/pSIzpLt.png" alt="pSIzpLt.png"></a></p>
+<p>在opencv中，内置函数cv2.pointPolygonTest（cnt，（i，j），True）用于判定某像素点是否在轮廓内部，若在则计算该点距离轮廓最近的距离，我们利用该函数就可计算出上述内切圆半径<em>r</em>和圆心<em>O</em>。测试效果如图2-10所示（为减小误差，测试时切线向下平移了10个像素的位置）。</p>
+<h4 id="代码实例-3"><a href="#代码实例-3" class="headerlink" title="代码实例"></a>代码实例</h4><pre><code class="python">
+# 手臂分割内切圆算法（无法切出拇指向下的手势），返回切除手臂后的手势轮廓及其对应信息
+def handCut(img,cnt,x,y,w,h):
+    max = 0
+    point = ()
+    for i in range(x, x + w):
+        for j in range(y, y + h):
+            # 判定某像素点是否在轮廓内部，若在，则计算该点距离轮廓最近的距离
+            dist = cv.pointPolygonTest(cnt, (i, j), True)
+            # print(dist)
+            if dist &gt; max:
+                max = dist
+                point = (i, j)
+    cv.circle(img, point, int(max), (0, 255, 0), 2)
+    return point,max
+
+def handCount(img):
+    cnt, (x, y, w, h) = contours_detect(img)#找出皮肤检测出的手势轮廓
+    # 内切圆算法切除多余的手臂部分
+    point,r=handCut(img, cnt, x, y, w, h)
+    img[int(point[1] + r) + 10:y + h, x:x + w] = 0  # 切除多余部分
+    cnt, (x, y, w, h) = contours_detect(img)#再次计算轮廓
+    return img,cnt,(x,y,w,h)
+</code></pre>
+<p>效果如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSIzCeP"><img src="https://s1.ax1x.com/2023/02/13/pSIzCeP.png" alt="pSIzCeP.png"></a></p>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
+  
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+
+    
+    <a href="/2023/02/13/%E9%9D%99%E6%80%81%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%AE%97%E6%B3%95/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>经典静态手势识别算法概述</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
+
+
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
+</html>
+
