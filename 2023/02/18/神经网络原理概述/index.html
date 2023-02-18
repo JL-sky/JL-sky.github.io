@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>神经网络原理概述-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="机器学习,人工智能,">
+<meta name="description" content="本文主要介绍了前馈神经网络的数学原理，主要包括信号的传播，误差的反向传播以及权重参数的更新表达式推导，并探讨了有关输入、输出数据和初始化权重矩阵的注意事项">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文档目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										文章分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										技术标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										个人简介
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文档目录</a>
+        </li>
+        
+        <li>
+            <a href="/categories">文章分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">技术标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">个人简介</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/机器学习">机器学习</a></li>
+            
+            <li><a href="/tags/人工智能">人工智能</a></li>
+            
+            
+        </ul>
+        
+        <h1>神经网络原理概述</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/人工智能/" target="_blank" >人工智能</a>
+                    
+                </div>
+                <p>2023-02-18 12:53:05</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
+  
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E4%B8%80%E4%B8%AA%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-text">训练一个分类器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%90%91%E4%BC%A0%E6%92%AD%E4%BF%A1%E5%8F%B7"><span class="toc-text">正向传播信号</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-text">神经网络与激活函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%BF%A1%E5%8F%B7%E4%BC%A0%E9%80%92%E5%AE%9E%E4%BE%8B"><span class="toc-text">网络信号传递实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95%E7%9A%84%E4%B8%89%E5%B1%82%E7%BD%91%E7%BB%9C%E5%AE%9E%E4%BE%8B"><span class="toc-text">使用矩阵乘法的三层网络实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E8%AF%AF%E5%B7%AE"><span class="toc-text">反向传播误差</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9D%83%E9%87%8D%E6%9B%B4%E6%96%B0"><span class="toc-text">权重更新</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95"><span class="toc-text">梯度下降法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-text">神经网络中的梯度下降</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%87%8D%E6%9B%B4%E6%96%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="toc-text">权重更新表达式推导</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8"><span class="toc-text">相关问题探讨</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-text">输入数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E6%95%B0%E6%8D%AE"><span class="toc-text">输出数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E5%88%9D%E5%A7%8B%E6%9D%83%E9%87%8D"><span class="toc-text">随机初始权重</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><h2 id="训练一个分类器"><a href="#训练一个分类器" class="headerlink" title="训练一个分类器"></a>训练一个分类器</h2><p><strong>问题</strong>：如下，给出一组数组，要求给出一个线性分类器，使它能够较好的对瓢虫和毛虫进行分类</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSqvGgU"><img src="https://s1.ax1x.com/2023/02/18/pSqvGgU.jpg" alt="pSqvGgU.jpg" style="zoom:33%;" /></a></p>
+<p><strong>分析</strong>：如下图，该问题其实是要求我们求出一条直线来把毛虫和瓢虫“划分”开，因此我们可以设定该直线为</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSqv83T"><img src="https://s1.ax1x.com/2023/02/18/pSqv83T.jpg" alt="pSqv83T.jpg" style="zoom: 25%;" /></a></p>
+<pre><code>y=Ax
+</code></pre>
+<p>其中x表示宽度，y表示长度，则问题转化为根据已知数据求出参数A，使得该直线能够适当的对毛虫和瓢虫进行划分。</p>
+<p><strong>初始时</strong>，我们设定A&#x3D;0.25，则y&#x3D;0.25x，如下图所示</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSqvJvF"><img src="https://s1.ax1x.com/2023/02/18/pSqvJvF.jpg" alt="pSqvJvF.jpg" style="zoom:25%;" /></a></p>
+<p><strong>针对第一个数据</strong>，x&#x3D;3.0，则y&#x3D;0.25*3.0&#x3D;0.75，此时易知0.75&lt;1.0，因此我们需要对参数A进行调整，调整的依据是我们得到的误差</p>
+<pre><code>误差值=期望目标值-真实输出值
+即E=1.1-0.75=0.35
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pSqvtu4"><img src="https://s1.ax1x.com/2023/02/18/pSqvtu4.jpg" alt="pSqvtu4.jpg" style="zoom:25%;" /></a></p>
+<p>注意，之所以期望目标值设定为1.1而不是原始数据的1.0，是因为我们希望的是得到的直线是将两个数据进行划分，而不是让直线落在数据上。</p>
+<p>根据误差定义，我们有</p>
+<pre><code>E=t-y=(A+ΔA)x-Ax=（ΔA）x
+</code></pre>
+<p>则：</p>
+<pre><code>ΔA=E/X
+</code></pre>
+<p>根据上式我们就可以对斜率进行更新，即当E&#x3D;0.35，x&#x3D;3.0时</p>
+<pre><code>ΔA=0.35/3.0=0.1167
+</code></pre>
+<p>故更新后的A&#x3D;0.25+0.1167&#x3D;0.3367</p>
+<p>此时我们便根据第一个样本数据对参数A进行了更新，这就是<strong>基于误差调整参数</strong>的方法</p>
+<p>接下来我们训练<strong>第二个样本数据</strong>，使用第一个样本训练的A，我们有y&#x3D;0.3367x，带入第二个样本数据x&#x3D;1.0.得到y&#x3D;0.3367，易知此时的真实值与目标值3.0相去甚远，基于此前方法，我们又得到了一个误差，并基于同样的办法对参数A进行更新，我们将目标值设定为2.9，同时误差为E&#x3D;2.9-0.3367&#x3D;2.5333，则ΔA&#x3D;2.5333&#x2F;1.0&#x3D;2.5333，于是再次得到更新后的A&#x3D;0.3367+2.5333&#x3D;2.9.如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/TeROJ"><img src="https://cdnjson.com/images/2023/02/18/_20230218132202.md.jpg" alt="_20230218132202.md.jpg"></a></p>
+<p>上述过程其实就是针对一个问题通过样本数据对参数进行训练的过程，但同时也易知，<strong>最终改的直线不会顾及所有先前的训练样本，而是抛弃了所有先前的训练样本的学习结果，只是对最近的一个实例进行了学习</strong></p>
+<p>要解决上述问题，我们只需要引入一个<strong>学习率</strong>的概念，让参数的训练进行<strong>适度改进</strong>，而不是猛烈改进。如下，我们设定学习率为L，则</p>
+<pre><code>ΔA=L（E/x）
+</code></pre>
+<p>当我们设定L&#x3D;0.5，重新进行一遍上述针对参数的训练更新过程，则有</p>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/Tgsuq"><img src="https://cdnjson.com/images/2023/02/18/_20230218132742.md.jpg" alt="_20230218132742.md.jpg"></a></p>
+<h1 id="正向传播信号"><a href="#正向传播信号" class="headerlink" title="正向传播信号"></a>正向传播信号</h1><p>引言中训练一个分类器的实例其实就是一个进行机器学习的实例，在这个实例中，我们采用的核心思想是：<strong>基于误差对参数进行训练更新</strong>，而为了使得训练过程中所有数据都有效，我们引入了学习率的概念。事实上，在真实的机器学习过程中，如果学习率设置的过大，会导致欠拟合现象，有时还会导致误差迭代不收敛的情况，而如果学习率设置的太小，又会导致迭代次数和频率太多，浪费了大量的资源和精力。关于迭代与学习率的问题，我们会在下文详细阐述，这里我们只做一个引述。</p>
+<p>现在，我们将目光放到神经网络上。</p>
+<h3 id="神经网络与激活函数"><a href="#神经网络与激活函数" class="headerlink" title="神经网络与激活函数"></a>神经网络与激活函数</h3><p>所谓神经网络，即科学家模拟大脑神经对外界事务的学习处理过程提出的一种让机器对客观世界事物进行自学习的方法。</p>
+<p>如下图所示，在大脑中存在许许多多这样的神经元，他们负责传递在大脑中流转的电信号，只有当电信号输入到一个神经元时。只有它的强度达到一个程度才能使得神经元将该信号向下一个神经元进行传递，在传递过程中神经元还会对电信号进行一些处理才将处理后的信号进行输出。</p>
+<p>[<img src="https://cdnjson.com/images/2023/02/18/_20230218133628.md.jpg" alt="_20230218133628.md.jpg">]</p>
+<p>上述过程有两个重要步骤，即：</p>
+<blockquote>
+<ul>
+<li>输入信号只有达到一定强度时，才能激发神经元对信号进行传递输出</li>
+<li>传入的信号需要通过神经元的处理后再向下传递</li>
+</ul>
+</blockquote>
+<p>针对上述第一个问题，科学家设计一种名为激活函数的式子来模拟这个过程，其中较为经典的激活函数就是sigmoid函数，也称逻辑函数和S函数。如下图所示：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218134536.md.jpg" alt="_20230218134536.md.jpg"></p>
+<p>其表达式为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218134543.md.jpg" alt="_20230218134543.md.jpg"></p>
+<p>至此，我们对神经元的信号传递模拟可以用下图进行直观感受：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218134548.md.jpg" alt="_20230218134548.md.jpg"></p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218134553.md.jpg" alt="_20230218134553.md.jpg"></p>
+<p>在此基础上，科学家便设计出了神经网络模型，我们以经典的三层网络模型进行示例，其中每一层有三个神经元或节点如下图所示：<br><img src="https://cdnjson.com/images/2023/02/18/_20230218134557.md.jpg" alt="_20230218134557.md.jpg"></p>
+<p>同时，模拟神经元对信号的传递和处理过程，科学家在上述神经网络中加入了链接权重，即对每一组输入数据，在达到激活条件后，需要重新对数据进行分配后再传入下一层，其中较小的权重将弱化信号，而较大的权重将放大信号，而如果权重为0，则表示该链接是被断开了。如下图所示：<br><img src="https://cdnjson.com/images/2023/02/18/_20230218134603.md.jpg" alt="_20230218134603.md.jpg"></p>
+<h3 id="网络信号传递实例"><a href="#网络信号传递实例" class="headerlink" title="网络信号传递实例"></a>网络信号传递实例</h3><p>我们用一个两层的网络模型来阐述信号在神经网络中是如何进行传递的</p>
+<p>如图所示，我们有两个输入值1.0和0.5，这两个输入值分别通过第一层的两个节点进行传入，同时我们设定好信号向后传递的权重参数w<del>1,1</del>&#x3D;0.9,w<del>1,2</del>&#x3D;0.2,w<del>2,1</del>&#x3D;0.3,w<del>2,2</del>&#x3D;0.8（注意，第一层的神经元我们不设置激活函数）。如下图所示：</p>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/Tezhr"><img src="https://cdnjson.com/images/2023/02/18/_20230218135922.md.jpg" alt="_20230218135922.md.jpg"></a></p>
+<p>则经过权重调整后，进入第二层的两个输入信号分别为：</p>
+<p>x<del>1</del>&#x3D;1.0*0.9+0.5*0.3&#x3D;1.05</p>
+<p>x<del>2</del>&#x3D;1.0*0.2+0.5*0.8&#x3D;0.6</p>
+<p>第二层对上述两个传入的输入信号再通过激活函数（y&#x3D;1&#x2F;(1+e^-x^）)进行调整,得到：</p>
+<p>y<del>1</del>&#x3D;1&#x2F;（1+0.3499）&#x3D;0.7408</p>
+<p>y<del>2</del>&#x3D;1&#x2F;（1+0.5488）&#x3D;0.6457</p>
+<p>在第二层的信号计算过程如下图所示</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218140651.md.jpg" alt="_20230218140651.md.jpg"></p>
+<p>最终输入信号在整个网络中的信号传递过程如下图所示：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218140657.md.jpg" alt="_20230218140657.md.jpg"></p>
+<h3 id="使用矩阵乘法的三层网络实例"><a href="#使用矩阵乘法的三层网络实例" class="headerlink" title="使用矩阵乘法的三层网络实例"></a>使用矩阵乘法的三层网络实例</h3><p>我们重新设定一个三层网络模型，每层都有三个神经元节点，其中我们将第一层称之为输入层，第二层称之为隐藏层，第三层称之为输出层。同时我们将计算过程转换为矩阵进行计算，来再次感受神经网络信号传递过程。如下图所示：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218141541.md.jpg" alt="_20230218141541.md.jpg"></p>
+<p>我们将输入信号的三个值进行矩阵表示：</p>
+<p>I&#x3D;[0.9,0.1,0.8]</p>
+<p>同时用w<del>input_hidden</del>表示输入层到隐藏层之间的权重矩阵：</p>
+<p>w<del>input_hidden</del>&#x3D;[0.9 0.3 0.4</p>
+<p>​					 0.2 0.8 0.2</p>
+<p>​					 0.1 0.5 0.6]</p>
+<p>用w<del>hidden_output</del>表示输入层到隐藏层之间的权重矩阵：</p>
+<p>w<del>hidden_output</del>&#x3D;[0.3 0.7 0.5</p>
+<p>​					 0.6 0.5 0.2</p>
+<p>​					 0.8 0.1 0.9]</p>
+<p>则信号到达隐藏层的输入为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218142119.md.jpg" alt="_20230218142119.md.jpg"></p>
+<p>如今的传递状态为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218142315.md.jpg" alt="_20230218142315.md.jpg"></p>
+<p>至此，我们需要对传入隐藏层的信号进行激活处理，即O<del>hidden</del>&#x3D;sigmoid(X<del>hidden</del>):</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218142731.md.jpg" alt="_20230218142731.md.jpg"></p>
+<p>得到此时的信号传递状态图：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218142741.md.jpg" alt="_20230218142741.md.jpg"></p>
+<p>接下来对信号的传递过程如上述计算过程继续，</p>
+<p>计算输出层的输入信号：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218142754.md.jpg" alt="_20230218142754.md.jpg"></p>
+<p>输出层对信号进行激活处理：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218142805.md.jpg" alt="_20230218142805.md.jpg"></p>
+<p>完整信号传递过程为：</p>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/Tgj2G"><img src="https://cdnjson.com/images/2023/02/18/_20230218142811.md.jpg" alt="_20230218142811.md.jpg"></a></p>
+<h1 id="反向传播误差"><a href="#反向传播误差" class="headerlink" title="反向传播误差"></a>反向传播误差</h1><p>至此，我们已经根据神经网络模型完成了数据从输入到输出的全过程。现在让我们重新会想起引言中的分类器实例，我们针对输入信号得到输出信号时，最终得到的结果不一定是满足我们的要求的，换句话说，我们得到是输出信息与我们的期望值有一定误差，接下来我们需要根据这个误差对我们的参数进行调整，使得网络模型能够对输入信号转换出我们期望的输出。在分类器实例中我们训练和更新的参数是斜率A，而在神经网络模型中我们需要进行训练和调整的参数则是网络传播的链接矩阵，即上述示例中的W<del>input_hidden</del>和W<del>hidden_output</del>。</p>
+<p>在对参数进行修正和训练之前，我们现在需要解决一个问题，那就是虽然我们得到了输出层的误差，但却不知道隐藏层的误差。针对隐藏层的误差如何得来，我们可以通过输出层误差，并根据权重矩阵对隐藏层误差进行反向传播。</p>
+<p>如下图所示，我们重新设定一个三层网络模型来进行说明：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218145713.md.jpg" alt="_20230218145713.md.jpg"></p>
+<p>设输出层误差为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218145720.md.jpg" alt="_20230218145720.md.jpg"></p>
+<p>则我们根据W<del>hidden_output</del>来反向计算隐藏层的误差：</p>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/TgfTB"><img src="https://cdnjson.com/images/2023/02/18/_20230218145726.md.jpg" alt="_20230218145726.md.jpg"></a></p>
+<p>为使矩阵计算方便，我们舍去分母：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218145731.md.jpg" alt="_20230218145731.md.jpg"></p>
+<p>这样做的原因是，较大的权重就意味着携带较多的输出误差给隐藏层。这是非常重要的一点。这些分数的分母是一种归一化因子。如果我们忽略了这个因子，那么我们仅仅失去后馈误差的大小。也就是说，我们使用简单得多的e1* w1,1来代替e1* w1,1&#x2F; ( w1,1+w2,1)。</p>
+<p>最终我们得到反向传播误差的矩阵式子为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218145737.md.jpg" alt="_20230218145737.md.jpg"></p>
+<h1 id="权重更新"><a href="#权重更新" class="headerlink" title="权重更新"></a>权重更新</h1><p>得到各层之间的误差后，我们就可以对链接权重进行更新。一直以来，如何对权重进行更新曾困扰科学界多年，因为对于层次比较多的网络模型来说，普通的更新方法将耗费巨大的计算量，直到20世纪60年代到70年代，有人提出了一种切实可行的办法。接下来让我们介绍梯度下降法。</p>
+<h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p>我们来看一个最优化问题，比如有一个表达式为g(x)&#x3D;(x-1)^2^的二次函数，它的最小值是g(x)&#x3D;0，出现在x&#x3D;1时。</p>
+<p>现在假如x&#x3D;3，我们要在此基础上求出当g(x)取得最小值时x的值，而为了使g(x)变小，我们需要将x向左移动，也就是减小x，同理假如x&#x3D;-1时，我们需要将x向右移动，通过观察图像发现，我们的移动方向刚好和g(x)在该点处的导数符号相反。如下图所示：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218152028.md.jpg" alt="_20230218152028.md.jpg"></p>
+<p>此外，我们还需要解决的问题是，移动的步幅需要多大？</p>
+<p>在梯度下降法中，我们根据g(x)在该点处的梯度大小来决定每次移动的步幅，而为了防止出现在引言分类器示例中出现的现象，我们同时对步幅发调整加了学习率。则整个过程用一个表达式来表示就是：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218152033.md.jpg" alt="_20230218152033.md.jpg"></p>
+<p>此外，学习率的大小也将决定收敛速度，如果设置不当甚至会出现不收敛的情况。如我们设置上式η&#x3D;1，从x&#x3D;3开始迭代，我们会发现每次迭代是在-1和3之间循环往复出现的，这样我们将永远无法迭代到最小值。</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218152050.md.jpg" alt="_20230218152050.md.jpg"></p>
+<p>综上，我们将整个迭代过程通过图解表示如下：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218152055.md.jpg" alt="_20230218152055.md.jpg"></p>
+<h2 id="神经网络中的梯度下降"><a href="#神经网络中的梯度下降" class="headerlink" title="神经网络中的梯度下降"></a>神经网络中的梯度下降</h2><h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>在梯度下降法中，我们通过梯度的大小和方向来确定当函数取得最小值时自变量的值。而在神经网络中，我们要求的是当误差函数取得最小时对应参数值。我们称这个误差函数为<strong>损失函数</strong>，其因变量即是误差，自变量即是参数，如果有多个参数，则对应的图像也应该是高维的。</p>
+<p>在对损失函数使用梯度下降法时，我们需要明确以下问题</p>
+<blockquote>
+<ul>
+<li>在使用梯度下降法时，每次迭代的步幅大小有函数在该点处的梯度大小决定，因此我们最好保证当距离最低点较远时步幅较大，越靠近最低点时，迭代的步幅大小应该尽量保持越小，以避免过度迭代，从而跳过最低但</li>
+<li>在最低点处的梯度是存在的，即可导，因此我们尽量避免使用绝对值函数</li>
+<li>当函数出现多个最低点（此时称为极小值）时，为保证结果的正确，我们应尽量多设置几个初始值进行多次尝试迭代</li>
+</ul>
+</blockquote>
+<h3 id="权重更新表达式推导"><a href="#权重更新表达式推导" class="headerlink" title="权重更新表达式推导"></a>权重更新表达式推导</h3><p>由梯度下降法表达式及思想知，关键因素是我们要求出损失函数对权重参数的导数，即：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154421.md.jpg" alt="_20230218154421.md.jpg"></p>
+<p>由链式法则得：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154428.md.jpg" alt="_20230218154428.md.jpg"></p>
+<p>故有：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154506.md.jpg" alt="_20230218154506.md.jpg"></p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154513.md.jpg" alt="_20230218154513.md.jpg"></p>
+<p>而S函数的微分结果为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154520.md.jpg" alt="_20230218154520.md.jpg"></p>
+<p>因此整个表达式的微分结果为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154527.md.jpg" alt="_20230218154527.md.jpg"></p>
+<p>为使表达式简洁，我们得到：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154532.md.jpg" alt="_20230218154532.md.jpg"></p>
+<p>最终推导出的整个权重更新式子为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154539.md.jpg" alt="_20230218154539.md.jpg"></p>
+<p>其中α即我们上文中表述的学习率。</p>
+<h1 id="相关问题探讨"><a href="#相关问题探讨" class="headerlink" title="相关问题探讨"></a>相关问题探讨</h1><h2 id="输入数据"><a href="#输入数据" class="headerlink" title="输入数据"></a>输入数据</h2><p><img src="https://cdnjson.com/images/2023/02/18/_20230218155519.md.jpg" alt="_20230218155519.md.jpg"></p>
+<p>由权重更新表达式可知，<strong>权重的改变依赖于激活函数的梯度和输入信号O<del>j</del></strong></p>
+<p>其中</p>
+<blockquote>
+<ul>
+<li>小梯度意味着限制神经网络学习的能力。这就是所谓的饱和神经网络。这意味着，我们应该尽量保持小的输入。</li>
+<li>我们也不应该让输入信号太小。当计算机处理非常小或非常大的数字时，可能会丧失精度，因此，使用非常小的值也会出现问题。输入0会将oj设置为0，这样权重更新表达式就会等于0，从而造成学习能力的丧失，因此在某些情况下，我们会将此输入加上一个小小的偏移，如0.01，避免输入0带来麻烦。</li>
+</ul>
+</blockquote>
+<h2 id="输出数据"><a href="#输出数据" class="headerlink" title="输出数据"></a>输出数据</h2><p>同样由激活函数知，最终数据经过激活函数后，其输出极限为1，因此我们的期望值不能设置超过1的数据，否则误差太大，导致训练网络得到更大的权重，由上述知，越大的权重将在下一场训练中造成网络饱和问题。</p>
+<p>因此，我们应该重新调整目标值，匹配激活函数的可能输出，注意避开激活函数不可能达到的值。虽然，常见的使用范围为0.0～1.0，但是由于0.0和1.0这两个数也不可能是目标值，并且有驱动产生过大的权重的风险，因此一些人也使用0.01～0.99的范围。</p>
+<h2 id="随机初始权重"><a href="#随机初始权重" class="headerlink" title="随机初始权重"></a>随机初始权重</h2><p>在初始权重的设置上，数学家所得到的经验规则是，我们可以在一个节点传入链接数量平方根倒数的大致范围内随机采样，初始化权重。因此，如果每个节点具有3条传入链接，那么初始权重的范围应该在从-1 &#x2F;sqrt(3)到+1&#x2F;sqrt(3)，即±0.577之间。如果每个节点具有100条传入链接，那么权重的范围应该在-1&#x2F;sqrt(100)至+1&#x2F;sqrt(100)，即±0.1之间。</p>
+<p>这一经验法则实际上讲的是，从均值为0、标准方差等于节点传入链接数量平方根倒数的正态分布中进行采样。</p>
+<p>禁止将初始权重设定为相同的恒定值，特别是禁止将初始权重设定为0。</p>
+<p>综上有：</p>
+<blockquote>
+<ul>
+<li><p>如果输入、输出和初始权重数据的准备与网络设计和实际求解的问题不匹配，那么神经网络并不能很好地工作。</p>
+</li>
+<li><p>一个常见的问题是饱和。在这个时候，大信号（这有时候是由大权重带来的）导致了应用在信号上的激活函数的斜率变得非常平缓。这降低了神经网络学习到更好权重的能力。</p>
+</li>
+<li><p>另一个问题是零值信号或零值权重。这也可以使网络丧失学习更好权重的能力。内部链接的权重应该是随机的，值较小，但要避免零值。如果节点的传入链接较多，有一些人会使用相对复杂的规则，如减小这些权重的大小</p>
+</li>
+</ul>
+</blockquote>
+<p>因此有：</p>
+<blockquote>
+<ul>
+<li>输入应该调整到较小值，但不能为零。一个常见的范围为0.01～0.99，或-1.0～1.0，使用哪个范围，取决于是否匹配了问题。</li>
+<li>输出应该在激活函数能够生成的值的范围内。逻辑S函数是不可能生成小于等于0或大于等于1的值。将训练目标值设置在有效的范围之外，将会驱使产生越来越大的权重，导致网络饱和。一个合适的范围为0.01～0.99。</li>
+</ul>
+</blockquote>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
+  
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+
+    
+    <a href="/2023/02/13/%E6%89%8B%E5%8A%BF%E5%88%86%E5%89%B2%E4%B8%8E%E6%8F%90%E5%8F%96/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>手势分割与提取</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
+
+
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
+</html>
+
