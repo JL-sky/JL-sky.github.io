@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>MNIST手写数字识别（手工网络模型）-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="机器学习,人工智能,python,">
+<meta name="description" content="本文主要依托于上文对神经网络数学原理的概述，使用python搭建一个手工网络模型，并借助MNIST数据集对网络模型进行测试">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文档目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										文章分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										技术标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										个人简介
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文档目录</a>
+        </li>
+        
+        <li>
+            <a href="/categories">文章分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">技术标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">个人简介</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/机器学习">机器学习</a></li>
+            
+            <li><a href="/tags/人工智能">人工智能</a></li>
+            
+            <li><a href="/tags/python">python</a></li>
+            
+            
+        </ul>
+        
+        <h1>MNIST手写数字识别（手工网络模型）</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/人工智能/" target="_blank" >人工智能</a>
+                    
+                </div>
+                <p>2023-02-19 00:00:00</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
+  
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%90%AD%E5%BB%BA"><span class="toc-text">网络模型搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">网络初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%9E%E6%8E%A5%E7%9F%A9%E9%98%B5"><span class="toc-text">初始化连接矩阵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-text">定义激活函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%BF%A1%E5%8F%B7"><span class="toc-text">前向传播信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83"><span class="toc-text">网络训练</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E8%AF%AF%E5%B7%AE%E5%8F%8A%E8%AF%AF%E5%B7%AE%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">计算误差及误差的反向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%87%8D%E7%9F%A9%E9%98%B5%E6%9B%B4%E6%96%B0"><span class="toc-text">权重矩阵更新</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%B7%A5%E7%BD%91%E7%BB%9C%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-text">手工网络完整代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MNIST%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%B6%E4%BD%9C"><span class="toc-text">MNIST数据集制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MNIST%E6%95%B0%E6%8D%AE%E9%9B%86%E4%BB%8B%E7%BB%8D"><span class="toc-text">MNIST数据集介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E7%BD%91%E7%BB%9C"><span class="toc-text">构建网络</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83-1"><span class="toc-text">网络训练</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text">数据处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text">输入数据处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%9F%E6%9C%9B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text">期望数据处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="toc-text">模型训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95"><span class="toc-text">网络测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MNIST%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-text">MNIST手写数字识别完整代码</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <blockquote>
+<p>在上篇文章中，我们阐述了手工神经网络的数学原理，详见<a target="_blank" rel="noopener" href="https://jl-sky.github.io/2023/02/18/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0/">https://jl-sky.github.io/2023/02/18/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0/</a><br>在本篇文章中，我们将使用python手工搭建一个神经网络，并使用mnist手写数字数据集进行测试</p>
+</blockquote>
+<h1 id="网络模型搭建"><a href="#网络模型搭建" class="headerlink" title="网络模型搭建"></a>网络模型搭建</h1><p>创建网络类bpNetWork，类内定义构造函数；query()函数，用于前向传播信号；train（）函数用于训练网络，对权重矩阵进行更新。</p>
+<h2 id="网络初始化"><a href="#网络初始化" class="headerlink" title="网络初始化"></a>网络初始化</h2><blockquote>
+<p>参数：输入层节点个数，隐藏层节点个数，输出层节点个数，学习率</p>
+</blockquote>
+<h3 id="初始化连接矩阵"><a href="#初始化连接矩阵" class="headerlink" title="初始化连接矩阵"></a>初始化连接矩阵</h3><p>输入层到隐藏层连接矩阵</p>
+<pre><code class="python">self.wih=np.random.normal(0.0,pow(self.hidnodes,-0.5),(self.hidnodes,self.innodes))#矩阵大小为hidnodes×innodes
+</code></pre>
+<p>隐藏层到输出层连接矩阵</p>
+<pre><code class="python">self.who=np.random.normal(0.0,pow(self.outnodes,-0.5),(self.outnodes,self.hidnodes))#矩阵大小为outnodes×hidnodes
+</code></pre>
+<h3 id="定义激活函数"><a href="#定义激活函数" class="headerlink" title="定义激活函数"></a>定义激活函数</h3><pre><code class="python">self.activeFuction=lambda x:scipy.special.expit(x)
+</code></pre>
+<p>完整代码：</p>
+<pre><code class="python">    def __init__(self,inputNodes,hiddenNodes,outputNodes,learningRate):
+        self.innodes=inputNodes#输入层节点个数
+        self.hidnodes=hiddenNodes#隐藏层节点个数
+        self.outnodes=outputNodes#输出层节点个数
+
+        # 初始化训练矩阵,随机正态分布矩阵
+        self.wih=np.random.normal(0.0,pow(self.hidnodes,-0.5),(self.hidnodes,self.innodes))#矩阵大小为hidnodes×innodes
+        self.who=np.random.normal(0.0,pow(self.outnodes,-0.5),(self.outnodes,self.hidnodes))#矩阵大小为outnodes×hidnodes
+        # 初始化学习率
+        self.lr=learningRate
+        # 定义sigmod激活函数
+        self.activeFuction=lambda x:scipy.special.expit(x)
+        # return
+</code></pre>
+<h2 id="前向传播信号"><a href="#前向传播信号" class="headerlink" title="前向传播信号"></a>前向传播信号</h2><p>信号从输入层经过连接矩阵后到达隐藏层</p>
+<pre><code class="python">hiddenInput=np.dot(self.wih,inputs)
+</code></pre>
+<p>信号经隐藏层激活后输出</p>
+<pre><code class="python">hiddenOut=self.activeFuction(hiddenInput)
+</code></pre>
+<p>信号从隐藏层经连接矩阵到达输出层</p>
+<pre><code class="python">outInput = np.dot(self.who, hiddenOut)
+</code></pre>
+<p>信号经过输出层激活后输出</p>
+<pre><code class="python">finalOut = self.activeFuction(outInput)
+</code></pre>
+<p>完整代码：</p>
+<pre><code class="python">    def query(self,inputsList):
+        # 转置
+        inputs=np.array(inputsList,ndmin=2).T#ndmin表示矩阵最低维数是2维
+        # 隐藏层输入值
+        hiddenInput=np.dot(self.wih,inputs)
+        # 激活后的隐藏输出
+        hiddenOut=self.activeFuction(hiddenInput)
+
+        # 输出层输入值
+        outInput = np.dot(self.who, hiddenOut)
+        # 激活后的输出层输出
+        finalOut = self.activeFuction(outInput)
+        return finalOut
+</code></pre>
+<h2 id="网络训练"><a href="#网络训练" class="headerlink" title="网络训练"></a>网络训练</h2><h3 id="计算误差及误差的反向传播"><a href="#计算误差及误差的反向传播" class="headerlink" title="计算误差及误差的反向传播"></a>计算误差及误差的反向传播</h3><pre><code class="python">outErrors=targets-finalOut
+hiddenErrors=np.dot(self.who.T,outErrors)
+</code></pre>
+<h3 id="权重矩阵更新"><a href="#权重矩阵更新" class="headerlink" title="权重矩阵更新"></a>权重矩阵更新</h3><p>由上篇文章我们知道，权重更新表达式为：</p>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154532.md.jpg" alt="_20230218154532.md.jpg"></p>
+<blockquote>
+<p>注：*乘法是正常的对应元素的乘法，·点乘是矩阵点积，且来自上一层的输出矩阵被转置了。实际上，这意味着输出矩阵的列变成了行。</p>
+</blockquote>
+<p><img src="https://cdnjson.com/images/2023/02/18/_20230218154539.md.jpg" alt="_20230218154539.md.jpg"></p>
+<p>故权重更新表达式为：</p>
+<pre><code class="python">self.who+=self.lr*np.dot((outErrors*finalOut*(1-finalOut)),np.transpose(hiddenOut))#更新隐藏层到输出层的权重矩阵
+self.wih+=self.lr*np.dot((hiddenErrors*hiddenOut*(1-hiddenOut)),np.transpose(inputs))#更新输入层到隐藏层的权重矩阵
+</code></pre>
+<p>完整代码：</p>
+<pre><code class="python">    def train(self,inputsList,targetList):
+        inputs=np.array(inputsList,ndmin=2).T# ndmin表示矩阵最低维数是2维
+        targets=np.array(targetList,ndmin=2).T# 期望值
+
+        # 正向传播
+        hiddenInput=np.dot(self.wih,inputs)#隐藏层输入值
+        hiddenOut=self.activeFuction(hiddenInput)#隐藏层输出值
+
+        finalInput=np.dot(self.who,hiddenOut)#最终层输入值
+        finalOut=self.activeFuction(finalInput)#最终层输出值
+
+        # 计算损失（误差）
+        outErrors=targets-finalOut
+        hiddenErrors=np.dot(self.who.T,outErrors)
+
+        # 权重更新
+        self.who+=self.lr*np.dot((outErrors*finalOut*(1-finalOut)),np.transpose(hiddenOut))
+        self.wih+=self.lr*np.dot((hiddenErrors*hiddenOut*(1-hiddenOut)),np.transpose(inputs))
+        return
+</code></pre>
+<h2 id="手工网络完整代码"><a href="#手工网络完整代码" class="headerlink" title="手工网络完整代码"></a>手工网络完整代码</h2><pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+import numpy as np
+import scipy.special#激活函数
+
+# https://blog.csdn.net/weixin_41822392/article/details/89639783
+
+# 三层网络模型
+
+# 参数：输入层节点数，隐藏层节点数，输出层节点数，学习率
+class bpNetWork:
+    def __init__(self,inputNodes,hiddenNodes,outputNodes,learningRate):
+        self.innodes=inputNodes#输入层节点个数
+        self.hidnodes=hiddenNodes#隐藏层节点个数
+        self.outnodes=outputNodes#输出层节点个数
+
+        # 初始化训练矩阵,随机正态分布矩阵
+        self.wih=np.random.normal(0.0,pow(self.hidnodes,-0.5),(self.hidnodes,self.innodes))
+        self.who=np.random.normal(0.0,pow(self.outnodes,-0.5),(self.outnodes,self.hidnodes))
+        # 初始化学习率
+        self.lr=learningRate
+        # 定义sigmod激活函数
+        self.activeFuction=lambda x:scipy.special.expit(x)
+        # return
+
+    # 计算网络输出与标准值之间的误差，以训练网络权重
+    def train(self,inputsList,targetList):
+        inputs=np.array(inputsList,ndmin=2).T# ndmin表示矩阵最低维数是2维
+        targets=np.array(targetList,ndmin=2).T
+
+        # 正向传播
+        hiddenInput=np.dot(self.wih,inputs)#隐藏层输入值
+        hiddenOut=self.activeFuction(hiddenInput)#隐藏层输出值
+
+        finalInput=np.dot(self.who,hiddenOut)#最终层输入值
+        finalOut=self.activeFuction(finalInput)#最终层输出值
+
+        # 计算损失（误差）
+        outErrors=targets-finalOut
+        hiddenErrors=np.dot(self.who.T,outErrors)
+
+        # 权重更新
+        self.who+=self.lr*np.dot((outErrors*finalOut*(1-finalOut)),np.transpose(hiddenOut))
+        self.wih+=self.lr*np.dot((hiddenErrors*hiddenOut*(1-hiddenOut)),np.transpose(inputs))
+        return
+
+    # 给定初始信号值，计算初始输出值
+    def query(self,inputsList):
+        # 转置
+        inputs=np.array(inputsList,ndmin=2).T
+        # 隐藏层输入值
+        hiddenInput=np.dot(self.wih,inputs)
+        # 激活后的隐藏输出
+        hiddenOut=self.activeFuction(hiddenInput)
+
+        # 输出层输入值
+        outInput = np.dot(self.who, hiddenOut)
+        # 激活后的输出层输出
+        finalOut = self.activeFuction(outInput)
+        return finalOut
+</code></pre>
+<h1 id="MNIST数据集制作"><a href="#MNIST数据集制作" class="headerlink" title="MNIST数据集制作"></a>MNIST数据集制作</h1><h3 id="MNIST数据集介绍"><a href="#MNIST数据集介绍" class="headerlink" title="MNIST数据集介绍"></a>MNIST数据集介绍</h3><p>该数据集是一个手写数字数据集，可由<a target="_blank" rel="noopener" href="https://pjreddie.com/projects/mnist-in-csv/%E8%8E%B7%E5%8F%96%E3%80%82">https://pjreddie.com/projects/mnist-in-csv/获取。</a></p>
+<p>这个网站提供了两个CSV文件：</p>
+<ul>
+<li>训练集<a target="_blank" rel="noopener" href="http://www.pjreddie.com/media/files/mnist_train.csv%C2%B7">http://www.pjreddie.com/media/files/mnist_train.csv·</a></li>
+<li>测试集<a target="_blank" rel="noopener" href="http://www.pjreddie.com/media/files/mnist_test.csv">http://www.pjreddie.com/media/files/mnist_test.csv</a></li>
+</ul>
+<p>其csv文件中，每一行记录代表一个手写数字信息，这些记录或这些行的内容为：</p>
+<ul>
+<li>第一个值是标签，即书写者实际希望表示的数字，如“7”或“9”。这是我们希望神经网络学习得到的正确答案。</li>
+<li>随后的值，由逗号分隔，是手写体数字的像素值。像素数组的尺寸是28乘以28，因此在标签后有784个值。</li>
+</ul>
+<p>导入数据集：</p>
+<pre><code class="python"># 导入训练集
+with open(&#39;../data/mnist_train.csv&#39;,&#39;r&#39;) as f:
+    trainDataFiles=f.readlines()
+    f.close()
+# 导入测试集
+with open(&#39;../data/mnist_test.csv&#39;,&#39;r&#39;) as f:
+    testDataFiles=f.readlines()#读取所有行，将文件的每行数据作为一个列表，testData为2维数据
+    f.close()
+</code></pre>
+<h3 id="构建网络"><a href="#构建网络" class="headerlink" title="构建网络"></a>构建网络</h3><blockquote>
+<p>输入数据是每行记录的像素值，也就是某个手写数字的像素值，每行共784个像素值，因此输入层定义784个节点</p>
+<p>隐藏层我们定义200个节点</p>
+<p>要求神经网络对图像进行分类，分配正确的标签。这些标签是0到9共10个数字中的一个。这意味着神经网络应该有10个输出层节点，每个节点对应一个可能的答案或标签。如果答案是“0”，输出层第一个节点激发，而其余的输出节点则保持抑制状态。如果答案是“9”，输出层的最后节点会激发，而其余的输出节点则保持抑制状态。下图详细阐释了这个方案，并显示了一些示例输出。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/TAAk2"><img src="https://cdnjson.com/images/2023/02/19/_20230219185953.md.jpg" alt="_20230219185953.md.jpg"></a></p>
+<pre><code class="python">inputNodes=784#输入节点
+hiddenNodes=200#隐藏节点
+outNodes=10#输出节点
+learningRate=0.1#学习率
+bp=bpNetWork(inputNodes,hiddenNodes,outNodes,learningRate)
+</code></pre>
+<h1 id="网络训练-1"><a href="#网络训练-1" class="headerlink" title="网络训练"></a>网络训练</h1><h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><h3 id="输入数据处理"><a href="#输入数据处理" class="headerlink" title="输入数据处理"></a>输入数据处理</h3><blockquote>
+<p>我们需要做的第一件事情是将输入颜色值从较大的0到255的范围，缩放至较小的0.01 到1.0的范围。</p>
+<p>我们刻意选择0.01作为范围最低点，是为了避免先前观察到的0值输入最终会人为地造成权重更新失败。</p>
+<p>我们没有选择0.99作为输入的上限值，是因为不需要避免输入1.0会造成这个问题。我们只需要避免输出值为1.0。</p>
+<p>将在0到255范围内的原始输入值除以255，就可以得到0到1范围的输入值。然后，需要将所得到的输入乘以0.99，把它们的范围变成0.0到0.99。接下来，加上0.01，将这些值整体偏移到所需的范围0.01到1.00。</p>
+</blockquote>
+<pre><code class="python"> trainData=(np.asfarray(data[1:])/255*0.99)+0.01
+</code></pre>
+<h3 id="期望数据处理"><a href="#期望数据处理" class="headerlink" title="期望数据处理"></a>期望数据处理</h3><blockquote>
+<p>如果训练样本的标签为“5”，那么需要创建输出节点的目标数组，其中除了对应于标签“5”的节点，其他所有节点的值应该都很小，这个数组看起来可能如[0,0,0,0,0,1,0,0,0,0]。</p>
+<p>但是试图让神经网络生成0和1的输出，对于激活函数而言是不可能的，这会导致大的权重和饱和网络，因此需要重新调整这些数字。我们将使用值0.01和0.99来代替0和1，这样标签为“5”的目标输出数组为[0.01, 0.01,0.01, 0.01, 0.01, 0.99, 0.01, 0.01, 0.01, 0.01]。</p>
+</blockquote>
+<p>因此目标矩阵为：</p>
+<pre><code class="python">targets=np.zeros(outNodes)+0.01
+targets[int(data[0])]=0.99
+</code></pre>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><pre><code class="python">bp.train(trainData,targets)
+</code></pre>
+<pre><code class="python">i = 1
+for record in trainList:
+    data=record.split(&#39;,&#39;)
+    # 处理输入数据，asfarray将字符串数据转换为浮点型，并将像素值归一化到0.01~1范围内
+    # 目标值不能存在0.0和1.0，隐式sigmod函数的极限达不到
+    trainData=(np.asfarray(data[1:])/255*0.99)+0.01
+    # 处理输出数据
+    targets=np.zeros(outNodes)+0.01
+    targets[int(data[0])]=0.99
+
+    # 网络训练
+    bp.train(trainData,targets)
+    print(&quot;正在训练第&quot;+str(i)+&quot;条数据!&quot;)
+    i+=1
+</code></pre>
+<h2 id="网络测试"><a href="#网络测试" class="headerlink" title="网络测试"></a>网络测试</h2><pre><code class="python"># 网络测试
+# 记录识别准确率
+scoreCard=[]
+# 样本真实值
+real=[]
+# 测试值
+testval=[]
+for record in testList:
+    data=record.split(&#39;,&#39;)
+    testData=(np.asfarray(data[1:])/255*0.99)+0.01
+    # 手写数字真实值
+    value=int(data[0])
+    real.append(value)
+    # 训练测试值
+    testAnswer=bp.query(testData)
+    answer=np.argmax(testAnswer)
+    testval.append(answer)
+
+    if(value==answer):
+        scoreCard.append(1)
+    else:
+        scoreCard.append(0)
+
+
+scoreCard=np.asfarray(scoreCard)
+accuracy=np.sum(scoreCard)/np.size(scoreCard)#计算准确率
+</code></pre>
+<h2 id="MNIST手写数字识别完整代码"><a href="#MNIST手写数字识别完整代码" class="headerlink" title="MNIST手写数字识别完整代码"></a>MNIST手写数字识别完整代码</h2><pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+
+import numpy as np
+# 手写数字数据集
+# https://pjreddie.com/projects/mnist-in-csv/
+# 该数据集的共有60000行训练集，每行数据的第一个数字表示标准值，其余的784个数字表示该手写数字图的像素值
+from BpNetWork import bpNetWork
+# 构建网络
+
+inputNodes=784#输入节点
+hiddenNodes=200#隐藏节点
+outNodes=10#输出节点
+learningRate=0.1#学习率
+bp=bpNetWork(inputNodes,hiddenNodes,outNodes,learningRate)
+
+
+# 导入训练集
+with open(&#39;../data/mnist_train.csv&#39;,&#39;r&#39;) as f:
+    trainDataFiles=f.readlines()
+    f.close()
+# 导入测试集
+with open(&#39;../data/mnist_test.csv&#39;,&#39;r&#39;) as f:
+    testDataFiles=f.readlines()#读取所有行，将文件的每行数据作为一个列表，testData为2维数据
+    f.close()
+
+# 数据处理
+# trainList=trainDataFiles[:100]
+trainList=trainDataFiles
+# testList=testDataFiles[:10]
+testList=testDataFiles
+
+i = 1
+for record in trainList:
+    data=record.split(&#39;,&#39;)
+    # 处理输入数据，asfarray将字符串数据转换为浮点型，并将像素值归一化到0.01~1范围内
+    # 目标值不能存在0.0和1.0，隐式sigmod函数的极限达不到
+    trainData=(np.asfarray(data[1:])/255*0.99)+0.01
+    # 处理输出数据
+    targets=np.zeros(outNodes)+0.01
+    targets[int(data[0])]=0.99
+
+    # 网络训练
+    bp.train(trainData,targets)
+    print(&quot;正在训练第&quot;+str(i)+&quot;条数据!&quot;)
+    i+=1
+
+# 网络测试
+# 记录识别准确率
+scoreCard=[]
+# 样本真实值
+real=[]
+# 测试值
+testval=[]
+for record in testList:
+    data=record.split(&#39;,&#39;)
+    testData=(np.asfarray(data[1:])/255*0.99)+0.01
+    # 手写数字真实值
+    value=int(data[0])
+    real.append(value)
+    # 训练测试值
+    testAnswer=bp.query(testData)
+    answer=np.argmax(testAnswer)
+    testval.append(answer)
+
+    if(value==answer):
+        scoreCard.append(1)
+    else:
+        scoreCard.append(0)
+
+
+scoreCard=np.asfarray(scoreCard)
+accuracy=np.sum(scoreCard)/np.size(scoreCard)#计算准确率
+print(scoreCard)
+print(real)
+print(testval)
+print(accuracy)
+</code></pre>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
+  
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+
+    
+    <a href="/2023/02/18/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>神经网络原理概述</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
+
+
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
+</html>
+
