@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>MNIST手写数字识别（torch版）-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon1.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="机器学习,人工智能,python,">
+<meta name="description" content="本文主要依托于前文对神经网络数学原理的概述以及手工构建网络模型后，简要介绍了torch的自动求导机制，并使用pytorch重新搭建一个网络模型，体会pytorch对于简化网络构建的复杂度的强大之处，并借助MNIST数据集对网络模型进行测试。">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 5.4.1"></head>
+
+	<body>
+		
+	<div class="header">
+		<div class="header-top" id="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.jpg" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										首页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文档目录
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										文章分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										技术标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										个人简介
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>你好</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文档目录</a>
+        </li>
+        
+        <li>
+            <a href="/categories">文章分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">技术标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">个人简介</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+            <img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div class="post-header-background post-header-img"
+    style="background: url('https://api.ixiaowai.cn/gqapi/gqapi.php')" 
+>
+    <div class="post-header-background-content">
+        <ul class="post-header-tag">
+            
+            
+            <li><a href="/tags/机器学习">机器学习</a></li>
+            
+            <li><a href="/tags/人工智能">人工智能</a></li>
+            
+            <li><a href="/tags/python">python</a></li>
+            
+            
+        </ul>
+        
+        <h1>MNIST手写数字识别（torch版）</h1>
+        <div class="post-header-info">
+            <div class="post-header-info-author">
+                
+                    <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                        <path
+                            d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                            p-id="2902" fill="#ffffff"></path>
+                    </svg>
+                    
+                <span class="post-header-info-author-text"> <a href="../../about">你好</a></span>
+                <div class="post-header-info-author-categories">
+                    
+                         <a href="../../categories/人工智能/" target="_blank" >人工智能</a>
+                    
+                </div>
+                <p>2023-02-19 18:40:04</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="post-content" id="content">
+  
+  <div id="article" class="post-content-info">
+    
+      <div id="post-toc">
+        <span class="post-toc-title">文章目录</span>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pytorch%E7%AE%80%E4%BB%8B"><span class="toc-text">pytorch简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#pytorch%E7%9A%84%E8%87%AA%E5%8A%A8%E6%B1%82%E5%AF%BC%E6%9C%BA%E5%88%B6"><span class="toc-text">pytorch的自动求导机制</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA"><span class="toc-text">模型构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="toc-text">模型定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">定义损失函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%BC%98%E5%8C%96%E5%99%A8%E6%9B%B4%E6%96%B0%E6%9D%83%E9%87%8D"><span class="toc-text">创建优化器更新权重</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">前向传播</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="toc-text">模型训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%9F%E5%A4%B1%E5%9B%BE%E6%98%BE%E7%A4%BA"><span class="toc-text">损失图显示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-text">模型构建完整代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MNIST%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%B6%E4%BD%9C"><span class="toc-text">MNIST数据集制作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%B6%E4%BD%9C%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-text">数据集制作完整代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MNIST%E8%AE%AD%E7%BB%83"><span class="toc-text">MNIST训练</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <h1 id="pytorch简介"><a href="#pytorch简介" class="headerlink" title="pytorch简介"></a>pytorch简介</h1><p>在前两篇文章中，我们分别介绍了神经网络的背后运行原理（<a target="_blank" rel="noopener" href="https://jl-sky.github.io/2023/02/18/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0/">神经网络原理概述-Quiet (jl-sky.github.io)</a>），并手工制作了一个网络模型（<a target="_blank" rel="noopener" href="https://jl-sky.github.io/2023/02/19/MNIST%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB-BP/">MNIST手写数字识别（手工网络模型）-Quiet (jl-sky.github.io)</a>），体会了手动构建神经网络后，构建大型网络的复杂程度可想而知。其中，最烦琐的部分莫过于通过微积分计算反向传播误差（back-propagated error）和网络权重（weight）之间的关系。每当网络结构需要改变时，我们很可能需要重新计算一次。</p>
+<p>现在，我们使用PyTorch来取代大部分的底层工作，从而可以专注于网络的设计。</p>
+<p>PyTorch最强大且最便利的功能之一是，无论我们设想的网络是什么样子的，它都能替我们进行所有的微积分计算。即使设计改变了，PyTorch也会自动更新微积分计算，无须我们亲自动手计算梯度（gradient）。</p>
+<p>PyTorch使用一种独特的变量存储数字，我们称它为PyTorch张量</p>
+<pre><code class="python"># 简单PyTorch张量
+x = torch.tensor(3.5)
+print(x)
+</code></pre>
+<p>在上面的代码中，我们创建了一个变量x，它的类型是PyTorch张量，初始值为3.5。张量类型的数据可以满足日常的加减乘除数据计算，如：</p>
+<pre><code class="python"># 简单的张量计算
+y = x + 3
+print(y)
+</code></pre>
+<p>但它更为强大的功能是，它可以进行自动求导运算。</p>
+<h2 id="pytorch的自动求导机制"><a href="#pytorch的自动求导机制" class="headerlink" title="pytorch的自动求导机制"></a>pytorch的自动求导机制</h2><p>定义一个张量数据，并通过requires_grad&#x3D;True告诉PyTorch我们希望得到一个关于x的梯度。</p>
+<pre><code class="python"># PyTorch张量
+x = torch.tensor(3.5, requires_grad=True)
+print(x)
+</code></pre>
+<p>用x再次创建一个张量数据：</p>
+<pre><code class="python"># y以x的函数表示
+y = (x-1) * (x-2) * (x-3)
+print(y)
+</code></pre>
+<blockquote>
+<p>PyTorch张量记录了自己是由哪个张量计算而得，以及如何计算的。在这里，PyTorch记录了y由x定义。</p>
+<p>除此以外，一个PyTorch张量可以包含除原始数值之外的附加信息，比如梯度值。关于它所依赖的其他张量的信息，以及这种依赖的数学表达式。</p>
+</blockquote>
+<p>我们知道，训练神经网络的计算需要使用微积分计算出误差梯度。也就是说，输出误差改变的速率随着网络链接权重的改变而改变。神经网络的输出由链接权重计算得出。输出依赖于权重，就像y依赖于x。</p>
+<p>下面，我们来看看PyTorch如何计算y随x变化的速率。</p>
+<p>我们计算当x &#x3D; 3.5时y的梯度，即dy&#x2F;dx。</p>
+<p>要计算y的梯度，PyTorch需要知道它依赖于哪个张量以及依赖关系的数学表达式。之后便能计算出dy&#x2F;dx。</p>
+<pre><code class="python"># 计算梯度
+y.backward()
+</code></pre>
+<p>上面的代码完成所有这些步骤。通过观察y，PyTorch发现它来自（x−1） <em>（x−2） * （x−3），并自动算出梯度dy&#x2F;dx &#x3D; 3x2 −12x + 11。同时，这行代码也计算出梯度的数值，并与x的实际值一同存储在张量x里。因为x是3.5，所以梯度是3*（3.5*3.5）−12</em>（3.5）+ 11 &#x3D; 5.75。</p>
+<p>此时，张量x里梯度的数值为</p>
+<pre><code class="python"># x = 3.5时的梯度
+x.grad
+</code></pre>
+<p>接下来，我们再来看一个多元微分的例子，体会pytorch自动求导运算的强大。</p>
+<p>我们定义一个多元复合函数</p>
+<blockquote>
+<p>z&#x3D;2x+3y<br>y&#x3D;5a^2^+3b^2^</p>
+<p>x&#x3D;2a+3b</p>
+</blockquote>
+<p>其链式法则微分图如下：</p>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/TBkWj"><img src="https://cdnjson.com/images/2023/02/20/_20230220180620.jpg" alt="_20230220180620.jpg"></a></p>
+<p>接下来我们使用torch定义这个关系式</p>
+<pre><code class="python"># 创建包含x、y和z的计算图
+a = torch.tensor(2.0, requires_grad=True)
+b = torch.tensor(1.0, requires_grad=True)
+x = 2*a + 3*b
+y = 5*a*a + 3*b*b*b
+z = 2*x + 3*y
+</code></pre>
+<p>接着，我们使用torch进行梯度计算并查询张量a的值</p>
+<pre><code class="python"># 计算梯度
+z.backward()
+ 
+# 当a = 2.0时的梯度
+a.grad
+</code></pre>
+<p>可以看到，对于复杂的关系式，pytorch的求导机制对于简化我们网络模型的工作量之重要！</p>
+<p>接下来，我们借助torch重新构建神经网络，并仍旧借助MNIST数据集对网络进行测试。</p>
+<h1 id="模型构建"><a href="#模型构建" class="headerlink" title="模型构建"></a>模型构建</h1><h2 id="模型定义"><a href="#模型定义" class="headerlink" title="模型定义"></a>模型定义</h2><pre><code class="python">self.model=nn.Sequential(
+            nn.Linear(784,200),#定义一个784个节点到200个节点的全相联映射，该模块包含节点之间的连接权重，训练时可以被更新
+            nn.Sigmoid(),#定义激活函数(sigmod)，作为上一层（200个节点的隐藏层）的网络输出
+
+            nn.Linear(200,10),#定义一个200个节点到10个节点的全相联映射
+            nn.Sigmoid()
+        )
+</code></pre>
+<h2 id="定义损失函数"><a href="#定义损失函数" class="headerlink" title="定义损失函数"></a>定义损失函数</h2><pre><code class="python"># 定义损失函数
+ self.lossFunction=nn.MSELoss()#使用均方误差作为目标损失函数进行最小化迭代
+ # self.lossFunction=nn.BCELoss()#二元交叉熵损失
+</code></pre>
+<h2 id="创建优化器更新权重"><a href="#创建优化器更新权重" class="headerlink" title="创建优化器更新权重"></a>创建优化器更新权重</h2><pre><code class="python">#创建优化器更新权重，通过self.model.parameters()传递模型参数进行优化更新
+self.optimiser=torch.optim.SGD(self.model.parameters(),lr)#随机梯度下降
+# self.optimiser=torch.optim.Adam(self.model.parameters())
+</code></pre>
+<h2 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h2><pre><code class="python"># pytorch通过forward函数向网络传递信息
+    def forward(self,inputs):
+        return self.model(inputs)
+</code></pre>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><pre><code class="python">def train(self,inputs,targets):
+        outputs=self.forward(inputs)#计算网络输出值
+        loss=self.lossFunction(outputs,targets)#计算损失（误差）
+
+        # 梯度归零，反向传播，更新权重
+        self.optimiser.zero_grad()#每次训练前需要将图计算网络梯度归零，否则loss.backward()计算出的梯度会累积
+        loss.backward()#从loss函数中计算梯度
+        self.optimiser.step()#使用梯度更新学习参数
+
+        return
+</code></pre>
+<h2 id="损失图显示"><a href="#损失图显示" class="headerlink" title="损失图显示"></a>损失图显示</h2><p>为了可视化结果，我们定义一个变量来记录训练情况</p>
+<pre><code class="python"># 网络训练进展可视化（损失图记录），记录每次迭代更新的损失情况
+        self.count = 0
+        self.congress = []
+</code></pre>
+<p>在训练过程中，记录损失情况</p>
+<pre><code class="python"># 记录每次训练的损失情况
+        self.count += 1
+        if (self.count % 10 == 0):
+            # print(self.count,&#39;&gt;&gt;&gt;&#39;,loss.item())
+            # 每10个训练样本就记录一次损失值(误差)，item()函数展开单值张量，获取里边数字
+            self.congress.append(loss.item())
+
+        if self.count%10000==0:
+            print(self.count,&#39;&gt;&gt;&gt;\n&#39;,self.congress)
+</code></pre>
+<p>损失图显示</p>
+<pre><code class="python">def plotProgerss(self):#绘制损失图
+        df=pd.DataFrame(self.congress,columns=[&#39;loss&#39;])
+        # y轴范围，图像大小，透明度，标记点，是否有网格，y轴刻度值（步长0.25）
+        df.plot(ylim=(0,1.0),figsize=(16,8),alpha=0.1,marker=&#39;.&#39;,grid=True,yticks=(0,0.25,0.5))
+        plt.show()
+        return
+</code></pre>
+<h2 id="模型构建完整代码"><a href="#模型构建完整代码" class="headerlink" title="模型构建完整代码"></a>模型构建完整代码</h2><pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+
+import torch
+import torch.nn as nn#设置分类器
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 优化方法：激活函数改进，损失函数改进，权重更新方法改进，数据标准化（可提高收敛速度），正则化
+# 构建网络分类器
+class classiFier(nn.Module):#继承nn.Module类
+    def __init__(self,lr=0.01):
+        super().__init__()#继承父类构造函数
+        # 定义网络模型
+        self.model=nn.Sequential(
+            nn.Linear(784,200),#定义一个784个节点到200个节点的全相联映射，该模块包含节点之间的连接权重，训练时可以被更新
+            # nn.Sigmoid(),#定义激活函数(sigmod)，作为上一层（200个节点的隐藏层）的网络输出
+            nn.LeakyReLU(0.02),#定义激活函数(线性整流函数，0.02为该函数左侧梯度)
+
+            nn.LayerNorm(200),#数据标准化
+
+            nn.Linear(200,10),#定义一个200个节点到10个节点的全相联映射
+            # nn.Sigmoid()
+            nn.LeakyReLU(0.02),  # 定义激活函数(线性整流函数，0.02为该函数左侧梯度)
+
+        )
+
+        # 定义损失函数
+        self.lossFunction=nn.MSELoss()#使用均方误差作为目标损失函数进行最小化迭代
+        # self.lossFunction=nn.BCELoss()#二元交叉熵损失
+
+        #创建优化器更新权重，通过self.model.parameters()传递模型参数进行优化更新
+        self.optimiser=torch.optim.SGD(self.model.parameters(),lr)#随机梯度下降
+        # self.optimiser=torch.optim.Adam(self.model.parameters())
+
+        # 网络训练进展可视化（损失图记录），记录每次迭代更新的损失情况
+        self.count = 0
+        self.congress = []
+
+
+    # pytorch通过forward函数向网络传递信息
+    def forward(self,inputs):
+        return self.model(inputs)
+
+    def train(self,inputs,targets):
+        outputs=self.forward(inputs)#计算网络输出值
+        loss=self.lossFunction(outputs,targets)#计算损失（误差）
+
+        # 梯度归零，反向传播，更新权重
+        self.optimiser.zero_grad()#每次训练前需要将图计算网络梯度归零，否则loss.backward()计算出的梯度会累积
+        loss.backward()#从loss函数中计算梯度
+        self.optimiser.step()#使用梯度更新学习参数
+
+        # 记录每次训练的损失情况
+        self.count += 1
+        if (self.count % 10 == 0):
+            # print(self.count,&#39;&gt;&gt;&gt;&#39;,loss.item())
+            # 每10个训练样本就记录一次损失值(误差)，item()函数展开单值张量，获取里边数字
+            self.congress.append(loss.item())
+
+        if self.count%10000==0:
+            print(self.count,&#39;&gt;&gt;&gt;\n&#39;,self.congress)
+
+        return
+
+    def plotProgerss(self):#绘制损失图
+        df=pd.DataFrame(self.congress,columns=[&#39;loss&#39;])
+        # y轴范围，图像大小，透明度，标记点，是否有网格，y轴刻度值（步长0.25）
+        df.plot(ylim=(0,1.0),figsize=(16,8),alpha=0.1,marker=&#39;.&#39;,grid=True,yticks=(0,0.25,0.5))
+        plt.show()
+        return
+</code></pre>
+<h1 id="MNIST数据集制作"><a href="#MNIST数据集制作" class="headerlink" title="MNIST数据集制作"></a>MNIST数据集制作</h1><p>导入数据集</p>
+<pre><code class="python"> def __init__(self,filePath):
+        self.dataDf=pd.read_csv(filePath,header=None)
+        return
+</code></pre>
+<p>返回数据集记录总数</p>
+<pre><code class="python"> # 重写__len__方法，当len函数作用于实例后的类对象时被调用
+    def __len__(self):#获取文件长度
+        return len(self.dataDf)
+</code></pre>
+<p>获取数据集某个记录</p>
+<pre><code class="python"># 重写__getitem__函数，可通过索引值返回实例化对象的数据，即将实例化对象作为可迭代数据结构进行使用
+    def __getitem__(self, index):#获取某一行数据集信息（label、手写数字像素值、目标向量）
+        label=self.dataDf.iloc[index,0]#手势数字实值
+        # 定义训练数据张量
+        imgValue=torch.FloatTensor(self.dataDf.iloc[index,1:].values)/255.0
+
+        # 定义目标张量
+        target=torch.zeros((10))#创建一个10维的张量
+        target[label]=1.0
+
+        return label,imgValue,target
+</code></pre>
+<blockquote>
+<p>注：使用torch时，要将数据全部转换为张量变量，本例中，训练数据以及目标数据全部转换为张量</p>
+</blockquote>
+<p>定义一个绘图函数</p>
+<pre><code class="python">    def plotImg(self,index):#绘图
+        imgData=self.dataDf.iloc[index,1:].values.reshape(28,28)
+        plt.imshow(imgData,cmap=&#39;Blues&#39;,interpolation=None)
+        pylab.show()
+        return
+</code></pre>
+<h2 id="数据集制作完整代码"><a href="#数据集制作完整代码" class="headerlink" title="数据集制作完整代码"></a>数据集制作完整代码</h2><pre><code class="python">class MnistDataset():
+    def __init__(self,filePath):
+        self.dataDf=pd.read_csv(filePath,header=None)
+        return
+
+    # 重写魔法方法，可将实例化后的对象作为一种特殊的数据结构进行使用
+    # 重写__len__方法，当len函数作用于实例后的类对象时被调用
+    def __len__(self):#获取文件长度
+        return len(self.dataDf)
+    
+    # 重写__getitem__函数，可通过索引值返回实例化对象的数据，即将实例化对象作为可迭代数据结构进行使用
+    def __getitem__(self, index):#获取某一行数据集信息（label、手写数字像素值、目标向量）
+        label=self.dataDf.iloc[index,0]#手势数字实值
+        # 定义训练数据张量
+        imgValue=torch.FloatTensor(self.dataDf.iloc[index,1:].values)/255.0
+
+        # 定义目标张量
+        target=torch.zeros((10))#创建一个10维的张量
+        target[label]=1.0
+
+        return label,imgValue,target
+    
+    
+    def plotImg(self,index):#绘图
+        imgData=self.dataDf.iloc[index,1:].values.reshape(28,28)
+        plt.imshow(imgData,cmap=&#39;Blues&#39;,interpolation=None)
+        pylab.show()
+        return
+</code></pre>
+<h2 id="MNIST训练"><a href="#MNIST训练" class="headerlink" title="MNIST训练"></a>MNIST训练</h2><pre><code class="python"># -*- codeing=utf-8 -*-
+# @Author:姜磊
+# 人间烟火气，最抚凡人心
+import pandas as pd
+from ImgShow import MnistDataset
+import matplotlib.pyplot as plt
+# from torch.utils.data import Dataset
+from ClassFier import classiFier
+
+# mnist手写数字识别测试网络
+class MnistTorch():
+    def __init__(self,trainFilePath,testFilePath):
+        # 分类器实例化 参数：学习率默认0.01
+        # self.c = classiFier(lr=0.1)
+        self.c = classiFier()
+        # 导入训练集
+        self.trainDataSet = MnistDataset(trainFilePath)
+        # 导入测试集
+        self.testDataSet=MnistDataset(testFilePath)
+        return
+
+    # 训练  参数:训练次数
+    def mnistTorchTrain(self,epoch):
+        # 数据集的训练次数
+        for i in range(epoch):
+            for label, imgValue, target in self.trainDataSet:
+                # print(imgValue)
+                # print(target)
+                self.c.train(imgValue, target)
+        return
+
+    def mnistErrorPlot(self):
+        # 每10个训练样本后的误差可视化显示
+        self.c.plotProgerss()
+        return
+
+    # 对数据集中的某一行数据进行测试
+    def mnistTorchTest(self,record):
+        imgData=self.testDataSet[record][1]#原始数字大小
+        TorchTestOut=self.c.forward(imgData)#网络输出
+
+        self.testDataSet.plotImg(record)#展示原始手绘数字图像
+        # 将输出结果转换为numpy数组并包装为DataFrame数据后绘制成柱状图
+        pd.DataFrame(TorchTestOut.detach().numpy()).plot(kind=&#39;bar&#39;,legend=False,ylim=(0,1))
+        plt.show()
+
+    def testScore(self):
+        score=0#测试成功的数据条数
+        item=0
+        for label,imgData,target in self.testDataSet:
+            testAnswer=self.c.forward(imgData).detach().numpy()#训练答案
+            if(label==testAnswer.argmax()):
+                score+=1
+            item+=1
+
+        # 精确率
+        accuary=score/item
+        return score,item,accuary
+
+trainFilePath = &#39;../data/mnist_train.csv&#39;
+testFilePath = &#39;../data/mnist_test.csv&#39;
+mt=MnistTorch(trainFilePath,testFilePath)
+
+# 训练，参数：训练次数
+mt.mnistTorchTrain(2)
+
+# 对测试集某一条数据记录进行测试
+# mt.mnistTorchTest(12)
+
+# 训练进度（损失图）展示
+# mt.mnistErrorPlot()
+
+# 网络精确率，训练成功的数据条数，数据总数，精确率
+score,item,accuary=mt.testScore()
+print(score,&#39;-&#39;,item,&#39;-&#39;,accuary)
+</code></pre>
+
+  </div>
+  <div id="gitalk-container"></div>
+</div>
+
+<script>
+  
+Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+  dragToClose: true,
+  Toolbar: true,
+  closeButton: "top",
+  Image: {
+    zoom: true,
+  },
+  on: {
+    initCarousel: (fancybox) => {
+      const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+    "Carousel.change": (fancybox, carousel, to, from) => {
+      const slide = carousel.slides[to];
+      fancybox.$container.style.setProperty(
+        "--bg-image",
+        `url("${slide.$thumb.src}")`
+      );
+    },
+  },
+});
+</script>
+
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 9999;
+        /* width: 600px !important; */
+        min-width: 0%;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            max-width: 88%
+        }
+    }
+</style>
+
+    <div class="post-paging">
+    
+
+    
+    <a href="/2023/02/19/MNIST%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB-BP/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>MNIST手写数字识别（手工网络模型）</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		
+<div class="footer">
+	<div class="Copyright">
+		©2023 By 你好. 主题：<a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet">Quiet</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/79E/hexo-theme-quiet">
+			<img src="https://i.328888.xyz/2023/02/01/IDlMp.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>
+
+
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('true')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/79e/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+	</body>
+</html>
+
