@@ -623,14 +623,12 @@ int main()
 <blockquote>
 <p><strong>字段解释</strong></p>
 <ul>
-<li><p>SYN：同步位，SYN&#x3D;1表示<strong>连接请求</strong>报文或者<strong>连接接收</strong>报文</p>
-</li>
-<li><p>ACK：ACK&#x3D;1时确认号ack才起作用</p>
-</li>
-<li><p>seq：报文序号，如客户端发送序号为500，长度为200的报文段，则seq&#x3D;500</p>
-</li>
-<li><p>ack：确认号字段，指接收到对方发送的数据后，期望下一次接收到的序号，如上，ack&#x3D;701</p>
-</li>
+<li>SYN：同步位，SYN&#x3D;1表示<strong>连接请求</strong>报文或者<strong>连接接收</strong>报文</li>
+<li>SYN&#x3D;1,ACK&#x3D;0时表示连接请求报文</li>
+<li>SYN&#x3D;1,ACK&#x3D;1时表示连接接收报文</li>
+<li>ACK：ACK&#x3D;1时确认号ack才起作用</li>
+<li>seq：报文序号，如客户端发送序号为500，长度为200的报文段，则seq&#x3D;500</li>
+<li>ack：确认号字段，指接收到对方发送的数据后，期望下一次接收到的序号，如上，ack&#x3D;701</li>
 </ul>
 </blockquote>
 <blockquote>
@@ -643,8 +641,11 @@ int main()
 </blockquote>
 <blockquote>
 <p><strong>第三次握手作用</strong></p>
-<p>考虑一种<strong>异常情况</strong>：</p>
-<p>客户端第一次握手发送连接请求报文在网络中延迟，于是客户端认为连接请求失败</p>
+<p><strong>为了防止已经失效的连接请求报文突然又传送回了TCP服务器，造成服务器的资源浪费</strong></p>
+<p><strong>为了解决网络中存在延迟的重复分组的问题</strong></p>
+<ul>
+<li><p>考虑一种<strong>异常情况</strong>：</p>
+<p>客户端第一次握手发送连接请求报文在网络中延迟，于是客户端认为连接请求失败，关闭客户端</p>
 <p>服务端接收到延迟的连接请求后认为有客户端进行连接请求，于是发送确认请求</p>
 <p>如果此时不进行第三次握手机制，则客户端接受到错误的确认报文后将不予理睬，而服务端则会一直等待客户端发送数据，这样会消耗掉服务端大量资源</p>
 <p>上述异常情况<strong>举例</strong>：</p>
@@ -653,6 +654,16 @@ int main()
 <p>如果通信过程中A的信息“我们去玩吧”延迟了，那么A误以为B不想搭理A，于是不想和B去玩了</p>
 <p>但B收到了A的延迟请求后又向A发送了确认数据“好的”</p>
 <p>当A收到了B的确认后，由于此时A已经不想和B玩耍，如果此时A不向B发送数据表述情况，则B一直等待A的玩耍时间和玩耍地点等信息，于是B此时就把A认定为渣男，关系崩解</p>
+</li>
+<li><p>另外一种<strong>异常情况</strong>：</p>
+<p>客户端第一次发送的连接请求在网络中延迟，由于超时重传机制使得客户端重新发送了一个连接请求</p>
+<p>客户端第二次的连接请求发送成功并且服务端接收连接，此时服务端发送连接请求确认报文，如果此时只进行两次握手，则此时客户端认为连接已经成功建立，因此双方开始通信</p>
+<p>当双方通信结束后，客户端进入关闭状态</p>
+<p>然而此时客户端第一次延迟的连接请求报文突然到达了服务器，而服务器又无法区别这是一个延迟且重复的请求，因此向客户端发送确认，但客户端已经进入关闭状态将无法接收确认段，则此时服务器将消耗大量资源进行测试。</p>
+<p>如下图所示</p>
+<p><a target="_blank" rel="noopener" href="https://cdnjson.com/image/WL9Rk"><img src="https://cdnjson.com/images/2023/02/28/image.md.png" alt="image.md.png"></a></p>
+</li>
+</ul>
 </blockquote>
 <h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pS4bd1K"><img src="https://s1.ax1x.com/2023/02/11/pS4bd1K.jpg" alt="pS4bd1K.jpg"></a></p>
 <blockquote>
