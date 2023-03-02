@@ -985,7 +985,7 @@ HAVING avg_sal&gt;4000;
 <p><strong>注</strong>：</p>
 <ol>
 <li>不能在where中使用聚合函数过滤，因为聚合函数在where之后执行</li>
-<li>having可过滤非聚合字段，但一般不使用，因为having是先连接后过滤，而where是先过滤后连接，因此从效率上讲，应当把非聚合函数放在where后过滤，将聚合函数放在having后过滤</li>
+<li>having可过滤非聚合字段，但一般不使用，因为<strong>having是先连接后过滤，而where是先过滤后连接，因此从效率上讲，应当把非聚合函数放在where后过滤，将聚合函数放在having后过滤</strong></li>
 </ol>
 <h2 id="sql底层原理"><a href="#sql底层原理" class="headerlink" title="sql底层原理"></a>sql底层原理</h2><h3 id="sql查询结构"><a href="#sql查询结构" class="headerlink" title="sql查询结构"></a>sql查询结构</h3><p><strong>方式1</strong></p>
 <pre><code class="sql">select 查询字段
@@ -1174,7 +1174,9 @@ WHERE employee_id NOT IN(
             WHERE manager_id IS NOT NULL
             )
 </code></pre>
-<h2 id="相关子查询"><a href="#相关子查询" class="headerlink" title="相关子查询"></a>相关子查询</h2><p><strong>在子查询中使用外部表</strong></p>
+<h2 id="相关子查询"><a href="#相关子查询" class="headerlink" title="相关子查询"></a>相关子查询</h2><p><strong>不相关子查询</strong>：子查询的查询条件不依赖于外层查询，<strong>执行顺序</strong>为先执行子查询，在子查询结果集上执行外层查询</p>
+<p><strong>相关子查询</strong>：子查询中的查询条件设计与外层表数据的关联，<strong>执行顺序</strong>为先执行外层查询，取出外层查询的每一条记录与子查询中的条件进行判断是否满足，如果满足则保留该记录</p>
+<p><strong>在子查询中使用外部表</strong></p>
 <p><strong>练习</strong>：查询员工工资大于公司平均工资的员工信息</p>
 <pre><code class="sql">SELECT last_name,salary,department_id
 FROM employees 
@@ -1190,7 +1192,7 @@ FROM employees e1
 WHERE salary &gt; (
         SELECT AVG(salary)
         FROM employees
-        WHERE department_id=e1.department_id-- 子查询中使用外部表
+        WHERE department_id=e1.department_id -- 子查询中使用外部表
         )
 </code></pre>
 <p><strong>解2</strong>：在from中声明子查询</p>
