@@ -416,37 +416,6 @@ int main()
 &#125;
 </code></pre>
 <p><img src="https://s3.bmp.ovh/imgs/2022/04/19/3a75007c0e06e4cd.png"><img src="https://s3.bmp.ovh/imgs/2022/04/19/8429dd51eae9c26b.png"></p>
-<pre><code class="c++">#include&lt;stdlib.h&gt;
-#include&lt;stdio.h&gt;
-#include&lt;string.h&gt;
-#include&lt;sys/types.h&gt;
-#include&lt;unistd.h&gt;
-int main()
-&#123;
-        for(int i=0;i&lt;3;i++)
-        &#123;
-                int pid=fork();
-                if(pid&lt;0)
-                &#123;
-                        printf(&quot;error!\n&quot;);
-                        return -1;
-                &#125;
-                if(pid&gt;0)
-                &#123;
-                        printf(&quot;father-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
-                        // sleep(1);//让父进程后死亡
-                &#125;
-                if(pid==0)
-                &#123;
-                        printf(&quot;child-&gt; pid:%d,fpid:%d\n&quot;,getpid(),getppid());
-                        break;//当子进程进入循环体时就直接退出循环，让子进程不再创建子进程
-                &#125;
-        &#125;
-        sleep(10);
-        return 0;
-&#125;
-</code></pre>
-<p><img src="https://s3.bmp.ovh/imgs/2022/04/19/753811118e8f49b0.png"></p>
 <ul>
 <li>在写操作下父子进程之间不共享全局变量，但在读操作下他们共享一份变量</li>
 </ul>
@@ -999,9 +968,7 @@ int main()
 <p><img src="https://s3.bmp.ovh/imgs/2022/04/19/ac0485d9b4260bfd.png"></p>
 <h2 id="线程分离"><a href="#线程分离" class="headerlink" title="线程分离"></a>线程分离</h2><pre><code class="c++">int pthread_detach(pthread_t thread);
 /*
-功能   使调用线程与当前进程分离，分离后不代表此线程不依赖当前进程，线程分离的目的是将线程资源回收
-       的工作交由系统自动完成，也就是说当被分离的线程结束之后，系统会自动回收它的资源，不需要使用pthread_join进行回收，所以，此
-       函数不会阻塞
+功能   使调用线程与当前进程分离，分离后不代表此线程不依赖当前进程，线程分离的目的是将线程资源回收的工作交由系统自动完成，也就是说当被分离的线程	    结束之后，系统会自动回收它的资源，不需要使用pthread_join进行回收，所以，此函数不会阻塞
 
 参数    thread 线程号
 返回    成功 0     失败 非0
