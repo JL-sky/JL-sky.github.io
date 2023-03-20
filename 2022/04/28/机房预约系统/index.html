@@ -601,57 +601,54 @@ if (type == 1)//学生登录验证
     while (ifs &gt;&gt; fid &amp;&amp; ifs &gt;&gt; fname &amp;&amp; ifs &gt;&gt; fpassword)//c++编码方式为ANSI（gbk）
     &#123;
 
-​		if (fid == id &amp;&amp; fname == name &amp;&amp; fpassword == password)
-​		&#123;
+        if (fid == id &amp;&amp; fname == name &amp;&amp; fpassword == password)
+        &#123;
+            cout &lt;&lt; &quot;登陆成功！&quot; &lt;&lt; endl;
+            ifs.close();
+            system(&quot;pause&quot;);
+            system(&quot;cls&quot;);
 
-​			cout &lt;&lt; &quot;登陆成功！&quot; &lt;&lt; endl;
-​			ifs.close();
-​			system(&quot;pause&quot;);
-​			system(&quot;cls&quot;);
-
-​			person = new student(id, name, password);
-​			//进入学生子菜单
-​			student_menu(person);
-​			return;
-​		&#125;
-​	&#125;
+            person = new student(id, name, password);//父类指针指向子类对象
+            //进入学生子菜单
+            student_menu(person);
+            return;
+        &#125;
+    &#125;
 &#125;
 else &#123;
-​	if (type == 2)//教师登录验证
-​	&#123;
-​		while (ifs &gt;&gt; fid &amp;&amp; ifs &gt;&gt; fname &amp;&amp; ifs &gt;&gt; fpassword)
-​		&#123;
-​			if (fid == id &amp;&amp; fname == name &amp;&amp; fpassword == password)
-​			&#123;
-​				cout &lt;&lt; &quot;登陆成功！&quot; &lt;&lt; endl;
-​				system(&quot;pause&quot;);
-​				system(&quot;cls&quot;);
-
-​				person = new teacher(id, name, password);
-​				//进入教师子菜单
-​				teacher_menu(person);
-​				return;
-​			&#125;
-​		&#125;
-​	&#125;
-​	else
-​		if (type == 3)//管理员登录验证
-​		&#123;
-​			while (ifs &gt;&gt; fname &amp;&amp; ifs &gt;&gt; fpassword)
-​			&#123;
-​				if (fname == name &amp;&amp; fpassword == password)
-​				&#123;
-​					cout &lt;&lt; &quot;登录成功！&quot; &lt;&lt; endl;
-​					system(&quot;pause&quot;);
-​					system(&quot;cls&quot;);
-
-​					person = new manager(name, password);
-​					//进入管理员子菜单
-​					manager_menu(person);
-​					return;
-​				&#125;
-​			&#125;
-​		&#125;
+    if (type == 2)//教师登录验证
+    &#123;
+        while (ifs &gt;&gt; fid &amp;&amp; ifs &gt;&gt; fname &amp;&amp; ifs &gt;&gt; fpassword)
+        &#123;
+            if (fid == id &amp;&amp; fname == name &amp;&amp; fpassword == password)
+            &#123;
+                cout &lt;&lt; &quot;登陆成功！&quot; &lt;&lt; endl;
+                system(&quot;pause&quot;);
+                system(&quot;cls&quot;);
+                person = new teacher(id, name, password);
+                //进入教师子菜单
+                teacher_menu(person);
+                return;
+            &#125;
+        &#125;
+    &#125;
+    else
+        if (type == 3)//管理员登录验证
+        &#123;
+            while (ifs &gt;&gt; fname &amp;&amp; ifs &gt;&gt; fpassword)
+            &#123;
+                if (fname == name &amp;&amp; fpassword == password)
+                &#123;
+                    cout &lt;&lt; &quot;登录成功！&quot; &lt;&lt; endl;
+                    system(&quot;pause&quot;);
+                    system(&quot;cls&quot;);
+                    person = new manager(name, password);
+                    //进入管理员子菜单
+                    manager_menu(person);
+                    return;
+                &#125;
+            &#125;
+        &#125;
 &#125;
 cout &lt;&lt; &quot;登录验证失败！&quot; &lt;&lt; endl;
 system(&quot;pause&quot;);
