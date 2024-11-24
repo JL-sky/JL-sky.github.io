@@ -7,7 +7,15 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>JL-sky</copyright>
-        <lastBuildDate>Wed, 09 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://JL-sky.github.io/categories/test/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 24 Nov 2024 22:30:22 +0800</lastBuildDate><atom:link href="https://JL-sky.github.io/categories/test/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>设计模式</title>
+        <link>https://JL-sky.github.io/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+        <pubDate>Sun, 24 Nov 2024 22:30:22 +0800</pubDate>
+        
+        <guid>https://JL-sky.github.io/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+        <description>&lt;img src="https://JL-sky.github.io/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.jpg" alt="Featured image of post 设计模式" /&gt;&lt;p&gt;本文用于记录常用设计模式&lt;/p&gt;</description>
+        </item>
+        <item>
         <title>Chinese Test</title>
         <link>https://JL-sky.github.io/p/test-chinese/</link>
         <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
