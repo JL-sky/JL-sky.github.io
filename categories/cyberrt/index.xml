@@ -7,13 +7,20 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>JL-sky</copyright>
-        <lastBuildDate>Sun, 24 Nov 2024 22:30:22 +0800</lastBuildDate><atom:link href="https://JL-sky.github.io/categories/cyberrt/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 25 Nov 2024 14:55:32 +0000</lastBuildDate><atom:link href="https://JL-sky.github.io/categories/cyberrt/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>cyberRT安装</title>
         <link>https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/</link>
         <pubDate>Sun, 24 Nov 2024 22:30:22 +0800</pubDate>
         
         <guid>https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/</guid>
-        <description>&lt;img src="https://JL-sky.github.io/img/cyber_install_index.jpg" alt="Featured image of post cyberRT安装" /&gt;&lt;p&gt;cyberRT是。。。。。&lt;/p&gt;</description>
+        <description>&lt;img src="https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg" alt="Featured image of post cyberRT安装" /&gt;&lt;h1 id=&#34;前言&#34;&gt;前言
+&lt;/h1&gt;&lt;p&gt;由于笔者只对cyberRT感兴趣，之前安装的是apollo 9.0，里边包含了所有的代码，包括仿真和pnc等，占据空间较大，因此尝试改用apollo6.0，只安装cyberRT部分&lt;/p&gt;
+&lt;p&gt;有关apollo 9.0部分的安装见官网，没有遇到什么bug&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;apollo.baidu.com/community/Apollo-Homepage-Document?doc=BYFxAcGcC4HpYIbgPYBtXIHQCMEEsATAV0wGNkBbWA5UyRFdZWVBEAU0hFgoIH0adPgCY%2BADwCiAVnEBBCeIAcATnETFcgMxKZkgGxKAwkoDsa3YoAi45WdGSLxsYt0SzY%2BXICMa98oAMSgYALF7%2B2NhemsLBJsrCYZqKwors7AikBIp6miYmpFJSXpigFKhAA&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但apollo 6.0的安装遇到了一些问题，故而在此记录&lt;/p&gt;
+&lt;h1 id=&#34;安装&#34;&gt;安装
+&lt;/h1&gt;&lt;h2 id=&#34;安装docker&#34;&gt;安装docker
+&lt;/h2&gt;</description>
         </item>
         
     </channel>

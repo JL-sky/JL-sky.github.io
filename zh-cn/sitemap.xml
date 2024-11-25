@@ -2,26 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://JL-sky.github.io/</loc>
-    <lastmod>2024-11-24T22:30:22+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://JL-sky.github.io/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ar"
-                href="https://JL-sky.github.io/ar/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://JL-sky.github.io/"
-                />
-  </url><url>
     <loc>https://JL-sky.github.io/categories/</loc>
-    <lastmod>2024-11-24T22:30:22+08:00</lastmod>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -38,26 +20,50 @@
                 href="https://JL-sky.github.io/categories/"
                 />
   </url><url>
-    <loc>https://JL-sky.github.io/categories/cyberrt/</loc>
-    <lastmod>2024-11-24T22:30:22+08:00</lastmod>
+    <loc>https://JL-sky.github.io/categories/docker/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
-    <loc>https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/</loc>
-    <lastmod>2024-11-24T22:30:22+08:00</lastmod>
+    <loc>https://JL-sky.github.io/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
     <loc>https://JL-sky.github.io/post/</loc>
-    <lastmod>2024-11-24T22:30:22+08:00</lastmod>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
+  </url><url>
+    <loc>https://JL-sky.github.io/categories/cyberrt/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
+  </url><url>
+    <loc>https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
     <loc>https://JL-sky.github.io/p/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2024-11-24T22:30:22+08:00</lastmod>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
     <loc>https://JL-sky.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2024-11-24T22:30:22+08:00</lastmod>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
     <loc>https://JL-sky.github.io/page/</loc>
-    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
     <loc>https://JL-sky.github.io/archives/</loc>
-    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
+  </url><url>
+    <loc>https://JL-sky.github.io/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://JL-sky.github.io/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ar"
+                href="https://JL-sky.github.io/ar/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://JL-sky.github.io/"
+                />
   </url><url>
     <loc>https://JL-sky.github.io/tags/</loc>
     <xhtml:link
@@ -77,9 +83,12 @@
                 />
   </url><url>
     <loc>https://JL-sky.github.io/categories/test/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
     <loc>https://JL-sky.github.io/%E5%85%B3%E4%BA%8E/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url><url>
     <loc>https://JL-sky.github.io/search/</loc>
+    <lastmod>2024-11-25T14:55:32+00:00</lastmod>
   </url>
 </urlset>

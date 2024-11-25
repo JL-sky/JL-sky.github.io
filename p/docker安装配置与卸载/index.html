@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="介绍cyberRT6.0在linux上的安装">
-<title>cyberRT安装</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="介绍docker在linux上的安装">
+<title>docker安装、配置与卸载</title>
 
-<link rel='canonical' href='https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/'>
+<link rel='canonical' href='https://JL-sky.github.io/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/'>
 
-<link rel="stylesheet" href="/scss/style.min.17acea4051ad9ae62d841329902f66cade576f741cd73843fe06565a3246f75e.css"><meta property='og:title' content="cyberRT安装">
-<meta property='og:description' content="介绍cyberRT6.0在linux上的安装">
-<meta property='og:url' content='https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/'>
+<link rel="stylesheet" href="/scss/style.min.17acea4051ad9ae62d841329902f66cade576f741cd73843fe06565a3246f75e.css"><meta property='og:title' content="docker安装、配置与卸载">
+<meta property='og:description' content="介绍docker在linux上的安装">
+<meta property='og:url' content='https://JL-sky.github.io/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-24T22:30:22&#43;08:00'/><meta property='article:modified_time' content='2024-11-25T14:55:32&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg' />
-<meta name="twitter:title" content="cyberRT安装">
-<meta name="twitter:description" content="介绍cyberRT6.0在linux上的安装"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-11-25T14:55:32&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/docker/dokcer%E5%AE%89%E8%A3%85/index.jpg' />
+<meta name="twitter:title" content="docker安装、配置与卸载">
+<meta name="twitter:description" content="介绍docker在linux上的安装"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://JL-sky.github.io/img/docker/dokcer%E5%AE%89%E8%A3%85/index.jpg' />
     </head>
     <body class="
     article-page
@@ -302,7 +302,23 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#安装docker">安装docker</a></li>
+    <li><a href="#apt方式安装">apt方式安装</a></li>
+    <li><a href="#snap方式安装">snap方式安装</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#设置docker非sudo执行">设置docker非sudo执行</a></li>
+    <li><a href="#docker镜像加速">docker镜像加速</a>
+      <ol>
+        <li><a href="#方式一修改本地镜像源">方式一：修改本地镜像源</a></li>
+        <li><a href="#方式二直接使用镜像加速命令">方式二：直接使用镜像加速命令</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#apt卸载">apt卸载</a></li>
+    <li><a href="#snap卸载">snap卸载</a></li>
   </ol>
 </nav>
         </div>
@@ -317,9 +333,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/cyberrt%E5%AE%89%E8%A3%85/">
+            <a href="/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/">
                 
-                    <img src="/img/CyberRT/CyberRT6.0%e5%ae%89%e8%a3%85/cyber_install_index.jpg" loading="lazy" alt="Featured image of post cyberRT安装" />
+                    <img src="/img/docker/dokcer%e5%ae%89%e8%a3%85/index.jpg" loading="lazy" alt="Featured image of post docker安装、配置与卸载" />
                 
             </a>
         </div>
@@ -329,8 +345,8 @@
     
     <header class="article-category">
         
-        <a href="/categories/cyberrt/" >
-            CyberRT
+        <a href="/categories/docker/" >
+            Docker
         </a>
         
     </header>
@@ -338,12 +354,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/cyberrt%E5%AE%89%E8%A3%85/">cyberRT安装</a>
+            <a href="/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/">docker安装、配置与卸载</a>
         </h2>
 
         
         <h3 class="article-subtitle">
-            介绍cyberRT6.0在linux上的安装
+            介绍docker在linux上的安装
         </h3>
         
     </div>
@@ -364,7 +380,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">2024-11-24</time>
+            <time class="article-time--published">2024-11-25</time>
         </div>
         
 
@@ -379,14 +395,282 @@
     <section class="article-content">
     
     
-    <h1 id="前言">前言
-</h1><p>由于笔者只对cyberRT感兴趣，之前安装的是apollo 9.0，里边包含了所有的代码，包括仿真和pnc等，占据空间较大，因此尝试改用apollo6.0，只安装cyberRT部分</p>
-<p>有关apollo 9.0部分的安装见官网，没有遇到什么bug</p>
-<p><a class="link" href="" >apollo.baidu.com/community/Apollo-Homepage-Document?doc=BYFxAcGcC4HpYIbgPYBtXIHQCMEEsATAV0wGNkBbWA5UyRFdZWVBEAU0hFgoIH0adPgCY%2BADwCiAVnEBBCeIAcATnETFcgMxKZkgGxKAwkoDsa3YoAi45WdGSLxsYt0SzY%2BXICMa98oAMSgYALF7%2B2NhemsLBJsrCYZqKwors7AikBIp6miYmpFJSXpigFKhAA</a></p>
-<p>但apollo 6.0的安装遇到了一些问题，故而在此记录</p>
-<h1 id="安装">安装
-</h1><h2 id="安装docker">安装docker
-</h2>
+    <h1 id="安装">安装
+</h1><h2 id="apt方式安装">apt方式安装
+</h2><p>1.安装docker依赖</p>
+<p>Docker在Ubuntu上依赖一些软件包。执行以下命令来安装这些依赖:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install ca-certificates curl gnupg lsb-release
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.添加Docker官方GPG密钥</p>
+<p>执行以下命令来添加Docker官方的GPG密钥:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg <span class="p">|</span> sudo apt-key add -
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.添加Docker软件源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo add-apt-repository <span class="s2">&#34;deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> stable&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>4.更新软件源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>5.安装docker</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install docker-ce docker-ce-cli containerd.io
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="snap方式安装">snap方式安装
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo snap install docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="配置">配置
+</h1><h2 id="设置docker非sudo执行">设置docker非sudo执行
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo groupadd docker
+</span></span><span class="line"><span class="cl">sudo usermod -aG docker <span class="nv">$USER</span>
+</span></span><span class="line"><span class="cl">newgrp docker
+</span></span><span class="line"><span class="cl">sudo chown root:docker /var/run/docker.sock
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="docker镜像加速">docker镜像加速
+</h2><h3 id="方式一修改本地镜像源">方式一：修改本地镜像源
+</h3><p>这里给出一个长期更新镜像源的博客</p>
+<p><a class="link" href="https://xuanyuan.me/blog/archives/1154?from=tencent"  target="_blank" rel="noopener"
+    >Docker/DockerHub 国内镜像源/加速列表（11月23日更新-长期维护） - 轩辕博客</a></p>
+<p><strong>具体操作如下</strong></p>
+<p>修改<a class="link" href="https://so.csdn.net/so/search?q=%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
+    >配置文件</a>，没有则新增这个文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">vim /etc/docker/daemon.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;registry-mirrors&#34;</span>: <span class="o">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://hub.xdark.top&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://hub.littlediary.cn&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://dockerpull.org&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://hub.crdz.gq&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.1panel.live&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.unsee.tech&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>里面的地址可以随意更换，有一个可用就行</p>
+<p>wq保存退出后，执行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl daemon-reload <span class="o">&amp;&amp;</span> sudo systemctl restart docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行查看是否生效</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker info
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> Registry Mirrors:
+</span></span><span class="line"><span class="cl">  https://hub.xdark.top/
+</span></span><span class="line"><span class="cl">  https://hub.littlediary.cn/
+</span></span><span class="line"><span class="cl">  https://dockerpull.org/
+</span></span><span class="line"><span class="cl">  https://hub.crdz.gq/
+</span></span><span class="line"><span class="cl">  https://docker.1panel.live/
+</span></span><span class="line"><span class="cl">  https://docker.unsee.tech/
+</span></span><span class="line"><span class="cl"> Live Restore Enabled: <span class="nb">false</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="方式二直接使用镜像加速命令">方式二：直接使用镜像加速命令
+</h3><p>打开网页</p>
+<p><a class="link" href="https://xdark.top/"  target="_blank" rel="noopener"
+    >docker_docker镜像_docker镜像下载</a></p>
+<blockquote>
+<ul>
+<li>输入你想要获取的<strong>镜像名称和版本</strong></li>
+<li>点击获取<strong>加速命令</strong></li>
+<li>按照给出的命令操作</li>
+</ul>
+</blockquote>
+<h1 id="卸载docker">卸载docker
+</h1><h2 id="apt卸载">apt卸载
+</h2><p>1.删除docker及安装时自动安装的所有包</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get autoremove docker docker-ce docker-engine  docker.io  containerd runc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.查看docker是否卸载干净</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg -l <span class="p">|</span> grep docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.删除没有删除的相关插件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get autoremove docker-ce-*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>4.删除docker的相关配置&amp;目录</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> dpkg -l <span class="p">|</span>grep ^rc<span class="p">|</span>awk <span class="s1">&#39;{print $2}&#39;</span> <span class="p">|</span>sudo xargs dpkg -P <span class="c1"># 删除无用的相关的配置文件</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rm -rf /etc/systemd/system/docker.service.d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rm -rf /var/lib/docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>5.确定docker卸载完毕</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker --version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="snap卸载">snap卸载
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo snap remove --purge docker 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>清理多余的配置文件（如果有）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -rf /var/snap/docker
+</span></span><span class="line"><span class="cl">sudo rm -rf ~/snap/docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -rf /var/lib/docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -f /var/run/docker.sock
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -rf /var/log/docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 

@@ -7,13 +7,13 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>JL-sky</copyright>
-        <lastBuildDate>Sun, 24 Nov 2024 22:30:22 +0800</lastBuildDate><atom:link href="https://JL-sky.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 25 Nov 2024 14:55:32 +0000</lastBuildDate><atom:link href="https://JL-sky.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>单例模式</title>
         <link>https://JL-sky.github.io/p/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
         <pubDate>Sun, 24 Nov 2024 22:30:22 +0800</pubDate>
         
         <guid>https://JL-sky.github.io/p/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
-        <description>&lt;img src="https://JL-sky.github.io/img/singleton_index.jpg" alt="Featured image of post 单例模式" /&gt;&lt;h1 id=&#34;介绍&#34;&gt;介绍
+        <description>&lt;img src="https://JL-sky.github.io/img/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/SIngleton/singleton_index.jpg" alt="Featured image of post 单例模式" /&gt;&lt;h1 id=&#34;介绍&#34;&gt;介绍
 &lt;/h1&gt;&lt;p&gt;单例模式的目的是确保某个类在整个应用程序中只有一个实例，并提供一个全局访问点来获取该实例。这个模式常常用来管理全局共享资源，如配置对象、数据库连接、线程池等。&lt;/p&gt;
 &lt;p&gt;如下所示，我们通过new运算符创建出了类A的三个对象实例，而我们现在要做的是，如何设计类A，使得上述代码运行之后永远只产生同一个对象实例&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
