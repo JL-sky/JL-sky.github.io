@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="This is a test page for i18n support.\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="欢迎来到我的博客！\n">
 <title>关于</title>
 
 <link rel='canonical' href='https://JL-sky.github.io/%E5%85%B3%E4%BA%8E/'>
 
-<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="关于">
-<meta property='og:description' content="This is a test page for i18n support.\n">
+<link rel="stylesheet" href="/scss/style.min.dd9d13abfdf8e6b64c1b3152acc9d9d5d342517111e6508f418e596308d9665c.css"><span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+
+<script language="javascript">
+    var now = new Date();
+    function createtime() {
+        now.setTime(now.getTime() + 250); 
+        var grt = new Date("20xx/xx/xx 00:00:00"); 
+        days = (now - grt) / 1000 / 60 / 60 / 24;
+        dnum = Math.floor(days);
+        hours = (now - grt) / 1000 / 60 / 60 - (24 * dnum);
+        hnum = Math.floor(hours);
+        if (String(hnum).length == 1) { hnum = "0" + hnum; }
+        minutes = (now - grt) / 1000 / 60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes);
+        if (String(mnum).length == 1) { mnum = "0" + mnum; }
+        seconds = (now - grt) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds);
+        if (String(snum).length == 1) { snum = "0" + snum; }
+
+        document.getElementById("timeDate").innerHTML = "本站已稳定运行" + dnum + " 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"
+    }
+    setInterval("createtime()", 250); 
+</script><meta property='og:title' content="关于">
+<meta property='og:description' content="欢迎来到我的博客！\n">
 <meta property='og:url' content='https://JL-sky.github.io/%E5%85%B3%E4%BA%8E/'>
-<meta property='og:site_name' content='一个人的兵荒马乱'>
+<meta property='og:site_name' content='你好'>
 <meta property='og:type' content='article'><meta property='article:section' content='Page' />
 <meta name="twitter:title" content="关于">
-<meta name="twitter:description" content="This is a test page for i18n support.\n">
+<meta name="twitter:description" content="欢迎来到我的博客！\n">
     </head>
     <body class="
     article-page
@@ -69,7 +92,7 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">一个人的兵荒马乱</a></h1>
+            <h1 class="site-name"><a href="/">你好</a></h1>
             <h2 class="site-description">原来是你啊</h2>
         </div>
     </header><ol class="menu-social">
@@ -311,7 +334,7 @@
         <h2 class="article-title">
             <a href="/%E5%85%B3%E4%BA%8E/">关于</a>
         </h2>
-    
+
         
     </div>
 
@@ -322,13 +345,12 @@
 
     
 </div>
-
 </header>
 
     <section class="article-content">
     
     
-    <p>This is a test page for i18n support.</p>
+    <p>欢迎来到我的博客！</p>
 
 </section>
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>一个人的兵荒马乱</title>
+        <title>你好</title>
         <link>https://JL-sky.github.io/</link>
-        <description>Recent content on 一个人的兵荒马乱</description>
+        <description>Recent content on 你好</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>JL-sky</copyright>
@@ -452,7 +452,7 @@
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://JL-sky.github.io/%E5%85%B3%E4%BA%8E/</guid>
-        <description>&lt;p&gt;This is a test page for i18n support.&lt;/p&gt;
+        <description>&lt;p&gt;欢迎来到我的博客！&lt;/p&gt;
 </description>
         </item>
         <item>
