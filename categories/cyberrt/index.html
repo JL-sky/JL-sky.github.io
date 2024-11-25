@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://JL-sky.github.io/categories/cyberrt/'>
 
-<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Category: CyberRT - 一个人的兵荒马乱">
+<link rel="stylesheet" href="/scss/style.min.c97836f869c56b2c7c888aa22197bdd6517861513323e78fc06518d38f8afc94.css"><meta property='og:title' content="Category: CyberRT - 一个人的兵荒马乱">
 <meta property='og:description' content="原来是你啊">
 <meta property='og:url' content='https://JL-sky.github.io/categories/cyberrt/'>
 <meta property='og:site_name' content='一个人的兵荒马乱'>
@@ -242,25 +242,6 @@
             </a>
         </li>
         
-        
-        <li >
-            <a href='/links/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
-  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
-</svg>
-
-
-
-                
-                <span>Links</span>
-            </a>
-        </li>
-        
         <li class="menu-bottom-section">
             <ol class="menu">
                     
@@ -472,6 +453,14 @@
         document.head.appendChild(customFont);
     }());
 </script>
-
+<script src="https://npm.elemecdn.com/nprogress@0.2.0/nprogress.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://npm.elemecdn.com/nprogress@0.2.0/nprogress.css" crossorigin="anonymous" />
+<script>
+    NProgress.start();
+    document.addEventListener("readystatechange", () => {
+        if (document.readyState === "interactive") NProgress.inc(0.8);
+        if (document.readyState === "complete") NProgress.done();
+    });
+</script>
     </body>
 </html>
