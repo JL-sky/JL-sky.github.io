@@ -339,9 +339,9 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#1将构造函数设为私有">1.将构造函数设为私有</a></li>
-    <li><a href="#2声明全局对象并提供访问接口">2.声明全局对象并提供访问接口</a></li>
-    <li><a href="#3拒绝对象的拷贝和赋值">3.拒绝对象的拷贝和赋值</a></li>
+    <li><a href="#将构造函数设为私有">将构造函数设为私有</a></li>
+    <li><a href="#声明全局对象并提供访问接口">声明全局对象并提供访问接口</a></li>
+    <li><a href="#拒绝对象的拷贝和赋值">拒绝对象的拷贝和赋值</a></li>
   </ol>
 
   <ol>
@@ -425,7 +425,16 @@
     <section class="article-content">
     
     
-    <p>[TOC]</p>
+    <p><img src="/index.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="index"
+	
+	
+></p>
 <h1 id="介绍">介绍
 </h1><p>单例模式的目的是确保某个类在整个应用程序中只有一个实例，并提供一个全局访问点来获取该实例。这个模式常常用来管理全局共享资源，如配置对象、数据库连接、线程池等。</p>
 <p>如下所示，我们通过new运算符创建出了类A的三个对象实例，而我们现在要做的是，如何设计类A，使得上述代码运行之后永远只产生同一个对象实例</p>
@@ -458,7 +467,7 @@
 </blockquote>
 <h1 id="设计方法">设计方法
 </h1><p>接下来我们一步步设计代码，来观察单例模式是如何被设计出来的</p>
-<h2 id="1将构造函数设为私有">1.将构造函数设为私有
+<h2 id="将构造函数设为私有">将构造函数设为私有
 </h2><p>这一步的目的在于<strong>拒绝用户使用构造函数创建对象，只能使用我们提供的静态方法创建一个全局对象</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -476,7 +485,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="2声明全局对象并提供访问接口">2.声明全局对象并提供访问接口
+</div><h2 id="声明全局对象并提供访问接口">声明全局对象并提供访问接口
 </h2><p>我们知道静态成员变量的特点是它在类的所有实例之间是共享的，因此，我们可将类实例直接创建出来，并声明为static</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -522,7 +531,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>该接口声明是static的原因是，<strong>当用户调用接口时，对象实例还没有被创建出来，假如声明为普通成员函数，则普通成员函数的调用必须通过对象进行</strong>，这将成为一个矛盾点，因此如果想要用户使用这个函数，就必须要将其声明为static的</p>
-<h2 id="3拒绝对象的拷贝和赋值">3.拒绝对象的拷贝和赋值
+<h2 id="拒绝对象的拷贝和赋值">拒绝对象的拷贝和赋值
 </h2><p>至此，我们已经完成了一个半成品，也就是说，这个时候我们要使用Sington对象，就必须通过其中的static成员函数getInstance来获取，而该函数返回的对象实例永远都是同一个实例</p>
 <p>但还有个问题是，<strong>编译器还会为我们创建拷贝构造函数和拷贝赋值运算符，因此，当我们进行对象拷贝操作的时候，这个实例对象就不是“单例”的了</strong></p>
 <p>故而我们需要将拷贝构造和拷贝赋值运算符禁止掉</p>
@@ -805,35 +814,35 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include&lt;mutex&gt;
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="cl"><span class="cp">#if 0</span><span class="c">
-</span></span></span><span class="line"><span class="cl"><span class="c">class Singleton {
-</span></span></span><span class="line"><span class="cl"><span class="c"> public:
-</span></span></span><span class="line"><span class="cl"><span class="c">    static Singleton *GetInstance() {
-</span></span></span><span class="line"><span class="cl"><span class="c">        if (!instance_) {
-</span></span></span><span class="line"><span class="cl"><span class="c">            std::lock_guard&lt;std::mutex&gt; lock(mtx_);
-</span></span></span><span class="line"><span class="cl"><span class="c">            if (!instance_)
-</span></span></span><span class="line"><span class="cl"><span class="c">                instance_ = new Singleton();
-</span></span></span><span class="line"><span class="cl"><span class="c">        }
-</span></span></span><span class="line"><span class="cl"><span class="c">        return instance_;
-</span></span></span><span class="line"><span class="cl"><span class="c">    }
-</span></span></span><span class="line"><span class="cl"><span class="c">
-</span></span></span><span class="line"><span class="cl"><span class="c">
-</span></span></span><span class="line"><span class="cl"><span class="c"> private:
-</span></span></span><span class="line"><span class="cl"><span class="c">    static Singleton *instance_;
-</span></span></span><span class="line"><span class="cl"><span class="c">    static std::mutex mtx_;
-</span></span></span><span class="line"><span class="cl"><span class="c">
-</span></span></span><span class="line"><span class="cl"><span class="c">    Singleton() {};
-</span></span></span><span class="line"><span class="cl"><span class="c">    Singleton(const Singleton &amp;) = delete;
-</span></span></span><span class="line"><span class="cl"><span class="c">    Singleton &amp;operator=(const Singleton &amp;) = delete;
-</span></span></span><span class="line"><span class="cl"><span class="c">};
-</span></span></span><span class="line"><span class="cl"><span class="c">
-</span></span></span><span class="line"><span class="cl"><span class="c">
-</span></span></span><span class="line"><span class="cl"><span class="c">// 静态成员变量定义：初始化为 nullptr
-</span></span></span><span class="line"><span class="cl"><span class="c">Singleton* Singleton::instance_ = nullptr;
-</span></span></span><span class="line"><span class="cl"><span class="c">
-</span></span></span><span class="line"><span class="cl"><span class="c">// 静态成员变量初始化：mutex
-</span></span></span><span class="line"><span class="cl"><span class="c">std::mutex Singleton::mtx_;
-</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="cp">#endif
+</span></span><span class="line"><span class="cl"><span class="cp">#if 1
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">GetInstance</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">instance_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mtx_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">instance_</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">instance_</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Singleton</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">instance_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">instance_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mtx_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Singleton</span><span class="p">()</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Singleton</span><span class="p">(</span><span class="k">const</span> <span class="n">Singleton</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Singleton</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Singleton</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 静态成员变量定义：初始化为 nullptr
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Singleton</span><span class="o">*</span> <span class="n">Singleton</span><span class="o">::</span><span class="n">instance_</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 静态成员变量初始化：mutex
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">Singleton</span><span class="o">::</span><span class="n">mtx_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用互斥锁可以避免竞态问题的出现，但是会代码效率问题，但是如果我们此时在外层多加一层判断，那么<strong>一旦instance被创建成功后，因为最外面有一个条件判断if （instance ==NULL）在，这样就不会每次调用GetInstance都会创建一次互斥量</strong>。</p>
