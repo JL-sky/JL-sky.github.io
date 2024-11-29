@@ -11,7 +11,7 @@
 <meta property='og:description' content="介绍cyberRT6.0在linux上的安装">
 <meta property='og:url' content='https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-24T22:30:22&#43;08:00'/><meta property='article:modified_time' content='2024-11-29T15:16:11&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-24T22:30:22&#43;08:00'/><meta property='article:modified_time' content='2024-11-29T16:47:21&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg' />
 <meta name="twitter:title" content="cyberRT安装">
 <meta name="twitter:description" content="介绍cyberRT6.0在linux上的安装"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg' />
@@ -53,7 +53,8 @@
         
         
         <figure class="site-avatar">
-            <a href="/">
+            
+            <a href="https://jl-sky.github.io/">
                 
                 
 
@@ -304,13 +305,19 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#安装docker">安装docker</a></li>
-    <li><a href="#下载apollo源码">下载apollo源码</a>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#安装">安装</a>
       <ol>
-        <li><a href="#启动进入apollo-docker-开发容器">启动进入Apollo Docker 开发容器</a></li>
-        <li><a href="#在容器中构建apollo">在容器中构建Apollo</a></li>
+        <li><a href="#安装docker">安装docker</a></li>
+        <li><a href="#下载apollo源码">下载apollo源码</a>
+          <ol>
+            <li><a href="#启动进入apollo-docker-开发容器">启动进入Apollo Docker 开发容器</a></li>
+            <li><a href="#在容器中构建apollo">在容器中构建Apollo</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
+    <li><a href="#测试">测试</a></li>
   </ol>
 </nav>
         </div>
@@ -387,18 +394,18 @@
     <section class="article-content">
     
     
-    <h1 id="前言">前言
-</h1><p>由于笔者只对cyberRT感兴趣，之前安装的是apollo 9.0，里边包含了所有的代码，包括仿真和pnc等，占据空间较大，因此尝试改用apollo6.0，只安装cyberRT部分</p>
+    <h2 id="前言">前言
+</h2><p>由于笔者只对cyberRT感兴趣，之前安装的是apollo 9.0，里边包含了所有的代码，包括仿真和pnc等，占据空间较大，因此尝试改用apollo6.0，只安装cyberRT部分</p>
 <p>有关apollo 9.0部分的安装见官网，没有遇到什么bug</p>
 <p><a class="link" href="" >apollo.baidu.com/community/Apollo-Homepage-Document?doc=BYFxAcGcC4HpYIbgPYBtXIHQCMEEsATAV0wGNkBbWA5UyRFdZWVBEAU0hFgoIH0adPgCY%2BADwCiAVnEBBCeIAcATnETFcgMxKZkgGxKAwkoDsa3YoAi45WdGSLxsYt0SzY%2BXICMa98oAMSgYALF7%2B2NhemsLBJsrCYZqKwors7AikBIp6miYmpFJSXpigFKhAA</a></p>
 <p>但apollo 6.0的安装遇到了一些问题，故而在此记录</p>
-<h1 id="安装">安装
-</h1><h2 id="安装docker">安装docker
-</h2><p>可参考</p>
+<h2 id="安装">安装
+</h2><h3 id="安装docker">安装docker
+</h3><p>可参考</p>
 <p><a class="link" href="https://jl-sky.github.io/p/docker%e5%ae%89%e8%a3%85%e9%85%8d%e7%bd%ae%e4%b8%8e%e5%8d%b8%e8%bd%bd/"  target="_blank" rel="noopener"
     >docker安装、配置与卸载</a></p>
-<h2 id="下载apollo源码">下载apollo源码
-</h2><p>注意一定要下载6.0版本的源码，否则后续编译安装会失败</p>
+<h3 id="下载apollo源码">下载apollo源码
+</h3><p>注意一定要下载6.0版本的源码，否则后续编译安装会失败</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -407,8 +414,8 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone -b r6.0.0 https://github.com/ApolloAuto/apollo.git
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="启动进入apollo-docker-开发容器">启动进入Apollo Docker 开发容器
-</h3><div class="highlight"><div class="chroma">
+</div><h4 id="启动进入apollo-docker-开发容器">启动进入Apollo Docker 开发容器
+</h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -420,8 +427,8 @@
 </span></span><span class="line"><span class="cl">./docker/scripts/cyber_into.sh 
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="在容器中构建apollo">在容器中构建Apollo
-</h3><div class="highlight"><div class="chroma">
+</div><h4 id="在容器中构建apollo">在容器中构建Apollo
+</h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -473,8 +480,8 @@
 </div>
 </div><p>然后再重新使用上述命令构建apollo即可</p>
 <p>编译时间较长，需耐心等待</p>
-<h1 id="测试">测试
-</h1><p>1、为了使cyber日志信息输出到终端，需要修改配置文件。</p>
+<h2 id="测试">测试
+</h2><p>1、为了使cyber日志信息输出到终端，需要修改配置文件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -533,7 +540,7 @@
 
 
         <span>
-            最后更新于 Nov 29, 2024 15:16 UTC
+            最后更新于 Nov 29, 2024 16:47 UTC
         </span>
     </section></footer>
 
@@ -624,9 +631,11 @@
         
         
         
-        发表了4篇文章 ·
+        
+        
+        发表了5篇文章 ·
         总计
-        0.15k字
+        0.10k字
         
     </section>
 

@@ -12,17 +12,17 @@
         <pubDate>Fri, 29 Nov 2024 00:00:00 +0000</pubDate>
         
         <guid>https://JL-sky.github.io/p/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80-sort/</guid>
-        <description>&lt;img src="https://JL-sky.github.io/img/linux/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index1.jpg" alt="Featured image of post linux常用命令(一) —— sort" /&gt;&lt;h1 id=&#34;介绍&#34;&gt;介绍
-&lt;/h1&gt;&lt;h2 id=&#34;作用&#34;&gt;作用
-&lt;/h2&gt;&lt;p&gt;Linux sort 命令用于&lt;strong&gt;将文本文件内容加以排序。&lt;/strong&gt;&lt;/p&gt;
+        <description>&lt;img src="https://JL-sky.github.io/img/linux/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index1.jpg" alt="Featured image of post linux常用命令(一) —— sort" /&gt;&lt;h2 id=&#34;介绍&#34;&gt;介绍
+&lt;/h2&gt;&lt;h3 id=&#34;作用&#34;&gt;作用
+&lt;/h3&gt;&lt;p&gt;Linux sort 命令用于&lt;strong&gt;将文本文件内容加以排序。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;sort 可针对文本文件的内容，&lt;strong&gt;以行为单位来排序&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;注意&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;1、排序时，&lt;strong&gt;默认是按每行/每个域的首字符排序，数字的优先级要大于字符的优先级&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;2、不指定升序还是降序时，&lt;strong&gt;默认是升序&lt;/strong&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;语法&#34;&gt;语法
-&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;h3 id=&#34;语法&#34;&gt;语法
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
@@ -30,8 +30,8 @@
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sort &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;-bcdfimMnr&lt;span class=&#34;o&#34;&gt;][&lt;/span&gt;-o&amp;lt;输出文件&amp;gt;&lt;span class=&#34;o&#34;&gt;][&lt;/span&gt;-t&amp;lt;分隔字符&amp;gt;&lt;span class=&#34;o&#34;&gt;][&lt;/span&gt;+&amp;lt;起始栏位&amp;gt;-&amp;lt;结束栏位&amp;gt;&lt;span class=&#34;o&#34;&gt;][&lt;/span&gt;--help&lt;span class=&#34;o&#34;&gt;][&lt;/span&gt;--verison&lt;span class=&#34;o&#34;&gt;][&lt;/span&gt;文件&lt;span class=&#34;o&#34;&gt;][&lt;/span&gt;-k field1&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;,field2&lt;span class=&#34;o&#34;&gt;]]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;参数&#34;&gt;参数
-&lt;/h2&gt;&lt;blockquote&gt;
+&lt;/div&gt;&lt;h3 id=&#34;参数&#34;&gt;参数
+&lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;-b 忽略每行前面开始出的空格字符。&lt;/li&gt;
 &lt;li&gt;-c 检查文件是否已经按照顺序排序。&lt;/li&gt;
@@ -51,8 +51,8 @@
 &lt;li&gt;&lt;strong&gt;[-k field1[,field2]] 按指定的列进行排序。&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;h3 id=&#34;重点掌握&#34;&gt;重点掌握
-&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;h4 id=&#34;重点掌握&#34;&gt;重点掌握
+&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
@@ -60,9 +60,9 @@
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-t -n -o -u - k,尤其是-k。
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h1 id=&#34;实例&#34;&gt;实例
-&lt;/h1&gt;&lt;h2 id=&#34;-r逆序排序&#34;&gt;-r，逆序排序
-&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;数据准备&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;h2 id=&#34;实例&#34;&gt;实例
+&lt;/h2&gt;&lt;h3 id=&#34;-r逆序排序&#34;&gt;-r，逆序排序
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;数据准备&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -138,8 +138,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;baidu &lt;span class=&#34;m&#34;&gt;100&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;-k指定按照某列进行排序&#34;&gt;-k，指定按照某列进行排序
-&lt;/h3&gt;&lt;p&gt;我们先使用salary.txt文本内容进行实验，输入以下命令&lt;/p&gt;
+&lt;/div&gt;&lt;h4 id=&#34;-k指定按照某列进行排序&#34;&gt;-k，指定按照某列进行排序
+&lt;/h4&gt;&lt;p&gt;我们先使用salary.txt文本内容进行实验，输入以下命令&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -166,8 +166,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;但&lt;strong&gt;这个结果其实只是一个巧合&lt;/strong&gt;，为什么这么说呢？我们看接下来的实验&lt;/p&gt;
-&lt;h2 id=&#34;-n按照数值大小排序&#34;&gt;-n，按照数值大小排序
-&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;数据准备&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;-n按照数值大小排序&#34;&gt;-n，按照数值大小排序
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;数据准备&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -290,8 +290,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;john &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;-t指定字段分隔符&#34;&gt;-t，指定字段分隔符
-&lt;/h2&gt;&lt;p&gt;该选项的作用是指定字段分隔符&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id=&#34;-t指定字段分隔符&#34;&gt;-t，指定字段分隔符
+&lt;/h3&gt;&lt;p&gt;该选项的作用是指定字段分隔符&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;数据准备&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -373,8 +373,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;可以看到，这次的输出结果是符合预期的&lt;/p&gt;
-&lt;h2 id=&#34;练习组合命令的使用&#34;&gt;练习，组合命令的使用
-&lt;/h2&gt;&lt;p&gt;到这里，我们先写一道题，熟悉一下上述学过的命令&lt;/p&gt;
+&lt;h3 id=&#34;练习组合命令的使用&#34;&gt;练习，组合命令的使用
+&lt;/h3&gt;&lt;p&gt;到这里，我们先写一道题，熟悉一下上述学过的命令&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;题目：在salary中，&lt;strong&gt;按薪水进行降序排列，薪资相同时，按公司人数升序排列&lt;/strong&gt;。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -434,8 +434,8 @@
 &lt;li&gt;后面的 &lt;strong&gt;-k 2 没有指定降序，那么默认第2个域（列）就是升序排列的。&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;-o把结果输出到指定文件&#34;&gt;-o,把结果输出到指定文件
-&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h3 id=&#34;-o把结果输出到指定文件&#34;&gt;-o,把结果输出到指定文件
+&lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;在sort排序中，如果用 &amp;gt; 重定向来把结果输出到源文件，源文件会被置为空。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;此时，-o的作用就凸显出来了。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -481,8 +481,8 @@
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sort -k2n s.txt -o s.txt
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;-u-去除重复行---k-mn消除指定域的重复行&#34;&gt;-u 去除重复行 | -k M,N消除指定域的重复行
-&lt;/h2&gt;&lt;p&gt;再次回顾我们的salary.txt文件内容，我们看到，文本中有三条sohu相关的行，&lt;strong&gt;我们现在的需求是，我们想去除重复的行&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id=&#34;-u-去除重复行---k-mn消除指定域的重复行&#34;&gt;-u 去除重复行 | -k M,N消除指定域的重复行
+&lt;/h3&gt;&lt;p&gt;再次回顾我们的salary.txt文件内容，我们看到，文本中有三条sohu相关的行，&lt;strong&gt;我们现在的需求是，我们想去除重复的行&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -598,8 +598,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sohu &lt;span class=&#34;m&#34;&gt;100&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;4500&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;-k-的高级用法-k1235&#34;&gt;-k 的高级用法-k1.2,3.5
-&lt;/h2&gt;&lt;blockquote&gt;
+&lt;/div&gt;&lt;h3 id=&#34;-k-的高级用法-k1235&#34;&gt;-k 的高级用法-k1.2,3.5
+&lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;通过上一案例的学习，对-k M,N有了一定了解，接下来的内容相对会比较容易理解一些。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;blockquote&gt;

@@ -12,18 +12,18 @@
         <pubDate>Sun, 24 Nov 2024 22:30:22 +0800</pubDate>
         
         <guid>https://JL-sky.github.io/p/cyberrt%E5%AE%89%E8%A3%85/</guid>
-        <description>&lt;img src="https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg" alt="Featured image of post cyberRT安装" /&gt;&lt;h1 id=&#34;前言&#34;&gt;前言
-&lt;/h1&gt;&lt;p&gt;由于笔者只对cyberRT感兴趣，之前安装的是apollo 9.0，里边包含了所有的代码，包括仿真和pnc等，占据空间较大，因此尝试改用apollo6.0，只安装cyberRT部分&lt;/p&gt;
+        <description>&lt;img src="https://JL-sky.github.io/img/CyberRT/CyberRT6.0%E5%AE%89%E8%A3%85/cyber_install_index.jpg" alt="Featured image of post cyberRT安装" /&gt;&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;由于笔者只对cyberRT感兴趣，之前安装的是apollo 9.0，里边包含了所有的代码，包括仿真和pnc等，占据空间较大，因此尝试改用apollo6.0，只安装cyberRT部分&lt;/p&gt;
 &lt;p&gt;有关apollo 9.0部分的安装见官网，没有遇到什么bug&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;apollo.baidu.com/community/Apollo-Homepage-Document?doc=BYFxAcGcC4HpYIbgPYBtXIHQCMEEsATAV0wGNkBbWA5UyRFdZWVBEAU0hFgoIH0adPgCY%2BADwCiAVnEBBCeIAcATnETFcgMxKZkgGxKAwkoDsa3YoAi45WdGSLxsYt0SzY%2BXICMa98oAMSgYALF7%2B2NhemsLBJsrCYZqKwors7AikBIp6miYmpFJSXpigFKhAA&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;但apollo 6.0的安装遇到了一些问题，故而在此记录&lt;/p&gt;
-&lt;h1 id=&#34;安装&#34;&gt;安装
-&lt;/h1&gt;&lt;h2 id=&#34;安装docker&#34;&gt;安装docker
-&lt;/h2&gt;&lt;p&gt;可参考&lt;/p&gt;
+&lt;h2 id=&#34;安装&#34;&gt;安装
+&lt;/h2&gt;&lt;h3 id=&#34;安装docker&#34;&gt;安装docker
+&lt;/h3&gt;&lt;p&gt;可参考&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://jl-sky.github.io/p/docker%e5%ae%89%e8%a3%85%e9%85%8d%e7%bd%ae%e4%b8%8e%e5%8d%b8%e8%bd%bd/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;docker安装、配置与卸载&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;下载apollo源码&#34;&gt;下载apollo源码
-&lt;/h2&gt;&lt;p&gt;注意一定要下载6.0版本的源码，否则后续编译安装会失败&lt;/p&gt;
+&lt;h3 id=&#34;下载apollo源码&#34;&gt;下载apollo源码
+&lt;/h3&gt;&lt;p&gt;注意一定要下载6.0版本的源码，否则后续编译安装会失败&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -32,8 +32,8 @@
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git clone -b r6.0.0 https://github.com/ApolloAuto/apollo.git
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;启动进入apollo-docker-开发容器&#34;&gt;启动进入Apollo Docker 开发容器
-&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;/div&gt;&lt;h4 id=&#34;启动进入apollo-docker-开发容器&#34;&gt;启动进入Apollo Docker 开发容器
+&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
@@ -45,8 +45,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;./docker/scripts/cyber_into.sh 
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;在容器中构建apollo&#34;&gt;在容器中构建Apollo
-&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;/div&gt;&lt;h4 id=&#34;在容器中构建apollo&#34;&gt;在容器中构建Apollo
+&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
@@ -98,8 +98,8 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;然后再重新使用上述命令构建apollo即可&lt;/p&gt;
 &lt;p&gt;编译时间较长，需耐心等待&lt;/p&gt;
-&lt;h1 id=&#34;测试&#34;&gt;测试
-&lt;/h1&gt;&lt;p&gt;1、为了使cyber日志信息输出到终端，需要修改配置文件。&lt;/p&gt;
+&lt;h2 id=&#34;测试&#34;&gt;测试
+&lt;/h2&gt;&lt;p&gt;1、为了使cyber日志信息输出到终端，需要修改配置文件。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1

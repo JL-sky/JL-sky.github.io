@@ -11,7 +11,7 @@
 <meta property='og:description' content="本文详解sort命令的常用方法">
 <meta property='og:url' content='https://JL-sky.github.io/p/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80-sort/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-11-29T15:16:11&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/linux/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index1.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-11-29T16:47:21&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/linux/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index1.jpg' />
 <meta name="twitter:title" content="linux常用命令(一) —— sort">
 <meta name="twitter:description" content="本文详解sort命令的常用方法"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://JL-sky.github.io/img/linux/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index1.jpg' />
@@ -53,7 +53,8 @@
         
         
         <figure class="site-avatar">
-            <a href="/">
+            
+            <a href="https://jl-sky.github.io/">
                 
                 
 
@@ -304,27 +305,32 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#作用">作用</a></li>
-    <li><a href="#语法">语法</a></li>
-    <li><a href="#参数">参数</a>
+    <li><a href="#介绍">介绍</a>
       <ol>
-        <li><a href="#重点掌握">重点掌握</a></li>
+        <li><a href="#作用">作用</a></li>
+        <li><a href="#语法">语法</a></li>
+        <li><a href="#参数">参数</a>
+          <ol>
+            <li><a href="#重点掌握">重点掌握</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
-  </ol>
-
-  <ol>
-    <li><a href="#-r逆序排序">-r，逆序排序</a>
+    <li><a href="#实例">实例</a>
       <ol>
-        <li><a href="#-k指定按照某列进行排序">-k，指定按照某列进行排序</a></li>
+        <li><a href="#-r逆序排序">-r，逆序排序</a>
+          <ol>
+            <li><a href="#-k指定按照某列进行排序">-k，指定按照某列进行排序</a></li>
+          </ol>
+        </li>
+        <li><a href="#-n按照数值大小排序">-n，按照数值大小排序</a></li>
+        <li><a href="#-t指定字段分隔符">-t，指定字段分隔符</a></li>
+        <li><a href="#练习组合命令的使用">练习，组合命令的使用</a></li>
+        <li><a href="#-o把结果输出到指定文件">-o,把结果输出到指定文件</a></li>
+        <li><a href="#-u-去除重复行---k-mn消除指定域的重复行">-u 去除重复行 | -k M,N消除指定域的重复行</a></li>
+        <li><a href="#-k-的高级用法-k1235">-k 的高级用法-k1.2,3.5</a></li>
       </ol>
     </li>
-    <li><a href="#-n按照数值大小排序">-n，按照数值大小排序</a></li>
-    <li><a href="#-t指定字段分隔符">-t，指定字段分隔符</a></li>
-    <li><a href="#练习组合命令的使用">练习，组合命令的使用</a></li>
-    <li><a href="#-o把结果输出到指定文件">-o,把结果输出到指定文件</a></li>
-    <li><a href="#-u-去除重复行---k-mn消除指定域的重复行">-u 去除重复行 | -k M,N消除指定域的重复行</a></li>
-    <li><a href="#-k-的高级用法-k1235">-k 的高级用法-k1.2,3.5</a></li>
   </ol>
 </nav>
         </div>
@@ -401,17 +407,17 @@
     <section class="article-content">
     
     
-    <h1 id="介绍">介绍
-</h1><h2 id="作用">作用
-</h2><p>Linux sort 命令用于<strong>将文本文件内容加以排序。</strong></p>
+    <h2 id="介绍">介绍
+</h2><h3 id="作用">作用
+</h3><p>Linux sort 命令用于<strong>将文本文件内容加以排序。</strong></p>
 <p>sort 可针对文本文件的内容，<strong>以行为单位来排序</strong>。</p>
 <p>注意</p>
 <blockquote>
 <p>1、排序时，<strong>默认是按每行/每个域的首字符排序，数字的优先级要大于字符的优先级</strong></p>
 <p>2、不指定升序还是降序时，<strong>默认是升序</strong></p>
 </blockquote>
-<h2 id="语法">语法
-</h2><div class="highlight"><div class="chroma">
+<h3 id="语法">语法
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -419,8 +425,8 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort <span class="o">[</span>-bcdfimMnr<span class="o">][</span>-o&lt;输出文件&gt;<span class="o">][</span>-t&lt;分隔字符&gt;<span class="o">][</span>+&lt;起始栏位&gt;-&lt;结束栏位&gt;<span class="o">][</span>--help<span class="o">][</span>--verison<span class="o">][</span>文件<span class="o">][</span>-k field1<span class="o">[</span>,field2<span class="o">]]</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="参数">参数
-</h2><blockquote>
+</div><h3 id="参数">参数
+</h3><blockquote>
 <ul>
 <li>-b 忽略每行前面开始出的空格字符。</li>
 <li>-c 检查文件是否已经按照顺序排序。</li>
@@ -440,8 +446,8 @@
 <li><strong>[-k field1[,field2]] 按指定的列进行排序。</strong></li>
 </ul>
 </blockquote>
-<h3 id="重点掌握">重点掌握
-</h3><div class="highlight"><div class="chroma">
+<h4 id="重点掌握">重点掌握
+</h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -449,9 +455,9 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">-t -n -o -u - k,尤其是-k。
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="实例">实例
-</h1><h2 id="-r逆序排序">-r，逆序排序
-</h2><p><strong>数据准备</strong></p>
+</div><h2 id="实例">实例
+</h2><h3 id="-r逆序排序">-r，逆序排序
+</h3><p><strong>数据准备</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -527,8 +533,8 @@
 </span></span><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="-k指定按照某列进行排序">-k，指定按照某列进行排序
-</h3><p>我们先使用salary.txt文本内容进行实验，输入以下命令</p>
+</div><h4 id="-k指定按照某列进行排序">-k，指定按照某列进行排序
+</h4><p>我们先使用salary.txt文本内容进行实验，输入以下命令</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -555,8 +561,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>但<strong>这个结果其实只是一个巧合</strong>，为什么这么说呢？我们看接下来的实验</p>
-<h2 id="-n按照数值大小排序">-n，按照数值大小排序
-</h2><p><strong>数据准备</strong></p>
+<h3 id="-n按照数值大小排序">-n，按照数值大小排序
+</h3><p><strong>数据准备</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -679,8 +685,8 @@
 </span></span><span class="line"><span class="cl">john <span class="m">2</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="-t指定字段分隔符">-t，指定字段分隔符
-</h2><p>该选项的作用是指定字段分隔符</p>
+</div><h3 id="-t指定字段分隔符">-t，指定字段分隔符
+</h3><p>该选项的作用是指定字段分隔符</p>
 <p><strong>数据准备</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -762,8 +768,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到，这次的输出结果是符合预期的</p>
-<h2 id="练习组合命令的使用">练习，组合命令的使用
-</h2><p>到这里，我们先写一道题，熟悉一下上述学过的命令</p>
+<h3 id="练习组合命令的使用">练习，组合命令的使用
+</h3><p>到这里，我们先写一道题，熟悉一下上述学过的命令</p>
 <blockquote>
 <p>题目：在salary中，<strong>按薪水进行降序排列，薪资相同时，按公司人数升序排列</strong>。</p>
 </blockquote>
@@ -823,8 +829,8 @@
 <li>后面的 <strong>-k 2 没有指定降序，那么默认第2个域（列）就是升序排列的。</strong></li>
 </ul>
 </blockquote>
-<h2 id="-o把结果输出到指定文件">-o,把结果输出到指定文件
-</h2><blockquote>
+<h3 id="-o把结果输出到指定文件">-o,把结果输出到指定文件
+</h3><blockquote>
 <p><strong>在sort排序中，如果用 &gt; 重定向来把结果输出到源文件，源文件会被置为空。</strong></p>
 <p>此时，-o的作用就凸显出来了。</p>
 </blockquote>
@@ -870,8 +876,8 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -k2n s.txt -o s.txt
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="-u-去除重复行---k-mn消除指定域的重复行">-u 去除重复行 | -k M,N消除指定域的重复行
-</h2><p>再次回顾我们的salary.txt文件内容，我们看到，文本中有三条sohu相关的行，<strong>我们现在的需求是，我们想去除重复的行</strong></p>
+</div><h3 id="-u-去除重复行---k-mn消除指定域的重复行">-u 去除重复行 | -k M,N消除指定域的重复行
+</h3><p>再次回顾我们的salary.txt文件内容，我们看到，文本中有三条sohu相关的行，<strong>我们现在的需求是，我们想去除重复的行</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -987,8 +993,8 @@
 </span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="-k-的高级用法-k1235">-k 的高级用法-k1.2,3.5
-</h2><blockquote>
+</div><h3 id="-k-的高级用法-k1235">-k 的高级用法-k1.2,3.5
+</h3><blockquote>
 <p>通过上一案例的学习，对-k M,N有了一定了解，接下来的内容相对会比较容易理解一些。</p>
 </blockquote>
 <blockquote>
@@ -1078,7 +1084,7 @@
 
 
         <span>
-            最后更新于 Nov 29, 2024 15:16 UTC
+            最后更新于 Nov 29, 2024 16:47 UTC
         </span>
     </section></footer>
 
@@ -1169,9 +1175,11 @@
         
         
         
-        发表了4篇文章 ·
+        
+        
+        发表了5篇文章 ·
         总计
-        0.15k字
+        0.10k字
         
     </section>
 
