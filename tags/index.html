@@ -7,11 +7,11 @@
 
 <link rel='canonical' href='https://JL-sky.github.io/tags/'>
 
-<link rel="stylesheet" href="/scss/style.min.504e136fc3fef311a4fad69c1e9094e2405b2cfda021352a1513c5f03ea28964.css"><meta property='og:title' content="Tags">
+<link rel="stylesheet" href="/scss/style.min.198b007130434fee4395c5320ffc5d57ab61ad9c82c6dd856791a4dc3481d81e.css"><meta property='og:title' content="Tags">
 <meta property='og:description' content="原来是你啊">
 <meta property='og:url' content='https://JL-sky.github.io/tags/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2024-11-30T05:38:27&#43;00:00 '/>
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2024-11-30T06:08:00&#43;00:00 '/>
 <meta name="twitter:title" content="Tags">
 <meta name="twitter:description" content="原来是你啊"><link rel="alternate" type="application/rss&#43;xml" href="https://JL-sky.github.io/tags/index.xml">
 </head>
@@ -471,6 +471,25 @@
     let result = days + "天" + hours + "小时" + minutes + "分钟";
     document.getElementById('runningdays').innerHTML = result;
 </script>
+
+<div id="particles-js"></div>
+
+<script src=https://JL-sky.github.io/background/particles.min.js></script>
+<script>
+    particlesJS.load('particles-js', resources.Get("background/package.json").Permalink, function () {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+
+<style>
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+</style>
 </body>
 
 </html>
