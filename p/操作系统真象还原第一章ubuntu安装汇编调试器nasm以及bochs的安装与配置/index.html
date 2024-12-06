@@ -2,19 +2,19 @@
 <html lang="zh-cn" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="介绍docker在linux上的安装">
-<title>docker安装、配置与卸载</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文介绍了如何在Linux系统中安装nasm工具和Bochs虚拟机，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用">
+<title>《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM以及Bochs的安装与配置</title>
 
-<link rel='canonical' href='https://JL-sky.github.io/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/'>
+<link rel='canonical' href='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm%E4%BB%A5%E5%8F%8Abochs%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/'>
 
-<link rel="stylesheet" href="/scss/style.min.504e136fc3fef311a4fad69c1e9094e2405b2cfda021352a1513c5f03ea28964.css"><meta property='og:title' content="docker安装、配置与卸载">
-<meta property='og:description' content="介绍docker在linux上的安装">
-<meta property='og:url' content='https://JL-sky.github.io/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/'>
+<link rel="stylesheet" href="/scss/style.min.504e136fc3fef311a4fad69c1e9094e2405b2cfda021352a1513c5f03ea28964.css"><meta property='og:title' content="《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM以及Bochs的安装与配置">
+<meta property='og:description' content="本文介绍了如何在Linux系统中安装nasm工具和Bochs虚拟机，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用">
+<meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm%E4%BB%A5%E5%8F%8Abochs%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-06T13:24:47&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/docker/dokcer%E5%AE%89%E8%A3%85/index.jpg' />
-<meta name="twitter:title" content="docker安装、配置与卸载">
-<meta name="twitter:description" content="介绍docker在linux上的安装"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://JL-sky.github.io/img/docker/dokcer%E5%AE%89%E8%A3%85/index.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-06T13:24:47&#43;00:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733487587.jpg' />
+<meta name="twitter:title" content="《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM以及Bochs的安装与配置">
+<meta name="twitter:description" content="本文介绍了如何在Linux系统中安装nasm工具和Bochs虚拟机，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733487587.jpg' />
 </head>
 
 <body class="
@@ -305,27 +305,24 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#安装">安装</a>
+    <li><a href="#安装nasm">安装NASM</a>
       <ol>
-        <li><a href="#apt方式安装">apt方式安装</a></li>
-        <li><a href="#snap方式安装">snap方式安装</a></li>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#测试">测试</a></li>
       </ol>
     </li>
-    <li><a href="#配置">配置</a>
+    <li><a href="#bochs安装">Bochs安装</a>
       <ol>
-        <li><a href="#设置docker非sudo执行">设置docker非sudo执行</a></li>
-        <li><a href="#docker镜像加速">docker镜像加速</a>
+        <li><a href="#bochs下载与解压">Bochs下载与解压</a></li>
+        <li><a href="#编译安装">编译安装</a>
           <ol>
-            <li><a href="#方式一修改本地镜像源">方式一：修改本地镜像源</a></li>
-            <li><a href="#方式二直接使用镜像加速命令">方式二：直接使用镜像加速命令</a></li>
+            <li><a href="#配置">配置</a></li>
+            <li><a href="#编译">编译</a></li>
+            <li><a href="#安装-1">安装</a></li>
           </ol>
         </li>
-      </ol>
-    </li>
-    <li><a href="#卸载docker">卸载docker</a>
-      <ol>
-        <li><a href="#apt卸载">apt卸载</a></li>
-        <li><a href="#snap卸载">snap卸载</a></li>
+        <li><a href="#配置bochs">配置Bochs</a></li>
+        <li><a href="#创建启动盘">创建启动盘</a></li>
       </ol>
     </li>
   </ol>
@@ -342,9 +339,9 @@
     <article class="has-image main-article">
     <header class="article-header">
     <div class="article-image">
-        <a href="/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/">
+        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm%E4%BB%A5%E5%8F%8Abochs%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/">
             
-            <img src="/img/docker/dokcer%e5%ae%89%e8%a3%85/index.jpg" loading="lazy" alt="Featured image of post docker安装、配置与卸载" />
+            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733487587.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM以及Bochs的安装与配置" />
             
         </a>
     </div>
@@ -354,8 +351,8 @@
     
     <header class="article-category">
         
-        <a href="/categories/docker/" >
-            Docker
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" >
+            操作系统真象还原
         </a>
         
     </header>
@@ -363,12 +360,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/">docker安装、配置与卸载</a>
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm%E4%BB%A5%E5%8F%8Abochs%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/">《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM以及Bochs的安装与配置</a>
         </h2>
 
         
         <h3 class="article-subtitle">
-            介绍docker在linux上的安装
+            本文介绍了如何在Linux系统中安装nasm工具和Bochs虚拟机，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用
         </h3>
         
     </div>
@@ -389,7 +386,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">2024-11-25</time>
+            <time class="article-time--published">2024-12-06</time>
         </div>
         
 
@@ -434,7 +431,7 @@
 
             
             <time class="article-words">
-                本文共 675 字
+                本文共 1548 字
             </time>
         </div>
         
@@ -449,94 +446,34 @@
     <section class="article-content">
     
     
-    <h2 id="安装">安装
-</h2><h3 id="apt方式安装">apt方式安装
-</h3><p>1.安装docker依赖</p>
-<p>Docker在Ubuntu上依赖一些软件包。执行以下命令来安装这些依赖:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install ca-certificates curl gnupg lsb-release
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>2.添加Docker官方GPG密钥</p>
-<p>执行以下命令来添加Docker官方的GPG密钥:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg <span class="p">|</span> sudo apt-key add -
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>3.添加Docker软件源</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo add-apt-repository <span class="s2">&#34;deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> stable&#34;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>4.更新软件源</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt update
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>5.安装docker</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install docker-ce docker-ce-cli containerd.io
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="snap方式安装">snap方式安装
+    <h2 id="安装nasm">安装NASM
+</h2><h3 id="安装">安装
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo snap install docker
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install nasm
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="配置">配置
-</h2><h3 id="设置docker非sudo执行">设置docker非sudo执行
-</h3><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo groupadd docker
-</span></span><span class="line"><span class="cl">sudo usermod -aG docker <span class="nv">$USER</span>
-</span></span><span class="line"><span class="cl">newgrp docker
-</span></span><span class="line"><span class="cl">sudo chown root:docker /var/run/docker.sock
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="docker镜像加速">docker镜像加速
-</h3><h4 id="方式一修改本地镜像源">方式一：修改本地镜像源
-</h4><p>这里给出一个长期更新镜像源的博客</p>
-<p><a class="link" href="https://xuanyuan.me/blog/archives/1154?from=tencent"  target="_blank" rel="noopener"
-    >Docker/DockerHub 国内镜像源/加速列表（11月23日更新-长期维护） - 轩辕博客</a></p>
-<p><strong>具体操作如下</strong></p>
-<p>修改<a class="link" href="https://so.csdn.net/so/search?q=%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
-    >配置文件</a>，没有则新增这个文件</p>
+</div><p>安装完成后，如果可以查看到nasm的版本号即可视为安装成功</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">vim /etc/docker/daemon.json
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nasm -version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="测试">测试
+</h3><p>创建一个<a class="link" href="https://so.csdn.net/so/search?q=asm&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
+    >asm</a>文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">vim hello.asm
 </span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
@@ -551,40 +488,68 @@
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">{</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;registry-mirrors&#34;</span>: <span class="o">[</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://hub.xdark.top&#34;</span>,
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://hub.littlediary.cn&#34;</span>,
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://dockerpull.org&#34;</span>,
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://hub.crdz.gq&#34;</span>,
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.1panel.live&#34;</span>,
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.unsee.tech&#34;</span>
-</span></span><span class="line"><span class="cl">  <span class="o">]</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">section .data
+</span></span><span class="line"><span class="cl">  hello:     db <span class="s1">&#39;Hello world!&#39;</span>,10    <span class="p">;</span> <span class="s1">&#39;Hello world!&#39;</span> plus a linefeed character
+</span></span><span class="line"><span class="cl">  helloLen:  equ <span class="nv">$-</span>hello             <span class="p">;</span> Length of the <span class="s1">&#39;Hello world!&#39;</span> string
+</span></span><span class="line"><span class="cl">                                     <span class="p">;</span> <span class="o">(</span>I<span class="s1">&#39;ll explain soon)
+</span></span></span><span class="line"><span class="cl"><span class="s1">section .text
+</span></span></span><span class="line"><span class="cl"><span class="s1">  global _start
+</span></span></span><span class="line"><span class="cl"><span class="s1">_start:
+</span></span></span><span class="line"><span class="cl"><span class="s1">  mov eax,4            ; The system call for write (sys_write)
+</span></span></span><span class="line"><span class="cl"><span class="s1">  mov ebx,1            ; File descriptor 1 - standard output
+</span></span></span><span class="line"><span class="cl"><span class="s1">  mov ecx,hello        ; Put the offset of hello in ecx
+</span></span></span><span class="line"><span class="cl"><span class="s1">  mov edx,helloLen     ; helloLen is a constant, so we don&#39;</span>t need to say
+</span></span><span class="line"><span class="cl">                       <span class="p">;</span>  mov edx,<span class="o">[</span>helloLen<span class="o">]</span> to get it<span class="err">&#39;</span>s actual value
+</span></span><span class="line"><span class="cl">  int 80h              <span class="p">;</span> Call the kernel
+</span></span><span class="line"><span class="cl">  mov eax,1            <span class="p">;</span> The system call <span class="k">for</span> <span class="nb">exit</span> <span class="o">(</span>sys_exit<span class="o">)</span>
+</span></span><span class="line"><span class="cl">  mov ebx,0            <span class="p">;</span> Exit with <span class="k">return</span> code of <span class="m">0</span> <span class="o">(</span>no error<span class="o">)</span>
+</span></span><span class="line"><span class="cl">  int 80h
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>里面的地址可以随意更换，有一个可用就行</p>
-<p>wq保存退出后，执行</p>
+</div><p>编译</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl daemon-reload <span class="o">&amp;&amp;</span> sudo systemctl restart docker
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nasm -f elf64 hello.asm
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>执行查看是否生效</p>
+</div><p>运行</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker info
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./hello
 </span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div><p>如果可以正常运行没有报错说明安装成功</p>
+<h2 id="bochs安装">Bochs安装
+</h2><h3 id="bochs下载与解压">Bochs下载与解压
+</h3><p>直接<a class="link" href="[sourceforge.net/projects/bochs/files/bochs/2.6.8/bochs-2.6.8.tar.gz/download]%28https://sourceforge.net/projects/bochs/files/bochs/2.6.8/bochs-2.6.8.tar.gz/download%29[" >点击</a>链接，等待3秒即可自动下载</p>
+<p>下载成功后解压文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tar -zxvf bochs-2.6.8.tar.gz
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="编译安装">编译安装
+</h3><h4 id="配置">配置
+</h4><p>进入bochs-2.6.2<a class="link" href="https://so.csdn.net/so/search?q=%e6%96%87%e4%bb%b6%e5%a4%b9&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
+    >文件夹</a>，执行以下语句，其中我把bochs安装在了我的/home/minios/bochs目录下，读者可自行修改</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -593,138 +558,365 @@
 </span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
-</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> Registry Mirrors:
-</span></span><span class="line"><span class="cl">  https://hub.xdark.top/
-</span></span><span class="line"><span class="cl">  https://hub.littlediary.cn/
-</span></span><span class="line"><span class="cl">  https://dockerpull.org/
-</span></span><span class="line"><span class="cl">  https://hub.crdz.gq/
-</span></span><span class="line"><span class="cl">  https://docker.1panel.live/
-</span></span><span class="line"><span class="cl">  https://docker.unsee.tech/
-</span></span><span class="line"><span class="cl"> Live Restore Enabled: <span class="nb">false</span>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./configure <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--prefix<span class="o">=</span>/home/minios/bochs <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--enable-debugger <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--enable-disasm <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--enable-iodebug <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--enable-x86-debugger <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--with-x --with-x11
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="方式二直接使用镜像加速命令">方式二：直接使用镜像加速命令
-</h4><p>打开网页</p>
-<p><a class="link" href="https://xdark.top/"  target="_blank" rel="noopener"
-    >docker_docker镜像_docker镜像下载</a></p>
+</div><p>配置过程中如有报错，可自行网上查阅修改</p>
+<p>本人遇到的错误：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ERROR: pkg-config was not found, or unable to access the gtk+-2.0 package. Install pkg-config and the gtk+ development p
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733489015.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206204335101"
+	
+	
+></p>
+<p>解决方案：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install libgtk2.0-dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置成功后的界面如下所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733490442.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206210721926"
+	
+	
+></p>
+<h4 id="编译">编译
+</h4><p>执行make命令进行编译</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">make
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意，刚开始我使用bochs2.6.2版本编译的时候会报错，但是我换成bochs2.6.8版本后就直接编译成功了</p>
+<p>编译成功界面</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733490474.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206210754571"
+	
+	
+></p>
+<h4 id="安装-1">安装
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">make install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装成功的标志：
+<strong>在安装路径（/home/minios/bochs）下生成了bin文件夹</strong></p>
+<h3 id="配置bochs">配置Bochs
+</h3><p>进入bochs目录（安装目录），新建boot.disk文件，写入以下配置，注意<strong>将相应目录修改为自己设置的目录</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">vim boot.disk
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 设置 Bochs 在运行过程中能够使用的内存，本例为 32MB</span>
+</span></span><span class="line"><span class="cl">megs: <span class="m">32</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置对应真实机器的 BIOS 和 VGA BIOS</span>
+</span></span><span class="line"><span class="cl">romimage: <span class="nv">file</span><span class="o">=</span>/home/minios/bochs/share/bochs/BIOS-bochs-latest
+</span></span><span class="line"><span class="cl">vgaromimage: <span class="nv">file</span><span class="o">=</span>/home/minios/bochs/share/bochs/VGABIOS-lgpl-latest
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置 Bochs 使用的磁盘</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># floppya: 1_44=a.img, status=inserted</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 选择启动盘符</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># boot: flopy # 默认从软盘启动</span>
+</span></span><span class="line"><span class="cl">boot: disk <span class="c1"># 从硬盘启动，我们的任何代码都将直接写在硬盘上，所以不会再有读写软盘的操作。</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置日志文件输出</span>
+</span></span><span class="line"><span class="cl">log: bochs.out
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 关闭鼠标，打开键盘，按照书上写会报错</span>
+</span></span><span class="line"><span class="cl">mouse: <span class="nv">enabled</span><span class="o">=</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#keyboard: enabled=1,</span>
+</span></span><span class="line"><span class="cl">keyboard: <span class="nv">keymap</span><span class="o">=</span>/home/minios/bochs/share/bochs/keymaps/x11-pc-us.map
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 硬盘设置</span>
+</span></span><span class="line"><span class="cl">ata0: <span class="nv">enabled</span><span class="o">=</span>1, <span class="nv">ioaddr1</span><span class="o">=</span>0x1f0, <span class="nv">ioaddr2</span><span class="o">=</span>0x3f0, <span class="nv">irq</span><span class="o">=</span><span class="m">14</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 增加 Bochs 对 GDB 的支持，GDB 远程连接到此机器的 1234 端口便可调试</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># gdbstub: enabled=1, port=1234, test_base=0, data_base=0, bss_base=0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>保存退出后，启动bochs</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bin/bochs -f boot.disk
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如下图所示， <strong>看到数字[6]就直接按下回车，之后再按键盘c，否则报错就检查错误，如配置文件中的路径是否写对等</strong></p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733490698.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206211137895"
+	
+	
+></p>
+<p>安装成功！</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733490723.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206211203705"
+	
+	
+></p>
+<h3 id="创建启动盘">创建启动盘
+</h3><p>仔细观察上述运行成功的bochs，可以看到bochs会报错显示</p>
 <blockquote>
-<ul>
-<li>输入你想要获取的<strong>镜像名称和版本</strong></li>
-<li>点击获取<strong>加速命令</strong></li>
-<li>按照给出的命令操作</li>
-</ul>
+<p>Boot failed:could not read the boot disk</p>
 </blockquote>
-<h2 id="卸载docker">卸载docker
-</h2><h3 id="apt卸载">apt卸载
-</h3><p>1.删除docker及安装时自动安装的所有包</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733490784.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206211303896"
+	
+	
+></p>
+<p>那是因为此时系统中还没有启动盘，接下来我们需要创建启动盘</p>
+<p>bochs给我们提供了创建虚拟硬盘的工具，使用如下命令可以查看相关指令</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get autoremove docker docker-ce docker-engine  docker.io  containerd runc
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bin/bximage --help
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>2.查看docker是否卸载干净</p>
+</div><p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733490810.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206211330663"
+	
+	
+></p>
+<p>接下来我们来根据帮助创建虚拟硬盘，在终端输入</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg -l <span class="p">|</span> grep docker
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bin/bximage
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>3.删除没有删除的相关插件</p>
+</div><p>其余具体步骤如下所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733490860.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206211420369"
+	
+	
+></p>
+<p>接下来，我们需要将创建的虚拟硬盘的信息写入到配置文件中，注意柱面、磁道和扇区信息（上图红框中的CHS信息）也要写进去</p>
+<p>打开配置文件</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get autoremove docker-ce-*
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">vim boot.disk
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>4.删除docker的相关配置&amp;目录</p>
+</div><p>加入以下代码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> dpkg -l <span class="p">|</span>grep ^rc<span class="p">|</span>awk <span class="s1">&#39;{print $2}&#39;</span> <span class="p">|</span>sudo xargs dpkg -P <span class="c1">## 删除无用的相关的配置文件</span>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ata0-master: <span class="nv">type</span><span class="o">=</span>disk, <span class="nv">path</span><span class="o">=</span><span class="s2">&#34;hd60M.img&#34;</span>, <span class="nv">mode</span><span class="o">=</span>flat,cylinders<span class="o">=</span>121,heads<span class="o">=</span>16,spt<span class="o">=</span><span class="m">63</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div><p>完整文件内容</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rm -rf /etc/systemd/system/docker.service.d
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 设置 Bochs 在运行过程中能够使用的内存，本例为 32MB
+</span></span><span class="line"><span class="cl">megs: 32
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"># 设置对应真实机器的 BIOS 和 VGA BIOS
+</span></span><span class="line"><span class="cl">romimage: file=/home/minios/bochs/share/bochs/BIOS-bochs-latest
+</span></span><span class="line"><span class="cl">vgaromimage: file=/home/minios/bochs/share/bochs/VGABIOS-lgpl-latest
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"># 设置 Bochs 使用的磁盘
+</span></span><span class="line"><span class="cl"># floppya: 1_44=a.img, status=inserted
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"># 选择启动盘符
+</span></span><span class="line"><span class="cl"># boot: flopy # 默认从软盘启动
+</span></span><span class="line"><span class="cl">boot: disk # 从硬盘启动，我们的任何代码都将直接写在硬盘上，所以不会再有读写软盘的操作。
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"># 设置日志文件输出
+</span></span><span class="line"><span class="cl">log: bochs.out
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"># 关闭鼠标，打开键盘，按照书上写会报错
+</span></span><span class="line"><span class="cl">mouse: enabled=0
+</span></span><span class="line"><span class="cl">#keyboard: enabled=1,
+</span></span><span class="line"><span class="cl">keyboard: keymap=/home/minios/bochs/share/bochs/keymaps/x11-pc-us.map
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"># 硬盘设置
+</span></span><span class="line"><span class="cl">ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">#新加入的代码,虚拟硬盘配置
+</span></span><span class="line"><span class="cl">ata0-master: type=disk, path=&#34;hd60M.img&#34;, mode=flat,cylinders=121,heads=16,spt=63
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"># 增加 Bochs 对 GDB 的支持，GDB 远程连接到此机器的 1234 端口便可调试
+</span></span><span class="line"><span class="cl">#gdbstub: enabled=1, port=1234, test_base=0, data_base=0, bss_base=0
 </span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rm -rf /var/lib/docker
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>5.确定docker卸载完毕</p>
+</div><p>保存退出，再次运行bochs</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker --version
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bin/bochs -f boot.disk
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="snap卸载">snap卸载
-</h3><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo snap remove --purge docker 
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>清理多余的配置文件（如果有）</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -rf /var/snap/docker
-</span></span><span class="line"><span class="cl">sudo rm -rf ~/snap/docker
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -rf /var/lib/docker
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -f /var/run/docker.sock
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rm -rf /var/log/docker
-</span></span></code></pre></td></tr></table>
-</div>
-</div>
+</div><p>可以看到，虽然仍旧报错，但是报错信息不再是不能读取启动盘，说明启动盘已经创建好了</p>
+<blockquote>
+<p>Boot failed:not a bootable disk</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241206_1733491143.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206211902811"
+	
+	
+></p>
+<p>参考：</p>
+<p><a class="link" href="https://blog.csdn.net/qq_37500516/article/details/117751327"  target="_blank" rel="noopener"
+    >《操作系统真象还原》第一章 &mdash;- 安装Vmware Station 安装Ubuntu 装载配置Bochs 安装Vmware tools 开始乘帆历险！_学习操作系统真相还原安装虚拟机-CSDN博客</a></p>
+<p><a class="link" href="https://zhuanlan.zhihu.com/p/477175642"  target="_blank" rel="noopener"
+    >操作系统真象还原环境搭建-详细实践版 - 知乎</a></p>
+
 </section>
 
 
@@ -765,34 +957,6 @@
     
 
     
-
-<aside class="related-content--wrapper">
-    <h2 class="section-title">相关文章</h2>
-    <div class="related-content">
-        <div class="flex article-list--tile">
-            
-                
-<article class="has-image">
-    <a href="/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/img/docker/docker%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4/index.jpg" loading="lazy" data-key="" data-hash="/img/docker/docker常用命令/index.jpg"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">docker常用命令</h2>
-        </div>
-    </a>
-</article>
-
-            
-        </div>
-    </div>
-</aside>
 
      
     
