@@ -2,22 +2,24 @@
 <html lang="zh-cn" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="介绍CyberRT的使用">
-<title>Category: CyberRT - 你好</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文介绍了如何在Linux系统中安装nasm工具，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用">
+<title>《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM</title>
 
-<link rel='canonical' href='https://JL-sky.github.io/categories/cyberrt/'>
+<link rel='canonical' href='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm/'>
 
-<link rel="stylesheet" href="/scss/style.min.504e136fc3fef311a4fad69c1e9094e2405b2cfda021352a1513c5f03ea28964.css"><meta property='og:title' content="Category: CyberRT - 你好">
-<meta property='og:description' content="介绍CyberRT的使用">
-<meta property='og:url' content='https://JL-sky.github.io/categories/cyberrt/'>
+<link rel="stylesheet" href="/scss/style.min.504e136fc3fef311a4fad69c1e9094e2405b2cfda021352a1513c5f03ea28964.css"><meta property='og:title' content="《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM">
+<meta property='og:description' content="本文介绍了如何在Linux系统中安装nasm工具，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用">
+<meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2024-12-06T08:47:03&#43;00:00 '/><meta property='og:image' content='https://JL-sky.github.io/categories/cyberrt/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg' />
-<meta name="twitter:title" content="Category: CyberRT - 你好">
-<meta name="twitter:description" content="介绍CyberRT的使用"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://JL-sky.github.io/categories/cyberrt/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg' /><link rel="alternate" type="application/rss&#43;xml" href="https://JL-sky.github.io/categories/cyberrt/index.xml">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-06T08:47:03&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/SIngleton/singleton_index.jpg' />
+<meta name="twitter:title" content="《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM">
+<meta name="twitter:description" content="本文介绍了如何在Linux系统中安装nasm工具，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://JL-sky.github.io/img/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/SIngleton/singleton_index.jpg' />
 </head>
 
-<body class="">
+<body class="
+    article-page
+    ">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -281,154 +283,205 @@
         </li>
     </ol>
 </aside>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                <form action="/search/" class="search-form widget" >
-        <p>
-            <label>搜索</label>
-            <input name="keyword" required placeholder="输入关键词..." />
-        
-            <button title="搜索">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-            </button>
-        </p>
-    </form>
-            
-        
-            
-                <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">归档</h2>
-
-        
-        
-        
-        
-        
-        <div class="widget-archive--list">
-            <div class="archives-year">
-                    <a href="/archives/#2024">
-                        
-                            <span class="year">2024</span>
-                            <span class="count">6</span>
-                        
-                    </a> 
-                </div>
-            
-        </div>
-    </section>
-            
-        
-            
-                <section class="widget tagCloud">
-    <div class="widget-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-    </div>
-    <h2 class="widget-title section-title">分类</h2>
-
-    <div class="tagCloud-tags">
-        
-            <a href="/categories/docker/" class="font_size_2">
-                Docker
-            </a>
-        
-            <a href="/categories/cyberrt/" class="font_size_1">
-                CyberRT
-            </a>
-        
-            <a href="/categories/linux/" class="font_size_1">
-                linux
-            </a>
-        
-            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" class="font_size_1">
-                操作系统真象还原
-            </a>
-        
-            <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="font_size_1">
-                设计模式
-            </a>
-        
-    </div>
-</section>
-
-            
-        
-    </aside>
-
+    
 
         <main class="main full-width">
-    <header>
-        <h3 class="section-title">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm/">
             
-                Categories
+            <img src="/img/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f/SIngleton/singleton_index.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM" />
             
-        </h3>
+        </a>
+    </div>
+    
 
-        <div class="section-card">
-            <div class="section-details">
-                <h3 class="section-count">1 个页面</h3>
-                <h1 class="section-term">CyberRT</h1>
-                
-                    <h2 class="section-description">介绍CyberRT的使用</h2>
-                
-            </div>
-                <div class="section-image">
-                    <img src="/categories/cyberrt/hutomo-abrianto-l2jk-uxb1BY-unsplash_hu13714511474273067689.jpg" 
-                            width="120"
-                            height="120" 
-                            loading="lazy">
-                    
-                </div>
-            
-        </div>
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" >
+            操作系统真象还原
+        </a>
+        
     </header>
     
-    <section class="article-list--compact">
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm/">《操作系统真象还原》第一章——ubuntu安装汇编调试器NASM</a>
+        </h2>
+
         
-            <article>
-    <a href="/p/cyberrt%E5%AE%89%E8%A3%85/">
-        <div class="article-details">
-            <h2 class="article-title">cyberRT安装</h2>
-            <footer class="article-time">
-                <time datetime='2024-11-24T22:30:22&#43;08:00'>2024-11-24</time>
-            </footer>
+        <h3 class="article-subtitle">
+            本文介绍了如何在Linux系统中安装nasm工具，通过创建并编译简单的HelloWorld汇编程序，展示了从编写、测试到运行的全过程，包括系统调用的使用
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2024-12-06</time>
         </div>
-            <div class="article-image">
-                
-                    <img src="/img/CyberRT/CyberRT6.0%e5%ae%89%e8%a3%85/cyber_install_index.jpg" loading="lazy" alt="Featured image of post cyberRT安装" />
-                
-            </div>
         
-    </a>
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2024-12-06
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 7 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p><img src="https://gitee.com/tiancong-cloud-id/images-datasets/raw/master/2024/12/upgit_20241206_1733473279.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://gitee.com/tiancong-cloud-id/images-datasets/raw/master/2024/12/upgit_20241206_1733474149.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241206163549703"
+	
+	
+></p>
+<p>你好巴巴爸爸班</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    
+</footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
 </article>
+
+    
+
+    
+
+     
+    
         
-    </section>
-<footer class="site-footer">
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"lang":"zh-CN","locale":{"admin":"你好","placeholder":null,"sofa":"还没有人评论哦！快来抢沙发吧~"},"placeholder":"欢迎留下宝贵的评论！","requiredMeta":["name","email","url"],"serverURL":"https://blogcomment-iqp14djt5-jl-skys-projects.vercel.app/","visitor":false});
+</script>
+
+    
+
+    <footer class="site-footer">
     <section class="copyright">
         &copy;
         
@@ -471,6 +524,84 @@
 
     
 </footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
 
         </main>
     </div>
