@@ -11,7 +11,7 @@
 <meta property='og:description' content="本文解释了显卡和显存的作用，以及如何通过内存映射技术提高访问速度。介绍了显卡的工作原理，包括显存的职责，ASCII码在屏幕显示中的作用，以及如何通过BIOS中断函数操作显存来显示字符。还涉及了操作系统加载和内核加载的过程，展示了如何通过MBR和loader.S文件实现基本的屏幕内容显示">
 <meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-10T10:29:23&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-10T12:20:27&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
 <meta name="twitter:title" content="《操作系统真象还原》第三章——完善MBR">
 <meta name="twitter:description" content="本文解释了显卡和显存的作用，以及如何通过内存映射技术提高访问速度。介绍了显卡的工作原理，包括显存的职责，ASCII码在屏幕显示中的作用，以及如何通过BIOS中断函数操作显存来显示字符。还涉及了操作系统加载和内核加载的过程，展示了如何通过MBR和loader.S文件实现基本的屏幕内容显示"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
@@ -441,7 +441,7 @@
 
             
             <time class="article-words">
-                本文共 6434 字
+                本文共 6418 字
             </time>
         </div>
         
@@ -460,8 +460,7 @@
     >miniOS_32</a></p>
 <h2 id="前置知识">前置知识
 </h2><h3 id="显卡与显存">显卡与显存
-</h3><p>为了显示文字，通常需要两种<a class="link" href="https://marketing.csdn.net/p/3127db09a98e0723b83b2914d9256174?pId=2782&amp;utm_source=glcblog&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
-    >硬件</a>，一是显示器，二是显卡。</p>
+</h3><p>为了显示文字，通常需要两种硬件，一是显示器，二是显卡。</p>
 <blockquote>
 <ul>
 <li><strong>显卡</strong>的职责是<strong>为显示器提供内容</strong>，并<strong>控制显示器的显示模式和状态</strong>。
@@ -473,8 +472,7 @@
 <li><strong>显示器</strong>的职责是<strong>将显卡的内容以视觉可见的方式呈现在屏幕</strong>上。</li>
 </ul>
 </blockquote>
-<p><strong>显存就是存放要在显示器上显示的内容的器件</strong>，因为它位于显卡上，故称显示<a class="link" href="https://so.csdn.net/so/search?q=%e5%ad%98%e5%82%a8%e5%99%a8&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
-    >存储器</a>(Video RAM,VRAM)，简称显存，<strong>要显示的内容都预先写入显存。</strong></p>
+<p><strong>显存就是存放要在显示器上显示的内容的器件</strong>，因为它位于显卡上，故称显示存储器，简称显存，<strong>要显示的内容都预先写入显存。</strong></p>
 <blockquote>
 <p>所以，<strong>显存可以认为就是一块特殊的内存</strong>，用于存储显示在屏幕上的内容，**为了给出要显示的字符，处理器需要访问显存，把字符的ASCII码写进去。**但是，显存是位于显卡上的，访问显存需要和显卡这个外围设备打交道。同时，多一道手续自然是不好的，这当中最重要的考量是速度和效率。</p>
 <p>为此，计算机系统的设计者们，决定把<strong>显存映射到处理器可以直接访问的地址空间里</strong>，也就是内存空间里。</p>
@@ -539,7 +537,8 @@
 ></p>
 <h2 id="章节任务">章节任务
 </h2><h3 id="操作显存显示内容">操作显存显示内容
-</h3><p><a class="link" href="[%e3%80%8a%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9c%9f%e8%b1%a1%e8%bf%98%e5%8e%9f%e3%80%8b%e7%ac%ac%e4%ba%8c%e7%ab%a0%e2%80%94%e2%80%94%e7%bc%96%e5%86%99MBR%e4%b8%bb%e5%bc%95%e5%af%bc%e8%ae%b0%e5%bd%95]%28https://jl-sky.github.io/p/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9c%9f%e8%b1%a1%e8%bf%98%e5%8e%9f%e7%ac%ac%e4%ba%8c%e7%ab%a0%e7%bc%96%e5%86%99mbr%e4%b8%bb%e5%bc%95%e5%af%bc%e8%ae%b0%e5%bd%95/%29" >上一节</a>中，我们介绍了计算机在开机后BIOS是如何从磁盘中加载mbr程序并运行的，为了测试mbr程序，我们使用BIOS中断写了一段在屏幕上显示内容的代码，以此来测试BIOS加载mbr程序的过程，如果BIOS能够成功加载mbr程序并运行，则必然会在屏幕上显示我们在mbr程序中写的内容</p>
+</h3><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%96%E5%86%99mbr%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95/"  target="_blank" rel="noopener"
+    >上一节</a>，我们介绍了计算机在开机后BIOS是如何从磁盘中加载mbr程序并运行的，为了测试mbr程序，我们使用BIOS中断写了一段在屏幕上显示内容的代码，以此来测试BIOS加载mbr程序的过程，如果BIOS能够成功加载mbr程序并运行，则必然会在屏幕上显示我们在mbr程序中写的内容</p>
 <p>本节我们介绍了显卡与显存，所以我们的第一个任务，就是将通过显存来控制屏幕输出内容，替换掉BIOS中断的方法</p>
 <p><strong>编写mbr.S代码</strong></p>
 <div class="highlight"><div class="chroma">
@@ -1527,7 +1526,7 @@
         
         发表了8篇文章 ·
         总计
-        21,896字
+        21,880字
         
     </section>
 
