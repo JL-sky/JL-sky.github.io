@@ -12,7 +12,8 @@
         <pubDate>Tue, 10 Dec 2024 00:00:00 +0000</pubDate>
         
         <guid>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/</guid>
-        <description>&lt;img src="https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg" alt="Featured image of post 《操作系统真象还原》第三章——完善MBR" /&gt;&lt;p&gt;本章节所有代码托管在https://github.com/JL-sky/miniOS_32&lt;/p&gt;
+        <description>&lt;img src="https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg" alt="Featured image of post 《操作系统真象还原》第三章——完善MBR" /&gt;&lt;p&gt;本章节所有代码托管在&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;miniOS_32&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;前置知识&#34;&gt;前置知识
 &lt;/h2&gt;&lt;h3 id=&#34;显卡与显存&#34;&gt;显卡与显存
 &lt;/h3&gt;&lt;p&gt;为了显示文字，通常需要两种&lt;a class=&#34;link&#34; href=&#34;https://marketing.csdn.net/p/3127db09a98e0723b83b2914d9256174?pId=2782&amp;amp;utm_source=glcblog&amp;amp;spm=1001.2101.3001.7020&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -936,8 +937,9 @@
         <pubDate>Mon, 09 Dec 2024 00:00:00 +0000</pubDate>
         
         <guid>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%96%E5%86%99mbr%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95/</guid>
-        <description>&lt;img src="https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index2.jpg" alt="Featured image of post 《操作系统真象还原》第二章——编写MBR主引导记录" /&gt;&lt;p&gt;本章节所有代码托管在&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;JL-sky/miniOS_32: 本仓库参考《操作系统真象还原》手写一个32位的操作系统内核&lt;/a&gt;&lt;/p&gt;
+        <description>&lt;img src="https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index2.jpg" alt="Featured image of post 《操作系统真象还原》第二章——编写MBR主引导记录" /&gt;&lt;p&gt;本章节所有代码托管在&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;miniOS_32&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;前置知识&#34;&gt;前置知识
 &lt;/h2&gt;&lt;h3 id=&#34;通用寄存器httpssocsdnnetsosearchq寄存器spm1001210130017020介绍&#34;&gt;通用&lt;a class=&#34;link&#34; href=&#34;https://so.csdn.net/so/search?q=%e5%af%84%e5%ad%98%e5%99%a8&amp;amp;spm=1001.2101.3001.7020&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;寄存器&lt;/a&gt;介绍
