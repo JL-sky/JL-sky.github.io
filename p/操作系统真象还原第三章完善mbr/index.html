@@ -11,7 +11,7 @@
 <meta property='og:description' content="本文解释了显卡和显存的作用，以及如何通过内存映射技术提高访问速度。介绍了显卡的工作原理，包括显存的职责，ASCII码在屏幕显示中的作用，以及如何通过BIOS中断函数操作显存来显示字符。还涉及了操作系统加载和内核加载的过程，展示了如何通过MBR和loader.S文件实现基本的屏幕内容显示">
 <meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-10T15:45:19&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-11T04:55:38&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
 <meta name="twitter:title" content="《操作系统真象还原》第三章——完善MBR">
 <meta name="twitter:description" content="本文解释了显卡和显存的作用，以及如何通过内存映射技术提高访问速度。介绍了显卡的工作原理，包括显存的职责，ASCII码在屏幕显示中的作用，以及如何通过BIOS中断函数操作显存来显示字符。还涉及了操作系统加载和内核加载的过程，展示了如何通过MBR和loader.S文件实现基本的屏幕内容显示"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
@@ -411,7 +411,7 @@
 
             <time class="article-lastmod">
                 最后更新于
-                2024-12-10
+                2024-12-11
             </time>
         </div>
         <div>
@@ -441,7 +441,7 @@
 
             
             <time class="article-words">
-                本文共 6418 字
+                本文共 6378 字
             </time>
         </div>
         
@@ -650,8 +650,8 @@
 </span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="c1">;将要显示的字符串写入到显存中</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x00</span><span class="p">],</span><span class="s">&#39;1&#39;</span><span class="c1">;在第一个字节的位置写入要显示的字符“1”</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">;在第二个字节的位置写入显示字符（也就是字符1）的属性，其中A表示绿色背景，4表示前景色为红色</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x00</span><span class="p">],</span><span class="s">&#39;1&#39;</span>  <span class="c1">;在第一个字节的位置写入要显示的字符“1”</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;在第二个字节的位置写入显示字符（也就是字符1）的属性，其中A表示绿色背景，4表示前景色为红色</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x01</span><span class="p">],</span><span class="mh">0xA4</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x02</span><span class="p">],</span><span class="s">&#39; &#39;</span>
@@ -1113,8 +1113,8 @@
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
 </span></span><span class="line"><span class="cl"><span class="c1">;将要显示的字符串写入到显存中</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x00</span><span class="p">],</span><span class="s">&#39;1&#39;</span><span class="c1">;在第一个字节的位置写入要显示的字符“1”</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">;在第二个字节的位置写入显示字符（也就是字符1）的属性，其中A表示绿色背景，4表示前景色为红色</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x00</span><span class="p">],</span><span class="s">&#39;1&#39;</span>      <span class="c1">;在第一个字节的位置写入要显示的字符“1”</span>
+</span></span><span class="line"><span class="cl">                                <span class="c1">;在第二个字节的位置写入显示字符（也就是字符1）的属性，其中A表示绿色背景，4表示前景色为红色</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x01</span><span class="p">],</span><span class="mh">0xA4</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x02</span><span class="p">],</span><span class="s">&#39; &#39;</span>
@@ -1129,10 +1129,10 @@
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x08</span><span class="p">],</span><span class="s">&#39;R&#39;</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x09</span><span class="p">],</span><span class="mh">0xA4</span>
 </span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">LOADER_START_SECTOR</span>		<span class="c1">;起始扇区地址</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">bx</span><span class="p">,</span><span class="nv">LOADER_BASE_ADDR</span>		<span class="c1">;要写入的内存地址</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,</span><span class="mi">1</span>				<span class="c1">;待读入的扇区数目</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nv">rd_disk_m16</span>			<span class="c1">;调用磁盘读取程序</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">LOADER_START_SECTOR</span> <span class="c1">;起始扇区地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">bx</span><span class="p">,</span><span class="nv">LOADER_BASE_ADDR</span>     <span class="c1">;要写入的内存地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,</span><span class="mi">1</span>                    <span class="c1">;待读入的扇区数目</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nv">rd_disk_m16</span>            <span class="c1">;调用磁盘读取程序</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="nv">LOADER_BASE_ADDR</span><span class="c1">;</span>
 </span></span><span class="line"><span class="cl"> 
@@ -1156,7 +1156,7 @@
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">cx</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">ax</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">esi</span>		<span class="c1">;恢复eax的值</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">esi</span>		    <span class="c1">;恢复eax的值</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="c1">;第二步：将LBA的地址存入0x1f3~0x1f6</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">;LBA的0~7位写入端口0x1f3</span>
@@ -1165,7 +1165,7 @@
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl">    <span class="c1">;LBA的8~15位写入端口0x1f4</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cl</span><span class="p">,</span><span class="mi">8</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cl</span>		<span class="c1">;将ax右移8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cl</span>		    <span class="c1">;将ax右移8位</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f4</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
 </span></span><span class="line"><span class="cl"> 
@@ -1175,9 +1175,9 @@
 </span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl">    <span class="c1">;LBA的24~27位写入端口0x1f6</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cl</span>		<span class="c1">;右移8位</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">and</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x0f</span>		<span class="c1">;与0000 1111相与，取后四位</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0xe0</span>		<span class="c1">;设置7~4位为1110，表示lba模式</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cl</span>		    <span class="c1">;右移8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">and</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x0f</span>		    <span class="c1">;与0000 1111相与，取后四位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0xe0</span>		    <span class="c1">;设置7~4位为1110，表示lba模式</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f6</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
 </span></span><span class="line"><span class="cl"> 
@@ -1188,33 +1188,33 @@
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="c1">;第四步，检测硬盘状态</span>
 </span></span><span class="line"><span class="cl">    <span class="nl">.not_ready:</span>
-</span></span><span class="line"><span class="cl">        <span class="nf">nop</span>		<span class="c1">;空操作，什么也不做，相当于sleep，只是为了增加延迟</span>
-</span></span><span class="line"><span class="cl">        <span class="nf">in</span> <span class="nb">al</span><span class="p">,</span><span class="nb">dx</span>	<span class="c1">;由于读取硬盘状态信息的端口仍旧是0x1f7，因此不需要再为dx指定端口号</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">nop</span>             <span class="c1">;空操作，什么也不做，相当于sleep，只是为了增加延迟</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">in</span> <span class="nb">al</span><span class="p">,</span><span class="nb">dx</span>        <span class="c1">;由于读取硬盘状态信息的端口仍旧是0x1f7，因此不需要再为dx指定端口号</span>
 </span></span><span class="line"><span class="cl">        
-</span></span><span class="line"><span class="cl">        <span class="nf">and</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x88</span>	<span class="c1">;取出状态位的第3位和第7位</span>
-</span></span><span class="line"><span class="cl">        		<span class="c1">;其中第3位若为1表示硬盘控制器已经准备好数据传输,第7位为1表示硬盘忙</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">and</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x88</span>     <span class="c1">;取出状态位的第3位和第7位</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">;其中第3位若为1表示硬盘控制器已经准备好数据传输,第7位为1表示硬盘忙</span>
 </span></span><span class="line"><span class="cl">        
-</span></span><span class="line"><span class="cl">        <span class="nf">cmp</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x08</span>	<span class="c1">;cmp为减法指令，如果两个操作数相等，标志寄存器ZF会被置为1</span>
-</span></span><span class="line"><span class="cl">			<span class="c1">;此处是为了判断第7位是否为1，如果为1，说明硬盘忙，则减法的结果应该为0，相应ZF寄存器的值会被置为1</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">cmp</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x08</span>     <span class="c1">;cmp为减法指令，如果两个操作数相等，标志寄存器ZF会被置为1</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">;此处是为了判断第7位是否为1，如果为1，说明硬盘忙，则减法的结果应该为0，相应ZF寄存器的值会被置为1</span>
 </span></span><span class="line"><span class="cl">        
-</span></span><span class="line"><span class="cl">        <span class="nf">jnz</span> <span class="nv">.not_ready</span>	<span class="c1">;若未准备好，则继续等</span>
-</span></span><span class="line"><span class="cl">        		<span class="c1">;JNZ是条件跳转指令，它表示&#34;Jump if Not Zero&#34;，</span>
-</span></span><span class="line"><span class="cl">        		<span class="c1">;也就是如果零标志位（ZF）不为0，则进行跳转。否则不进行跳转</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">jnz</span> <span class="nv">.not_ready</span>  <span class="c1">;若未准备好，则继续等</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">;JNZ是条件跳转指令，它表示&#34;Jump if Not Zero&#34;，</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">;也就是如果零标志位（ZF）不为0，则进行跳转。否则不进行跳转</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">;第五步，从0x1f0端口读取数据</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">di</span>		<span class="c1">;di是之前备份的要读取的扇区数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">di</span>           <span class="c1">;di是之前备份的要读取的扇区数</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mi">256</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="nf">mul</span> <span class="nb">dx</span>		<span class="c1">;一个扇区512字节，每次读取两个字节，需要读取di*256次</span>
-</span></span><span class="line"><span class="cl">    			<span class="c1">;mul指令表示乘法操作，当只有一个操作数时，被乘数隐含在al或者ax中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mul</span> <span class="nb">dx</span>              <span class="c1">;一个扇区512字节，每次读取两个字节，需要读取di*256次</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">;mul指令表示乘法操作，当只有一个操作数时，被乘数隐含在al或者ax中</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,</span><span class="nb">ax</span>		<span class="c1">;cx在此时表示要循环读取的次数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,</span><span class="nb">ax</span>           <span class="c1">;cx在此时表示要循环读取的次数</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f0</span>
 </span></span><span class="line"><span class="cl">    <span class="nl">.go_on_read:</span>
-</span></span><span class="line"><span class="cl">        <span class="nf">in</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">dx</span>	<span class="c1">;从0x1f0端口读取2个字节的数据到寄存器ax</span>
-</span></span><span class="line"><span class="cl">        <span class="nf">mov</span> <span class="p">[</span><span class="nb">bx</span><span class="p">],</span><span class="nb">ax</span>	<span class="c1">;读取的数据写入bx寄存器所指向的内存</span>
-</span></span><span class="line"><span class="cl">        <span class="nf">add</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">2</span>	<span class="c1">;目的内存地址偏移2个字节继续循环读取剩余的数据</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">in</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">dx</span>        <span class="c1">;从0x1f0端口读取2个字节的数据到寄存器ax</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">mov</span> <span class="p">[</span><span class="nb">bx</span><span class="p">],</span><span class="nb">ax</span>     <span class="c1">;读取的数据写入bx寄存器所指向的内存</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">add</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">2</span>        <span class="c1">;目的内存地址偏移2个字节继续循环读取剩余的数据</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">loop</span> <span class="nv">.go_on_read</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">ret</span>
 </span></span><span class="line"><span class="cl"> 
@@ -1528,7 +1528,7 @@
         
         发表了9篇文章 ·
         总计
-        22,613字
+        22,573字
         
     </section>
 
