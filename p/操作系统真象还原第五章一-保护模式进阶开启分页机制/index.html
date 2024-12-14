@@ -3,16 +3,16 @@
 
 <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文详细介绍了分页机制的详细内容以及如何在使操作系统在分页机制下工作">
-<title>《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进</title>
+<title>《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</title>
 
-<link rel='canonical' href='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/'>
+<link rel='canonical' href='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/'>
 
-<link rel="stylesheet" href="/scss/style.min.504e136fc3fef311a4fad69c1e9094e2405b2cfda021352a1513c5f03ea28964.css"><meta property='og:title' content="《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进">
+<link rel="stylesheet" href="/scss/style.min.504e136fc3fef311a4fad69c1e9094e2405b2cfda021352a1513c5f03ea28964.css"><meta property='og:title' content="《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制">
 <meta property='og:description' content="本文详细介绍了分页机制的详细内容以及如何在使操作系统在分页机制下工作">
-<meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/'>
+<meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-13T05:35:51&#43;00:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg' />
-<meta name="twitter:title" content="《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-14T11:30:10&#43;00:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg' />
+<meta name="twitter:title" content="《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制">
 <meta name="twitter:description" content="本文详细介绍了分页机制的详细内容以及如何在使操作系统在分页机制下工作"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg' />
 </head>
@@ -305,7 +305,11 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#内核的结构">内核的结构</a></li>
+    <li><a href="#章节任务介绍">章节任务介绍</a>
+      <ol>
+        <li><a href="#内核的结构">内核的结构</a></li>
+      </ol>
+    </li>
     <li><a href="#获取物理内存容量">获取物理内存容量</a>
       <ol>
         <li><a href="#利用bios中断的子功能0xe820获取内存">利用BIOS中断的子功能0xE820获取内存</a></li>
@@ -363,9 +367,9 @@
     <article class="has-image main-article">
     <header class="article-header">
     <div class="article-image">
-        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/">
+        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/">
             
-            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进" />
+            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制" />
             
         </a>
     </div>
@@ -384,7 +388,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/">《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进</a>
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/">《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</a>
         </h2>
 
         
@@ -425,7 +429,7 @@
 
             <time class="article-lastmod">
                 最后更新于
-                2024-12-13
+                2024-12-14
             </time>
         </div>
         <div>
@@ -455,7 +459,7 @@
 
             
             <time class="article-words">
-                本文共 18104 字
+                本文共 18222 字
             </time>
         </div>
         
@@ -472,8 +476,9 @@
     
     <p>本章节所有代码托管在<a class="link" href="https://github.com/JL-sky/miniOS_32"  target="_blank" rel="noopener"
     >miniOS_32</a></p>
-<h2 id="内核的结构">内核的结构
-</h2><p>内核分为四个部分，分别是</p>
+<h2 id="章节任务介绍">章节任务介绍
+</h2><h3 id="内核的结构">内核的结构
+</h3><p>内核分为四个部分，分别是</p>
 <blockquote>
 <ul>
 <li>初始化代码：初始化代码用于<strong>从BIOS那里接管处理器和计算机硬件的控制权，安装最基本的段描述符，初始化最初的执行环境</strong>。然后，<strong>从硬盘上读取和加载内核的剩余部分，创建组成内核的各个内存段</strong>。</li>
@@ -485,7 +490,28 @@
 <p>因此，<strong>mbr程序和loader程序其实就是内核的初始化代码，负责完成加载内核前的初始化工作。</strong></p>
 <p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%9B%9B%E7%AB%A0%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%85%A5%E9%97%A8/"  target="_blank" rel="noopener"
     >上一节</a>，我们在GDT中安装了四个最基本的段描述符（数据段、代码段、栈段、显存段），并完成了GDT的初始化。</p>
-<p>本章我们将继续对loader程序加以改造，在正式加载内核之前完成所有准备工作，因此本章节的所有代码依旧是在实模式下运行</p>
+<blockquote>
+<p>本章我们将继续对loader程序加以改造，在正式加载内核之前完成所有准备工作，本章节的工作主要是</p>
+<ul>
+<li>检测现有的实际物理内存</li>
+<li>开启分页机制，让后续的内核在分页机制下工作
+<ul>
+<li>如何开启分页机制？
+<ol>
+<li>构建页表和页目录表</li>
+<li>将页目录表的位置加载到控制寄存器cr3</li>
+<li>置cr0寄存器的PG位为1，打开分页机制</li>
+</ol>
+</li>
+<li>分页机制测试
+<ul>
+<li>我们在分页机制开启后重新使用显存段在屏幕上打印字符，如果能够正常显示说明分页机制成功开启</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
 <h2 id="获取物理内存容量">获取物理内存容量
 </h2><p>操作系统是计算机硬件的管家，它不仅要知道自己安装了哪些硬件，还得给出有效得当的管理措施,按照预定的一套管理策略使硬件资源得到合理的运用。但管理策略只是逻辑上的东西，真正干活的都是底层。</p>
 <p>保护模式最“大”的特点就是寻址空间“大”，在进入保护模式之后，我们将接触到虚拟内存、内存管理等。但这些和内存有关的概念都建立在物理内存之上。为了在后期做好内存管理工作，我们首先需要知道自己有多少物理内存才行。</p>
@@ -1892,9 +1918,6 @@
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="no">PAGE_DIR_TABLE_POS</span><span class="kd"> equ</span> <span class="mh">0x100000</span>                 <span class="c1">;页目录表基址</span>
@@ -1907,9 +1930,6 @@
 </span></span><span class="line"><span class="cl">    <span class="no">PG_RW_W</span><span class="kd"> equ</span> <span class="mb">10b</span>
 </span></span><span class="line"><span class="cl">    <span class="no">PG_US_S</span><span class="kd"> equ</span> <span class="mb">000b</span>
 </span></span><span class="line"><span class="cl">    <span class="no">PG_US_U</span><span class="kd"> equ</span> <span class="mb">100b</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">;-----  程序段的类型定义  ---------</span>
-</span></span><span class="line"><span class="cl">    <span class="no">PT_NULL</span><span class="kd"> equ</span> <span class="mi">0</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>完整boot.inc代码如下</p>
@@ -2988,7 +3008,7 @@
         
         发表了12篇文章 ·
         总计
-        52,696字
+        52,927字
         
     </section>
 

@@ -11,7 +11,7 @@
 <meta property='og:description' content="本文详细介绍了在计算机系统中如何使用全局描述符表(GDT)和局部描述符表(LDT)来管理代码段、数据段、显存以及设置特权级别。内容涵盖了GDT的结构、描述符的属性设置、控制寄存器CR0的使用以及进入保护模式的过程">
 <meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%9B%9B%E7%AB%A0%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%85%A5%E9%97%A8/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-13T05:35:51&#43;00:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733904874.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-14T11:30:10&#43;00:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733904874.jpg' />
 <meta name="twitter:title" content="《操作系统真象还原》第四章——保护模式入门">
 <meta name="twitter:description" content="本文详细介绍了在计算机系统中如何使用全局描述符表(GDT)和局部描述符表(LDT)来管理代码段、数据段、显存以及设置特权级别。内容涵盖了GDT的结构、描述符的属性设置、控制寄存器CR0的使用以及进入保护模式的过程"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733904874.jpg' />
@@ -305,6 +305,7 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
+    <li><a href="#章节任务介绍">章节任务介绍</a></li>
     <li><a href="#前置知识">前置知识</a>
       <ol>
         <li><a href="#保护模式概述">保护模式概述</a></li>
@@ -316,7 +317,6 @@
     </li>
     <li><a href="#进入保护模式">进入保护模式</a>
       <ol>
-        <li><a href="#章节任务介绍">章节任务介绍</a></li>
         <li><a href="#代码目录结构">代码目录结构</a></li>
         <li><a href="#代码">代码</a>
           <ol>
@@ -406,7 +406,7 @@
 
             <time class="article-lastmod">
                 最后更新于
-                2024-12-13
+                2024-12-14
             </time>
         </div>
         <div>
@@ -436,7 +436,7 @@
 
             
             <time class="article-words">
-                本文共 7899 字
+                本文共 7958 字
             </time>
         </div>
         
@@ -453,6 +453,39 @@
     
     <p>本章节所有代码托管在<a class="link" href="https://github.com/JL-sky/miniOS_32"  target="_blank" rel="noopener"
     >miniOS_32</a></p>
+<h2 id="章节任务介绍">章节任务介绍
+</h2><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/"  target="_blank" rel="noopener"
+    >上一节</a>，我们完善了mbr主引导程序的功能——加载loader程序到指定位置运行</p>
+<p>但是上一节我们只是为了测试我们的mbr程序是否能够成功加载loader，因此loader程序仅仅只是在屏幕上打印出我们想要的字符串</p>
+<p>在本节，我们的主要任务就是完善loader程序的功能——开启保护模式，让后续的内核工作在保护模式下</p>
+<blockquote>
+<ul>
+<li>
+<p>如何开启保护模式？</p>
+<ol>
+<li>打开A20</li>
+<li>加载GDT
+<ul>
+<li>在实模式下构造需要的段描述符（代码段、数据段、栈段、显存段）</li>
+<li>将四种段描述符装填进GDT，从而构造GDT</li>
+<li>构造四种内存段的段选择子</li>
+<li>构造GDTR（存储GDT基址的寄存器），从而让操作系统运行时将GDT加载进内存</li>
+</ul>
+</li>
+<li>置cr0寄存器的PE位为1</li>
+</ol>
+</li>
+<li>
+<p>进入保护模式之前，先在实模式下测试一段在屏幕上显示信息的代码，即loader_start，这段代码使用实模式的逻辑编写，因此，如果运行成功，则说明在进入保护模式之前我们的代码是在实模式下运行的</p>
+</li>
+<li>
+<p>保护模式测试</p>
+<ul>
+<li>在进入保护模式之后写一段屏幕显示信息，如果显示成功说明成功进入了保护模式</li>
+</ul>
+</li>
+</ul>
+</blockquote>
 <h2 id="前置知识">前置知识
 </h2><h3 id="保护模式概述">保护模式概述
 </h3><p>一般来说，操作系统负责整个计算机软、硬件的管理，它做任何事情都是可以的。但是，用户程序却应当有所限制，只允许它访问属于自己的数据，即使是转移，也只允许在自己的各个代码段之间进行。</p>
@@ -698,42 +731,7 @@
 	
 ></p>
 <h2 id="进入保护模式">进入保护模式
-</h2><h3 id="章节任务介绍">章节任务介绍
-</h3><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/"  target="_blank" rel="noopener"
-    >上一节</a>，我们完善了mbr主引导程序的功能——加载loader程序到指定位置运行</p>
-<p>但是上一节我们只是为了测试我们的mbr程序是否能够成功加载loader，因此loader程序仅仅只是在屏幕上打印出我们想要的字符串</p>
-<p>在本节，我们的主要任务就是完善loader程序的功能：</p>
-<blockquote>
-<ul>
-<li>
-<p>在实模式下准备好进入保护模式需要的数据结构——GDT</p>
-<ul>
-<li>
-<p>构造需要的段描述符（代码段、数据段、栈段、显存段）</p>
-</li>
-<li>
-<p>将四种段描述符装填进GDT，从而构造GDT</p>
-</li>
-<li>
-<p>构造GDTR，从而让操作系统运行时将GDT加载进内存</p>
-</li>
-<li>
-<p>构造四种内存段的段选择子</p>
-</li>
-</ul>
-</li>
-<li>
-<p>进入保护模式之前，先在实模式下测试一段在屏幕上显示信息的代码，即loader_start，这段代码使用实模式的逻辑编写，因此，如果运行成功，则说明在进入保护模式之前我们的代码是在实模式下运行的</p>
-</li>
-<li>
-<p>正式进入保护模式</p>
-</li>
-<li>
-<p>在保护模式下也运行一段代码在屏幕上显示信息</p>
-</li>
-</ul>
-</blockquote>
-<h3 id="代码目录结构">代码目录结构
+</h2><h3 id="代码目录结构">代码目录结构
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1561,7 +1559,7 @@
             
                 
 <article class="has-image">
-    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/">
         
         
             <div class="article-image">
@@ -1572,7 +1570,7 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进</h2>
+            <h2 class="article-title">《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</h2>
         </div>
     </a>
 </article>
@@ -1731,7 +1729,7 @@
         
         发表了12篇文章 ·
         总计
-        52,696字
+        52,927字
         
     </section>
 

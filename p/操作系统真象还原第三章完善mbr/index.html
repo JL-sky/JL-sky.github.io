@@ -11,7 +11,7 @@
 <meta property='og:description' content="本文解释了显卡和显存的作用，以及如何通过内存映射技术提高访问速度。介绍了显卡的工作原理，包括显存的职责，ASCII码在屏幕显示中的作用，以及如何通过BIOS中断函数操作显存来显示字符。还涉及了操作系统加载和内核加载的过程，展示了如何通过MBR和loader.S文件实现基本的屏幕内容显示">
 <meta property='og:url' content='https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-13T05:35:51&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-14T11:30:10&#43;00:00'/><meta property='og:image' content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
 <meta name="twitter:title" content="《操作系统真象还原》第三章——完善MBR">
 <meta name="twitter:description" content="本文解释了显卡和显存的作用，以及如何通过内存映射技术提高访问速度。介绍了显卡的工作原理，包括显存的职责，ASCII码在屏幕显示中的作用，以及如何通过BIOS中断函数操作显存来显示字符。还涉及了操作系统加载和内核加载的过程，展示了如何通过MBR和loader.S文件实现基本的屏幕内容显示"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg' />
@@ -305,15 +305,19 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
+    <li><a href="#章节任务">章节任务</a>
+      <ol>
+        <li><a href="#操作显存显示内容">操作显存显示内容</a></li>
+      </ol>
+    </li>
     <li><a href="#前置知识">前置知识</a>
       <ol>
         <li><a href="#显卡与显存">显卡与显存</a></li>
         <li><a href="#屏幕是如何显示内容的">屏幕是如何显示内容的</a></li>
       </ol>
     </li>
-    <li><a href="#章节任务">章节任务</a>
+    <li><a href="#mbr功能实现">mbr功能实现</a>
       <ol>
-        <li><a href="#操作显存显示内容">操作显存显示内容</a></li>
         <li><a href="#从硬盘中加载程序到内存">从硬盘中加载程序到内存</a>
           <ol>
             <li><a href="#磁盘的基本介绍">磁盘的基本介绍</a></li>
@@ -411,7 +415,7 @@
 
             <time class="article-lastmod">
                 最后更新于
-                2024-12-13
+                2024-12-14
             </time>
         </div>
         <div>
@@ -441,7 +445,7 @@
 
             
             <time class="article-words">
-                本文共 6378 字
+                本文共 6384 字
             </time>
         </div>
         
@@ -458,6 +462,11 @@
     
     <p>本章节所有代码托管在<a class="link" href="https://github.com/JL-sky/miniOS_32"  target="_blank" rel="noopener"
     >miniOS_32</a></p>
+<h2 id="章节任务">章节任务
+</h2><h3 id="操作显存显示内容">操作显存显示内容
+</h3><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%96%E5%86%99mbr%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95/"  target="_blank" rel="noopener"
+    >上一节</a>，我们介绍了计算机在开机后BIOS是如何从磁盘中加载mbr程序并运行的，为了测试mbr程序，我们使用BIOS中断写了一段在屏幕上显示内容的代码，以此来测试BIOS加载mbr程序的过程，如果BIOS能够成功加载mbr程序并运行，则必然会在屏幕上显示我们在mbr程序中写的内容</p>
+<p>本节我们将介绍显卡与显存，而我们的第一个任务，就是将通过显存来控制屏幕输出内容，替换掉BIOS中断的方法</p>
 <h2 id="前置知识">前置知识
 </h2><h3 id="显卡与显存">显卡与显存
 </h3><p>为了显示文字，通常需要两种硬件，一是显示器，二是显卡。</p>
@@ -535,12 +544,8 @@
 	
 	
 ></p>
-<h2 id="章节任务">章节任务
-</h2><h3 id="操作显存显示内容">操作显存显示内容
-</h3><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%96%E5%86%99mbr%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95/"  target="_blank" rel="noopener"
-    >上一节</a>，我们介绍了计算机在开机后BIOS是如何从磁盘中加载mbr程序并运行的，为了测试mbr程序，我们使用BIOS中断写了一段在屏幕上显示内容的代码，以此来测试BIOS加载mbr程序的过程，如果BIOS能够成功加载mbr程序并运行，则必然会在屏幕上显示我们在mbr程序中写的内容</p>
-<p>本节我们介绍了显卡与显存，所以我们的第一个任务，就是将通过显存来控制屏幕输出内容，替换掉BIOS中断的方法</p>
-<p><strong>编写mbr.S代码</strong></p>
+<h2 id="mbr功能实现">mbr功能实现
+</h2><p><strong>编写mbr.S代码</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1421,7 +1426,7 @@
             
                 
 <article class="has-image">
-    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/">
         
         
             <div class="article-image">
@@ -1432,7 +1437,7 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进</h2>
+            <h2 class="article-title">《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</h2>
         </div>
     </a>
 </article>
@@ -1591,7 +1596,7 @@
         
         发表了12篇文章 ·
         总计
-        52,696字
+        52,927字
         
     </section>
 

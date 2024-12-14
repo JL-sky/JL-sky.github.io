@@ -7,15 +7,16 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>JL-sky</copyright><atom:link href="https://JL-sky.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进</title>
-        <link>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/</link>
+        <title>《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</title>
+        <link>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/</link>
         <pubDate>Thu, 12 Dec 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%90%91%E5%86%85%E6%A0%B8%E8%BF%88%E8%BF%9B/</guid>
-        <description>&lt;img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg" alt="Featured image of post 《操作系统真象还原》第五章（一）——保护模式进阶，向内核迈进" /&gt;&lt;p&gt;本章节所有代码托管在&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+        <guid>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/</guid>
+        <description>&lt;img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg" alt="Featured image of post 《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制" /&gt;&lt;p&gt;本章节所有代码托管在&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;miniOS_32&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;内核的结构&#34;&gt;内核的结构
-&lt;/h2&gt;&lt;p&gt;内核分为四个部分，分别是&lt;/p&gt;
+&lt;h2 id=&#34;章节任务介绍&#34;&gt;章节任务介绍
+&lt;/h2&gt;&lt;h3 id=&#34;内核的结构&#34;&gt;内核的结构
+&lt;/h3&gt;&lt;p&gt;内核分为四个部分，分别是&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;初始化代码：初始化代码用于&lt;strong&gt;从BIOS那里接管处理器和计算机硬件的控制权，安装最基本的段描述符，初始化最初的执行环境&lt;/strong&gt;。然后，&lt;strong&gt;从硬盘上读取和加载内核的剩余部分，创建组成内核的各个内存段&lt;/strong&gt;。&lt;/li&gt;
@@ -27,7 +28,28 @@
 &lt;p&gt;因此，&lt;strong&gt;mbr程序和loader程序其实就是内核的初始化代码，负责完成加载内核前的初始化工作。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%9B%9B%E7%AB%A0%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%85%A5%E9%97%A8/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;上一节&lt;/a&gt;，我们在GDT中安装了四个最基本的段描述符（数据段、代码段、栈段、显存段），并完成了GDT的初始化。&lt;/p&gt;
-&lt;p&gt;本章我们将继续对loader程序加以改造，在正式加载内核之前完成所有准备工作，因此本章节的所有代码依旧是在实模式下运行&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本章我们将继续对loader程序加以改造，在正式加载内核之前完成所有准备工作，本章节的工作主要是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检测现有的实际物理内存&lt;/li&gt;
+&lt;li&gt;开启分页机制，让后续的内核在分页机制下工作
+&lt;ul&gt;
+&lt;li&gt;如何开启分页机制？
+&lt;ol&gt;
+&lt;li&gt;构建页表和页目录表&lt;/li&gt;
+&lt;li&gt;将页目录表的位置加载到控制寄存器cr3&lt;/li&gt;
+&lt;li&gt;置cr0寄存器的PG位为1，打开分页机制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;分页机制测试
+&lt;ul&gt;
+&lt;li&gt;我们在分页机制开启后重新使用显存段在屏幕上打印字符，如果能够正常显示说明分页机制成功开启&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;获取物理内存容量&#34;&gt;获取物理内存容量
 &lt;/h2&gt;&lt;p&gt;操作系统是计算机硬件的管家，它不仅要知道自己安装了哪些硬件，还得给出有效得当的管理措施,按照预定的一套管理策略使硬件资源得到合理的运用。但管理策略只是逻辑上的东西，真正干活的都是底层。&lt;/p&gt;
 &lt;p&gt;保护模式最“大”的特点就是寻址空间“大”，在进入保护模式之后，我们将接触到虚拟内存、内存管理等。但这些和内存有关的概念都建立在物理内存之上。为了在后期做好内存管理工作，我们首先需要知道自己有多少物理内存才行。&lt;/p&gt;
@@ -1434,9 +1456,6 @@
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-nasm&#34; data-lang=&#34;nasm&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;no&#34;&gt;PAGE_DIR_TABLE_POS&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt; equ&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x100000&lt;/span&gt;                 &lt;span class=&#34;c1&#34;&gt;;页目录表基址&lt;/span&gt;
@@ -1449,9 +1468,6 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;no&#34;&gt;PG_RW_W&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt; equ&lt;/span&gt; &lt;span class=&#34;mb&#34;&gt;10b&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;no&#34;&gt;PG_US_S&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt; equ&lt;/span&gt; &lt;span class=&#34;mb&#34;&gt;000b&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;no&#34;&gt;PG_US_U&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt; equ&lt;/span&gt; &lt;span class=&#34;mb&#34;&gt;100b&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;;-----  程序段的类型定义  ---------&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;no&#34;&gt;PT_NULL&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt; equ&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;完整boot.inc代码如下&lt;/p&gt;
@@ -2321,6 +2337,39 @@
         <guid>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%9B%9B%E7%AB%A0%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%85%A5%E9%97%A8/</guid>
         <description>&lt;img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733904874.jpg" alt="Featured image of post 《操作系统真象还原》第四章——保护模式入门" /&gt;&lt;p&gt;本章节所有代码托管在&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;miniOS_32&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;章节任务介绍&#34;&gt;章节任务介绍
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;上一节&lt;/a&gt;，我们完善了mbr主引导程序的功能——加载loader程序到指定位置运行&lt;/p&gt;
+&lt;p&gt;但是上一节我们只是为了测试我们的mbr程序是否能够成功加载loader，因此loader程序仅仅只是在屏幕上打印出我们想要的字符串&lt;/p&gt;
+&lt;p&gt;在本节，我们的主要任务就是完善loader程序的功能——开启保护模式，让后续的内核工作在保护模式下&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;如何开启保护模式？&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;打开A20&lt;/li&gt;
+&lt;li&gt;加载GDT
+&lt;ul&gt;
+&lt;li&gt;在实模式下构造需要的段描述符（代码段、数据段、栈段、显存段）&lt;/li&gt;
+&lt;li&gt;将四种段描述符装填进GDT，从而构造GDT&lt;/li&gt;
+&lt;li&gt;构造四种内存段的段选择子&lt;/li&gt;
+&lt;li&gt;构造GDTR（存储GDT基址的寄存器），从而让操作系统运行时将GDT加载进内存&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;置cr0寄存器的PE位为1&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进入保护模式之前，先在实模式下测试一段在屏幕上显示信息的代码，即loader_start，这段代码使用实模式的逻辑编写，因此，如果运行成功，则说明在进入保护模式之前我们的代码是在实模式下运行的&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;保护模式测试&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在进入保护模式之后写一段屏幕显示信息，如果显示成功说明成功进入了保护模式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;前置知识&#34;&gt;前置知识
 &lt;/h2&gt;&lt;h3 id=&#34;保护模式概述&#34;&gt;保护模式概述
 &lt;/h3&gt;&lt;p&gt;一般来说，操作系统负责整个计算机软、硬件的管理，它做任何事情都是可以的。但是，用户程序却应当有所限制，只允许它访问属于自己的数据，即使是转移，也只允许在自己的各个代码段之间进行。&lt;/p&gt;
@@ -2566,42 +2615,7 @@
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;进入保护模式&#34;&gt;进入保护模式
-&lt;/h2&gt;&lt;h3 id=&#34;章节任务介绍&#34;&gt;章节任务介绍
-&lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;上一节&lt;/a&gt;，我们完善了mbr主引导程序的功能——加载loader程序到指定位置运行&lt;/p&gt;
-&lt;p&gt;但是上一节我们只是为了测试我们的mbr程序是否能够成功加载loader，因此loader程序仅仅只是在屏幕上打印出我们想要的字符串&lt;/p&gt;
-&lt;p&gt;在本节，我们的主要任务就是完善loader程序的功能：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;在实模式下准备好进入保护模式需要的数据结构——GDT&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;构造需要的段描述符（代码段、数据段、栈段、显存段）&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;将四种段描述符装填进GDT，从而构造GDT&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;构造GDTR，从而让操作系统运行时将GDT加载进内存&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;构造四种内存段的段选择子&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;进入保护模式之前，先在实模式下测试一段在屏幕上显示信息的代码，即loader_start，这段代码使用实模式的逻辑编写，因此，如果运行成功，则说明在进入保护模式之前我们的代码是在实模式下运行的&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;正式进入保护模式&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;在保护模式下也运行一段代码在屏幕上显示信息&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;代码目录结构&#34;&gt;代码目录结构
+&lt;/h2&gt;&lt;h3 id=&#34;代码目录结构&#34;&gt;代码目录结构
 &lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -3910,6 +3924,11 @@
         <guid>https://JL-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%8C%E5%96%84mbr/</guid>
         <description>&lt;img src="https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index3.jpg" alt="Featured image of post 《操作系统真象还原》第三章——完善MBR" /&gt;&lt;p&gt;本章节所有代码托管在&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;miniOS_32&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;章节任务&#34;&gt;章节任务
+&lt;/h2&gt;&lt;h3 id=&#34;操作显存显示内容&#34;&gt;操作显存显示内容
+&lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%96%E5%86%99mbr%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;上一节&lt;/a&gt;，我们介绍了计算机在开机后BIOS是如何从磁盘中加载mbr程序并运行的，为了测试mbr程序，我们使用BIOS中断写了一段在屏幕上显示内容的代码，以此来测试BIOS加载mbr程序的过程，如果BIOS能够成功加载mbr程序并运行，则必然会在屏幕上显示我们在mbr程序中写的内容&lt;/p&gt;
+&lt;p&gt;本节我们将介绍显卡与显存，而我们的第一个任务，就是将通过显存来控制屏幕输出内容，替换掉BIOS中断的方法&lt;/p&gt;
 &lt;h2 id=&#34;前置知识&#34;&gt;前置知识
 &lt;/h2&gt;&lt;h3 id=&#34;显卡与显存&#34;&gt;显卡与显存
 &lt;/h3&gt;&lt;p&gt;为了显示文字，通常需要两种硬件，一是显示器，二是显卡。&lt;/p&gt;
@@ -3987,12 +4006,8 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;章节任务&#34;&gt;章节任务
-&lt;/h2&gt;&lt;h3 id=&#34;操作显存显示内容&#34;&gt;操作显存显示内容
-&lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%96%E5%86%99mbr%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;上一节&lt;/a&gt;，我们介绍了计算机在开机后BIOS是如何从磁盘中加载mbr程序并运行的，为了测试mbr程序，我们使用BIOS中断写了一段在屏幕上显示内容的代码，以此来测试BIOS加载mbr程序的过程，如果BIOS能够成功加载mbr程序并运行，则必然会在屏幕上显示我们在mbr程序中写的内容&lt;/p&gt;
-&lt;p&gt;本节我们介绍了显卡与显存，所以我们的第一个任务，就是将通过显存来控制屏幕输出内容，替换掉BIOS中断的方法&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;编写mbr.S代码&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;mbr功能实现&#34;&gt;mbr功能实现
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;编写mbr.S代码&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -4835,6 +4850,28 @@
         <description>&lt;img src="https://JL-sky.github.io/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/index2.jpg" alt="Featured image of post 《操作系统真象还原》第二章——编写MBR主引导记录" /&gt;&lt;p&gt;本章节所有代码托管在&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/JL-sky/miniOS_32&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;miniOS_32&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;本章节任务&#34;&gt;本章节任务
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%80%E7%AB%A0ubuntu%E5%AE%89%E8%A3%85%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95%E5%99%A8nasm%E4%BB%A5%E5%8F%8Abochs%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;上一节&lt;/a&gt;，我们完成了汇编调试器nasm和虚拟机bochs安装，本节我们将正式开始手写操作系统&lt;/p&gt;
+&lt;h3 id=&#34;任务简介&#34;&gt;任务简介
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;完成mbr主引导记录的代码编写，并完成编译，本节完成的代码编译并非真正的MBR主引导程序，而是为了&lt;strong&gt;测试mbr程序是否会被加载到0x07c00处被正确执行&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;将编译生成的主引导记录内容刻录到我们的创建的启动硬盘中&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;mbr主引导程序说明&#34;&gt;mbr主引导程序说明
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;mbr主引导记录程序必须存放在磁盘的0盘0道1扇区，这样BIOS程序才能进行加载&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mbr主引导记录程序的文件大小必须是512字节&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;程序的第510字节和第511字节处的内容必须是0x55和0xaa，BIOS程序会检查这两个字节标志来判断是否是mbr程序，否则BIOS不会加载该程序，即便它位于磁盘的0盘0道1扇区&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;前置知识&#34;&gt;前置知识
 &lt;/h2&gt;&lt;h3 id=&#34;通用寄存器httpssocsdnnetsosearchq寄存器spm1001210130017020介绍&#34;&gt;通用&lt;a class=&#34;link&#34; href=&#34;https://so.csdn.net/so/search?q=%e5%af%84%e5%ad%98%e5%99%a8&amp;amp;spm=1001.2101.3001.7020&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;寄存器&lt;/a&gt;介绍
@@ -4947,28 +4984,8 @@ ROM-BIOS的容量是有限的，当它完成自己的使命后，最后所要做
 	
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;本章节任务&#34;&gt;本章节任务
-&lt;/h2&gt;&lt;h3 id=&#34;任务简介&#34;&gt;任务简介
-&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;完成mbr主引导记录的代码编写，并完成编译，本节完成的代码编译并非真正的MBR主引导程序，而是为了&lt;strong&gt;测试mbr程序是否会被加载到0x07c00处被正确执行&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;将编译生成的主引导记录内容刻录到我们的创建的启动硬盘中&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;mbr主引导程序说明&#34;&gt;mbr主引导程序说明
-&lt;/h3&gt;&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;mbr主引导记录程序必须存放在磁盘的0盘0道1扇区，这样BIOS程序才能进行加载&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;mbr主引导记录程序的文件大小必须是512字节&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;程序的第510字节和第511字节处的内容必须是0x55和0xaa，BIOS程序会检查这两个字节标志来判断是否是mbr程序，否则BIOS不会加载该程序，即便它位于磁盘的0盘0道1扇区&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;实验步骤&#34;&gt;实验步骤
-&lt;/h3&gt;&lt;h4 id=&#34;创建mbrs文件&#34;&gt;创建mbr.S文件
+&lt;h2 id=&#34;mbr初步实现&#34;&gt;mbr初步实现
+&lt;/h2&gt;&lt;h4 id=&#34;创建mbrs文件&#34;&gt;创建mbr.S文件
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;
