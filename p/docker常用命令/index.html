@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="介绍docker常用命令">
+<title>docker常用命令</title>
+
+<link rel='canonical' href='http://localhost:1313/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
+
+<link rel="stylesheet" href="/scss/style.min.ea98715ebe4eca7e8bf88565f314f42acd095b8b77df842bad81cfe223b7006b.css"><meta property='og:title' content="docker常用命令">
+<meta property='og:description' content="介绍docker常用命令">
+<meta property='og:url' content='http://localhost:1313/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
+<meta property='og:site_name' content='你好'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-11-30T00:42:59&#43;08:00'/><meta property='og:image' content='http://localhost:1313/img/docker/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.jpg' />
+<meta name="twitter:title" content="docker常用命令">
+<meta name="twitter:description" content="介绍docker常用命令"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:1313/img/docker/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.jpg' />
+  
+
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            
+            <a href="https://jl-sky.github.io/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu16686392332003896281.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">🤔</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">你好</a></h1>
+            <h2 class="site-description">原来是你啊</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/JL-sky' target="_blank"  title="GitHub"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="438.536px" height="438.536px" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 438.536 438.536;"
+	 xml:space="preserve">
+<g>
+	<g>
+		<path d="M158.173,352.599c-3.049,0.568-4.381,1.999-3.999,4.281c0.38,2.283,2.093,3.046,5.138,2.283
+			c3.049-0.76,4.38-2.095,3.997-3.997C162.931,353.074,161.218,352.216,158.173,352.599z"/>
+		<path d="M141.898,354.885c-3.046,0-4.568,1.041-4.568,3.139c0,2.474,1.619,3.518,4.853,3.138c3.046,0,4.57-1.047,4.57-3.138
+			C146.753,355.553,145.134,354.502,141.898,354.885z"/>
+		<path d="M119.629,354.022c-0.76,2.095,0.478,3.519,3.711,4.284c2.855,1.137,4.664,0.568,5.424-1.714
+			c0.572-2.091-0.666-3.61-3.711-4.568C122.197,351.265,120.39,351.922,119.629,354.022z"/>
+		<path d="M414.41,24.123C398.326,8.042,378.964,0,356.309,0H82.225C59.577,0,40.208,8.042,24.123,24.123
+			C8.042,40.207,0,59.576,0,82.225v274.088c0,22.65,8.042,42.017,24.123,58.098c16.084,16.084,35.454,24.126,58.102,24.126h63.953
+			c4.184,0,7.327-0.144,9.42-0.424c2.092-0.288,4.184-1.526,6.279-3.717c2.096-2.187,3.14-5.376,3.14-9.562
+			c0-0.568-0.05-7.046-0.144-19.417c-0.097-12.375-0.144-22.176-0.144-29.41l-6.567,1.143c-4.187,0.76-9.469,1.095-15.846,0.999
+			c-6.374-0.096-12.99-0.76-19.841-1.998c-6.855-1.239-13.229-4.093-19.13-8.562c-5.898-4.477-10.085-10.328-12.56-17.559
+			l-2.856-6.571c-1.903-4.373-4.899-9.229-8.992-14.554c-4.093-5.332-8.232-8.949-12.419-10.852l-1.999-1.428
+			c-1.331-0.951-2.568-2.098-3.711-3.429c-1.141-1.335-1.997-2.669-2.568-3.997c-0.571-1.335-0.097-2.43,1.427-3.289
+			c1.524-0.855,4.281-1.279,8.28-1.279l5.708,0.855c3.808,0.76,8.516,3.042,14.134,6.851c5.614,3.806,10.229,8.754,13.846,14.843
+			c4.38,7.806,9.657,13.75,15.846,17.843c6.184,4.097,12.419,6.143,18.699,6.143s11.704-0.476,16.274-1.424
+			c4.565-0.954,8.848-2.385,12.847-4.288c1.713-12.751,6.377-22.559,13.988-29.41c-10.848-1.143-20.602-2.854-29.265-5.14
+			c-8.658-2.286-17.605-5.995-26.835-11.136c-9.234-5.14-16.894-11.512-22.985-19.13c-6.09-7.618-11.088-17.61-14.987-29.978
+			c-3.901-12.375-5.852-26.652-5.852-42.829c0-23.029,7.521-42.637,22.557-58.814c-7.044-17.32-6.379-36.732,1.997-58.242
+			c5.52-1.714,13.706-0.428,24.554,3.855c10.85,4.286,18.794,7.951,23.84,10.992c5.046,3.042,9.089,5.614,12.135,7.71
+			c17.705-4.949,35.976-7.423,54.818-7.423c18.841,0,37.115,2.474,54.821,7.423l10.849-6.852c7.426-4.57,16.18-8.757,26.269-12.562
+			c10.088-3.806,17.795-4.854,23.127-3.14c8.562,21.51,9.328,40.922,2.279,58.241c15.036,16.179,22.559,35.786,22.559,58.815
+			c0,16.18-1.951,30.505-5.852,42.969c-3.898,12.467-8.939,22.463-15.13,29.981c-6.184,7.519-13.894,13.843-23.124,18.986
+			c-9.232,5.137-18.178,8.853-26.84,11.132c-8.661,2.286-18.414,4.004-29.263,5.147c9.891,8.562,14.839,22.072,14.839,40.538v68.238
+			c0,3.237,0.472,5.852,1.424,7.851c0.958,1.998,2.478,3.374,4.571,4.141c2.102,0.76,3.949,1.235,5.571,1.424
+			c1.622,0.191,3.949,0.287,6.995,0.287h63.953c22.648,0,42.018-8.042,58.095-24.126c16.084-16.084,24.126-35.454,24.126-58.102
+			V82.225C438.533,59.576,430.491,40.204,414.41,24.123z"/>
+		<path d="M86.793,319.195c-1.331,0.948-1.141,2.471,0.572,4.565c1.906,1.902,3.427,2.189,4.57,0.855
+			c1.331-0.948,1.141-2.471-0.575-4.569C89.458,318.336,87.936,318.049,86.793,319.195z"/>
+		<path d="M77.374,312.057c-0.57,1.335,0.096,2.478,1.999,3.426c1.521,0.955,2.762,0.767,3.711-0.568
+			c0.57-1.335-0.096-2.478-1.999-3.433C79.182,310.91,77.945,311.102,77.374,312.057z"/>
+		<path d="M95.646,330.331c-1.715,0.948-1.715,2.666,0,5.137c1.713,2.478,3.328,3.142,4.853,1.998c1.714-1.334,1.714-3.142,0-5.427
+			C98.978,329.571,97.359,328.993,95.646,330.331z"/>
+		<path d="M105.641,343.174c-1.714,1.526-1.336,3.327,1.142,5.428c2.281,2.279,4.185,2.566,5.708,0.849
+			c1.524-1.519,1.143-3.326-1.142-5.42C109.068,341.751,107.164,341.463,105.641,343.174z"/>
+	</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E6%88%91%E7%9A%84/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>我的</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                <li id="i18n-switch">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                    <select name="language" title="language"
+                        onchange="window.location.href = this.selectedOptions[0].value">
+                        
+                        <option value="http://localhost:1313/en/" >English</option>
+                        
+                        <option value="http://localhost:1313/" selected>简体中文</option>
+                        
+                        <option value="http://localhost:1313/ar/" >عربي</option>
+                        
+                    </select>
+                </li>
+                
+                
+
+                
+                <li id="dark-mode-toggle">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828a4 4 0 1 0 -5.656 -5.656a4 4 0 0 0 5.656 5.656z" /><path d="M6.343 17.657l-1.414 1.414" /><path d="M6.343 6.343l-1.414 -1.414" /><path d="M17.657 6.343l1.414 -1.414" /><path d="M17.657 17.657l1.414 1.414" /><path d="M4 12h-2" /><path d="M12 4v-2" /><path d="M20 12h2" /><path d="M12 20v2" /></svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /><path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 11h2m-1 -1v2" /></svg>
+                    <span>暗色模式</span>
+                </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#镜像命令">镜像命令</a>
+      <ol>
+        <li><a href="#docker-search">docker search</a></li>
+        <li><a href="#docker-pull">docker pull</a></li>
+        <li><a href="#docker-images">docker images</a></li>
+        <li><a href="#docker-rmi">docker rmi</a></li>
+      </ol>
+    </li>
+    <li><a href="#容器命令">容器命令</a>
+      <ol>
+        <li><a href="#docker-run">docker run</a></li>
+        <li><a href="#docker-ps">docker ps</a></li>
+        <li><a href="#退出容器">退出容器</a>
+          <ol>
+            <li><a href="#退出方式1">退出方式1</a></li>
+            <li><a href="#退出方式2建议使用">退出方式2（建议使用）</a></li>
+          </ol>
+        </li>
+        <li><a href="#重新启动正在运行的容器">重新启动正在运行的容器</a></li>
+        <li><a href="#停止正在运行的容器">停止正在运行的容器</a></li>
+        <li><a href="#删除容器">删除容器</a></li>
+        <li><a href="#重新进入正在运行的容器">重新进入正在运行的容器</a>
+          <ol>
+            <li><a href="#docker-exec建议使用">docker exec（建议使用）</a></li>
+            <li><a href="#docker-attach">docker attach</a></li>
+          </ol>
+        </li>
+        <li><a href="#容器的导出与导入">容器的导出与导入</a>
+          <ol>
+            <li><a href="#容器导出">容器导出</a></li>
+            <li><a href="#容器导入">容器导入</a></li>
+          </ol>
+        </li>
+        <li><a href="#镜像的保存与加载">镜像的保存与加载</a>
+          <ol>
+            <li><a href="#镜像保存">镜像保存</a></li>
+            <li><a href="#镜像加载">镜像加载</a></li>
+          </ol>
+        </li>
+        <li><a href="#容器文件拷贝到本地">容器文件拷贝到本地</a></li>
+      </ol>
+    </li>
+    <li><a href="#从容器创建新镜像">从容器创建新镜像</a>
+      <ol>
+        <li><a href="#制作新容器">制作新容器</a></li>
+        <li><a href="#制作新镜像">制作新镜像</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+            
+            <img src="/img/docker/docker%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4/index.jpg" loading="lazy" alt="Featured image of post docker常用命令" />
+            
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/docker/" >
+            Docker
+        </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">docker常用命令</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            介绍docker常用命令
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2024-11-29</time>
+        </div>
+        
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2024-11-30
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 3295 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="镜像命令">镜像命令
+</h2><h3 id="docker-search">docker search
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">使用方式</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">docker search 镜像名称</td>
+<td style="text-align:left"><strong>查找某一镜像</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>案例</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker search redis
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">NAME                                DESCRIPTION                                      STARS     OFFICIAL   AUTOMATED
+</span></span><span class="line"><span class="cl">redis                               Redis is an open <span class="nb">source</span> key-value store that…   <span class="m">12826</span>     <span class="o">[</span>OK<span class="o">]</span>
+</span></span><span class="line"><span class="cl">redislabs/redisearch                Redis With the RedisSearch module pre-loaded…   <span class="m">64</span>
+</span></span><span class="line"><span class="cl">redislabs/redisinsight              RedisInsight - The GUI <span class="k">for</span> Redis                 <span class="m">102</span>
+</span></span><span class="line"><span class="cl">redis/redis-stack-server            redis-stack-server installs a Redis server w…   <span class="m">76</span>
+</span></span><span class="line"><span class="cl">redis/redis-stack                   redis-stack installs a Redis server with add…   <span class="m">106</span>
+</span></span><span class="line"><span class="cl">redislabs/rebloom                   A probablistic datatypes module <span class="k">for</span> Redis        <span class="m">27</span>                   <span class="o">[</span>OK<span class="o">]</span>
+</span></span><span class="line"><span class="cl">redislabs/redis                     Clustered in-memory database engine compatib…   <span class="m">40</span>
+</span></span><span class="line"><span class="cl">redislabs/rejson                    RedisJSON - Enhanced JSON data <span class="nb">type</span> processi…   <span class="m">53</span>
+</span></span><span class="line"><span class="cl">redislabs/redismod                  An automated build of redismod - latest Redi…   <span class="m">47</span>                   <span class="o">[</span>OK<span class="o">]</span>
+</span></span><span class="line"><span class="cl">redislabs/redisgraph                A graph database module <span class="k">for</span> Redis                <span class="m">27</span>                   <span class="o">[</span>OK<span class="o">]</span>
+</span></span><span class="line"><span class="cl">redislabs/redistimeseries           A <span class="nb">time</span> series database module <span class="k">for</span> Redis          <span class="m">12</span>
+</span></span><span class="line"><span class="cl">redislabs/operator                                                                   <span class="m">7</span>
+</span></span><span class="line"><span class="cl">redislabs/operator-internal         This repository contains pre-released versio…   <span class="m">1</span>
+</span></span><span class="line"><span class="cl">redislabs/redis-py                                                                   <span class="m">5</span>
+</span></span><span class="line"><span class="cl">redislabs/redis-webcli              A tiny Flask app to provide access to Redis …   <span class="m">5</span>                    <span class="o">[</span>OK<span class="o">]</span>
+</span></span><span class="line"><span class="cl">redislabs/k8s-controller-internal                                                    <span class="m">0</span>
+</span></span><span class="line"><span class="cl">redislabs/redisgears                An automated build of RedisGears                 <span class="m">4</span>
+</span></span><span class="line"><span class="cl">redislabs/memtier_benchmark         Docker image to run memtier_benchmark            <span class="m">0</span>
+</span></span><span class="line"><span class="cl">redis/redisinsight                  Redis Insight - our best official GUI <span class="k">for</span> Re…   <span class="m">6</span>
+</span></span><span class="line"><span class="cl">redislabs/ng-redis-raft             Redis with redis raft module                     <span class="m">0</span>
+</span></span><span class="line"><span class="cl">redislabs/redisai                                                                    <span class="m">6</span>
+</span></span><span class="line"><span class="cl">redislabs/olmtest                   Test artefact <span class="k">for</span> OLM CSV                        <span class="m">1</span>
+</span></span><span class="line"><span class="cl">redislabs/k8s-controller                                                             <span class="m">2</span>
+</span></span><span class="line"><span class="cl">redislabs/olm-bundle                                                                 <span class="m">0</span>
+</span></span><span class="line"><span class="cl">bitnami/redis                       Bitnami container image <span class="k">for</span> Redis                <span class="m">277</span>                  <span class="o">[</span>OK<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="docker-pull">docker pull
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">使用方式</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">docker pull 镜像名称:TAG(版本号)</td>
+<td style="text-align:left">从docker hub下载镜像</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>注：如果不写版本号，默认下载最新版本</p>
+</blockquote>
+<p>案例</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker pull ubuntu
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Using default tag: latest
+</span></span><span class="line"><span class="cl">        latest: Pulling from library/ubuntu
+</span></span><span class="line"><span class="cl">49b384cc7b4a: Pull <span class="nb">complete</span>
+</span></span><span class="line"><span class="cl">Digest: sha256:3f85b7caad41a95462cf5b787d8a04604c8262cdcdf9a472b8c52ef83375fe15
+</span></span><span class="line"><span class="cl">Status: Downloaded newer image <span class="k">for</span> ubuntu:latest
+</span></span><span class="line"><span class="cl">docker.io/library/ubuntu:latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="docker-images">docker images
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">使用方式</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">docker images</td>
+<td style="text-align:left"><strong>列出镜像</strong></td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">选项</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-a</td>
+<td style="text-align:left"><strong>列出所有镜像</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">-q</td>
+<td style="text-align:left"><strong>只列出镜像的ID号</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>案例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker images
+</span></span><span class="line"><span class="cl">REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+</span></span><span class="line"><span class="cl">ubuntu        latest    bf3dc08bfed0   <span class="m">3</span> weeks ago     76.2MB
+</span></span><span class="line"><span class="cl">hello-world   latest    d2c94e258dcb   <span class="m">12</span> months ago   13.3kB
+</span></span><span class="line"><span class="cl">redis         6.0.8     16ecd2772934   <span class="m">3</span> years ago     104MB
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker images -a
+</span></span><span class="line"><span class="cl">REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+</span></span><span class="line"><span class="cl">ubuntu        latest    bf3dc08bfed0   <span class="m">3</span> weeks ago     76.2MB
+</span></span><span class="line"><span class="cl">hello-world   latest    d2c94e258dcb   <span class="m">12</span> months ago   13.3kB
+</span></span><span class="line"><span class="cl">redis         6.0.8     16ecd2772934   <span class="m">3</span> years ago     104MB
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker images -q
+</span></span><span class="line"><span class="cl">bf3dc08bfed0
+</span></span><span class="line"><span class="cl">d2c94e258dcb
+</span></span><span class="line"><span class="cl">16ecd2772934
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="docker-rmi">docker rmi
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">使用方式</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">docker rmi 镜像名称</td>
+<td style="text-align:left"><strong>删除镜像</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">docker rmi 镜像ID</td>
+<td style="text-align:left">删除镜像</td>
+</tr>
+<tr>
+<td style="text-align:left">docker rmi -f 镜像名称:TAG</td>
+<td style="text-align:left"><strong>强制删除镜像</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">docker rmi -f $(docker images -qa)</td>
+<td style="text-align:left">强制删除所有镜像</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>案例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker images
+</span></span><span class="line"><span class="cl">REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+</span></span><span class="line"><span class="cl">ubuntu        latest    bf3dc08bfed0   <span class="m">3</span> weeks ago     76.2MB
+</span></span><span class="line"><span class="cl">hello-world   latest    d2c94e258dcb   <span class="m">12</span> months ago   13.3kB
+</span></span><span class="line"><span class="cl">redis         6.0.8     16ecd2772934   <span class="m">3</span> years ago     104MB
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker rmi hello-world
+</span></span><span class="line"><span class="cl">Untagged: hello-world:latest
+</span></span><span class="line"><span class="cl">Untagged: hello-world@sha256:266b191e926f65542fa8daaec01a192c4d292bff79426f47300a046e1bc576fd
+</span></span><span class="line"><span class="cl">Deleted: sha256:d2c94e258dcb3c5ac2798d32e1249e42ef01cba4841c2234249495f87264ac5a
+</span></span><span class="line"><span class="cl">Deleted: sha256:ac28800ec8bb38d5c35b49d45a6ac4777544941199075dff8c4eb63e093aa81e
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker images
+</span></span><span class="line"><span class="cl">REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+</span></span><span class="line"><span class="cl">ubuntu       latest    bf3dc08bfed0   <span class="m">3</span> weeks ago   76.2MB
+</span></span><span class="line"><span class="cl">redis        6.0.8     16ecd2772934   <span class="m">3</span> years ago   104MB
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="容器命令">容器命令
+</h2><h3 id="docker-run">docker run
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+<th>选项说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker run -it 镜像名称 /bin/bash</td>
+<td>以<strong>前台交互模式进入容器</strong></td>
+<td>-i，即interaction，以交互模式运行容器 -t，即terminal，给容器分配一个伪终端 /bin/bash：指定给容器分配的伪终端为bash</td>
+</tr>
+<tr>
+<td>docker run -it 镜像名称 &ndash;name 容器名 /bin/bash</td>
+<td>以<strong>前台交互模式进入容器，并给容器命名</strong></td>
+<td>&ndash;name：给容器重新命名</td>
+</tr>
+<tr>
+<td>docker run -d 镜像名称</td>
+<td>以<strong>后台方式进入容器给</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="docker-ps">docker ps
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker ps</td>
+<td>列出<strong>正在运行的容器</strong></td>
+</tr>
+<tr>
+<td>docker ps -a</td>
+<td>列出<strong>所有正在运行的容器+历史运行过的容器</strong></td>
+</tr>
+<tr>
+<td>dokcer ps -l</td>
+<td>显示<strong>最近创建的容器</strong></td>
+</tr>
+<tr>
+<td>docker ps -n</td>
+<td>显示<strong>最近n个创建的容器</strong></td>
+</tr>
+<tr>
+<td>docker ps -q</td>
+<td><strong>只显示容器编号</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>案例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pcl@robot:~$ docker run -it ubuntu /bin/bash
+</span></span><span class="line"><span class="cl"><span class="c1">#以下进入容器内部</span>
+</span></span><span class="line"><span class="cl">root@a319ce0751d9:/# ls
+</span></span><span class="line"><span class="cl">bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@a319ce0751d9:/# ls /home
+</span></span><span class="line"><span class="cl">ubuntu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker ps
+</span></span><span class="line"><span class="cl">CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+</span></span><span class="line"><span class="cl">e0fe39a3d75e   ubuntu    <span class="s2">&#34;/bin/bash&#34;</span>   <span class="m">14</span> seconds ago   Up <span class="m">14</span> seconds             unruffled_franklin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker run -it --name<span class="o">=</span>myenv ubuntu /bin/bash
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker ps
+</span></span><span class="line"><span class="cl">CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+</span></span><span class="line"><span class="cl">48a0406b57bd   ubuntu    <span class="s2">&#34;/bin/bash&#34;</span>   <span class="m">9</span> seconds ago   Up <span class="m">8</span> seconds             myenv
+</span></span><span class="line"><span class="cl">e0fe39a3d75e   ubuntu    <span class="s2">&#34;/bin/bash&#34;</span>   <span class="m">9</span> minutes ago   Up <span class="m">9</span> minutes             unruffled_franklin
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker ps -l
+</span></span><span class="line"><span class="cl">CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+</span></span><span class="line"><span class="cl">48a0406b57bd   ubuntu    <span class="s2">&#34;/bin/bash&#34;</span>   <span class="m">5</span> minutes ago   Up <span class="m">5</span> minutes             myenv
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker ps -a
+</span></span><span class="line"><span class="cl">CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                        PORTS     NAMES
+</span></span><span class="line"><span class="cl">48a0406b57bd   ubuntu    <span class="s2">&#34;/bin/bash&#34;</span>   <span class="m">5</span> minutes ago    Up <span class="m">5</span> minutes                            myenv
+</span></span><span class="line"><span class="cl">e0fe39a3d75e   ubuntu    <span class="s2">&#34;/bin/bash&#34;</span>   <span class="m">14</span> minutes ago   Up <span class="m">14</span> minutes                           unruffled_franklin
+</span></span><span class="line"><span class="cl">a319ce0751d9   ubuntu    <span class="s2">&#34;/bin/bash&#34;</span>   <span class="m">16</span> minutes ago   Exited <span class="o">(</span>127<span class="o">)</span> <span class="m">15</span> minutes ago             adoring_tesla
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker ps -q
+</span></span><span class="line"><span class="cl">48a0406b57bd
+</span></span><span class="line"><span class="cl">e0fe39a3d75e
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="退出容器">退出容器
+</h3><h4 id="退出方式1">退出方式1
+</h4><p>使用<strong>exit命令或者快捷键ctrl+d</strong></p>
+<blockquote>
+<p><strong>使用这种方式退出容器后，容器本身也会停止</strong></p>
+</blockquote>
+<h4 id="退出方式2建议使用">退出方式2（建议使用）
+</h4><p><strong>使用快捷键ctrl+p+q</strong></p>
+<blockquote>
+<p><strong>使用这种方式退出容器后，容器仍旧在运行，不会停止</strong></p>
+</blockquote>
+<h3 id="重新启动正在运行的容器">重新启动正在运行的容器
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker start 容器id</td>
+<td>重新启动<strong>正在运行的容器</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="停止正在运行的容器">停止正在运行的容器
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker stop 容器id</td>
+<td><strong>停止正在运行的容器</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="删除容器">删除容器
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker rm 容器id</td>
+<td>删除<strong>正在运行的容器</strong></td>
+</tr>
+<tr>
+<td>docker rm -f 容器id</td>
+<td><strong>强制删除容器，由于使用docker rm命令删除容器不能删除正在运行的容器，需要首先停止容器的运行才能删除，如果需要删除一个正在运行的容器可加上-f选项强制删除，但不推荐</strong></td>
+</tr>
+<tr>
+<td>docker rm -f $(docker ps -qa)</td>
+<td>强制删除所有容器</td>
+</tr>
+<tr>
+<td>docker ps -qa | xargs docker rm</td>
+<td>删除所有容器</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="重新进入正在运行的容器">重新进入正在运行的容器
+</h3><h4 id="docker-exec建议使用">docker exec（建议使用）
+</h4><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker exec -it 容器id /bin/bash</td>
+<td><strong>重新进入正在运行的容器</strong>，并<strong>以交互模式进入</strong></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>注， <strong>使用这种方式重新进入容器后，即使使用exit命令退出容器，容器本身也不会停止</strong></p>
+</blockquote>
+<h4 id="docker-attach">docker attach
+</h4><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker attach 容器id</td>
+<td>重新进入正在运行的容器</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>注， <strong>使用这种方式重新进入容器后，即使使用exit命令退出容器，容器本身同时也会停止运行</strong></p>
+</blockquote>
+<h3 id="容器的导出与导入">容器的导出与导入
+</h3><h4 id="容器导出">容器导出
+</h4><blockquote>
+<p>容器导出就是指<strong>将容器进行打包归档为tar文件以备份</strong>，防止有人误删容器</p>
+</blockquote>
+<p>命令使用格式为</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker <span class="nb">export</span> 容器ID &gt; 归档名.tar
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如下，我们对pcl/ubuntu容器进行导出，其中55d6651e8842是pcl/ubuntu的容器id</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">pcl</span><span class="err">@</span><span class="n">robot</span><span class="p">:</span><span class="o">~/</span><span class="n">Public</span><span class="o">$</span> <span class="n">docker</span> <span class="k">export</span> <span class="mi">55</span><span class="n">d6651e8842</span> <span class="o">&gt;</span> <span class="n">ubuntu1</span><span class="o">.</span><span class="mf">2.</span><span class="n">tar</span>
+</span></span><span class="line"><span class="cl"><span class="n">pcl</span><span class="err">@</span><span class="n">robot</span><span class="p">:</span><span class="o">~/</span><span class="n">Public</span><span class="o">$</span> <span class="n">ls</span>
+</span></span><span class="line"><span class="cl"><span class="n">ubuntu1</span><span class="o">.</span><span class="mf">2.</span><span class="n">tar</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="容器导入">容器导入
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker import ubuntu1.2.tar pcl/ubuntu:1.2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>容器导入就是指将打包归档为tar文件的备份容器进行“解包”，并<strong>重新导入为镜像文件</strong></p>
+<p>该命令的使用格式为</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker import 归档文件 镜像名:TAG
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再次查看导入后的镜像文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pcl@robot:/etc/docker$ docker images
+</span></span><span class="line"><span class="cl">REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+</span></span><span class="line"><span class="cl">pcl/ubuntu	  1.2	   7677b73af929   6 seconds ago  184MB
+</span></span><span class="line"><span class="cl">pcl/ubuntu    1.1      55d6651e8842   3 weeks ago     185MB
+</span></span><span class="line"><span class="cl">hello-world   latest   d2c94e258dcb   12 months ago   13.3kB
+</span></span><span class="line"><span class="cl">redis         6.0.8    16ecd2772934   3 years ago     104MB
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="镜像的保存与加载">镜像的保存与加载
+</h3><h4 id="镜像保存">镜像保存
+</h4><blockquote>
+<p>作用是<strong>将镜像文件保存为归档文件</strong>，注意与容器导出进行区分，容器导出是将容器保存为归档文件</p>
+</blockquote>
+<p>命令使用方式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker save 镜像id -o 归档名.tar
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们使用刚才导出的镜像文件进行实验</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker save pcl/ubuntu:1.2 -o ubuntu.1.3.tar
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="镜像加载">镜像加载
+</h4><blockquote>
+<p>作用是<strong>将保存的镜像归档文件重新解包为docker镜像文件</strong></p>
+</blockquote>
+<p>使用方式为</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">docker</span> <span class="nb">load</span> <span class="n">i</span> <span class="err">镜像打包文件</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如下所示，使用docker load命令看是否能加载出镜像文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> docker load -i ubuntu.1.3.tar
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>对比总结我们发现</p>
+<ul>
+<li>容器导出是将容器保存为归档文件</li>
+<li>镜像保存是将镜像保存为归档文件</li>
+<li>无论是将容器保存为归档文件还是将镜像保存为归档文件，使用对应命令解包（如容器导出对应的是容器导入，镜像保存对应的是镜像加载）之后，都只是解包为镜像文件</li>
+<li>日常情况下，我们常使用的是docker save 与 docker load 也就是镜像的保存与加载</li>
+</ul>
+</blockquote>
+<h3 id="容器文件拷贝到本地">容器文件拷贝到本地
+</h3><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>使用方式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker cp 容器id:容器内文件路径 本地路径</td>
+<td>拷贝容器内的文件到本地</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>同理，我们更换源路径与目标路径也可以实现将本地文件拷贝到容器中</p>
+</blockquote>
+<h2 id="从容器创建新镜像">从容器创建新镜像
+</h2><blockquote>
+<p>我们知道，从docker-hub上拉取的镜像所创建的容器是最小版本的，比如ubuntu内部是没有vim编辑器的，我们需要自己手动安装，但是当我们安装后假如有人把我们的容器误删了，如果我们重新根据原始镜像创建容器，那么这个由原始镜像创造的容器就没有了我们之前配的环境，这意味着我们需要重新配置环境。。。。。</p>
+<p>那么，有什么办法解决这种困境呢？</p>
+</blockquote>
+<p>一般情况下，我们有两种方法制作自己的镜像</p>
+<blockquote>
+<ol>
+<li>重写dockerfile文件</li>
+<li>在原来容器的基础上配好环境之后，使用docker commit命令制作</li>
+</ol>
+</blockquote>
+<p>有关dockerfile的说明我们在下节说明，今天我们介绍如何使用docker <a class="link" href="https://so.csdn.net/so/search?q=commit&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
+    >commit</a>命令将一个新的容器制作成一个镜像</p>
+<h3 id="制作新容器">制作新容器
+</h3><p>我们以最小版的ubuntu镜像为例，并创建一个ubuntu容器，在这个容器里安装vim（原始的ubuntu容器是没有vim的），之后使用docker commit命令根据这个容器创建一个新的镜像，如果我们制作成功，那么我们使用新的镜像创建容器后，容器会有vim</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> docker images
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如下，我的docker镜像里有一个原始的ubunutu镜像，该镜像的大小只有72.8MB</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">REPOSITORY               TAG              IMAGE ID       CREATED         SIZE
+</span></span><span class="line"><span class="cl">4m                       latest           23a2509258e9   <span class="m">5</span> weeks ago     18.1GB
+</span></span><span class="line"><span class="cl">ubuntu                   20.04            6013ae1a63c2   <span class="m">7</span> weeks ago     72.8MB
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来我们根据这个镜像创建一个容器并进入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>base<span class="o">)</span> jl@jin-X299X-AORUS-MASTER:~$ docker run -it --name ubuntu_vim  ubuntu:20.04 bash
+</span></span><span class="line"><span class="cl"><span class="c1">#如下已经进入容器了</span>
+</span></span><span class="line"><span class="cl">root@ce501a8563f7:/#
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>说明</p>
+<ul>
+<li>&ndash;name选项表示我们给创建的容器取一个名字，否则每次我们创建的容器名字就都是随机的</li>
+</ul>
+</blockquote>
+<p>进入容器之后，当我们进入创建好的容器后使用vim命令，容器内的系统会给我们报错显示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ce501a8563f7:/# vim
+</span></span><span class="line"><span class="cl">bash: vim: <span class="nb">command</span> not found
+</span></span><span class="line"><span class="cl">root@ce501a8563f7:/#
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>ok，接下来让我们在容器中手动安装vim</p>
+<p>1.更新源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.安装vim</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> apt install vim
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装成功之后，我们使用vim创建了一个text.txt文件，并在其中写入了一个admin单词，如下所示，这表示我们成功安装了vim</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ce501a8563f7:/# vim test.txt
+</span></span><span class="line"><span class="cl">root@ce501a8563f7:/# cat test.txt
+</span></span><span class="line"><span class="cl">admin
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="制作新镜像">制作新镜像
+</h3><p>接下来，我们根据这个容器重新制作一个新的镜像，使得下次我们使用这个新镜像创建容器</p>
+<p>我们先给出docker commit命令的使用格式，但我们一般用不到这么多参数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker commit -m <span class="s2">&#34;提交信息&#34;</span> -a<span class="o">=</span><span class="s2">&#34;作者名&#34;</span> 容器ID 要创建的目标镜像名:版本号
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>1.退出容器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ce501a8563f7:/# <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>base<span class="o">)</span> jl@jin-X299X-AORUS-MASTER:~$
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.根据该容器制作新镜像</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>base<span class="o">)</span> jl@jin-X299X-AORUS-MASTER:~$ docker commit ubuntu_vim ubuntu_vim_img
+</span></span><span class="line"><span class="cl">sha256:cedfbe36057f927d1b6deca0667a30ce5214076121eca0547055260d3d91be0b
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>其中</p>
+<ul>
+<li>ubuntu_vim，是我们刚才新容器的名字，如果你没有给容器命名，可以使用容器ID代替</li>
+<li>ubuntu_vim_img，是我们用这个容器制作的镜像名称，自己取就好</li>
+</ul>
+</blockquote>
+<p>如下所示，我们重新查看镜像列表，已经有了我们创建好的新镜像</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>base<span class="o">)</span> jl@jin-X299X-AORUS-MASTER:~$ docker images
+</span></span><span class="line"><span class="cl">REPOSITORY                   TAG              IMAGE ID       CREATED              SIZE
+</span></span><span class="line"><span class="cl">ubuntu_vim_img               latest           cedfbe36057f   About a minute ago   196MB
+</span></span><span class="line"><span class="cl">ubuntu                       20.04            6013ae1a63c2   <span class="m">7</span> weeks ago          72.8MB
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    
+</footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/dockerfile%E5%85%B3%E9%94%AE%E5%AD%97/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241210_1733844740.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241210_1733844740.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">dockerfile关键字</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/docker%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%8D%B8%E8%BD%BD/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/img/docker/dokcer%e5%ae%89%e8%a3%85/index.jpg" loading="lazy" data-key="" data-hash="/img/docker/dokcer安装/index.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">docker安装、配置与卸载</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"lang":"zh-CN","locale":{"admin":"你好","placeholder":null,"sofa":"还没有人评论哦！快来抢沙发吧~"},"placeholder":"欢迎留下宝贵的评论！","requiredMeta":["name","email","url"],"serverURL":"https://blogcomment-iqp14djt5-jl-skys-projects.vercel.app/","visitor":false});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy;
+        
+        2024 JL-sky
+    </section>
+
+    
+    <section class="running-time">
+        网站已运行
+        <span id="runningdays" class="running-days"></span>
+    </section>
+
+    
+    <section class="totalcount">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        发表了14篇文章 ·
+        总计
+        74,971字
+        
+    </section>
+
+    
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+        </main>
+    </div>
+    <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.dde1bc60c191a36f391af9ea35dd08be3c74bca8ca0cd8ff6a663c09a0256be0.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    let s1 = '2024-11-24'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+<div id="particles-js"></div>
+
+<script src=http://localhost:1313/background/particles.min.js></script>
+<script>
+    particlesJS.load('particles-js', resources.Get("background/package.json").Permalink, function () {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+
+<style>
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+</style>
+</body>
+
+</html>
