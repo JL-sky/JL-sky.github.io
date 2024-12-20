@@ -7,11 +7,11 @@
 
 <link rel='canonical' href='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AB%E7%AB%A0%E4%B8%80-%E4%BD%8D%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/'>
 
-<link rel="stylesheet" href="/scss/style.min.ea98715ebe4eca7e8bf88565f314f42acd095b8b77df842bad81cfe223b7006b.css"><meta property='og:title' content="《操作系统真象还原》第八章（一） —— 位图及其实现">
+<link rel="stylesheet" href="/scss/style.min.7188dfde9021a337902a152417729e3753a3c610e55d6bd3671c3bbe49e3bcdb.css"><meta property='og:title' content="《操作系统真象还原》第八章（一） —— 位图及其实现">
 <meta property='og:description' content="本文介绍了ASSERT断言的实现、基本字符串处理的实现物理内存管理数据结构位图的实现">
 <meta property='og:url' content='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AB%E7%AB%A0%E4%B8%80-%E4%BD%8D%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-18T20:38:27&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241218_1734521834.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-20T21:42:47&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241218_1734521834.png' />
 <meta name="twitter:title" content="《操作系统真象还原》第八章（一） —— 位图及其实现">
 <meta name="twitter:description" content="本文介绍了ASSERT断言的实现、基本字符串处理的实现物理内存管理数据结构位图的实现"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241218_1734521834.png' />
@@ -394,7 +394,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">2024-12-17</time>
+            <time class="article-time--published">2024-12-18</time>
         </div>
         
 
@@ -409,7 +409,7 @@
 
             <time class="article-lastmod">
                 最后更新于
-                2024-12-18
+                2024-12-20
             </time>
         </div>
         <div>
@@ -439,7 +439,7 @@
 
             
             <time class="article-words">
-                本文共 5309 字
+                本文共 5311 字
             </time>
         </div>
         
@@ -460,13 +460,13 @@
 </h2><h3 id="任务简介">任务简介
 </h3><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%89%93%E5%BC%80%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6/"  target="_blank" rel="noopener"
     >上一节</a>，我们成功为我们的内核开启了中断机制，并使用时钟中断进行了测试</p>
-<p>本节我们将开启物理内存管理的相关内容</p>
+<p>本节我们将开启操作系统内存管理的相关内容</p>
 <p>本章的主要任务有：</p>
 <blockquote>
 <ol>
 <li>实现ASSERT断言</li>
 <li>实现字符串处理函数</li>
-<li>实现管理物理内存的数据结果位图</li>
+<li>实现管理物理内存的数据结构位图</li>
 </ol>
 </blockquote>
 <h2 id="实现assert断言">实现assert断言
@@ -1082,7 +1082,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">memcpy</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dst_</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">src_</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">size</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">ASSRT</span><span class="p">(</span><span class="n">dst_</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">src_</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ASSERT</span><span class="p">(</span><span class="n">dst_</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">src_</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">src</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span> <span class="o">*</span><span class="p">)</span><span class="n">src_</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">dst</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span> <span class="o">*</span><span class="p">)</span><span class="n">dst_</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">size</span><span class="o">--</span><span class="p">)</span>
@@ -1446,7 +1446,7 @@
 </span></span><span class="line"><span class="cl">    <span class="c1">// 记录还剩余多少位没有判断
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">bit_left</span> <span class="o">=</span> <span class="n">btmp</span><span class="o">-&gt;</span><span class="n">btmp_bytes_len</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">-</span> <span class="n">bit_idx_start</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">next_bit</span> <span class="o">=</span> <span class="n">bit_idx_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/*寻找剩余连续的0*/</span>
 </span></span><span class="line"><span class="cl">    <span class="n">bit_idx_start</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
@@ -1570,6 +1570,25 @@
             
                 
 <article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AB%E7%AB%A0%E4%BA%8C-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734661126.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734661126.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第八章（二） —— 内存管理系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
     <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%89%93%E5%BC%80%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6/">
         
         
@@ -1639,25 +1658,6 @@
 
         <div class="article-details">
             <h2 class="article-title">《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%9B%9B%E7%AB%A0%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%85%A5%E9%97%A8/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733904874.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733904874.jpg"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">《操作系统真象还原》第四章——保护模式入门</h2>
         </div>
     </a>
 </article>
@@ -1746,9 +1746,11 @@
         
         
         
-        发表了16篇文章 ·
+        
+        
+        发表了17篇文章 ·
         总计
-        89,849字
+        101,171字
         
     </section>
 
