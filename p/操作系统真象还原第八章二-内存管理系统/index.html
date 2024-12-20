@@ -11,7 +11,7 @@
 <meta property='og:description' content="本文介绍了操作系统内存管理系统的相关知识以及内存池的规划与管理">
 <meta property='og:url' content='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AB%E7%AB%A0%E4%BA%8C-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-20T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-21T00:11:49&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734661126.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-20T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-21T00:48:13&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734661126.jpg' />
 <meta name="twitter:title" content="《操作系统真象还原》第八章（二） —— 内存管理系统">
 <meta name="twitter:description" content="本文介绍了操作系统内存管理系统的相关知识以及内存池的规划与管理"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734661126.jpg' />
@@ -315,13 +315,9 @@
     </li>
     <li><a href="#内存池的规划">内存池的规划</a>
       <ol>
-        <li>
-          <ol>
-            <li><a href="#物理内存池的规划">物理内存池的规划</a></li>
-            <li><a href="#虚拟内存池的规划">虚拟内存池的规划</a></li>
-            <li><a href="#位图的规划存放">位图的规划存放</a></li>
-          </ol>
-        </li>
+        <li><a href="#物理内存池的规划">物理内存池的规划</a></li>
+        <li><a href="#虚拟内存池的规划">虚拟内存池的规划</a></li>
+        <li><a href="#位图的规划存放">位图的规划存放</a></li>
       </ol>
     </li>
     <li><a href="#内存池的初始化">内存池的初始化</a>
@@ -512,8 +508,8 @@
 <p>事实上，应该还有一个用户虚拟内存池，但这部分内容我们在线程管理部分再进行补充</p>
 <p>虚拟内存池规划在虚拟内存中，物理内存池规划在物理内存中，他们之间的关系通过页表进行关联</p>
 </blockquote>
-<h4 id="物理内存池的规划">物理内存池的规划
-</h4><p>目前为止，低1MB的物理内存是我们的内核相关代码和数据，从1MB往上2MB字节存放的是页目录表和内核页表内容，这两部分的数据我们是不能覆盖的，因此剩余的内存将供我们规划物理内存池</p>
+<h3 id="物理内存池的规划">物理内存池的规划
+</h3><p>目前为止，低1MB的物理内存是我们的内核相关代码和数据，从1MB往上2MB字节存放的是页目录表和内核页表内容，这两部分的数据我们是不能覆盖的，因此剩余的内存将供我们规划物理内存池</p>
 <p>我们在剩余空间中各取一半，分别最为用户物理内存池和内核物理内存池，如下所示</p>
 <p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734693128.png"
 	
@@ -525,8 +521,8 @@
 	
 	
 ></p>
-<h4 id="虚拟内存池的规划">虚拟内存池的规划
-</h4><p>目前我们暂时只对内核虚拟内存池（内核堆区空间）进行规划，在3GB ~ 4GB中间的内核虚拟空间中取一块作为虚拟内存池，其中起始地址为<code>0xc0100000</code>，也就是绕过低端的1MB内存</p>
+<h3 id="虚拟内存池的规划">虚拟内存池的规划
+</h3><p>目前我们暂时只对内核虚拟内存池（内核堆区空间）进行规划，在3GB ~ 4GB中间的内核虚拟空间中取一块作为虚拟内存池，其中起始地址为<code>0xc0100000</code>，也就是绕过低端的1MB内存</p>
 <p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734700699.png"
 	
 	
@@ -537,8 +533,8 @@
 	
 	
 ></p>
-<h4 id="位图的规划存放">位图的规划存放
-</h4><p>既然有物理内存池和虚拟内存池，位图作为管理内存空间的数据结构，当然也要有地方进行存放，这样我们才能从位图中知道哪些内存被使用了，哪些内存块是空闲的，从而进一步管理内存</p>
+<h3 id="位图的规划存放">位图的规划存放
+</h3><p>既然有物理内存池和虚拟内存池，位图作为管理内存空间的数据结构，当然也要有地方进行存放，这样我们才能从位图中知道哪些内存被使用了，哪些内存块是空闲的，从而进一步管理内存</p>
 <p>三种内存池对应着三种位图，由于我们还有一个用户虚拟内存池还暂时没有开辟，因此在这里应该是四种位图</p>
 <blockquote>
 <ol>
