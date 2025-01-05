@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文介绍了汇编层面的函数调用过程以及内联汇编，同时完成了内核的第一个功能——打印字符及字符串">
+<title>《操作系统真象还原》第六章 —— 完善内核</title>
+
+<link rel='canonical' href='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%AE%8C%E5%96%84%E5%86%85%E6%A0%B8/'>
+
+<link rel="stylesheet" href="/scss/style.min.c2172b128ab8744b3f98599d792c6144c766b07c79ba00c88ff5c11861a33247.css"><meta property='og:title' content="《操作系统真象还原》第六章 —— 完善内核">
+<meta property='og:description' content="本文介绍了汇编层面的函数调用过程以及内联汇编，同时完成了内核的第一个功能——打印字符及字符串">
+<meta property='og:url' content='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%AE%8C%E5%96%84%E5%86%85%E6%A0%B8/'>
+<meta property='og:site_name' content='你好'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-15T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-16T21:51:08&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241215_1734252157.jpg' />
+<meta name="twitter:title" content="《操作系统真象还原》第六章 —— 完善内核">
+<meta name="twitter:description" content="本文介绍了汇编层面的函数调用过程以及内联汇编，同时完成了内核的第一个功能——打印字符及字符串"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241215_1734252157.jpg' />
+  
+
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            
+            <a href="https://jl-sky.github.io/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu16686392332003896281.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">🤔</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">你好</a></h1>
+            <h2 class="site-description">原来是你啊</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/JL-sky' target="_blank"  title="GitHub"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="438.536px" height="438.536px" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 438.536 438.536;"
+	 xml:space="preserve">
+<g>
+	<g>
+		<path d="M158.173,352.599c-3.049,0.568-4.381,1.999-3.999,4.281c0.38,2.283,2.093,3.046,5.138,2.283
+			c3.049-0.76,4.38-2.095,3.997-3.997C162.931,353.074,161.218,352.216,158.173,352.599z"/>
+		<path d="M141.898,354.885c-3.046,0-4.568,1.041-4.568,3.139c0,2.474,1.619,3.518,4.853,3.138c3.046,0,4.57-1.047,4.57-3.138
+			C146.753,355.553,145.134,354.502,141.898,354.885z"/>
+		<path d="M119.629,354.022c-0.76,2.095,0.478,3.519,3.711,4.284c2.855,1.137,4.664,0.568,5.424-1.714
+			c0.572-2.091-0.666-3.61-3.711-4.568C122.197,351.265,120.39,351.922,119.629,354.022z"/>
+		<path d="M414.41,24.123C398.326,8.042,378.964,0,356.309,0H82.225C59.577,0,40.208,8.042,24.123,24.123
+			C8.042,40.207,0,59.576,0,82.225v274.088c0,22.65,8.042,42.017,24.123,58.098c16.084,16.084,35.454,24.126,58.102,24.126h63.953
+			c4.184,0,7.327-0.144,9.42-0.424c2.092-0.288,4.184-1.526,6.279-3.717c2.096-2.187,3.14-5.376,3.14-9.562
+			c0-0.568-0.05-7.046-0.144-19.417c-0.097-12.375-0.144-22.176-0.144-29.41l-6.567,1.143c-4.187,0.76-9.469,1.095-15.846,0.999
+			c-6.374-0.096-12.99-0.76-19.841-1.998c-6.855-1.239-13.229-4.093-19.13-8.562c-5.898-4.477-10.085-10.328-12.56-17.559
+			l-2.856-6.571c-1.903-4.373-4.899-9.229-8.992-14.554c-4.093-5.332-8.232-8.949-12.419-10.852l-1.999-1.428
+			c-1.331-0.951-2.568-2.098-3.711-3.429c-1.141-1.335-1.997-2.669-2.568-3.997c-0.571-1.335-0.097-2.43,1.427-3.289
+			c1.524-0.855,4.281-1.279,8.28-1.279l5.708,0.855c3.808,0.76,8.516,3.042,14.134,6.851c5.614,3.806,10.229,8.754,13.846,14.843
+			c4.38,7.806,9.657,13.75,15.846,17.843c6.184,4.097,12.419,6.143,18.699,6.143s11.704-0.476,16.274-1.424
+			c4.565-0.954,8.848-2.385,12.847-4.288c1.713-12.751,6.377-22.559,13.988-29.41c-10.848-1.143-20.602-2.854-29.265-5.14
+			c-8.658-2.286-17.605-5.995-26.835-11.136c-9.234-5.14-16.894-11.512-22.985-19.13c-6.09-7.618-11.088-17.61-14.987-29.978
+			c-3.901-12.375-5.852-26.652-5.852-42.829c0-23.029,7.521-42.637,22.557-58.814c-7.044-17.32-6.379-36.732,1.997-58.242
+			c5.52-1.714,13.706-0.428,24.554,3.855c10.85,4.286,18.794,7.951,23.84,10.992c5.046,3.042,9.089,5.614,12.135,7.71
+			c17.705-4.949,35.976-7.423,54.818-7.423c18.841,0,37.115,2.474,54.821,7.423l10.849-6.852c7.426-4.57,16.18-8.757,26.269-12.562
+			c10.088-3.806,17.795-4.854,23.127-3.14c8.562,21.51,9.328,40.922,2.279,58.241c15.036,16.179,22.559,35.786,22.559,58.815
+			c0,16.18-1.951,30.505-5.852,42.969c-3.898,12.467-8.939,22.463-15.13,29.981c-6.184,7.519-13.894,13.843-23.124,18.986
+			c-9.232,5.137-18.178,8.853-26.84,11.132c-8.661,2.286-18.414,4.004-29.263,5.147c9.891,8.562,14.839,22.072,14.839,40.538v68.238
+			c0,3.237,0.472,5.852,1.424,7.851c0.958,1.998,2.478,3.374,4.571,4.141c2.102,0.76,3.949,1.235,5.571,1.424
+			c1.622,0.191,3.949,0.287,6.995,0.287h63.953c22.648,0,42.018-8.042,58.095-24.126c16.084-16.084,24.126-35.454,24.126-58.102
+			V82.225C438.533,59.576,430.491,40.204,414.41,24.123z"/>
+		<path d="M86.793,319.195c-1.331,0.948-1.141,2.471,0.572,4.565c1.906,1.902,3.427,2.189,4.57,0.855
+			c1.331-0.948,1.141-2.471-0.575-4.569C89.458,318.336,87.936,318.049,86.793,319.195z"/>
+		<path d="M77.374,312.057c-0.57,1.335,0.096,2.478,1.999,3.426c1.521,0.955,2.762,0.767,3.711-0.568
+			c0.57-1.335-0.096-2.478-1.999-3.433C79.182,310.91,77.945,311.102,77.374,312.057z"/>
+		<path d="M95.646,330.331c-1.715,0.948-1.715,2.666,0,5.137c1.713,2.478,3.328,3.142,4.853,1.998c1.714-1.334,1.714-3.142,0-5.427
+			C98.978,329.571,97.359,328.993,95.646,330.331z"/>
+		<path d="M105.641,343.174c-1.714,1.526-1.336,3.327,1.142,5.428c2.281,2.279,4.185,2.566,5.708,0.849
+			c1.524-1.519,1.143-3.326-1.142-5.42C109.068,341.751,107.164,341.463,105.641,343.174z"/>
+	</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E6%88%91%E7%9A%84/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>我的</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                <li id="i18n-switch">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                    <select name="language" title="language"
+                        onchange="window.location.href = this.selectedOptions[0].value">
+                        
+                        <option value="http://localhost:1313/en/" >English</option>
+                        
+                        <option value="http://localhost:1313/" selected>简体中文</option>
+                        
+                        <option value="http://localhost:1313/ar/" >عربي</option>
+                        
+                    </select>
+                </li>
+                
+                
+
+                
+                <li id="dark-mode-toggle">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828a4 4 0 1 0 -5.656 -5.656a4 4 0 0 0 5.656 5.656z" /><path d="M6.343 17.657l-1.414 1.414" /><path d="M6.343 6.343l-1.414 -1.414" /><path d="M17.657 6.343l1.414 -1.414" /><path d="M17.657 17.657l1.414 1.414" /><path d="M4 12h-2" /><path d="M12 4v-2" /><path d="M20 12h2" /><path d="M12 20v2" /></svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /><path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 11h2m-1 -1v2" /></svg>
+                    <span>暗色模式</span>
+                </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#章节任务介绍">章节任务介绍</a>
+      <ol>
+        <li><a href="#任务简介">任务简介</a></li>
+      </ol>
+    </li>
+    <li><a href="#前置知识">前置知识</a>
+      <ol>
+        <li><a href="#汇编层间的函数调用">汇编层间的函数调用</a></li>
+        <li><a href="#c语言与汇编语言的混合调用">c语言与汇编语言的混合调用</a></li>
+      </ol>
+    </li>
+    <li><a href="#内核初步完善">内核初步完善</a>
+      <ol>
+        <li><a href="#代码目录结构">代码目录结构</a></li>
+        <li><a href="#实现单字符打印">实现单字符打印</a>
+          <ol>
+            <li><a href="#数据类型定义">数据类型定义</a></li>
+            <li><a href="#字符打印头文件定义">字符打印头文件定义</a></li>
+            <li><a href="#字符打印源文件实现">字符打印源文件实现</a></li>
+            <li><a href="#内核主函数">内核主函数</a></li>
+            <li><a href="#编译链接">编译链接</a></li>
+            <li><a href="#运行">运行</a></li>
+          </ol>
+        </li>
+        <li><a href="#实现字符串打印">实现字符串打印</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%AE%8C%E5%96%84%E5%86%85%E6%A0%B8/">
+            
+            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241215_1734252157.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第六章 —— 完善内核" />
+            
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" >
+            操作系统真象还原
+        </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%AE%8C%E5%96%84%E5%86%85%E6%A0%B8/">《操作系统真象还原》第六章 —— 完善内核</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            本文介绍了汇编层面的函数调用过程以及内联汇编，同时完成了内核的第一个功能——打印字符及字符串
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2024-12-15</time>
+        </div>
+        
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2024-12-16
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 5393 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>本章节所有代码托管在<a class="link" href="https://github.com/JL-sky/miniOS_32"  target="_blank" rel="noopener"
+    >miniOS_32</a></p>
+<h2 id="章节任务介绍">章节任务介绍
+</h2><h3 id="任务简介">任务简介
+</h3><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%BA%8C-%E5%8A%A0%E8%BD%BD%E5%86%85%E6%A0%B8/"  target="_blank" rel="noopener"
+    >上一节</a>，我们介绍了程序的基本结构以及程序是如何加载到内存的，同时成功的加载了内核到内存</p>
+<p>本节我们将正式书写内核代码</p>
+<p>本章的主要任务有：</p>
+<blockquote>
+<ol>
+<li>实现内核的单个字符打印</li>
+<li>实现内核字符串打印功能</li>
+</ol>
+</blockquote>
+<h2 id="前置知识">前置知识
+</h2><h3 id="汇编层间的函数调用">汇编层间的函数调用
+</h3><p>函数调用涉及两个问题</p>
+<blockquote>
+<ol>
+<li>参数传递的方式</li>
+<li>参数传递的顺序</li>
+</ol>
+</blockquote>
+<p>先回答第一个问题，参数传递的方式</p>
+<p>首先，我们需要知道，现代编译器在处理函数调用进行参数传递有两种方式</p>
+<blockquote>
+<ul>
+<li>寄存器传递</li>
+<li>栈空间传递</li>
+</ul>
+</blockquote>
+<p>以下是当前的64位操作系统的寄存器概览</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241215_1734271937.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241215221217541"
+	
+	
+></p>
+<blockquote>
+<ul>
+<li>如果<strong>参数的个数小于7个，则采用寄存器传递</strong>，因为寄存器传递参数速度较快。这7个寄存器分别是
+<ul>
+<li>rdi，传递第一个参数</li>
+<li>rsi，传递第二个参数</li>
+<li>rdx，传递第三个参数</li>
+<li>rcx，传递第四个参数</li>
+<li>r8，传递第五个参数</li>
+<li>r9，传递第六个参数</li>
+</ul>
+</li>
+<li>当<strong>参数个数大于等于7个</strong>，多余的参数则使用栈空间传递</li>
+</ul>
+</blockquote>
+<p>当然，我们目前要做的是32位操作系统（如果想了解更多有关现代编译器过程调用细节可参看《深入理解计算机系统》），其调用约定还相对没那么多，当参数个数小于等于5个的时候使用寄存器传递，当参数个数大于5的时候使用栈空间传递，以下是我们目前使用的参数传递寄存器约定</p>
+<blockquote>
+<ul>
+<li>ebx存储第一个参数</li>
+<li>ecx存储第二个参数</li>
+<li>edx存储第三个参数</li>
+<li>esi存储第四个参数</li>
+<li>edi存储第五个参数</li>
+</ul>
+</blockquote>
+<p>接下来，我们回答第二个问题，参数传递的顺序</p>
+<blockquote>
+<ul>
+<li>调用者按照逆序存储参数</li>
+<li>被调用者顺序取出参数</li>
+</ul>
+</blockquote>
+<p>我们以一段代码说明</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">subtract</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">);</span>  <span class="c1">//被调用者
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="n">sub</span><span class="o">=</span><span class="nf">subtract</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>      <span class="c1">//调用者
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>以下是调用者的汇编代码，这里为了说明问题用的是栈空间传递参数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;调用者</span>
+</span></span><span class="line"><span class="cl"><span class="nf">push</span> <span class="mi">2</span>          <span class="c1">;压入参数b</span>
+</span></span><span class="line"><span class="cl"><span class="nf">push</span> <span class="mi">3</span>          <span class="c1">;压入参数a</span>
+</span></span><span class="line"><span class="cl"><span class="nf">call</span> <span class="nv">subtract</span>   <span class="c1">;调用subtract函数</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span> <span class="nb">esp</span><span class="p">,</span><span class="mi">8</span>       <span class="c1">;回收栈空间</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以下是被调用者的汇编代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;被调用者，也就是subtract</span>
+</span></span><span class="line"><span class="cl"><span class="nl">subtract:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebp</span><span class="p">,</span><span class="nb">esp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebp</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>     <span class="c1">;取出第一个参数a</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebp</span><span class="o">+</span><span class="mh">0xc</span><span class="p">]</span>   <span class="c1">;取出第二个参数b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">pop</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>需要知道，<code>call</code>指令在调用函数时做了两件事</p>
+<blockquote>
+<ul>
+<li>将call指令的下一条指令的地址压入栈中，作为函数的返回地址</li>
+<li>修改eip寄存器（指令寄存器，用于取出指令送给cpu执行）的值为subtract符号的地址</li>
+</ul>
+</blockquote>
+<p>相对的，<code>ret</code>指令也做了两件事</p>
+<blockquote>
+<ul>
+<li>弹出调用者压在栈中的返回地址</li>
+<li>修改eip寄存器的值为弹出的返回地址</li>
+</ul>
+</blockquote>
+<p>因此，其调用过程如下所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241215_1734272835.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241215222714975"
+	
+	
+></p>
+<p>由此可以看到，计算机正是通过<code>call</code>和<code>ret</code>这两条指令完成函数的调用和恢复的，但需要知道的是，从本质上说，这两天指令仅仅只是修改eip寄存器用的，并不能保证恢复环境的时候正确，因此有了以下框架</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebp</span><span class="p">,</span><span class="nb">esp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">;函数体</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">pop</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个框架是每个函数都要做的，事实上，在高级语言中</p>
+<blockquote>
+<ul>
+<li>函数的左括号对应的就是前两条指令</li>
+<li>函数的右括号对应的是最后两个指令</li>
+</ul>
+</blockquote>
+<h3 id="c语言与汇编语言的混合调用">c语言与汇编语言的混合调用
+</h3><p>如果想了解更多有关函数调用的细节可参考《深入理解计算机系统》第三章的内容，这里也推荐一个网站，供大家学习使用</p>
+<p><a class="link" href="https://godbolt.org/"  target="_blank" rel="noopener"
+    >Compiler Explorer</a></p>
+<p>有了上述知识，我们知道高级语言的底层其实就是汇编语言，因此本质上两者是想通的，接下来我们实战以作说明</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">write</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s">&#34;hello world</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="mi">13</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以上是一段简单的使用c语言调用系统函数<code>write</code>，接下来我们看如果使用汇编语言怎么写</p>
+<p>syscall_write.S</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="k">section</span> <span class="nv">.data</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">sys_call</span> <span class="nv">db</span> <span class="s">&#39;Hello from syscall write!&#39;</span><span class="p">,</span> <span class="mh">0xa</span>  <span class="c1">; 0xa 为换行符</span>
+</span></span><span class="line"><span class="cl">    <span class="no">sys_call_len</span><span class="kd"> equ</span> <span class="kc">$</span> <span class="o">-</span> <span class="nv">sys_call</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">str_c</span> <span class="nv">db</span> <span class="s">&#39;Hello from simu write!&#39;</span><span class="p">,</span><span class="mh">0xa</span>
+</span></span><span class="line"><span class="cl">    <span class="no">str_c_len</span><span class="kd"> equ</span> <span class="kc">$</span> <span class="o">-</span> <span class="nv">str_c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">section</span> <span class="nv">.text</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="nv">_start</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">_start:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;------- 模拟c语言的系统调用write --------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nv">str_c_len</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nv">str_c</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nb">si</span><span class="nv">mu_write</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">esp</span><span class="p">,</span><span class="mi">12</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">;------ 调用 sys_write ---------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="mi">4</span>              <span class="c1">; sys_write 系统调用号</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span> <span class="mi">1</span>              <span class="c1">; 文件描述符 1（标准输出）</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span> <span class="nv">sys_call</span>       <span class="c1">; 消息的地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span> <span class="nv">sys_call_len</span>   <span class="c1">; 消息的长度</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x80</span>                <span class="c1">; 执行系统调用</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">; 程序结束</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="mi">1</span>              <span class="c1">; sys_exit 系统调用号</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">ebx</span><span class="p">,</span> <span class="nb">ebx</span>            <span class="c1">; 退出码 0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x80</span>                <span class="c1">; 执行系统调用</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">simu_write:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebp</span><span class="p">,</span><span class="nb">esp</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,[</span><span class="nb">ebp</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,[</span><span class="nb">ebp</span><span class="o">+</span><span class="mi">12</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,[</span><span class="nb">ebp</span><span class="o">+</span><span class="mi">16</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x80</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">pop</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注意，<strong>所有的系统调用最底层的入口只有一个，那就是<code>0x80</code>号中断，针对不同的功能有不同的功能号，如4号功能代表<code>write</code>调用，1号功能代表退出，这些功能号像是参数，由操作系统通过<code>eax</code>传递</strong></p>
+</blockquote>
+<p>编译链接上述代码，即可验证结果</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="nf">nasm</span> <span class="o">-</span><span class="nv">f</span> <span class="nv">elf32</span> <span class="nv">syscall_write.S</span> <span class="o">-</span><span class="nv">o</span> <span class="nv">syscall_write.o</span>
+</span></span><span class="line"><span class="cl"><span class="nf">ld</span> <span class="o">-</span><span class="nv">m</span> <span class="nv">elf_i386</span> <span class="nv">syscall_write.o</span> <span class="o">-</span><span class="nv">o</span> <span class="nv">syscall_write.bin</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来我们看c语言和汇编语言是如果相互调用的</p>
+<p>C_with_S_c.c</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">extern</span> <span class="kt">void</span> <span class="nf">asm_print</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">,</span><span class="kt">int</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">c_print</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">len</span><span class="o">++</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">asm_print</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这段代码想必大家都能看懂，c_print函数通过将传入的参数str传递给asm_print函数进行打印，只不过接下来我们将通过汇编实现asm_print函数，同时我们在汇编代码中传递字符串参数给c_print</p>
+<p>所以本质上二者的调用关系应该是</p>
+<blockquote>
+<ul>
+<li>汇编代码首先传递字符串参数给c_print</li>
+<li>然后c_print将参数再回传给汇编代码中的asm_print函数</li>
+<li>asm_print函数最终负责将字符串打印出来</li>
+</ul>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241215_1734274205.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241215225005546"
+	
+	
+></p>
+<p>C_with_S_S.S</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="k">section</span> <span class="nv">.data</span>
+</span></span><span class="line"><span class="cl"><span class="nl">str:</span> <span class="kd">db</span> <span class="s">&#34;asm print says:hello wolrd!&#34;</span><span class="p">,</span><span class="mh">0xa</span><span class="p">,</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="no">str_len</span><span class="kd"> equ</span> <span class="kc">$</span> <span class="o">-</span> <span class="nv">str</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">section</span> <span class="nv">.text</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="nv">c_print</span>
+</span></span><span class="line"><span class="cl"><span class="k">global</span> <span class="nv">_start</span>
+</span></span><span class="line"><span class="cl"><span class="nl">_start:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nv">str</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nv">c_print</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">esp</span><span class="p">,</span><span class="mi">4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x80</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">global</span> <span class="nv">asm_print</span>
+</span></span><span class="line"><span class="cl"><span class="nl">asm_print:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebp</span><span class="p">,</span><span class="nb">esp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,[</span><span class="nb">ebp</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,[</span><span class="nb">ebp</span><span class="o">+</span><span class="mi">12</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x80</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">pop</span> <span class="nb">ebp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nasm -f elf32 ./C_with_S_S.S -o C_with_S_S.o
+</span></span><span class="line"><span class="cl">gcc-4.4 -m32 -c ./C_with_S_c.c -o C_with_S_c.o
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>链接</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ld -m elf_i386 ./C_with_S_c.o C_with_S_S.o -o main
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">minios@robot:~/osCode/miniOS_32/ch6/task1/test/asm_with_c$ ./main
+</span></span><span class="line"><span class="cl">asm print says:hello wolrd!
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="内核初步完善">内核初步完善
+</h2><h3 id="代码目录结构">代码目录结构
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── bin							//所有二进制文件目录
+</span></span><span class="line"><span class="cl">│   ├── kernel.bin
+</span></span><span class="line"><span class="cl">│   ├── loader
+</span></span><span class="line"><span class="cl">│   ├── main.o
+</span></span><span class="line"><span class="cl">│   ├── mbr
+</span></span><span class="line"><span class="cl">│   └── print.o
+</span></span><span class="line"><span class="cl">├── boot						//计算机启动目录
+</span></span><span class="line"><span class="cl">│   ├── include					//定义mbr和loader进行初始化工作需要的宏
+</span></span><span class="line"><span class="cl">│   │   └── boot.inc
+</span></span><span class="line"><span class="cl">│   ├── loader.S
+</span></span><span class="line"><span class="cl">│   └── mbr.S
+</span></span><span class="line"><span class="cl">├── kernel						//内核源文件
+</span></span><span class="line"><span class="cl">│   └── main.c
+</span></span><span class="line"><span class="cl">├── lib							//库文件
+</span></span><span class="line"><span class="cl">│   ├── kernel					//内核库文件
+</span></span><span class="line"><span class="cl">│   │   ├── print.h
+</span></span><span class="line"><span class="cl">│   │   └── print.S
+</span></span><span class="line"><span class="cl">│   └── stdint.h
+</span></span><span class="line"><span class="cl">├── Makefile
+</span></span><span class="line"><span class="cl">├── start.sh					//编译链接脚本
+</span></span><span class="line"><span class="cl">└── <span class="nb">test</span>						//章节知识学习测试代码
+</span></span><span class="line"><span class="cl">    ├── asm_print
+</span></span><span class="line"><span class="cl">    │   ├── start.sh
+</span></span><span class="line"><span class="cl">    │   └── syscall_write.S
+</span></span><span class="line"><span class="cl">    ├── asm_with_c
+</span></span><span class="line"><span class="cl">    │   ├── C_with_S_c.c
+</span></span><span class="line"><span class="cl">    │   ├── C_with_S_S.S
+</span></span><span class="line"><span class="cl">    │   └── start.sh
+</span></span><span class="line"><span class="cl">    └── main.c
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="实现单字符打印">实现单字符打印
+</h3><p>接下来我们将实现内核的第一个功能——单个字符打印，本节字符打印的源代码依旧采用汇编形式</p>
+<h4 id="数据类型定义">数据类型定义
+</h4><p>/lib/std_int.h</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#ifndef __LIB_STDINT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define __LIB_STDINT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">typedef</span> <span class="kt">signed</span> <span class="kt">char</span> <span class="kt">int8_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">signed</span> <span class="kt">short</span> <span class="kt">int</span> <span class="kt">int16_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">signed</span> <span class="kt">int</span> <span class="kt">int32_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">signed</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="kt">int64_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="kt">uint8_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">short</span> <span class="kt">int</span> <span class="kt">uint16_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="kt">uint32_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="kt">uint64_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="字符打印头文件定义">字符打印头文件定义
+</h4><p>/lib/kernel/print.h</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#ifndef __LIB_KERNEL_PRINT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define __LIB_KERNEL_PRINT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;stdint.h&#34;               //stdint.h中定义了数据类型</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">void</span> <span class="nf">put_char</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">char_asci</span><span class="p">);</span> <span class="c1">// 在stdint.h中uint8_t的定义是unsigned char
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#endif
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="字符打印源文件实现">字符打印源文件实现
+</h4><p>/lib/kernel/print.S</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="no">TI_GDT</span><span class="kd"> equ</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="no">RPL0</span><span class="kd"> equ</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="no">SELECTOR_VIDEO</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0003</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span><span class="o">+</span><span class="nv">TI_GDT</span><span class="o">+</span><span class="nv">RPL0</span><span class="c1">;定义显存段选择子</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">[</span><span class="k">bits</span> <span class="mi">32</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="k">section</span> <span class="nv">.text</span>
+</span></span><span class="line"><span class="cl"><span class="k">global</span> <span class="nv">put_char</span>                     <span class="c1">;通过global关键字将put_char函数定义为全局符号</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;使其对外部文件可见</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;================= put_char函数实现 =================</span>
+</span></span><span class="line"><span class="cl"><span class="nl">put_char:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pushad</span>                          <span class="c1">;push all double,压入所有双字长的寄存器</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;入栈顺序为eax-&gt;ecx-&gt;edx-&gt;ebx-&gt;esp-&gt;ebp-&gt;esi-&gt;edi</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nv">SELECTOR_VIDEO</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">gs</span><span class="p">,</span><span class="nb">ax</span>                       <span class="c1">;为gs寄存器赋予显存段的选择子</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;---------------- 获取光标的坐标位置 ----------------</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 以下代码用于获取光标的坐标位置(一维索引，如第一行的坐标范围为0~79,第二行为80~159)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 其中光标的坐标位置存放在光标坐标寄存器中</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 其中索引为0eh的寄存器和索引为0fh的寄存器分别存放光标高8位和低8位</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 访问CRT controller寄存器组的寄存器，需要先往端口地址为0x03d4的寄存器写入索引</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 从端口地址为0x03d5的数据寄存器中读写数据</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x03d4</span>                   <span class="c1">;将0x03d4的端口写入dx寄存器中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x0e</span>                     <span class="c1">;将需要的索引值写入al寄存器中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>                       <span class="c1">;向0x03d4端口写入0x0e索引</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x03d5</span>                   
+</span></span><span class="line"><span class="cl">    <span class="nf">in</span> <span class="nb">al</span><span class="p">,</span><span class="nb">dx</span>                        <span class="c1">;从0x03d5端口处获取光标高8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ah</span><span class="p">,</span><span class="nb">al</span>                       <span class="c1">;ax寄存器用于存放光标坐标，</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;因此将光标坐标的高8位数据存放到ah中</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;同上，以下代码获取光标坐标的低8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x03d4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x0f</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x03d5</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">in</span> <span class="nb">al</span><span class="p">,</span><span class="nb">dx</span>                        <span class="c1">;此时ax中就存放着读取到的光标坐标值</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">bx</span><span class="p">,</span><span class="nb">ax</span>                       <span class="c1">;bx寄存器不仅是光标坐标值，同时也是下一个可打印字符的位置</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;而我们习惯于bx作为基址寄存器，以后的处理都要基于bx寄存器</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;因此才将获取到的光标坐标值赋值为bx</span>
+</span></span><span class="line"><span class="cl">                                    
+</span></span><span class="line"><span class="cl"><span class="c1">;---------------- 参数（待打印的字符）传递 ----------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,[</span><span class="nb">esp</span><span class="o">+</span><span class="mi">36</span><span class="p">]</span>                <span class="c1">;前边已经压入了8个双字（一个字2个字节）的寄存器，</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;加上put_char函数的4字节返回地址</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;所以待打印的字符在栈顶偏移36字节的位置</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">cl</span><span class="p">,</span><span class="mh">0xd</span>                      <span class="c1">;回车符处理</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jz</span> <span class="nv">.is_carriage_return</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">cl</span><span class="p">,</span><span class="mh">0xa</span>                      <span class="c1">;换行符处理</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jz</span> <span class="nv">.is_line_feed</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">cl</span><span class="p">,</span><span class="mh">0x8</span>                      <span class="c1">;退格键处理</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jz</span> <span class="nv">.is_backspace</span>                
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="nv">.put_other</span>                  <span class="c1">;正常字符处理</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;---------------- 退格键处理 ----------------</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;处理思路：</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">;1.将光标位置减一</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">;2.将待删除的字符使用空格字符(ASCII:0x20)代替</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.is_backspace:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">dec</span> <span class="nb">bx</span>                          <span class="c1">;bx中存储光标的坐标位置，将光标坐标位置减去一，即模拟退格</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shl</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">1</span>                        <span class="c1">;由于文本模式下一个字符占用两个字节(第一个字节表示字符的ASCII码，第二个字节表示字符的属性)，</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;故光标位置乘以2(shl左移指令)就是光标处字符的第一个字节的偏移量</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span><span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="nb">bx</span><span class="p">],</span><span class="mh">0x20</span>            <span class="c1">;将空格键存入待删除字符处</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">bx</span>                          <span class="c1">;此时bx中存储的是字待删除字符的第一个字节位置，</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;使用inc指令将bx加1后就是该字符的第二个字节的位置</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span><span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="nb">bx</span><span class="p">],</span><span class="mh">0x07</span>            <span class="c1">;将黑底白字(0x07)属性加入到该字符处</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">1</span>                        <span class="c1">;bx除以2，恢复光标坐标位置</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="nv">.set_cursor</span>                 <span class="c1">;去设置光标位置, 这样光标位置才能真正在视觉上更新</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1">;将cx指向的字符放入到光标处</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.put_other:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shl</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">1</span>                        <span class="c1">;将光标坐标转换为内存偏移量</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span><span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="nb">bx</span><span class="p">],</span><span class="nb">cl</span>              <span class="c1">;将cx指向的字符放入到光标处</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">bx</span>                          <span class="c1">;bx指向当前字符的下一个字节处，存放当前字符属性</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span><span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="nb">bx</span><span class="p">],</span><span class="mh">0x07</span>            <span class="c1">;存放字符属性</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">1</span>                        <span class="c1">;将内存偏移量恢复为光标坐标值</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">bx</span>                          <span class="c1">;bx指向下一个待写入字符位置</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">2000</span>                     <span class="c1">;80*25=2000，判断是否字符已经写满屏了</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jl</span> <span class="nv">.set_cursor</span>                  <span class="c1">;更新光标坐标值</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1">;---------------- 换行处理 ----------------</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;思路：首先将光标移动到本行行首，之后再将光标移动到下一行行首</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.is_line_feed:</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.is_carriage_return:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">dx</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;将光标移动到本行行首</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">bx</span>                       <span class="c1">;将光标值给ax，以作除法之用</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">si</span><span class="p">,</span><span class="mi">80</span>                       
+</span></span><span class="line"><span class="cl">    <span class="nf">div</span> <span class="nb">si</span>                          <span class="c1">;除法操作，ax/si,结果ax存储商，dx存储余数</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;每行80个字符，光标值除以80得出的余数便是当前光标所在行的字符个数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">sub</span> <span class="nb">bx</span><span class="p">,</span><span class="nb">dx</span>                       <span class="c1">;光标值减去光标当前行的字符个数，就将光标移动到本行行首的位置</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="nl">.is_carriage_return_end:</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">add</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">80</span>                   <span class="c1">;将光标移动到下一行行首</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">cmp</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">2000</span>                 <span class="c1">;屏幕的每屏的可显示80*25=2000个字符（25行，每行80个字符）</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;这行代码和接下来jl .set_cursor这段代码的作用是</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;判断当前光标值是否小于2000</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;如果小于2000说明当前光标仍旧在本屏内，则代码直接跳转到.set_cursor更新光标值即可</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;否则说明需要滚动屏幕了，继续向下执行滚屏部分的代码.roll_screen</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">.is_line_feed_end:</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">jl</span> <span class="nv">.set_cursor</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;---------------- 滚屏处理 ----------------</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;思路:屏幕行范围是0~24,滚屏的原理是将屏幕的1~24行搬运到0~23行,再将第24行用空格填充</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">; mosd指令会按照指定的次数复制每次 4 字节</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 源地址：由 SI（源数据位置寄存器）指向。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 目标地址：由 DI（目标位置寄存器）指向。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 计数器：由 CX（在 16 位模式下）或 ECX（在 32 位模式下）寄存器控制，表示要复制的数据块的元素个数（每个元素是 4 字节）。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 每执行一次 movsd，SI 和 DI 会分别递增 4（因为是复制 32 位数据），ECX 会减 1，直到 ECX 变为 0。</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.roll_screen:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cld</span>                             <span class="c1">;清除eflags寄存器的方向标志位DF，使得内存移动地址从低地址向高地址移动</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;若方向标志位被设置，则字符串的内存移动地址从高地址向低地址移动</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">960</span>                     <span class="c1">;共移动2000-80=1920个字符，每个字符占2个字节，故共需移动1920*2=3840个字节</span>
+</span></span><span class="line"><span class="cl">                                    <span class="c1">;movsd指令每次移动4个字节，故共需执行该指令3840/4=960次数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="mh">0xb80a0</span>                 <span class="c1">;第1行行首地址，要复制的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edi</span><span class="p">,</span><span class="mh">0xb8000</span>                 <span class="c1">;第0行行首地址，要复制的目的地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rep</span> <span class="nv">movsd</span>                       <span class="c1">;rep(repeat)指令，重复执行movsd指令，执行的次数在ecx寄存器中</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="c1">;将最后一行填充为空白</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">3840</span>                    <span class="c1">;更新光标位置为最后一行首字符第一个字节的位置</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">80</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">.cls:</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">mov</span> <span class="kt">word</span><span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="nb">ebx</span><span class="p">],</span><span class="mh">0x0720</span>     <span class="c1">;0x0720是黑底白字的空格键</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">add</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">loop</span> <span class="nv">.cls</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">mov</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">1920</span>                 <span class="c1">;将光标值重置为1920,最后一行的首字符.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;---------------- 更新光标值 ----------------</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.set_cursor:</span>
+</span></span><span class="line"><span class="cl">    					                                    <span class="c1">;将光标设为bx值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;1 先设置高8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span> <span class="mh">0x03d4</span>			                                <span class="c1">;索引寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">al</span><span class="p">,</span> <span class="mh">0x0e</span>				                            <span class="c1">;用于提供光标位置的高8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span> <span class="nb">al</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span> <span class="mh">0x03d5</span>			                                <span class="c1">;通过读写数据端口0x3d5来获得或设置光标位置 </span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">al</span><span class="p">,</span> <span class="nb">bh</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span> <span class="nb">al</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="c1">;2 再设置低8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span> <span class="mh">0x03d4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">al</span><span class="p">,</span> <span class="mh">0x0f</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span> <span class="nb">al</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span> <span class="mh">0x03d5</span> 
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">al</span><span class="p">,</span> <span class="nb">bl</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span> <span class="nb">al</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="nl">.put_char_done:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">popad</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="内核主函数">内核主函数
+</h4><p>/kernel/main.c</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;print.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;k&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;e&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;r&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;n&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;e&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;l&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;1&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;2&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;\b&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_char</span><span class="p">(</span><span class="sc">&#39;3&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="编译链接">编译链接
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p bin
+</span></span><span class="line"><span class="cl"><span class="c1">#编译mbr</span>
+</span></span><span class="line"><span class="cl">nasm -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/mbr -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/include/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/mbr.S
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/mbr <span class="nv">of</span><span class="o">=</span>~/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">1</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#编译loader</span>
+</span></span><span class="line"><span class="cl">nasm -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/loader -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/include/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/loader.S
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/loader <span class="nv">of</span><span class="o">=</span>~/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">4</span> <span class="nv">seek</span><span class="o">=</span><span class="m">2</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1">#编译print函数</span>
+</span></span><span class="line"><span class="cl">nasm -f elf32 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/print.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/print.S
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#编译main函数</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/main.o -c -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/main.c
+</span></span><span class="line"><span class="cl"><span class="c1">#将main函数与print函数进行链接</span>
+</span></span><span class="line"><span class="cl">ld -m elf_i386 -Ttext 0xc0001500 -e main -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/kernel.bin <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/main.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/print.o
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1">#将内核文件写入磁盘，loader程序会将其加载到内存运行</span>
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/kernel.bin <span class="nv">of</span><span class="o">=</span>~/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">200</span> <span class="nv">conv</span><span class="o">=</span>notrunc <span class="nv">seek</span><span class="o">=</span><span class="m">9</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1">#rm -rf bin/*</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="运行">运行
+</h4><p>仍旧进入bochs安装目录，运行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> ./bin/bochs -f boot.disk
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果如下所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241216_1734280073.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241216002752584"
+	
+	
+></p>
+<h3 id="实现字符串打印">实现字符串打印
+</h3><p>字符串打印函数的实现就比较简单了，直接遍历字符串的每一个字符，然后调用上述我们的字符打印函数即可</p>
+<p>在/lib/kernel/print.S文件中添加如下代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;================= 字符串打印函数 ================= </span>
+</span></span><span class="line"><span class="cl"><span class="err">[</span><span class="k">bits</span> <span class="mi">32</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="k">section</span> <span class="nv">.text</span>
+</span></span><span class="line"><span class="cl"><span class="k">global</span> <span class="nv">put_str</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">put_str:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nb">ebx</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nb">ecx</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">ecx</span><span class="p">,</span><span class="nb">ecx</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,[</span><span class="nb">esp</span><span class="o">+</span><span class="mi">12</span><span class="p">]</span>                <span class="c1">;ebx存放字符串首地址</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.goon:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cl</span><span class="p">,[</span><span class="nb">ebx</span><span class="p">]</span>                    <span class="c1">;取出字符串的第一个字符，存放到cx寄存器中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">cl</span><span class="p">,</span><span class="mi">0</span>                        <span class="c1">;判断是否到了字符串结尾，字符串结尾标志符&#39;\0&#39;即0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jz</span> <span class="nv">.str_over</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span> <span class="nb">ecx</span>                        <span class="c1">;压入put_char参数，调用put_char函数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nv">put_char</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">esp</span><span class="p">,</span><span class="mi">4</span>                       <span class="c1">;回收栈空间</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">ebx</span>                         <span class="c1">;指向字符串的下一个字符</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="nv">.goon</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.str_over:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pop</span> <span class="nb">ecx</span>                         <span class="c1">;回收栈空间</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pop</span> <span class="nb">ebx</span>                         <span class="c1">;回收栈空间</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>/kernel/main.c文件中测试如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;print.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_str</span><span class="p">(</span><span class="s">&#34;I am kernel</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译运行之后结果如下</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241216_1734280686.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241216003805960"
+	
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    
+</footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十一章 —— 创建用户进程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%BA%8C-%E9%94%AE%E7%9B%98%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（二） —— 键盘驱动程序的编写与输入系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%B8%80-%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E5%AE%9E%E7%8E%B0%E4%B8%8E%E8%BE%93%E5%87%BA%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（一） —— 同步机制之互斥锁实现与输出系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%BA%8C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BD%AE%E8%BD%AC%E8%B0%83%E5%BA%A6/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（二） —— 多线程轮转调度</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%B8%80-%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（一） —— 在内核空间中实现线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"lang":"zh-CN","locale":{"admin":"你好","placeholder":null,"sofa":"还没有人评论哦！快来抢沙发吧~"},"placeholder":"欢迎留下宝贵的评论！","requiredMeta":["name","email","url"],"serverURL":"https://blogcomment-iqp14djt5-jl-skys-projects.vercel.app/","visitor":false});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy;
+        
+        2024 -
+        
+        2025 JL-sky
+    </section>
+
+    
+    <section class="running-time">
+        网站已运行
+        <span id="runningdays" class="running-days"></span>
+    </section>
+
+    
+    <section class="totalcount">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        发表了18篇文章 ·
+        总计
+        125,951字
+        
+    </section>
+
+    
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+        </main>
+    </div>
+    <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.dde1bc60c191a36f391af9ea35dd08be3c74bca8ca0cd8ff6a663c09a0256be0.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    let s1 = '2024-11-24'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+<div id="particles-js"></div>
+
+<script src=http://localhost:1313/background/particles.min.js></script>
+<script>
+    particlesJS.load('particles-js', resources.Get("background/package.json").Permalink, function () {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+
+<style>
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+</style>
+</body>
+
+</html>

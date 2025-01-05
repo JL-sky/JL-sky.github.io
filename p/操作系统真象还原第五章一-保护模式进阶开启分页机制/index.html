@@ -1,0 +1,3167 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文介绍了分页机制的详细内容以及如何在使操作系统在分页机制下工作">
+<title>《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</title>
+
+<link rel='canonical' href='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/'>
+
+<link rel="stylesheet" href="/scss/style.min.c2172b128ab8744b3f98599d792c6144c766b07c79ba00c88ff5c11861a33247.css"><meta property='og:title' content="《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制">
+<meta property='og:description' content="本文介绍了分页机制的详细内容以及如何在使操作系统在分页机制下工作">
+<meta property='og:url' content='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/'>
+<meta property='og:site_name' content='你好'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-20T18:51:34&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg' />
+<meta name="twitter:title" content="《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制">
+<meta name="twitter:description" content="本文介绍了分页机制的详细内容以及如何在使操作系统在分页机制下工作"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg' />
+  
+
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            
+            <a href="https://jl-sky.github.io/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu16686392332003896281.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">🤔</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">你好</a></h1>
+            <h2 class="site-description">原来是你啊</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/JL-sky' target="_blank"  title="GitHub"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="438.536px" height="438.536px" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 438.536 438.536;"
+	 xml:space="preserve">
+<g>
+	<g>
+		<path d="M158.173,352.599c-3.049,0.568-4.381,1.999-3.999,4.281c0.38,2.283,2.093,3.046,5.138,2.283
+			c3.049-0.76,4.38-2.095,3.997-3.997C162.931,353.074,161.218,352.216,158.173,352.599z"/>
+		<path d="M141.898,354.885c-3.046,0-4.568,1.041-4.568,3.139c0,2.474,1.619,3.518,4.853,3.138c3.046,0,4.57-1.047,4.57-3.138
+			C146.753,355.553,145.134,354.502,141.898,354.885z"/>
+		<path d="M119.629,354.022c-0.76,2.095,0.478,3.519,3.711,4.284c2.855,1.137,4.664,0.568,5.424-1.714
+			c0.572-2.091-0.666-3.61-3.711-4.568C122.197,351.265,120.39,351.922,119.629,354.022z"/>
+		<path d="M414.41,24.123C398.326,8.042,378.964,0,356.309,0H82.225C59.577,0,40.208,8.042,24.123,24.123
+			C8.042,40.207,0,59.576,0,82.225v274.088c0,22.65,8.042,42.017,24.123,58.098c16.084,16.084,35.454,24.126,58.102,24.126h63.953
+			c4.184,0,7.327-0.144,9.42-0.424c2.092-0.288,4.184-1.526,6.279-3.717c2.096-2.187,3.14-5.376,3.14-9.562
+			c0-0.568-0.05-7.046-0.144-19.417c-0.097-12.375-0.144-22.176-0.144-29.41l-6.567,1.143c-4.187,0.76-9.469,1.095-15.846,0.999
+			c-6.374-0.096-12.99-0.76-19.841-1.998c-6.855-1.239-13.229-4.093-19.13-8.562c-5.898-4.477-10.085-10.328-12.56-17.559
+			l-2.856-6.571c-1.903-4.373-4.899-9.229-8.992-14.554c-4.093-5.332-8.232-8.949-12.419-10.852l-1.999-1.428
+			c-1.331-0.951-2.568-2.098-3.711-3.429c-1.141-1.335-1.997-2.669-2.568-3.997c-0.571-1.335-0.097-2.43,1.427-3.289
+			c1.524-0.855,4.281-1.279,8.28-1.279l5.708,0.855c3.808,0.76,8.516,3.042,14.134,6.851c5.614,3.806,10.229,8.754,13.846,14.843
+			c4.38,7.806,9.657,13.75,15.846,17.843c6.184,4.097,12.419,6.143,18.699,6.143s11.704-0.476,16.274-1.424
+			c4.565-0.954,8.848-2.385,12.847-4.288c1.713-12.751,6.377-22.559,13.988-29.41c-10.848-1.143-20.602-2.854-29.265-5.14
+			c-8.658-2.286-17.605-5.995-26.835-11.136c-9.234-5.14-16.894-11.512-22.985-19.13c-6.09-7.618-11.088-17.61-14.987-29.978
+			c-3.901-12.375-5.852-26.652-5.852-42.829c0-23.029,7.521-42.637,22.557-58.814c-7.044-17.32-6.379-36.732,1.997-58.242
+			c5.52-1.714,13.706-0.428,24.554,3.855c10.85,4.286,18.794,7.951,23.84,10.992c5.046,3.042,9.089,5.614,12.135,7.71
+			c17.705-4.949,35.976-7.423,54.818-7.423c18.841,0,37.115,2.474,54.821,7.423l10.849-6.852c7.426-4.57,16.18-8.757,26.269-12.562
+			c10.088-3.806,17.795-4.854,23.127-3.14c8.562,21.51,9.328,40.922,2.279,58.241c15.036,16.179,22.559,35.786,22.559,58.815
+			c0,16.18-1.951,30.505-5.852,42.969c-3.898,12.467-8.939,22.463-15.13,29.981c-6.184,7.519-13.894,13.843-23.124,18.986
+			c-9.232,5.137-18.178,8.853-26.84,11.132c-8.661,2.286-18.414,4.004-29.263,5.147c9.891,8.562,14.839,22.072,14.839,40.538v68.238
+			c0,3.237,0.472,5.852,1.424,7.851c0.958,1.998,2.478,3.374,4.571,4.141c2.102,0.76,3.949,1.235,5.571,1.424
+			c1.622,0.191,3.949,0.287,6.995,0.287h63.953c22.648,0,42.018-8.042,58.095-24.126c16.084-16.084,24.126-35.454,24.126-58.102
+			V82.225C438.533,59.576,430.491,40.204,414.41,24.123z"/>
+		<path d="M86.793,319.195c-1.331,0.948-1.141,2.471,0.572,4.565c1.906,1.902,3.427,2.189,4.57,0.855
+			c1.331-0.948,1.141-2.471-0.575-4.569C89.458,318.336,87.936,318.049,86.793,319.195z"/>
+		<path d="M77.374,312.057c-0.57,1.335,0.096,2.478,1.999,3.426c1.521,0.955,2.762,0.767,3.711-0.568
+			c0.57-1.335-0.096-2.478-1.999-3.433C79.182,310.91,77.945,311.102,77.374,312.057z"/>
+		<path d="M95.646,330.331c-1.715,0.948-1.715,2.666,0,5.137c1.713,2.478,3.328,3.142,4.853,1.998c1.714-1.334,1.714-3.142,0-5.427
+			C98.978,329.571,97.359,328.993,95.646,330.331z"/>
+		<path d="M105.641,343.174c-1.714,1.526-1.336,3.327,1.142,5.428c2.281,2.279,4.185,2.566,5.708,0.849
+			c1.524-1.519,1.143-3.326-1.142-5.42C109.068,341.751,107.164,341.463,105.641,343.174z"/>
+	</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E6%88%91%E7%9A%84/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>我的</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                <li id="i18n-switch">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                    <select name="language" title="language"
+                        onchange="window.location.href = this.selectedOptions[0].value">
+                        
+                        <option value="http://localhost:1313/en/" >English</option>
+                        
+                        <option value="http://localhost:1313/" selected>简体中文</option>
+                        
+                        <option value="http://localhost:1313/ar/" >عربي</option>
+                        
+                    </select>
+                </li>
+                
+                
+
+                
+                <li id="dark-mode-toggle">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828a4 4 0 1 0 -5.656 -5.656a4 4 0 0 0 5.656 5.656z" /><path d="M6.343 17.657l-1.414 1.414" /><path d="M6.343 6.343l-1.414 -1.414" /><path d="M17.657 6.343l1.414 -1.414" /><path d="M17.657 17.657l1.414 1.414" /><path d="M4 12h-2" /><path d="M12 4v-2" /><path d="M20 12h2" /><path d="M12 20v2" /></svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /><path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 11h2m-1 -1v2" /></svg>
+                    <span>暗色模式</span>
+                </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#章节任务介绍">章节任务介绍</a>
+      <ol>
+        <li><a href="#内核的结构">内核的结构</a></li>
+      </ol>
+    </li>
+    <li><a href="#获取物理内存容量">获取物理内存容量</a>
+      <ol>
+        <li><a href="#利用bios中断的子功能0xe820获取内存">利用BIOS中断的子功能0xE820获取内存</a></li>
+        <li><a href="#0xe820调用说明">0xe820调用说明</a></li>
+        <li><a href="#代码目录结构">代码目录结构</a></li>
+        <li><a href="#代码">代码</a>
+          <ol>
+            <li><a href="#loaders">loader.S</a></li>
+            <li><a href="#mbrs">mbr.S</a></li>
+          </ol>
+        </li>
+        <li><a href="#编译">编译</a></li>
+        <li><a href="#运行">运行</a></li>
+      </ol>
+    </li>
+    <li><a href="#分页机制概述">分页机制概述</a>
+      <ol>
+        <li><a href="#为什么要分页">为什么要分页</a></li>
+        <li><a href="#分页机制概述-1">分页机制概述</a></li>
+        <li><a href="#分页机制下的地址转换">分页机制下的地址转换</a></li>
+        <li><a href="#二级页表">二级页表</a></li>
+      </ol>
+    </li>
+    <li><a href="#开启分页机制">开启分页机制</a>
+      <ol>
+        <li><a href="#分页机制启动步骤">分页机制启动步骤</a></li>
+        <li><a href="#页目录项与页表项">页目录项与页表项</a></li>
+        <li><a href="#控制寄存器cr3">控制寄存器cr3</a></li>
+        <li><a href="#内存规划">内存规划</a></li>
+        <li><a href="#代码目录结构-1">代码目录结构</a></li>
+        <li><a href="#代码-1">代码</a>
+          <ol>
+            <li><a href="#bootinc">boot.inc</a></li>
+            <li><a href="#创建页表和页目录表">创建页表和页目录表</a></li>
+            <li><a href="#开启分页机制-1">开启分页机制</a></li>
+            <li><a href="#完整loader">完整loader</a></li>
+            <li><a href="#编译并写入磁盘">编译并写入磁盘</a></li>
+            <li><a href="#运行-1">运行</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/">
+            
+            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1733996509.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制" />
+            
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" >
+            操作系统真象还原
+        </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%BA%94%E7%AB%A0%E4%B8%80-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%BC%80%E5%90%AF%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/">《操作系统真象还原》第五章（一）—— 保护模式进阶，开启分页机制</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            本文介绍了分页机制的详细内容以及如何在使操作系统在分页机制下工作
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2024-12-12</time>
+        </div>
+        
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2024-12-20
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 18273 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>本章节所有代码托管在<a class="link" href="https://github.com/JL-sky/miniOS_32"  target="_blank" rel="noopener"
+    >miniOS_32</a></p>
+<h2 id="章节任务介绍">章节任务介绍
+</h2><h3 id="内核的结构">内核的结构
+</h3><p>内核分为四个部分，分别是</p>
+<blockquote>
+<ul>
+<li>初始化代码：初始化代码用于<strong>从BIOS那里接管处理器和计算机硬件的控制权，安装最基本的段描述符，初始化最初的执行环境</strong>。然后，<strong>从硬盘上读取和加载内核的剩余部分，创建组成内核的各个内存段</strong>。</li>
+<li>内核代码段：内核代码段用于<strong>分配内存，读取和加载用户程序，控制用户程序的执行</strong>。</li>
+<li>内核数据段：内核数据段提供了一段可读写的内存空间，供<strong>内核自己使用</strong>。</li>
+<li>公共例程段：公共例程段用于<strong>提供各种用途和功能的子过程以简化代码的编写。这些例程既可以用于内核，也供用户程序调用</strong></li>
+</ul>
+</blockquote>
+<p>因此，<strong>mbr程序和loader程序其实就是内核的初始化代码，负责完成加载内核前的初始化工作。</strong></p>
+<p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%9B%9B%E7%AB%A0%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%85%A5%E9%97%A8/"  target="_blank" rel="noopener"
+    >上一节</a>，我们在GDT中安装了四个最基本的段描述符（数据段、代码段、栈段、显存段），并完成了GDT的初始化。</p>
+<blockquote>
+<p>本章我们将继续对loader程序加以改造，在正式加载内核之前完成所有准备工作，本章节的工作主要是</p>
+<ul>
+<li>检测现有的实际物理内存</li>
+<li>开启分页机制，让后续的内核在分页机制下工作
+<ul>
+<li>如何开启分页机制？
+<ol>
+<li>构建页表和页目录表</li>
+<li>将页目录表的位置加载到控制寄存器cr3</li>
+<li>置cr0寄存器的PG位为1，打开分页机制</li>
+</ol>
+</li>
+<li>分页机制测试
+<ul>
+<li>我们在分页机制开启后重新使用显存段在屏幕上打印字符，如果能够正常显示说明分页机制成功开启</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="获取物理内存容量">获取物理内存容量
+</h2><p>操作系统是计算机硬件的管家，它不仅要知道自己安装了哪些硬件，还得给出有效得当的管理措施,按照预定的一套管理策略使硬件资源得到合理的运用。但管理策略只是逻辑上的东西，真正干活的都是底层。</p>
+<p>保护模式最“大”的特点就是寻址空间“大”，在进入保护模式之后，我们将接触到虚拟内存、内存管理等。但这些和内存有关的概念都建立在物理内存之上。为了在后期做好内存管理工作，我们首先需要知道自己有多少物理内存才行。</p>
+<p><strong>linux内核获取物理内存的方式本质上是通过调用BIOS中断0x15实现的</strong>，分别是BIOS中断的0x15的3个子功能，子功能号要放在寄存器EAX或AX中，如下：</p>
+<blockquote>
+<ul>
+<li>EAX=0xE820:遍历主机上全部内存。</li>
+<li>AX=0xE801:分别检测低15MB和16MB~4GB的内存，最大支持4GB</li>
+<li>AH=0x88:最多检测出64MB内存，实际内存超过此容量也按照64MB返回</li>
+</ul>
+</blockquote>
+<p>本节我们主要使用BIOS中断的子功能0xE820获取内存</p>
+<h3 id="利用bios中断的子功能0xe820获取内存">利用BIOS中断的子功能0xE820获取内存
+</h3><blockquote>
+<ul>
+<li>BIOS中断0x15的子功能 0xE820能够<strong>获取系统的内存布局</strong></li>
+<li>由于<strong>系统内存各部分的类型属性不同,BIOS 就按照类型属性来划分这片系统内存</strong>，所以这种查询呈迭代式，<strong>每次BIOS只返回一种类型的内存信息，直到将所有内存类型返回完毕</strong>。</li>
+<li>子功能0xE820的强大之处是返回的内存信息较丰富，包括多个属性字段，所以需要一种格式结构来组织这些数据。</li>
+<li><strong>内存信息的内容是用地址范围描述符来描述的</strong>，用于存储这种描述符的结构称之为地址范围描述符(Address Range Descriptor Structure，ARDS)。</li>
+</ul>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734002106.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212191506283"
+	
+	
+></p>
+<p><strong>此结构中的字段大小都是4字节,共5个字段,所以此结构大小为 20字节</strong>。**每次int 0x15之后，BIOS就返回这样一个结构的数据。**注意，ARDS结构中用64位宽度的属性来描述这段内存基地址(起始地址)及其长度，所以表中的基地址和长度都分为低32位和高32位两部分。</p>
+<p>其中的 <strong>Type 字段用来描述这段内存的类型，这里所谓的类型是说明这段内存的用途</strong>，即其是可以被操作系统使用，还是保留起来不能用。Type字段的具体意义见下</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734002249.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212191729483"
+	
+	
+></p>
+<p>为什么 BIOS会按类型来返回内存信息呢?原因是这段内存可能是</p>
+<blockquote>
+<ul>
+<li>系统的 ROM。</li>
+<li>ROM 用到了这部分内存。</li>
+<li>设备内存映射到了这部分内存。</li>
+<li>由于某种原因，这段内存不适合标准设备使用。</li>
+</ul>
+</blockquote>
+<p>另外</p>
+<blockquote>
+<ul>
+<li>由于我们在32位环境下工作，所以在ARDS结构属性中，我们只用到低32位属性。</li>
+<li>BaseAddrLow+LengthLow 是一片内存区域上限，单位是字节。</li>
+</ul>
+</blockquote>
+<p>正常情况下，不会出现较大的内存区域不可用的情况，除非安装的物理内存极其小。这意味着，在所有返回的 ARDS 结构里，此值最大的内存块一定是操作系统可使用的部分，即主板上配置的物理内存容量。</p>
+<h3 id="0xe820调用说明">0xe820调用说明
+</h3><p>以下是BIOS中断0x15子功能0xe820的调用参数</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734002517.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212192157147"
+	
+	
+></p>
+<h3 id="代码目录结构">代码目录结构
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── include
+</span></span><span class="line"><span class="cl">│   └── boot.inc     //配置文件
+</span></span><span class="line"><span class="cl">├── loader.S		//loader程序代码
+</span></span><span class="line"><span class="cl">├── Makefile		//编译文件，可直接使用make进行编译代码
+</span></span><span class="line"><span class="cl">├── mbr.S			//mbr程序代码
+</span></span><span class="line"><span class="cl">└── start.sh		//编译脚本，如果不想使用make编译代码，也可以选择运行该脚本编译代码，该脚本的编译命令更加清晰
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="代码">代码
+</h3><p>调用步骤</p>
+<blockquote>
+<ol>
+<li>填写好“调用前输入”的寄存器</li>
+<li>执行中断调用int 0x15</li>
+<li>在CF位为0的情况下，获取对应的返回结果</li>
+<li>遍历获取到的ards结构体，计算最大内存容量</li>
+</ol>
+</blockquote>
+<h4 id="loaders">loader.S
+</h4><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%9B%9B%E7%AB%A0%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%85%A5%E9%97%A8/"  target="_blank" rel="noopener"
+    >上一节</a>，我们为了测试loader程序在进入保护模式之前是在实模式下运行的，我们定义了一个loader_start函数进行测试，本节我们修改这个函数的实现，让其用于获取物理内存的代码</p>
+<p>需要注意的是，代码中最终获取到的物理内存会被存储到total_mem_bytes变量中，该变量的定义位置如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;------------- 构建选择子 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_CODE</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0001</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_DATA</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0002</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_VIDEO</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0003</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">total_mem_bytes</span> <span class="nv">dd</span> <span class="mi">0</span>    <span class="c1">;total_mem_bytes用于保存最终获取到的内存容量，为4个字节</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;由于loader程序的加载地址为0x900，而loader.bin的文件头大小为0x200</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;（4个gdt段描述符（8B）加上60个dp（8B）填充字，故64*8=512B），</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;故total_mem_bytes在内存中的地址为0x900+0x200=0xb00</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;该地址将来在内核中会被用到</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之所以将该变量定义在这里，是因为刚好经过计算后，该变量在内存中的地址是0xb00，由于该变量在后边也会被用到，因此将变量定义在这里方便后续使用</p>
+<p>以下是用于获取获取物理内存的代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;------------- 定义记录ARDS结构体信息的变量 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_buf</span> <span class="nv">times</span> <span class="mi">244</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">;开辟一块缓冲区，用于记录返回的ARDS结构体，</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;该定义语句事实上是定义了一个数组ards_buf[244]</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;244是因为total_mem_bytes(4)+gdt_ptr(6)+244+ards_nr(2)=256,即0x100</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;这样loader_start的在文件内的偏移地址就是0x100+0x200=0x300</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_nr</span> <span class="nv">dw</span> <span class="mi">0</span>            <span class="c1">;用于记录ards结构体数量</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;INT 0x15 功能号：0xe820 功能描述：获取内存容量，检测内存</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;输入：</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EAX:功能号，0xE820，但调用返回时eax会被填入一串ASCII值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EBX:ARDS后续值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ES:di:ARDS缓冲区，BIOS将获取到的内存信息存到此寄存器指向的内存，每次都以ARDS格式返回</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ECX:ARDS结构的字节大小，20</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EDX:固定为签名标记，0x534d4150</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;返回值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;CF：若cf为0，表示未出错，cf为1，表示调用出错</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EAX：字符串SMAP的ASCII码值，0x534d4150</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ES:di:ARDS缓冲区，BIOS将获取到的内存信息存到此寄存器指向的内存，每次都以ARDS格式返回</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ECX:ARDS结构的字节大小，20</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EBX:ARDS后续值，即下一个ARDS的位置。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;每次BIOS中断返回后，BIOS会更新此值，BIOS会通过此值找到下一个待返回的ARDS结构。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;在cf位为0的情况下，若返回后的EBX值为0，表示这是最后一个ARDS结构</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">loader_start:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">ebx</span><span class="p">,</span><span class="nb">ebx</span>             <span class="c1">;第一次调用时，要将ebx清空置为0，此处使用的是异或运算置0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="mh">0x534d4150</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">di</span><span class="p">,</span><span class="nv">ards_buf</span>         <span class="c1">;di存储缓冲区地址，即指向缓冲区首地址</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.e820_mem_get_loop:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x0000e820</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">20</span>              <span class="c1">;一个ards结构体的大小</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x15</span>                <span class="c1">;调用0x15中断函数，返回的ards结构体被返回给di指向的缓冲区中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">di</span><span class="p">,</span><span class="nb">cx</span>               <span class="c1">;使di增加20字节指向缓冲区中下一个的ARDS结构位置</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="kt">word</span> <span class="p">[</span><span class="nv">ards_nr</span><span class="p">]</span>      <span class="c1">;inc（increment增加）指令表示将内存中的操作数增加一，此处用于记录返回的ARDS数量</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">0</span>               <span class="c1">;比较ebx中的值是否为0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jnz</span> <span class="nv">.e820_mem_get_loop</span>  <span class="c1">;若ebx不为0，则继续进行循环获取ARDS，</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;若为0说明已经获取到最后一个ards，则退出循环</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,[</span><span class="nv">ards_nr</span><span class="p">]</span>        <span class="c1">;cx存储遍历到的ards结构体个数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="nv">ards_buf</span>        <span class="c1">;ebx指向缓冲区地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">edx</span>             <span class="c1">;EDX用于保存BaseAddrLow+LengthLow最大值，此处初始化为0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.find_max_mem_area:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebx</span><span class="p">]</span>           <span class="c1">;eax用于遍历缓冲区中的每一个ards的BaseAddrLow</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebx</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>         <span class="c1">;ebx+8获取的是LengthLow，故该代码计算的是BaseAddrLow+LengthLow</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">20</span>                <span class="c1">;遍历下一个ards</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">eax</span>             <span class="c1">;分支语句，如果edx大于等于eax，则跳转到.next_ards，也就是进入循环</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jge</span> <span class="nv">.next_ards</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.next_ards:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.find_max_mem_area</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">total_mem_bytes</span><span class="p">],</span><span class="nb">edx</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完整的loader程序代码如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="cp">%include &#34;boot.inc&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">SECTION</span> <span class="nv">loader</span> <span class="nv">vstart</span><span class="err">=</span><span class="nv">LOADER_BASE_ADDR</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;初始化栈指针地址</span>
+</span></span><span class="line"><span class="cl"><span class="no">LOADER_STACK_TOP</span><span class="kd"> equ</span> <span class="nv">LOADER_BASE_ADDR</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 构建gdt及其内部的描述符 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">GDT_BASE:</span> 
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x00000000</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x00000000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;代码段描述符的低4字节部分，其中高两个字节表示段基址的0~15位,在这里定义为0x0000</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;低两个字节表示段界限的0~15位，由于使用的是平坦模型，因此是0xFFFF</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">CODE_DESC:</span>  
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x0000FFFF</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="nv">DESC_CODE_HIGH4</span><span class="c1">;段描述符的高4字节部分</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">DATA_STACK_DESC:</span> 
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x0000FFFF</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="nv">DESC_DATA_HIGH4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;定义显存段的描述符</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;文本模式下的适配器地址为0xb8000~0xbffff,为了方便显存操作，显存段不使用平坦模型</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;因此段基址为0xb8000,段大小为0xbffff-0xb8000=0x7fff,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;段粒度位4k，因此段界限的值为0x7fff/4k=7</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">VIDEO_DESC:</span> 
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x80000007</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="nv">DESC_VIDEO_HIGH4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="no">GDT_SIZE</span><span class="kd"> equ</span> <span class="kc">$</span><span class="o">-</span><span class="nv">GDT_BASE</span>
+</span></span><span class="line"><span class="cl">    <span class="no">GDT_LIMIT</span><span class="kd"> equ</span> <span class="nv">GDT_SIZE</span><span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">times</span> <span class="mi">60</span> <span class="nv">dq</span> <span class="mi">0</span> <span class="c1">;此处预留60个描述符的空位</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 构建选择子 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_CODE</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0001</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_DATA</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0002</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_VIDEO</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0003</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">total_mem_bytes</span> <span class="nv">dd</span> <span class="mi">0</span>    <span class="c1">;total_mem_bytes用于保存最终获取到的内存容量，为4个字节</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;由于loader程序的加载地址为0x900，而loader.bin的文件头大小为0x200</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;（4个gdt段描述符（8B）加上60个dp（8B）填充字，故64*8=512B），</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;故total_mem_bytes在内存中的地址为0x900+0x200=0xb00</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;该地址将来在内核中会被用到</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 定义gdtr（指向GDT的寄存器） -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">gdt_ptr</span> <span class="nv">dw</span> <span class="nv">GDT_LIMIT</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">dd</span> <span class="nv">GDT_BASE</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_buf</span> <span class="nv">times</span> <span class="mi">244</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">;开辟一块缓冲区，用于记录返回的ARDS结构体，</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;该定义语句事实上是定义了一个数组ards_buf[244]</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;244是因为total_mem_bytes(4)+gdt_ptr(6)+244+ards_nr(2)=256,即0x100</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;这样loader_start的在文件内的偏移地址就是0x100+0x200=0x300</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_nr</span> <span class="nv">dw</span> <span class="mi">0</span>            <span class="c1">;用于记录ards结构体数量</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;INT 0x15 功能号：0xe820 功能描述：获取内存容量，检测内存</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;输入：</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EAX:功能号，0xE820，但调用返回时eax会被填入一串ASCII值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EBX:ARDS后续值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ES:di:ARDS缓冲区，BIOS将获取到的内存信息存到此寄存器指向的内存，每次都以ARDS格式返回</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ECX:ARDS结构的字节大小，20</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EDX:固定为签名标记，0x534d4150</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;返回值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;CF：若cf为0，表示未出错，cf为1，表示调用出错</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EAX：字符串SMAP的ASCII码值，0x534d4150</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ES:di:ARDS缓冲区，BIOS将获取到的内存信息存到此寄存器指向的内存，每次都以ARDS格式返回</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ECX:ARDS结构的字节大小，20</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EBX:ARDS后续值，即下一个ARDS的位置。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;每次BIOS中断返回后，BIOS会更新此值，BIOS会通过此值找到下一个待返回的ARDS结构。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;在cf位为0的情况下，若返回后的EBX值为0，表示这是最后一个ARDS结构</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">loader_start:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">ebx</span><span class="p">,</span><span class="nb">ebx</span>             <span class="c1">;第一次调用时，要将ebx清空置为0，此处使用的是异或运算置0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="mh">0x534d4150</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">di</span><span class="p">,</span><span class="nv">ards_buf</span>         <span class="c1">;di存储缓冲区地址，即指向缓冲区首地址</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.e820_mem_get_loop:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x0000e820</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">20</span>              <span class="c1">;一个ards结构体的大小</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x15</span>                <span class="c1">;调用0x15中断函数，返回的ards结构体被返回给di指向的缓冲区中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">di</span><span class="p">,</span><span class="nb">cx</span>               <span class="c1">;使di增加20字节指向缓冲区中下一个的ARDS结构位置</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="kt">word</span> <span class="p">[</span><span class="nv">ards_nr</span><span class="p">]</span>      <span class="c1">;inc（increment增加）指令表示将内存中的操作数增加一，此处用于记录返回的ARDS数量</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">0</span>               <span class="c1">;比较ebx中的值是否为0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jnz</span> <span class="nv">.e820_mem_get_loop</span>  <span class="c1">;若ebx不为0，则继续进行循环获取ARDS，</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;若为0说明已经获取到最后一个ards，则退出循环</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,[</span><span class="nv">ards_nr</span><span class="p">]</span>        <span class="c1">;cx存储遍历到的ards结构体个数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="nv">ards_buf</span>        <span class="c1">;ebx指向缓冲区地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">edx</span>             <span class="c1">;EDX用于保存BaseAddrLow+LengthLow最大值，此处初始化为0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.find_max_mem_area:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebx</span><span class="p">]</span>           <span class="c1">;eax用于遍历缓冲区中的每一个ards的BaseAddrLow</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebx</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>         <span class="c1">;ebx+8获取的是LengthLow，故该代码计算的是BaseAddrLow+LengthLow</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">20</span>                <span class="c1">;遍历下一个ards</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">eax</span>             <span class="c1">;分支语句，如果edx大于等于eax，则跳转到.next_ards，也就是进入循环</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jge</span> <span class="nv">.next_ards</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.next_ards:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.find_max_mem_area</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">total_mem_bytes</span><span class="p">],</span><span class="nb">edx</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 准备进入保护模式 -------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;1.打开A20</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;2.加载gdt</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;3.置cr0的PE位为1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;------------- 打开A20 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">in</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x92</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">al</span><span class="p">,</span><span class="mi">0000</span><span class="nv">_0010B</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="mh">0x92</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">;------------- 加载gdt -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">lgdt</span> <span class="p">[</span><span class="nv">gdt_ptr</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;------------- 置cr0的PE位为1 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cr0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x00000001</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cr0</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="kt">dword</span> <span class="nv">SELECTOR_CODE</span><span class="p">:</span><span class="nv">p_mode_start</span><span class="c1">;刷新流水线</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.error_hlt:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">hlt</span>                     <span class="c1">;出错则挂起</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">[</span><span class="k">bits</span> <span class="mi">32</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nl">p_mode_start:</span>
+</span></span><span class="line"><span class="cl">     
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nv">SELECTOR_DATA</span>           <span class="c1">;初始化段寄存器，将数据段的选择子分别放入各段寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ds</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">es</span><span class="p">,</span><span class="nb">ax</span>                      
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ss</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esp</span><span class="p">,</span><span class="nv">LOADER_STACK_TOP</span>        <span class="c1">;初始化栈指针，将栈指针地址放入bsp寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nv">SELECTOR_VIDEO</span>           <span class="c1">;初始化显存段寄存器，显存段的选择子放入gs寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">gs</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mi">160</span><span class="p">],</span><span class="s">&#39;p&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="kc">$</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="mbrs">mbr.S
+</h4><p>注意，loader.S程序真正的代码执行位置是loader_start，该标号在内存中的物理位置是经过作者手工设计的</p>
+<p>设计原理是这样的</p>
+<blockquote>
+<ul>
+<li>构建GDT占据了512B（0x200）</li>
+<li>定义gdtr（指向GDT基址的寄存器）占据了6B</li>
+<li>定义total_mem_bytes（记录物理内存的实际容量）占据了4B</li>
+<li>定义ards_nr（记录ards结构体数量）占据了2B</li>
+<li>定义ards_buf（记录返回的ARDS结构体）占据244B</li>
+<li>故loader_start在内存中的地址为：<code>0x900+512B+256B（6+4+2+244）=0x900+0x300=0xc00</code></li>
+</ul>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;------------- 定义gdtr（指向GDT的寄存器） -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">gdt_ptr</span> <span class="nv">dw</span> <span class="nv">GDT_LIMIT</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">dd</span> <span class="nv">GDT_BASE</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 定义记录ARDS结构体信息的变量 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_buf</span> <span class="nv">times</span> <span class="mi">244</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">;开辟一块缓冲区，用于记录返回的ARDS结构体，</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;该定义语句事实上是定义了一个数组ards_buf[244]</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;244是因为total_mem_bytes(4)+gdt_ptr(6)+244+ards_nr(2)=256,即0x100</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;这样loader_start的在文件内的偏移地址就是0x100+0x200=0x300</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_nr</span> <span class="nv">dw</span> <span class="mi">0</span>            <span class="c1">;用于记录ards结构体数量</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>所以我们需要<strong>修改mbr中loader的加载地址</strong>，即</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="nv">LOADER_BASE_ADDR</span><span class="o">+</span><span class="mh">0x300</span><span class="c1">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其余与上节相同，完整的mbr程序代码如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;主引导程序MBR，由BIOS通过jmp 0:0x7c00跳转</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="cp">%include &#34;boot.inc&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">;vstart=0x7c00表示本程序在编译时，起始地址编译为0x7c00</span>
+</span></span><span class="line"><span class="cl"><span class="k">SECTION</span> <span class="nv">MBR</span> <span class="nv">vstart</span><span class="err">=</span><span class="mh">0x7c00</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;使用通用寄存器中的值（0）初始化其余寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">cs</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ds</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">es</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ss</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">fs</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;初始化栈指针</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">sp</span><span class="p">,</span><span class="mh">0x7c00</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;存入显存的段基址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="mh">0xb800</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">gs</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;利用0x06号功能进行清屏</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;INT 0x10 功能号：0x06 功能描述：上卷窗口清屏</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;输入:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;AH 功能号：0x06</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;AL=上卷的行数（如果为0，则表示全部）</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;BH=上卷的行属性</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;(CL,CH)=窗口左上角(X,Y)位置</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;(DL,DH)=窗口右下角(X,Y)位置</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;返回值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;无返回值</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="mh">0x0600</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">bx</span><span class="p">,</span><span class="mh">0x0700</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,</span><span class="mi">0</span>        <span class="c1">;左上角(0,0)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x184f</span>   <span class="c1">;右下角(80,25)</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">;0x18=24，0x4f=79</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x10</span>        <span class="c1">;调用BIOS中断函数</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;将要显示的字符串写入到显存中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x00</span><span class="p">],</span><span class="s">&#39;1&#39;</span><span class="c1">;在第一个字节的位置写入要显示的字符“1”</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;在第二个字节的位置写入显示字符（也就是字符1）的属性，其中A表示绿色背景，4表示前景色为红色</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x01</span><span class="p">],</span><span class="mh">0xA4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x02</span><span class="p">],</span><span class="s">&#39; &#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x03</span><span class="p">],</span><span class="mh">0xA4</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x04</span><span class="p">],</span><span class="s">&#39;M&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x05</span><span class="p">],</span><span class="mh">0xA4</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x06</span><span class="p">],</span><span class="s">&#39;B&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x07</span><span class="p">],</span><span class="mh">0xA4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x08</span><span class="p">],</span><span class="s">&#39;R&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mh">0x09</span><span class="p">],</span><span class="mh">0xA4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">LOADER_START_SECTOR</span><span class="c1">;起始扇区地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">bx</span><span class="p">,</span><span class="nv">LOADER_BASE_ADDR</span><span class="c1">;要写入的内存地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,</span><span class="mi">4</span><span class="c1">;待读入的扇区数目</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nv">rd_disk_m16</span><span class="c1">;调用磁盘读取程序</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="nv">LOADER_BASE_ADDR</span><span class="o">+</span><span class="mh">0x300</span><span class="c1">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;函数功能：读取硬盘的n个扇区</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;参数：</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;eax：LBA扇区号</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;bx：要写入的内存地址</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;cx：待读入的扇区数目</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">rd_disk_m16:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;out命令，通过端口向外围设备发送数据</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;其中目的操作数可以是8为立即数或者寄存器DX,源操作数必须是寄存器AL或者AX</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;因此需要将之前ax中保存的值进行备份</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">di</span><span class="p">,</span><span class="nb">cx</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;正式读写硬盘</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;第一步：设置要读取的扇区数目</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f2</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">cx</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">esi</span><span class="c1">;恢复eax的值</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;第二步：将LBA的地址存入0x1f3~0x1f6</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;LBA的0~7位写入端口0x1f3</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f3</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;LBA的8~15位写入端口0x1f4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cl</span><span class="p">,</span><span class="mi">8</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cl</span><span class="c1">;ax左移8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;LBA的16~23位写入端口0x1f5</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cl</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f5</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;LBA的24~27位写入端口0x1f6</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">shr</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cl</span><span class="c1">;左移8位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">and</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x0f</span><span class="c1">;与0000 1111相与，取后四位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0xe0</span><span class="c1">;设置7~4位为1110，表示lba模式</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f6</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;第三步，向0x1f7端口写入读命令，0x20</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f7</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x20</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="nb">dx</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;第四步，检测硬盘状态</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">.not_ready:</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">nop</span><span class="c1">;空操作，什么也不做，相当于sleep，只是为了增加延迟</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">in</span> <span class="nb">al</span><span class="p">,</span><span class="nb">dx</span><span class="c1">;由于读取硬盘状态信息的端口仍旧是0x1f7，因此不需要再为dx指定端口号</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c1">;取出状态位的第3位和第7位</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">;其中第3位若为1表示硬盘控制器已经准备好数据传输,第7位为1表示硬盘忙</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">and</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x88</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">;cmp为减法指令，此处是为了判断第7位是否为1，如果为1，则减法的结果应该为0</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">cmp</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x08</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">;JNZ是条件跳转指令，它表示&#34;Jump if Not Zero&#34;，</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">;也就是如果零标志位（ZF）不为0，则进行跳转。否则不进行跳转</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">jnz</span> <span class="nv">.not_ready</span><span class="c1">;若未准备好，则继续等</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">;第五步，从0x1f0端口读取数据</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">di</span><span class="c1">;di是之前备份的要读取的扇区数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mi">256</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;mul指令表示乘法操作，当只有一个操作数时，被乘数隐含在al或者ax中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mul</span> <span class="nb">dx</span><span class="c1">;一个扇区512字节，每次读取两个字节，需要读取di*256次</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,</span><span class="nb">ax</span><span class="c1">;cx在此时表示要循环读取的次数</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">dx</span><span class="p">,</span><span class="mh">0x1f0</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">.go_on_read:</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">in</span> <span class="nb">ax</span><span class="p">,</span><span class="nb">dx</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">mov</span> <span class="p">[</span><span class="nb">bx</span><span class="p">],</span><span class="nb">ax</span><span class="c1">;通过循环将输入写入bx寄存器所指向的内存，每次读入2个字节的数据</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">add</span> <span class="nb">bx</span><span class="p">,</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">loop</span> <span class="nv">.go_on_read</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ret</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">times</span> <span class="mi">510</span><span class="o">-</span><span class="p">(</span><span class="kc">$</span><span class="o">-</span><span class="kc">$$</span><span class="p">)</span> <span class="nv">db</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">db</span> <span class="mh">0x55</span><span class="p">,</span><span class="mh">0xaa</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="编译">编译
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nasm -I ./include/ ./mbr.S -o mbr.bin
+</span></span><span class="line"><span class="cl">nasm -I ./include/ ./loader.S -o loader.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/home/minios/osCode/miniOS_32/ch4/mbr.bin <span class="nv">of</span><span class="o">=</span>/home/minios/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">1</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/home/minios/osCode/miniOS_32/ch4/loader.bin <span class="nv">of</span><span class="o">=</span>/home/minios/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">2</span> <span class="nv">seek</span><span class="o">=</span><span class="m">2</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="运行">运行
+</h3><p>我们首先看看我们的物理机上装载的内存容量，然后再运行我们的代码，测试我们检测出的物理内存是否正确</p>
+<p>在bochs安装位置处运行以下代码查看物理机装载的内存容量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat -n boot.disk <span class="p">|</span> grep meg
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到，机器上装了32MB内存。megs指定的内存以MB为单位</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">minios@robot:~/bochs$ cat -n boot.disk <span class="p">|</span> grep meg
+</span></span><span class="line"><span class="cl">     <span class="m">2</span>  megs: <span class="m">32</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来验证我们的代码的正确性，是否可以检测出来这段32MB的内存容量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bin/bochs -f boot.disk
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行上述命令</p>
+<ol>
+<li>出现[6]直接按下回车</li>
+<li>继续按下c，出现如下界面</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734005277.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212200757542"
+	
+	
+></p>
+<p>这是我们之前的实验结果</p>
+<p>接下来按下ctrl+c，不要退出，在终端输入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="nf">xp</span> <span class="mh">0xb00</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，xp命令表示查看内存内容，0xb00是我们在代码中设计的变量total_mem_bytes的地址，total_mem_bytes保存了代码最终计算的结果，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&lt;bochs:2&gt; xp 0xb00
+</span></span><span class="line"><span class="cl"><span class="o">[</span>bochs<span class="o">]</span>:
+</span></span><span class="line"><span class="cl">0x00000b00 &lt;bogus+       0&gt;:    0x02000000
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上所示，在执行 xp 0xb00后，结果是 0x02000000。0x2000000 换算成十进制正是 32MB，可见检测结果是正确的。</p>
+<p>至此，我们的内存分布图如下所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241213_1734061716.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241213114836354"
+	
+	
+></p>
+<h2 id="分页机制概述">分页机制概述
+</h2><h3 id="为什么要分页">为什么要分页
+</h3><p>在说分页机制之前，我们先回顾一下内存的分段模式</p>
+<p>如图所示，在处理器中有负责分段管理的段部件。</p>
+<ul>
+<li>每个程序或任务都有自己的段，这些段都用段描述符定义。</li>
+<li>随着程序的执行，当要访问内存时，就用段地址加上偏移量，段部件就会输出一个线性地址。</li>
+<li>在单纯的分段模式下，线性地址就是物理地址。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734010671.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212213751133"
+	
+	
+></p>
+<p>正如图中所示</p>
+<ul>
+<li>描述符中的段基地址为0x002000C0，界限值为0x2007。</li>
+<li>因为段的粒度是字节，故该段的长度为8200字节。</li>
+<li>当访问内存时，用段基地址0x002000C0加上段内偏移量0x1008，段部件就会形成线性地址0x002010C8，这也是物理地址。</li>
+</ul>
+<p>那么在这种内存管理机制下，会有什么问题呢？</p>
+<p>我们首先看一个场景，如下图所示模拟了多个进程并行的情况</p>
+<blockquote>
+<ul>
+<li>初始时，系统里有3个进程正在运行，进程 A、B、C各占了 10MB、20MB、30MB的内存空间，还剩下15MB 可用。</li>
+<li>假设此时进程B已经运行结束，腾出了20MB的内存，可是待加载运行的进程D需要20MB+3KB的内存空间，即20483KB。</li>
+<li>现在的运行环境未开启分页功能,“段基址+段内偏移”产生的线性地址就是物理地址，<strong>程序中引用的线性地址是连续的，所以物理地址也连续</strong>。</li>
+<li>虽然总共剩下35MB 内存可用，但是现在连续的内存块只有原来进程B的20MB和最下面可用内存15MB，每一块都不够进程D用，这就是<strong>内存的外部碎片</strong></li>
+</ul>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734011233.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212214712893"
+	
+	
+></p>
+<p>针对上述场景中出现的问题，此时可有两个解决方案</p>
+<blockquote>
+<ul>
+<li>等待进程C运行完后腾出内存，这样连续可用的内存就够运行进程D了。</li>
+<li>将<strong>进程A的段A3或进程C的段C1换出到硬盘上</strong>，腾出一部分空间，加上邻接的20MB，足够容纳进程D。</li>
+</ul>
+</blockquote>
+<p>显然方案二的效果是更好的，我们将<strong>老进程不常用的段换出到硬盘，腾出空间给新进程用</strong>，等老进程再次需要该段时，再从硬盘上将该段载入内存，如图所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734011330.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212214850367"
+	
+	
+></p>
+<p>第二个方法虽然解决了内存不足的问题，但也有缺陷</p>
+<blockquote>
+<ul>
+<li>比如<strong>物理内存特别小，无法容纳任何一个进程的段</strong>，这就没法运行进程了，更没法做段的换入换出。</li>
+<li>另外一种情况是若<strong>进程的段比较大，换出时要将整个段全部搬到外存上，这种I0操作太多了机器响应奇慢无比</strong>，用户是无法接受的。</li>
+</ul>
+</blockquote>
+<p>出现这种问题的本质在于</p>
+<blockquote>
+<ul>
+<li><strong>在目前只分段的机制下，CPU 认为线性地址等于物理地址。</strong></li>
+<li>而<strong>线性地址是由编译器编译出来的，它本身是连续的，所以物理地址也必须要连续才行，但我们可用的物理地址不连续</strong>。</li>
+</ul>
+</blockquote>
+<h3 id="分页机制概述-1">分页机制概述
+</h3><p>针对以上问题，出现了分页机制</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734012152.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212220232438"
+	
+	
+></p>
+<blockquote>
+<p>分页机制的思想是:通过映射，<strong>使连续的线性地址与任意物理内存地址相关联，逻辑上连续的线性地址其对应的物理地址可以不连续。</strong></p>
+</blockquote>
+<p>分页机制的作用有两方面</p>
+<blockquote>
+<ul>
+<li>将线性地址转换成物理地址</li>
+<li>用大小相等的页代替大小不等的段。</li>
+</ul>
+</blockquote>
+<p>由于有了线性地址到真实物理地址的这层映射，经过段部件输出的线性地址便有了另外一个名字，虚拟地址，因此，分页机制是建立在分段机制上的。</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734012412.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212220651932"
+	
+	
+></p>
+<blockquote>
+<p><strong>分页机制本质上是将大小不同的大内存段拆分成大小相等的小内存块</strong></p>
+</blockquote>
+<p>那么我们要如何对内存进行分页呢？</p>
+<ul>
+<li>假如我们将4GB的内存空间划分成 4G个内存块，那么每个内存块大小是1字节，一共4G个内存块，也就是4G个页表项。</li>
+<li>页表也是存储在内存中的，为了表示 32位地址，每个页表项必须要4字节，若按此方案，光是页表就要占4B*4G=16GB的内存，显然是不合理的。</li>
+</ul>
+<p>因此，为了节省页表空间，我们需要将划分的单个内存块的尺寸变大，这样内存块数量变小，从而减少了页表项数量。</p>
+<p>如下所示，若滑块指向第12位，内存块大小则为2的12次方，即4KB，内存块数量则为2的20次方，1M，即1048576个。这里所说的内存块，其官方名称是页，CPU中采用的页大小恰恰就是4KB，也就是图5-10中滑块的落点处。</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734013399.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212222319141"
+	
+	
+></p>
+<ul>
+<li>页是地址空间的计量单位，并不是专属物理地址或线性地址，只要是4KB的地址空间都可以称为页，所以<strong>线性地址的一页也要对应物理地址的一页。</strong></li>
+<li>一页大小为4KB，所以4GB 地址空间被划分成 4GB/4KB=1M个页，也就是 4GB 空间中可以容纳1048576个页，页表中自然也要有 1048576个页表项。这就是我们要说的一级页表。</li>
+</ul>
+<h3 id="分页机制下的地址转换">分页机制下的地址转换
+</h3><blockquote>
+<ul>
+<li>一个页表项对应一个页</li>
+<li><strong>线性地址的高20位作为页表项的索引</strong>，每个页表项要占用4字节大小，所以这高 20位的索引乘以4后才是该页表项相对于页表物理地址的字节偏移量。</li>
+<li><strong>cr3 寄存器中存放着的页表的物理地址</strong>，加上页表项的偏移量便是该页表项的物理地址，从而<strong>得到该页表项中映射的物理页地址</strong></li>
+<li>然后<strong>用线性地址的低12位与该物理页地址相加</strong>，所得的地址之和便是最终要访问的物理地址。</li>
+</ul>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734014296.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212223816180"
+	
+	
+></p>
+<p>如上图所示，我们以指令 <code>mov ax,[0x1234]</code>为例</p>
+<blockquote>
+<ul>
+<li>假设在平坦模型下工作，不管段选择子值是多少，其所指向的段基址都是0</li>
+<li>指令<code>mov ax,[0x1234]</code>中的 0x1234称为有效地址，它作为“段基址:段内偏移地址”中的段内偏移地址。</li>
+<li>这样段基址为0，段内偏移地址为0x1234，经过段部件处理后，输出的线性地址是0x1234。</li>
+<li>当线性地址 0x1234被送入页部件，页部件分析 0x1234的高20位，用十六进制表示高20位是0x00001。</li>
+<li>然后将此项作为页表项索引，再将该索引乘以4后加上 cr3 寄存器中页表的物理地址，这样便得到索引所指代的页表项的物理地址</li>
+<li>再从该物理地址处(页表项中)读取所映射的物理页地址:0x9000。</li>
+<li>线性地址的低12位是0x234，它作为物理页的页内偏移地址与物理页地址0x9000相加，和为0x9234，这就是线性地址0x1234最终转换成的物理地址。</li>
+</ul>
+</blockquote>
+<h3 id="二级页表">二级页表
+</h3><p>前面所述的地址转换都是一级页表的过程，那么为什么有了一级页表还要有二级页表呢？</p>
+<p>(1)一级页表中最多可容纳1M(1048576)个页表项，每个页表项是4字节，如果页表项全满的话，便是 4MB 大小。</p>
+<p>(2)一级页表中所有页表项必须要提前建好，原因是操作系统要占用4GB虚拟地址空间的高1GB用户进程要占用低 3GB。</p>
+<p>(3)每个进程都有自己的页表，进程一多，光是页表占用的空间就很可观了。</p>
+<blockquote>
+<p>归根结底，我们要解决的是:不要一次性地将全部页表项建好，需要时动态创建页表项</p>
+</blockquote>
+<p>无论是几级页表，标准页的尺寸都是4KB，这一点是不变的。</p>
+<blockquote>
+<p>4GB线性地址空间最多有1M个标准页。一级页表是将这1M个标准页放置到一张页表中，二级页表是将这1M个标准页平均放置1K个页表中。每个页表中包含有1K个页表项。页表项是4字节大小，页表包含1K个页表项，故页表大小为4KB，这恰恰是一个标准页的大小。</p>
+</blockquote>
+<p>拆分出了这么多个页表，如何使用它们呢?为此，专门有个页目录表来存储这些页表。</p>
+<blockquote>
+<p>每个页表的物理地址在页目录表中都以页目录项(Page DirectoryEntry， PDE)的形式存储，页目录项大小同页表项一样，都用来描述一个物理页的物理地址，其大小都是4字节，而且最多有1024个页表，所以页目录表也是4KB大小，同样也是标准页的大小。页表是用于管理内存的数据结构，其也要占用内存，所以页目录表和页表所占用的物理页，同样混迹于物理内存之中</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734014671.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212224431364"
+	
+	
+></p>
+<p>每个任务都有自己的页目录表和页表。在处理器内部，有一个控制寄存器CR3，存放着当前任务的页目录表的物理地址，故又叫作页目录基址寄存器(Page Directory Base Register,PDBR)。</p>
+<p>每个任务都有自己的任务状态段(TSS)，它是任务的标志性结构，存放了和任务相关的各种数据，其中就包括了CR3寄存器域，存放了任务自己的页目录表物理地址。当任务切换时，处理器切换到新任务开始执行，而CR3的内容也被更新，以指向新任务的页目录表。相应的，页目录又指向一个个的页表，这就使得每个任务都只在自己的地址空间内运行。</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734014751.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212224551243"
+	
+	
+></p>
+<p>二级页表的地址转换过程同一级页表是相同的</p>
+<p>如图所示，在处理器内部，<strong>页部件将段部件送来的32位线性地址截成3段，分别是高10位、中间10位和低12位</strong>。</p>
+<blockquote>
+<ul>
+<li>高10位是页目录的索引</li>
+<li>中间10位是页表的索引</li>
+<li>低12位则作为页内偏移来用</li>
+</ul>
+</blockquote>
+<p>当前任务页目录的物理地址在处理器的寄存器CR3中，假设它的内容为0x00005000。</p>
+<p>段管理部件输出的线性地址是<code>0x00801050</code>，其二进制的形式为<code>0000 0000 1000 0000 0001 0000 0101 0000</code></p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734014937.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212224856742"
+	
+	
+></p>
+<p>在这里，</p>
+<blockquote>
+<ul>
+<li>高10位为0000000010，也就是十六进制的0x002，它是<strong>页目录表内的索引</strong>，处理器将它乘以4（因为每个目录项为4字节），作为<strong>偏移量访问页目录</strong>。最终，处理器从物理地址00005008处取得页表的物理地址0x08001000。</li>
+<li>线性地址的中间10位为二进制的0000000001，即0x001，处理器要用它<strong>作为页表内的索引来取得页的物理地址</strong>。处理器将该索引值乘以4，作为偏移量访问页表。</li>
+<li>最终，处理器又从物理地址08001004处取得页的物理地址，这就是我们一直努力寻找的那个页。</li>
+</ul>
+</blockquote>
+<h2 id="开启分页机制">开启分页机制
+</h2><h3 id="分页机制启动步骤">分页机制启动步骤
+</h3><blockquote>
+<ul>
+<li>准备页目录表和页表</li>
+<li>将页表地址写入控制寄存器cr3</li>
+<li>寄存器cr0的PG位置为1</li>
+</ul>
+</blockquote>
+<h3 id="页目录项与页表项">页目录项与页表项
+</h3><p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734015285.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212225445633"
+	
+	
+></p>
+<blockquote>
+<ul>
+<li>P，表示存在位
+<ul>
+<li>1表示该页位于物理内存中</li>
+</ul>
+</li>
+<li>RW：读写位
+<ul>
+<li>1表示可读可写</li>
+<li>0表示可读不可写</li>
+</ul>
+</li>
+<li>US：表示普通用户/系统用户
+<ul>
+<li>1，处于user级别，任意级别（1，2，3，4）特权的程序都可以访问该页</li>
+<li>0，处于supervisor级别，只允许特权级位（1,2,3）的程序可以访问</li>
+</ul>
+</li>
+<li>PWT：页级通写位
+<ul>
+<li>1,表示此项采用通写方式表示该页不仅是普通内存，还是高速缓存。此项和高速缓存有关,“通写”是高速缓存的一种工作方式本位用来间接决定是否用此方式改善该页的访问效率。</li>
+</ul>
+</li>
+<li>PCD:页级高速缓存禁止位
+<ul>
+<li>1表示该页启用高速缓存</li>
+<li>0表示该页禁用高速缓存</li>
+</ul>
+</li>
+<li>A：访问位
+<ul>
+<li>1表示该页已经被CPU访问过了</li>
+</ul>
+</li>
+<li>D：脏页位
+<ul>
+<li>当CPU对一个页面进行写操作时，就会将对应页表项D位置为1</li>
+<li>此项仅对页表项有效，并不会修改页目录项中的D位</li>
+</ul>
+</li>
+<li>PAT：页属性表位</li>
+<li>G，全局位
+<ul>
+<li>1表示该页为全局页，也就是该页将在TLB高速缓存中一直存在</li>
+<li>0表示该页不是全局页</li>
+</ul>
+</li>
+<li>AVL：可用位，操作系统是否可用</li>
+</ul>
+</blockquote>
+<h3 id="控制寄存器cr3">控制寄存器cr3
+</h3><p>用途：存储页目录表基址物理位置，又称页目录基址寄存器PDBR</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734015398.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212225638316"
+	
+	
+></p>
+<h3 id="内存规划">内存规划
+</h3><p>虚拟空间共4G</p>
+<blockquote>
+<ul>
+<li>
+<p>3GB ~ 4GB：操作系统</p>
+</li>
+<li>
+<p>0 ~ 3GB：用户进程自己的虚拟地址空间</p>
+</li>
+</ul>
+</blockquote>
+<p>以下是虚拟内存和物理内存的逻辑映射关系</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241213_1734064242.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241213123042004"
+	
+	
+></p>
+<blockquote>
+<ul>
+<li>页目录表的位置：0x100000</li>
+<li>第一个页表位置：0x101000</li>
+</ul>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241212_1734015477.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241212225757265"
+	
+	
+></p>
+<p>以下是内核需要的页目录表在物理内存中的存放位置，以及虚拟空间3GB ~ 4GB需要的页表在物理内存中的位置</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734691768.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241220184928320"
+	
+	
+></p>
+<p>以下是虚拟内存与物理内存的实际映射关系</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734690932.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241220183532307"
+	
+	
+></p>
+<h3 id="代码目录结构-1">代码目录结构
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── include
+</span></span><span class="line"><span class="cl">│   └── boot.inc     //配置文件
+</span></span><span class="line"><span class="cl">├── loader.S		//loader程序代码
+</span></span><span class="line"><span class="cl">├── Makefile		//编译文件，可直接使用make进行编译代码
+</span></span><span class="line"><span class="cl">├── mbr.S			//mbr程序代码
+</span></span><span class="line"><span class="cl">└── start.sh		//编译脚本，如果不想使用make编译代码，也可以选择运行该脚本编译代码，该脚本的编译命令更加清晰
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="代码-1">代码
+</h3><h4 id="bootinc">boot.inc
+</h4><p>在配置文件中添加页目录表和页表的相关信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="no">PAGE_DIR_TABLE_POS</span><span class="kd"> equ</span> <span class="mh">0x100000</span>                 <span class="c1">;页目录表基址</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;-----  模块化的页目录表字段  ---------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_P</span><span class="kd"> equ</span> <span class="mb">1b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_RW_R</span><span class="kd"> equ</span> <span class="mb">00b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_RW_W</span><span class="kd"> equ</span> <span class="mb">10b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_US_S</span><span class="kd"> equ</span> <span class="mb">000b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_US_U</span><span class="kd"> equ</span> <span class="mb">100b</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完整boot.inc代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;-----loader and kernel-----</span>
+</span></span><span class="line"><span class="cl">    <span class="no">LOADER_BASE_ADDR</span><span class="kd"> equ</span> <span class="mh">0x900</span>                      <span class="c1">;loader在内存中位置</span>
+</span></span><span class="line"><span class="cl">    <span class="no">LOADER_START_SECTOR</span><span class="kd"> equ</span> <span class="mh">0x2</span>                     <span class="c1">;loader在磁盘中的逻辑扇区地址，即LBA地址</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="no">LOADER_STACK_TOP</span><span class="kd"> equ</span> <span class="nv">LOADER_BASE_ADDR</span>           <span class="c1">;初始化栈指针地址</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="no">PAGE_DIR_TABLE_POS</span><span class="kd"> equ</span> <span class="mh">0x100000</span>                 <span class="c1">;页目录表基址</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;-----  gdt描述符属性  ---------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_G_4K</span><span class="kd">   equ</span>   <span class="mi">1</span><span class="nv">_00000000000000000000000b</span>    <span class="c1">;设置段界限的单位为4KB</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_D_32</span><span class="kd">   equ</span>    <span class="mi">1</span><span class="nv">_0000000000000000000000b</span>    <span class="c1">;设置代码段/数据段的有效地址（段内偏移地址）及操作数大小为32位</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_L</span><span class="kd">    equ</span>       <span class="mi">0</span><span class="nv">_000000000000000000000b</span>    <span class="c1">;64位代码段标记位，现在是32位操作系统，因此标记为0即可。</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_AVL</span><span class="kd">  equ</span>        <span class="mi">0</span><span class="nv">_00000000000000000000b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;定义段界限位</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;段界限的第2部分，即描述符的高32位中的第16~19位，最终的代码段段界限为0xFFFFF</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_LIMIT_CODE2</span><span class="kd"> equ</span> <span class="mi">1111</span><span class="nv">_0000000000000000b</span>     <span class="c1">;定义代码段要用的段描述符高32位中16~19段界限为全1</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_LIMIT_DATA2</span><span class="kd"> equ</span> <span class="nv">DESC_LIMIT_CODE2</span>           <span class="c1">;定义数据段要用的段描述符高32位中16~19段界限为全1</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_LIMIT_VIDEO2</span><span class="kd">  equ</span> <span class="mi">0000</span><span class="nv">_000000000000000b</span>    <span class="c1">;定义我们要操作显存时对应的段描述符的高32位中16~19段界限为全0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_P</span><span class="kd">  equ</span> <span class="mi">1</span><span class="nv">_000000000000000b</span>                  <span class="c1">;定义了段描述符中的P标志位，表示该段描述符指向的段是否在内存中</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;定义描述符的特权级别位</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_DPL_0</span><span class="kd"> equ</span> <span class="mi">00</span><span class="nv">_0000000000000b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_DPL_1</span><span class="kd"> equ</span> <span class="mi">01</span><span class="nv">_0000000000000b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_DPL_2</span><span class="kd"> equ</span> <span class="mi">10</span><span class="nv">_0000000000000b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_DPL_3</span><span class="kd"> equ</span> <span class="mi">11</span><span class="nv">_0000000000000b</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;定义类型位</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_S_CODE</span><span class="kd"> equ</span> <span class="mi">1</span><span class="nv">_000000000000b</span>                 <span class="c1">;代码段和数据段都是非系统段，故类型字段s设置为1</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_S_DATA</span><span class="kd"> equ</span> <span class="nv">DESC_S_CODE</span>                     <span class="c1">;代码段和数据段都是非系统段，故类型字段s设置为1</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_S_sys</span><span class="kd"> equ</span> <span class="mi">0</span><span class="nv">_000000000000b</span>                  <span class="c1">;系统段的类型字段设置为0</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;定义子类型位</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_TYPE_CODE</span><span class="kd"> equ</span> <span class="mi">1000</span><span class="nv">_00000000b</span>               <span class="c1">;x=1,c=0,r=0,a=0 代码段是可执行的，非一致性，不可读，已访问位a清0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">DESC_TYPE_DATA</span><span class="kd"> equ</span> <span class="mi">0010</span><span class="nv">_00000000b</span>               <span class="c1">;x=0,e=0,w=1,a=0，数据段不可执行，向上扩展，可写，已访问位a清0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;拼接代码段的描述符</span>
+</span></span><span class="line"><span class="cl"><span class="no">DESC_CODE_HIGH4</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x00</span><span class="o">&lt;&lt;</span><span class="mi">24</span><span class="p">)</span> <span class="o">+</span> <span class="nv">DESC_G_4K</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="err">+</span> <span class="nf">DESC_D_32</span> <span class="o">+</span> <span class="nv">DESC_L</span> <span class="o">+</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">DESC_AVL</span> <span class="o">+</span> <span class="nv">DESC_LIMIT_CODE2</span> <span class="o">+</span> <span class="nv">DESC_P</span> <span class="o">+</span> <span class="nv">DESC_DPL_0</span> <span class="o">+</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">DESC_S_CODE</span> <span class="o">+</span> <span class="nv">DESC_TYPE_CODE</span> <span class="o">+</span> <span class="mh">0x00</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;拼接数据段的描述符</span>
+</span></span><span class="line"><span class="cl"><span class="no">DESC_DATA_HIGH4</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x00</span><span class="o">&lt;&lt;</span><span class="mi">24</span><span class="p">)</span> <span class="o">+</span> <span class="nv">DESC_G_4K</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="err">+</span> <span class="nf">DESC_D_32</span> <span class="o">+</span> <span class="nv">DESC_L</span> <span class="o">+</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">DESC_AVL</span> <span class="o">+</span> <span class="nv">DESC_LIMIT_DATA2</span> <span class="o">+</span> <span class="nv">DESC_P</span> <span class="o">+</span> <span class="nv">DESC_DPL_0</span> <span class="o">+</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">DESC_S_DATA</span> <span class="o">+</span> <span class="nv">DESC_TYPE_DATA</span> <span class="o">+</span> <span class="mh">0x00</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;拼接显存段的描述符位                    </span>
+</span></span><span class="line"><span class="cl"><span class="no">DESC_VIDEO_HIGH4</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x00</span><span class="o">&lt;&lt;</span><span class="mi">24</span><span class="p">)</span> <span class="o">+</span> <span class="nv">DESC_G_4K</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="err">+</span> <span class="nf">DESC_D_32</span> <span class="o">+</span> <span class="nv">DESC_L</span> <span class="o">+</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">DESC_AVL</span> <span class="o">+</span> <span class="nv">DESC_LIMIT_VIDEO2</span> <span class="o">+</span> <span class="nv">DESC_P</span> <span class="o">+</span> <span class="nv">DESC_DPL_0</span> <span class="o">+</span> <span class="err">\</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">DESC_S_DATA</span> <span class="o">+</span> <span class="nv">DESC_TYPE_DATA</span> <span class="o">+</span> <span class="mh">0x0b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;-----  选择子属性  ---------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">RPL0</span><span class="kd"> equ</span> <span class="mb">00b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">RPL1</span><span class="kd"> equ</span> <span class="mb">01b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">RPL2</span><span class="kd"> equ</span> <span class="mb">10b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">RPL3</span><span class="kd"> equ</span> <span class="mb">11b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="no">TI_GDT</span><span class="kd"> equ</span> <span class="mb">000b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">TI_LDT</span><span class="kd"> equ</span> <span class="mb">100b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;-----  模块化的页目录表字段  ---------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_P</span><span class="kd"> equ</span> <span class="mb">1b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_RW_R</span><span class="kd"> equ</span> <span class="mb">00b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_RW_W</span><span class="kd"> equ</span> <span class="mb">10b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_US_S</span><span class="kd"> equ</span> <span class="mb">000b</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PG_US_U</span><span class="kd"> equ</span> <span class="mb">100b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;-----  程序段的类型定义  ---------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">PT_NULL</span><span class="kd"> equ</span> <span class="mi">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="创建页表和页目录表">创建页表和页目录表
+</h4><blockquote>
+<ul>
+<li>为了让3GB ~ 4GB的虚拟内存空间映射到物理内核空间0 ~ 1MB，需要将二级页表的768号页目录项（0xc00/4）指向第一个一级页表的页表项，因为第一个一级页表的页表项管理着物理空间的0 ~ 4KB</li>
+<li>由于mbr程序最开始会在实模式下加载loader程序，而loader程序的加载地址为0x900（实际执行代码的地址为0xc00），这是由一级页表的第一个页表项管理的物理空间，因此为了能够让mbr跨越实模式加载loader，还需要让二级页表的第一个页表项指向一级页表的第一个页表项</li>
+</ul>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="c1">;------------- 创建页目录表和页表 -------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;初始化页目录表和页表</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;逐字节清空页目录表</span>
+</span></span><span class="line"><span class="cl"><span class="nl">setup_page:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">4096</span>                                    <span class="c1">;页目录表的大小为4KB，ecx是loop指令的循环计数器</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;由于初始化页表是逐字节置0的，因此ecx的值为4096</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="mi">0</span>                                       <span class="c1">;页目录表的偏移量</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.clear_page_dir:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="nb">esi</span><span class="p">],</span><span class="mi">0</span>             <span class="c1">;逐字节清空页目录表</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;其中PAGE_DIR_TABLE_POS为页目录表初始地址的宏</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">esi</span>                                         <span class="c1">;递增偏移量，清空下一个字节</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.clear_page_dir</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;初始化创建页目录表</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.create_pde:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>                      <span class="c1">;eax保存页目录表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x1000</span>                                  <span class="c1">;0x1000为1k，故该代码的计算结果是将eax指向第一张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="nb">eax</span>                                     <span class="c1">;ebx保存第一张页表的起始地址，后续会用到</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PG_US_U</span><span class="o">|</span><span class="nv">PG_RW_W</span><span class="o">|</span><span class="nv">PG_P</span>                     <span class="c1">;eax已经有了第一张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;此处再加上属性，即可表示为页目录表的一个表项，</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;该表项代表的是第一张页表的物理地址及其相关属性</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="mh">0x0</span><span class="p">],</span><span class="nb">eax</span>                <span class="c1">;页目录表的第一个表项指向第一张页表</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="mh">0xc00</span><span class="p">],</span><span class="nb">eax</span>              <span class="c1">;0xc0000000即为3GB，由于我们划分的虚拟地址空间3GB以上为os地址空间</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;因此该语句是将3GB的虚拟空间映射到内核空间 </span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;而0xc00/4=768，也就是说页目录表的768号表项映射为物理内核空间</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nf">sub</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x1000</span>          
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="mi">4092</span><span class="p">],</span><span class="nb">eax</span>               <span class="c1">;最后一个页表项指向自己，为将来动态操作页表做准备</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;创建第一张页表的页表项，由于os的物理内存不会超过1M，故页表项个数的最大值为1M/4k=256</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">256</span>                                     <span class="c1">;循环计数器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="mi">0</span>                                       <span class="c1">;偏移量</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">edx</span>                                     <span class="c1">;第一个页表项指向物理空间的0~4KB物理页框</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;故记录的起始地址就是第一个页框的起始地址，也就是0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="nv">PG_US_S</span><span class="o">|</span><span class="nv">PG_RW_W</span><span class="o">|</span><span class="nv">PG_P</span>                    <span class="c1">;此时的edx表示拥有属性PG_US_S|PG_RW_W|PG_P</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;且物理地址为0的物理页的页表项</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.create_pte:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nb">ebx</span><span class="o">+</span><span class="nb">esi</span><span class="o">*</span><span class="mi">4</span><span class="p">],</span><span class="nb">edx</span>                             <span class="c1">;此前ebx已经保存了第一张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">edx</span><span class="p">,</span><span class="mi">4096</span>                                    <span class="c1">;edx指向下一个物理页（一个物理页4KB）</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">esi</span>                                         <span class="c1">;esi指向页表的下一个偏移</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.create_pte</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">; -------------------初始化页目录表769号-1022号项，769号项指向第二个页表的地址（此页表紧挨着上面的第一个页表），770号指向第三个，以此类推</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x2000</span>                                  <span class="c1">;此时的eax表示第二张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PG_US_U</span><span class="o">|</span><span class="nv">PG_RW_W</span><span class="o">|</span><span class="nv">PG_P</span>                     <span class="c1">;为eax表项添加属性</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">254</span>                                     <span class="c1">;要设置254个页表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="mi">769</span>                                     <span class="c1">;从第769个页表项开始设置</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.create_kernel_pde:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nb">ebx</span><span class="o">+</span><span class="nb">esi</span><span class="o">*</span><span class="mi">4</span><span class="p">],</span><span class="nb">eax</span>                             <span class="c1">; 设置页目录表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">esi</span>                                         <span class="c1">; 增加要设置的页目录表项的偏移</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x1000</span>                                  <span class="c1">; eax指向下一个页表的位置，由于之前设定了属性，所以eax是一个完整的指向下一个页表的页目录表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.create_kernel_pde</span>                         <span class="c1">; 循环设定254个页目录表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="开启分页机制-1">开启分页机制
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="err">[</span><span class="k">bits</span> <span class="mi">32</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nl">p_mode_start:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nv">SELECTOR_DATA</span>                    <span class="c1">;初始化段寄存器，将数据段的选择子分别放入各段寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ds</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">es</span><span class="p">,</span><span class="nb">ax</span>                      
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ss</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esp</span><span class="p">,</span><span class="nv">LOADER_STACK_TOP</span>                <span class="c1">;初始化栈指针，将栈指针地址放入bsp寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nv">SELECTOR_VIDEO</span>                   <span class="c1">;初始化显存段寄存器，显存段的选择子放入gs寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">gs</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nv">setup_page</span>                         <span class="c1">;创建页目录表和页表，并初始化页内存位图</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,[</span><span class="nv">gdt_ptr</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>                     <span class="c1">;gdt_ptr+2表示GDT_BASE,也就是GDT的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="kt">dword</span> <span class="p">[</span><span class="nb">ebx</span><span class="o">+</span><span class="mh">0x18</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span><span class="mh">0xc0000000</span>        <span class="c1">;ebx中保存着GDT_BASE，0x18=24，故ebx+0x18表示取出显存段的起始地址</span>
+</span></span><span class="line"><span class="cl">                                            <span class="c1">;+4表示取出段描述符的高32位，之后和0xc0000000进行或操作</span>
+</span></span><span class="line"><span class="cl">                                            <span class="c1">;表示将显存段的起始地址增加了3G</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">gdt_ptr</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span><span class="mh">0xc0000000</span>        <span class="c1">;同理将GDT_BASE的起始地址也增加3G</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">esp</span><span class="p">,</span><span class="mh">0xc0000000</span>                      <span class="c1">;同理将esp栈指针的起始地址也增加3G</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cr3</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cr0</span>                             <span class="c1">;打开cr0的PG位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x80000000</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cr0</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">lgdt</span> <span class="p">[</span><span class="nv">gdt_ptr</span><span class="p">]</span>                          <span class="c1">;开启分页后，用gdt的新地址重新加载</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mi">160</span><span class="p">],</span><span class="s">&#39;V&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="kc">$</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="完整loader">完整loader
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl"><span class="cp">%include &#34;boot.inc&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">SECTION</span> <span class="nv">loader</span> <span class="nv">vstart</span><span class="err">=</span><span class="nv">LOADER_BASE_ADDR</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;初始化栈指针地址</span>
+</span></span><span class="line"><span class="cl"><span class="no">LOADER_STACK_TOP</span><span class="kd"> equ</span> <span class="nv">LOADER_BASE_ADDR</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 构建gdt及其内部的描述符 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">GDT_BASE:</span> 
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x00000000</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x00000000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;代码段描述符的低4字节部分，其中高两个字节表示段基址的0~15位,在这里定义为0x0000</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;低两个字节表示段界限的0~15位，由于使用的是平坦模型，因此是0xFFFF</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">CODE_DESC:</span>  
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x0000FFFF</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="nv">DESC_CODE_HIGH4</span><span class="c1">;段描述符的高4字节部分</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">DATA_STACK_DESC:</span> 
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x0000FFFF</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="nv">DESC_DATA_HIGH4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;定义显存段的描述符</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;文本模式下的适配器地址为0xb8000~0xbffff,为了方便显存操作，显存段不使用平坦模型</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;因此段基址为0xb8000,段大小为0xbffff-0xb8000=0x7fff,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;段粒度位4k，因此段界限的值为0x7fff/4k=7</span>
+</span></span><span class="line"><span class="cl">    <span class="nl">VIDEO_DESC:</span> 
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="mh">0x80000007</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">dd</span> <span class="nv">DESC_VIDEO_HIGH4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="no">GDT_SIZE</span><span class="kd"> equ</span> <span class="kc">$</span><span class="o">-</span><span class="nv">GDT_BASE</span>
+</span></span><span class="line"><span class="cl">    <span class="no">GDT_LIMIT</span><span class="kd"> equ</span> <span class="nv">GDT_SIZE</span><span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">times</span> <span class="mi">60</span> <span class="nv">dq</span> <span class="mi">0</span> <span class="c1">;此处预留60个描述符的空位</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 构建选择子 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_CODE</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0001</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_DATA</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0002</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">    <span class="no">SELECTOR_VIDEO</span><span class="kd"> equ</span> <span class="p">(</span><span class="mh">0x0003</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nv">TI_GDT</span> <span class="o">+</span> <span class="nv">RPL0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">total_mem_bytes</span> <span class="nv">dd</span> <span class="mi">0</span>    <span class="c1">;total_mem_bytes用于保存最终获取到的内存容量，为4个字节</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;由于loader程序的加载地址为0x900，而loader.bin的文件头大小为0x200</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;（4个gdt段描述符（8B）加上60个dp（8B）填充字，故64*8=512B），</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;故total_mem_bytes在内存中的地址为0x900+0x200=0xc00</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;该地址将来在内核中会被用到</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 定义gdtr（指向GDT的寄存器） -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">gdt_ptr</span> <span class="nv">dw</span> <span class="nv">GDT_LIMIT</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">dd</span> <span class="nv">GDT_BASE</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_buf</span> <span class="nv">times</span> <span class="mi">244</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">;开辟一块缓冲区，用于记录返回的ARDS结构体，</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;该定义语句事实上是定义了一个数组ards_buf[244]</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;244是因为total_mem_bytes(4)+gdt_ptr(6)+244+ards_nr(2)=256,即0x100</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;这样loader_start的在文件内的偏移地址就是0x100+0x200=0x300</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">ards_nr</span> <span class="nv">dw</span> <span class="mi">0</span>            <span class="c1">;用于记录ards结构体数量</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;INT 0x15 功能号：0xe820 功能描述：获取内存容量，检测内存</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;输入：</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EAX:功能号，0xE820，但调用返回时eax会被填入一串ASCII值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EBX:ARDS后续值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ES:di:ARDS缓冲区，BIOS将获取到的内存信息存到此寄存器指向的内存，每次都以ARDS格式返回</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ECX:ARDS结构的字节大小，20</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EDX:固定为签名标记，0x534d4150</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;返回值</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;CF：若cf为0，表示未出错，cf为1，表示调用出错</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EAX：字符串SMAP的ASCII码值，0x534d4150</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ES:di:ARDS缓冲区，BIOS将获取到的内存信息存到此寄存器指向的内存，每次都以ARDS格式返回</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;ECX:ARDS结构的字节大小，20</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;EBX:ARDS后续值，即下一个ARDS的位置。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;每次BIOS中断返回后，BIOS会更新此值，BIOS会通过此值找到下一个待返回的ARDS结构。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">;在cf位为0的情况下，若返回后的EBX值为0，表示这是最后一个ARDS结构</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">loader_start:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">ebx</span><span class="p">,</span><span class="nb">ebx</span>             <span class="c1">;第一次调用时，要将ebx清空置为0，此处使用的是异或运算置0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="mh">0x534d4150</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">di</span><span class="p">,</span><span class="nv">ards_buf</span>         <span class="c1">;di存储缓冲区地址，即指向缓冲区首地址</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.e820_mem_get_loop:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x0000e820</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">20</span>              <span class="c1">;一个ards结构体的大小</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mh">0x15</span>                <span class="c1">;调用0x15中断函数，返回的ards结构体被返回给di指向的缓冲区中</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">di</span><span class="p">,</span><span class="nb">cx</span>               <span class="c1">;使di增加20字节指向缓冲区中下一个的ARDS结构位置</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="kt">word</span> <span class="p">[</span><span class="nv">ards_nr</span><span class="p">]</span>      <span class="c1">;inc（increment增加）指令表示将内存中的操作数增加一，此处用于记录返回的ARDS数量</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">0</span>               <span class="c1">;比较ebx中的值是否为0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jnz</span> <span class="nv">.e820_mem_get_loop</span>  <span class="c1">;若ebx不为0，则继续进行循环获取ARDS，</span>
+</span></span><span class="line"><span class="cl">                            <span class="c1">;若为0说明已经获取到最后一个ards，则退出循环</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cx</span><span class="p">,[</span><span class="nv">ards_nr</span><span class="p">]</span>        <span class="c1">;cx存储遍历到的ards结构体个数</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="nv">ards_buf</span>        <span class="c1">;ebx指向缓冲区地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">xor</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">edx</span>             <span class="c1">;EDX用于保存BaseAddrLow+LengthLow最大值，此处初始化为0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.find_max_mem_area:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebx</span><span class="p">]</span>           <span class="c1">;eax用于遍历缓冲区中的每一个ards的BaseAddrLow</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,[</span><span class="nb">ebx</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>         <span class="c1">;ebx+8获取的是LengthLow，故该代码计算的是BaseAddrLow+LengthLow</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">ebx</span><span class="p">,</span><span class="mi">20</span>              <span class="c1">;遍历下一个ards</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmp</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">eax</span>             <span class="c1">;分支语句，如果edx大于等于eax，则跳转到.next_ards，也就是进入循环</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jge</span> <span class="nv">.next_ards</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="nb">eax</span>             <span class="c1">;否则就是更新edx</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.next_ards:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.find_max_mem_area</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">total_mem_bytes</span><span class="p">],</span><span class="nb">edx</span>   <span class="c1">;将最终结果保存到total_mem_bytes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 准备进入保护模式 -------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;1.打开A20</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;2.加载gdt</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;3.置cr0的PE位为1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;------------- 打开A20 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">in</span> <span class="nb">al</span><span class="p">,</span><span class="mh">0x92</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">al</span><span class="p">,</span><span class="mi">0000</span><span class="nv">_0010B</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">out</span> <span class="mh">0x92</span><span class="p">,</span><span class="nb">al</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">;------------- 加载gdt -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">lgdt</span> <span class="p">[</span><span class="nv">gdt_ptr</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">;------------- 置cr0的PE位为1 -------------</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cr0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x00000001</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cr0</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="kt">dword</span> <span class="nv">SELECTOR_CODE</span><span class="p">:</span><span class="nv">p_mode_start</span>    <span class="c1">;刷新流水线</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">.error_hlt:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">hlt</span>                                     <span class="c1">;出错则挂起</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">[</span><span class="k">bits</span> <span class="mi">32</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nl">p_mode_start:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nv">SELECTOR_DATA</span>                    <span class="c1">;初始化段寄存器，将数据段的选择子分别放入各段寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ds</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">es</span><span class="p">,</span><span class="nb">ax</span>                      
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ss</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esp</span><span class="p">,</span><span class="nv">LOADER_STACK_TOP</span>                <span class="c1">;初始化栈指针，将栈指针地址放入bsp寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span><span class="nv">SELECTOR_VIDEO</span>                   <span class="c1">;初始化显存段寄存器，显存段的选择子放入gs寄存器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">gs</span><span class="p">,</span><span class="nb">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span> <span class="nv">setup_page</span>                         <span class="c1">;创建页目录表和页表，并初始化页内存位图</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,[</span><span class="nv">gdt_ptr</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>                     <span class="c1">;gdt_ptr+2表示GDT_BASE,也就是GDT的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="kt">dword</span> <span class="p">[</span><span class="nb">ebx</span><span class="o">+</span><span class="mh">0x18</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span><span class="mh">0xc0000000</span>        <span class="c1">;ebx中保存着GDT_BASE，0x18=24，故ebx+0x18表示取出显存段的起始地址</span>
+</span></span><span class="line"><span class="cl">                                            <span class="c1">;+4表示取出段描述符的高32位，之后和0xc0000000进行或操作</span>
+</span></span><span class="line"><span class="cl">                                            <span class="c1">;表示将显存段的起始地址增加了3G</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">gdt_ptr</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span><span class="mh">0xc0000000</span>        <span class="c1">;同理将GDT_BASE的起始地址也增加3G</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">esp</span><span class="p">,</span><span class="mh">0xc0000000</span>                      <span class="c1">;同理将esp栈指针的起始地址也增加3G</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cr3</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nb">cr0</span>                             <span class="c1">;打开cr0的PG位</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x80000000</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">cr0</span><span class="p">,</span><span class="nb">eax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">lgdt</span> <span class="p">[</span><span class="nv">gdt_ptr</span><span class="p">]</span>                          <span class="c1">;开启分页后，用gdt的新地址重新加载</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">gs</span><span class="p">:</span><span class="mi">160</span><span class="p">],</span><span class="s">&#39;V&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="kc">$</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------------- 创建页目录表和页表 -------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;初始化页目录表和页表</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;逐字节清空页目录表</span>
+</span></span><span class="line"><span class="cl"><span class="nl">setup_page:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">4096</span>                                    <span class="c1">;页目录表的大小为4KB，ecx是loop指令的循环计数器</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;由于初始化页表是逐字节置0的，因此ecx的值为4096</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="mi">0</span>                                       <span class="c1">;页目录表的偏移量</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.clear_page_dir:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="nb">esi</span><span class="p">],</span><span class="mi">0</span>             <span class="c1">;逐字节清空页目录表</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;其中PAGE_DIR_TABLE_POS为页目录表初始地址的宏</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">esi</span>                                         <span class="c1">;递增偏移量，清空下一个字节</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.clear_page_dir</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;初始化创建页目录表</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.create_pde:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>                      <span class="c1">;eax保存页目录表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x1000</span>                                  <span class="c1">;0x1000为1k，故该代码的计算结果是将eax指向第一张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="nb">eax</span>                                     <span class="c1">;ebx保存第一张页表的起始地址，后续会用到</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PG_US_U</span><span class="o">|</span><span class="nv">PG_RW_W</span><span class="o">|</span><span class="nv">PG_P</span>                     <span class="c1">;eax已经有了第一张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;此处再加上属性，即可表示为页目录表的一个表项，</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;该表项代表的是第一张页表的物理地址及其相关属性</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="mh">0x0</span><span class="p">],</span><span class="nb">eax</span>                <span class="c1">;页目录表的第一个表项指向第一张页表</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="mh">0xc00</span><span class="p">],</span><span class="nb">eax</span>              <span class="c1">;0xc0000000即为3GB，由于我们划分的虚拟地址空间3GB以上为os地址空间</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;因此该语句是将3GB的虚拟空间映射到内核空间 </span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;而0xc00/4=768，也就是说页目录表的768号表项映射为物理内核空间</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nf">sub</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x1000</span>          
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nv">PAGE_DIR_TABLE_POS</span><span class="o">+</span><span class="mi">4092</span><span class="p">],</span><span class="nb">eax</span>               <span class="c1">;最后一个页表项指向自己，为将来动态操作页表做准备</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;创建第一张页表的页表项，由于os的物理内存不会超过1M，故页表项个数的最大值为1M/4k=256</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">256</span>                                     <span class="c1">;循环计数器</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="mi">0</span>                                       <span class="c1">;偏移量</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">edx</span><span class="p">,</span><span class="nv">PG_US_S</span><span class="o">|</span><span class="nv">PG_RW_W</span><span class="o">|</span><span class="nv">PG_P</span>                    <span class="c1">;此时的edx表示拥有属性PG_US_S|PG_RW_W|PG_P</span>
+</span></span><span class="line"><span class="cl">                                                    <span class="c1">;且物理地址为0的物理页的页表项</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.create_pte:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nb">ebx</span><span class="o">+</span><span class="nb">esi</span><span class="o">*</span><span class="mi">4</span><span class="p">],</span><span class="nb">edx</span>                             <span class="c1">;此前ebx已经保存了第一张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">edx</span><span class="p">,</span><span class="mi">4096</span>                                    <span class="c1">;edx指向下一个物理页（一个物理页4KB）</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">esi</span>                                         <span class="c1">;esi指向页表的下一个偏移</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.create_pte</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">; -------------------初始化页目录表769号-1022号项，769号项指向第二个页表的地址（此页表紧挨着上面的第一个页表），770号指向第三个，以此类推</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x2000</span>                                  <span class="c1">;此时的eax表示第二张页表的起始地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span><span class="nv">PG_US_U</span><span class="o">|</span><span class="nv">PG_RW_W</span><span class="o">|</span><span class="nv">PG_P</span>                     <span class="c1">;为eax表项添加属性</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ebx</span><span class="p">,</span><span class="nv">PAGE_DIR_TABLE_POS</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span><span class="mi">254</span>                                     <span class="c1">;要设置254个页表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="nb">esi</span><span class="p">,</span><span class="mi">769</span>                                     <span class="c1">;从第769个页表项开始设置</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.create_kernel_pde:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="p">[</span><span class="nb">ebx</span><span class="o">+</span><span class="nb">esi</span><span class="o">*</span><span class="mi">4</span><span class="p">],</span><span class="nb">eax</span>                             <span class="c1">; 设置页目录表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">inc</span> <span class="nb">esi</span>                                         <span class="c1">; 增加要设置的页目录表项的偏移</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="nb">eax</span><span class="p">,</span><span class="mh">0x1000</span>                                  <span class="c1">; eax指向下一个页表的位置，由于之前设定了属性，所以eax是一个完整的指向下一个页表的页目录表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">loop</span> <span class="nv">.create_kernel_pde</span>                         <span class="c1">; 循环设定254个页目录表项</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="编译并写入磁盘">编译并写入磁盘
+</h4><p>编译mbr</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nasm -I ./include/ ./mbr.S -o mbr.bin
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译loader</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nasm -I ./include/ ./loader.S -o loader.bin
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>写入mbr</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/home/minios/osCode/miniOS_32/ch5/task2/mbr.bin <span class="nv">of</span><span class="o">=</span>/home/minios/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">1</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>写入loader</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/home/minios/osCode/miniOS_32/ch5/task2/loader.bin <span class="nv">of</span><span class="o">=</span>/home/minios/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">4</span> <span class="nv">seek</span><span class="o">=</span><span class="m">2</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="运行-1">运行
+</h4><p>如下，屏幕第二行出现了字符“V”，这个字符的打印代码是在保护模式下编写的，因此当字符“V”成功打印就说明我们成功开启了保护模式</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241213_1734066743.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241213131223659"
+	
+	
+></p>
+<h2 id="总结">总结
+</h2><p>以下我们使用一张图总结虚拟地址在段机制与页机制下如何进行地址转换并找到物理地址的</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241213_1734066950.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241213131549854"
+	
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    
+</footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十一章 —— 创建用户进程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%BA%8C-%E9%94%AE%E7%9B%98%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（二） —— 键盘驱动程序的编写与输入系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%B8%80-%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E5%AE%9E%E7%8E%B0%E4%B8%8E%E8%BE%93%E5%87%BA%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（一） —— 同步机制之互斥锁实现与输出系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%BA%8C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BD%AE%E8%BD%AC%E8%B0%83%E5%BA%A6/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（二） —— 多线程轮转调度</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%B8%80-%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（一） —— 在内核空间中实现线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"lang":"zh-CN","locale":{"admin":"你好","placeholder":null,"sofa":"还没有人评论哦！快来抢沙发吧~"},"placeholder":"欢迎留下宝贵的评论！","requiredMeta":["name","email","url"],"serverURL":"https://blogcomment-iqp14djt5-jl-skys-projects.vercel.app/","visitor":false});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy;
+        
+        2024 -
+        
+        2025 JL-sky
+    </section>
+
+    
+    <section class="running-time">
+        网站已运行
+        <span id="runningdays" class="running-days"></span>
+    </section>
+
+    
+    <section class="totalcount">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        发表了18篇文章 ·
+        总计
+        125,951字
+        
+    </section>
+
+    
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+        </main>
+    </div>
+    <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.dde1bc60c191a36f391af9ea35dd08be3c74bca8ca0cd8ff6a663c09a0256be0.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    let s1 = '2024-11-24'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+<div id="particles-js"></div>
+
+<script src=http://localhost:1313/background/particles.min.js></script>
+<script>
+    particlesJS.load('particles-js', resources.Get("background/package.json").Permalink, function () {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+
+<style>
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+</style>
+</body>
+
+</html>

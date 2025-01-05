@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文详解sort命令的常用方法">
+<title>linux常用命令(一) —— sort</title>
+
+<link rel='canonical' href='http://localhost:1313/p/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80-sort/'>
+
+<link rel="stylesheet" href="/scss/style.min.c2172b128ab8744b3f98599d792c6144c766b07c79ba00c88ff5c11861a33247.css"><meta property='og:title' content="linux常用命令(一) —— sort">
+<meta property='og:description' content="本文详解sort命令的常用方法">
+<meta property='og:url' content='http://localhost:1313/p/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80-sort/'>
+<meta property='og:site_name' content='你好'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-11-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-06T16:14:22&#43;08:00'/><meta property='og:image' content='http://localhost:1313/img/linux/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index1.jpg' />
+<meta name="twitter:title" content="linux常用命令(一) —— sort">
+<meta name="twitter:description" content="本文详解sort命令的常用方法"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:1313/img/linux/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index1.jpg' />
+  
+
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            
+            <a href="https://jl-sky.github.io/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu16686392332003896281.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">🤔</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">你好</a></h1>
+            <h2 class="site-description">原来是你啊</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/JL-sky' target="_blank"  title="GitHub"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="438.536px" height="438.536px" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 438.536 438.536;"
+	 xml:space="preserve">
+<g>
+	<g>
+		<path d="M158.173,352.599c-3.049,0.568-4.381,1.999-3.999,4.281c0.38,2.283,2.093,3.046,5.138,2.283
+			c3.049-0.76,4.38-2.095,3.997-3.997C162.931,353.074,161.218,352.216,158.173,352.599z"/>
+		<path d="M141.898,354.885c-3.046,0-4.568,1.041-4.568,3.139c0,2.474,1.619,3.518,4.853,3.138c3.046,0,4.57-1.047,4.57-3.138
+			C146.753,355.553,145.134,354.502,141.898,354.885z"/>
+		<path d="M119.629,354.022c-0.76,2.095,0.478,3.519,3.711,4.284c2.855,1.137,4.664,0.568,5.424-1.714
+			c0.572-2.091-0.666-3.61-3.711-4.568C122.197,351.265,120.39,351.922,119.629,354.022z"/>
+		<path d="M414.41,24.123C398.326,8.042,378.964,0,356.309,0H82.225C59.577,0,40.208,8.042,24.123,24.123
+			C8.042,40.207,0,59.576,0,82.225v274.088c0,22.65,8.042,42.017,24.123,58.098c16.084,16.084,35.454,24.126,58.102,24.126h63.953
+			c4.184,0,7.327-0.144,9.42-0.424c2.092-0.288,4.184-1.526,6.279-3.717c2.096-2.187,3.14-5.376,3.14-9.562
+			c0-0.568-0.05-7.046-0.144-19.417c-0.097-12.375-0.144-22.176-0.144-29.41l-6.567,1.143c-4.187,0.76-9.469,1.095-15.846,0.999
+			c-6.374-0.096-12.99-0.76-19.841-1.998c-6.855-1.239-13.229-4.093-19.13-8.562c-5.898-4.477-10.085-10.328-12.56-17.559
+			l-2.856-6.571c-1.903-4.373-4.899-9.229-8.992-14.554c-4.093-5.332-8.232-8.949-12.419-10.852l-1.999-1.428
+			c-1.331-0.951-2.568-2.098-3.711-3.429c-1.141-1.335-1.997-2.669-2.568-3.997c-0.571-1.335-0.097-2.43,1.427-3.289
+			c1.524-0.855,4.281-1.279,8.28-1.279l5.708,0.855c3.808,0.76,8.516,3.042,14.134,6.851c5.614,3.806,10.229,8.754,13.846,14.843
+			c4.38,7.806,9.657,13.75,15.846,17.843c6.184,4.097,12.419,6.143,18.699,6.143s11.704-0.476,16.274-1.424
+			c4.565-0.954,8.848-2.385,12.847-4.288c1.713-12.751,6.377-22.559,13.988-29.41c-10.848-1.143-20.602-2.854-29.265-5.14
+			c-8.658-2.286-17.605-5.995-26.835-11.136c-9.234-5.14-16.894-11.512-22.985-19.13c-6.09-7.618-11.088-17.61-14.987-29.978
+			c-3.901-12.375-5.852-26.652-5.852-42.829c0-23.029,7.521-42.637,22.557-58.814c-7.044-17.32-6.379-36.732,1.997-58.242
+			c5.52-1.714,13.706-0.428,24.554,3.855c10.85,4.286,18.794,7.951,23.84,10.992c5.046,3.042,9.089,5.614,12.135,7.71
+			c17.705-4.949,35.976-7.423,54.818-7.423c18.841,0,37.115,2.474,54.821,7.423l10.849-6.852c7.426-4.57,16.18-8.757,26.269-12.562
+			c10.088-3.806,17.795-4.854,23.127-3.14c8.562,21.51,9.328,40.922,2.279,58.241c15.036,16.179,22.559,35.786,22.559,58.815
+			c0,16.18-1.951,30.505-5.852,42.969c-3.898,12.467-8.939,22.463-15.13,29.981c-6.184,7.519-13.894,13.843-23.124,18.986
+			c-9.232,5.137-18.178,8.853-26.84,11.132c-8.661,2.286-18.414,4.004-29.263,5.147c9.891,8.562,14.839,22.072,14.839,40.538v68.238
+			c0,3.237,0.472,5.852,1.424,7.851c0.958,1.998,2.478,3.374,4.571,4.141c2.102,0.76,3.949,1.235,5.571,1.424
+			c1.622,0.191,3.949,0.287,6.995,0.287h63.953c22.648,0,42.018-8.042,58.095-24.126c16.084-16.084,24.126-35.454,24.126-58.102
+			V82.225C438.533,59.576,430.491,40.204,414.41,24.123z"/>
+		<path d="M86.793,319.195c-1.331,0.948-1.141,2.471,0.572,4.565c1.906,1.902,3.427,2.189,4.57,0.855
+			c1.331-0.948,1.141-2.471-0.575-4.569C89.458,318.336,87.936,318.049,86.793,319.195z"/>
+		<path d="M77.374,312.057c-0.57,1.335,0.096,2.478,1.999,3.426c1.521,0.955,2.762,0.767,3.711-0.568
+			c0.57-1.335-0.096-2.478-1.999-3.433C79.182,310.91,77.945,311.102,77.374,312.057z"/>
+		<path d="M95.646,330.331c-1.715,0.948-1.715,2.666,0,5.137c1.713,2.478,3.328,3.142,4.853,1.998c1.714-1.334,1.714-3.142,0-5.427
+			C98.978,329.571,97.359,328.993,95.646,330.331z"/>
+		<path d="M105.641,343.174c-1.714,1.526-1.336,3.327,1.142,5.428c2.281,2.279,4.185,2.566,5.708,0.849
+			c1.524-1.519,1.143-3.326-1.142-5.42C109.068,341.751,107.164,341.463,105.641,343.174z"/>
+	</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E6%88%91%E7%9A%84/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>我的</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                <li id="i18n-switch">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                    <select name="language" title="language"
+                        onchange="window.location.href = this.selectedOptions[0].value">
+                        
+                        <option value="http://localhost:1313/en/" >English</option>
+                        
+                        <option value="http://localhost:1313/" selected>简体中文</option>
+                        
+                        <option value="http://localhost:1313/ar/" >عربي</option>
+                        
+                    </select>
+                </li>
+                
+                
+
+                
+                <li id="dark-mode-toggle">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828a4 4 0 1 0 -5.656 -5.656a4 4 0 0 0 5.656 5.656z" /><path d="M6.343 17.657l-1.414 1.414" /><path d="M6.343 6.343l-1.414 -1.414" /><path d="M17.657 6.343l1.414 -1.414" /><path d="M17.657 17.657l1.414 1.414" /><path d="M4 12h-2" /><path d="M12 4v-2" /><path d="M20 12h2" /><path d="M12 20v2" /></svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /><path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 11h2m-1 -1v2" /></svg>
+                    <span>暗色模式</span>
+                </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#介绍">介绍</a>
+      <ol>
+        <li><a href="#作用">作用</a></li>
+        <li><a href="#语法">语法</a></li>
+        <li><a href="#参数">参数</a>
+          <ol>
+            <li><a href="#重点掌握">重点掌握</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#实例">实例</a>
+      <ol>
+        <li><a href="#-r逆序排序">-r，逆序排序</a>
+          <ol>
+            <li><a href="#-k指定按照某列进行排序">-k，指定按照某列进行排序</a></li>
+          </ol>
+        </li>
+        <li><a href="#-n按照数值大小排序">-n，按照数值大小排序</a></li>
+        <li><a href="#-t指定字段分隔符">-t，指定字段分隔符</a></li>
+        <li><a href="#练习组合命令的使用">练习，组合命令的使用</a></li>
+        <li><a href="#-o把结果输出到指定文件">-o,把结果输出到指定文件</a></li>
+        <li><a href="#-u-去除重复行---k-mn消除指定域的重复行">-u 去除重复行 | -k M,N消除指定域的重复行</a></li>
+        <li><a href="#-k-的高级用法-k1235">-k 的高级用法-k1.2,3.5</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80-sort/">
+            
+            <img src="/img/linux/linux%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4/index1.jpg" loading="lazy" alt="Featured image of post linux常用命令(一) —— sort" />
+            
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/linux/" >
+            linux
+        </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80-sort/">linux常用命令(一) —— sort</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            本文详解sort命令的常用方法
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2024-11-29</time>
+        </div>
+        
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2024-12-06
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 3112 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="介绍">介绍
+</h2><h3 id="作用">作用
+</h3><p>Linux sort 命令用于<strong>将文本文件内容加以排序。</strong></p>
+<p>sort 可针对文本文件的内容，<strong>以行为单位来排序</strong>。</p>
+<p>注意</p>
+<blockquote>
+<p>1、排序时，<strong>默认是按每行/每个域的首字符排序，数字的优先级要大于字符的优先级</strong></p>
+<p>2、不指定升序还是降序时，<strong>默认是升序</strong></p>
+</blockquote>
+<h3 id="语法">语法
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort <span class="o">[</span>-bcdfimMnr<span class="o">][</span>-o&lt;输出文件&gt;<span class="o">][</span>-t&lt;分隔字符&gt;<span class="o">][</span>+&lt;起始栏位&gt;-&lt;结束栏位&gt;<span class="o">][</span>--help<span class="o">][</span>--verison<span class="o">][</span>文件<span class="o">][</span>-k field1<span class="o">[</span>,field2<span class="o">]]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="参数">参数
+</h3><blockquote>
+<ul>
+<li>-b 忽略每行前面开始出的空格字符。</li>
+<li>-c 检查文件是否已经按照顺序排序。</li>
+<li>-d 排序时，处理英文字母、数字及空格字符外，忽略其他的字符。</li>
+<li>-f 排序时，将小写字母视为大写字母。</li>
+<li>-i 排序时，除了040至176之间的ASCII字符外，忽略其他的字符。</li>
+<li>-m 将几个排序好的文件进行合并。</li>
+<li>-M 将前面3个字母依照月份的缩写进行排序。</li>
+<li><strong>-n 依照数值的大小排序。</strong></li>
+<li><strong>-u 意味着是唯一的(unique)，输出的结果是去完重了的。</strong></li>
+<li><strong>-o&lt;输出文件&gt; 将排序后的结果存入指定的文件。</strong></li>
+<li><strong>-r 以相反的顺序来排序。</strong></li>
+<li><strong>-t&lt;分隔字符&gt; 指定排序时所用的栏位分隔字符。</strong></li>
+<li>+&lt;起始栏位&gt;-&lt;结束栏位&gt; 以指定的栏位来排序，范围由起始栏位到结束栏位的前一栏位。</li>
+<li>&ndash;help 显示帮助。</li>
+<li>&ndash;version 显示版本信息。</li>
+<li><strong>[-k field1[,field2]] 按指定的列进行排序。</strong></li>
+</ul>
+</blockquote>
+<h4 id="重点掌握">重点掌握
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">-t -n -o -u - k,尤其是-k。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="实例">实例
+</h2><h3 id="-r逆序排序">-r，逆序排序
+</h3><p><strong>数据准备</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> cat salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>实验</strong></p>
+<p>如下所示，单独使用sort命令对文件内容进行排序，<strong>默认情况按照第一列字段内容的首字母进行升序排序</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用-r选项可按照逆序排序，但排序依据仍旧默认是第一列字段内容的首字母</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> sort -r salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="-k指定按照某列进行排序">-k，指定按照某列进行排序
+</h4><p>我们先使用salary.txt文本内容进行实验，输入以下命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -k <span class="m">2</span> salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>观察输出结果可以发现，目前的排序结果是<strong>按照第二列字段的内容进行升序排序</strong>的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>但<strong>这个结果其实只是一个巧合</strong>，为什么这么说呢？我们看接下来的实验</p>
+<h3 id="-n按照数值大小排序">-n，按照数值大小排序
+</h3><p><strong>数据准备</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> cat nums.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tom <span class="m">10</span>
+</span></span><span class="line"><span class="cl">su <span class="m">15</span>
+</span></span><span class="line"><span class="cl">john <span class="m">2</span>
+</span></span><span class="line"><span class="cl">han <span class="m">20</span>
+</span></span><span class="line"><span class="cl">bell <span class="m">25</span>
+</span></span><span class="line"><span class="cl">jom <span class="m">7</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们看使用 nums.txt 文件内容的第二列进行排序的结果</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -k2 nums.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>观察实验结果，我们看到</p>
+<blockquote>
+<ul>
+<li>我们<strong>期望的是能够按照 nums.txt 的第二列内容进行升序排序</strong></li>
+<li>但<strong>实际情况是，出现了数字10排列在数字2之前的结果</strong></li>
+</ul>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tom <span class="m">10</span>
+</span></span><span class="line"><span class="cl">su <span class="m">15</span>
+</span></span><span class="line"><span class="cl">john <span class="m">2</span>
+</span></span><span class="line"><span class="cl">han <span class="m">20</span>
+</span></span><span class="line"><span class="cl">bell <span class="m">25</span>
+</span></span><span class="line"><span class="cl">jom <span class="m">7</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>出现这个结果的原因也很简单，因为默认情况下，sort命令是将文本按照字符串进行排序的，举个例子，上述数字“10”和数字“2”，</p>
+<blockquote>
+<ul>
+<li>它直接将这两个数字按照字符串处理</li>
+<li>于是<strong>字符串“10”的第一个字符是“1”</strong>，而<strong>字符串“2”的第一个字符是2</strong></li>
+<li><strong>字符“1”比字符“2”小</strong>，因为sort只按照首字符进行排序，因此最后的结果就变成了“10”比“2”小</li>
+</ul>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"> sort -k2 -n nums.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述命令的意思是，<strong>让sort将第二列内容视为数值，并以此为依据进行升序排序</strong>，观察实验结果这次是符合预期的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">john <span class="m">2</span>
+</span></span><span class="line"><span class="cl">jom <span class="m">7</span>
+</span></span><span class="line"><span class="cl">tom <span class="m">10</span>
+</span></span><span class="line"><span class="cl">su <span class="m">15</span>
+</span></span><span class="line"><span class="cl">han <span class="m">20</span>
+</span></span><span class="line"><span class="cl">bell <span class="m">25</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同样的，我们也可以将其按照降序排序，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> sort -k2 -n -r nums.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bell <span class="m">25</span>
+</span></span><span class="line"><span class="cl">han <span class="m">20</span>
+</span></span><span class="line"><span class="cl">su <span class="m">15</span>
+</span></span><span class="line"><span class="cl">tom <span class="m">10</span>
+</span></span><span class="line"><span class="cl">jom <span class="m">7</span>
+</span></span><span class="line"><span class="cl">john <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="-t指定字段分隔符">-t，指定字段分隔符
+</h3><p>该选项的作用是指定字段分隔符</p>
+<p><strong>数据准备</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat data.csv
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">name,age,city
+</span></span><span class="line"><span class="cl">Alice,30,New York
+</span></span><span class="line"><span class="cl">Bob,25,Los Angeles
+</span></span><span class="line"><span class="cl">Charlie,35,Chicago
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>实验</strong></p>
+<p>我们首先不指定分隔符，想让内容按照第二列数据，也就是按照年龄进行升序排序，查看结果</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -k2 -n  data.csv
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到，下述的输出结果也是不符合我们预期的，这又是为什么呢？</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Alice,30,New York
+</span></span><span class="line"><span class="cl">Bob,25,Los Angeles
+</span></span><span class="line"><span class="cl">Charlie,35,Chicago
+</span></span><span class="line"><span class="cl">name,age,city
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>造成这个结果的原因是，</p>
+<blockquote>
+<ul>
+<li>当我们想<strong>使用-k选项找到第二列</strong>，它<strong>首先需要知道文本是按照什么分割符划分第一列第二列</strong></li>
+<li>我<strong>们文件内容的每一行的每一列都是按照逗号进行分割的，sort命令不知道这一点</strong></li>
+<li>默认情况下，<strong>sort默认使用空格或者制表符作为分隔符</strong>，因此它此时找到的第二列是一个空列，也就是每一行的末尾</li>
+</ul>
+</blockquote>
+<p>因此，这就是-t选项的作用，<strong>让sort知道我们的文本是按照什么分割符进行划分的，好让-k选项真正生效</strong></p>
+<p>重新输入命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -t , -k2n data.csv
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">name,age,city
+</span></span><span class="line"><span class="cl">Bob,25,Los Angeles
+</span></span><span class="line"><span class="cl">Alice,30,New York
+</span></span><span class="line"><span class="cl">Charlie,35,Chicago
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到，这次的输出结果是符合预期的</p>
+<h3 id="练习组合命令的使用">练习，组合命令的使用
+</h3><p>到这里，我们先写一道题，熟悉一下上述学过的命令</p>
+<blockquote>
+<p>题目：在salary中，<strong>按薪水进行降序排列，薪资相同时，按公司人数升序排列</strong>。</p>
+</blockquote>
+<p>首先回顾一下我们的salary.txt文本内容，如下，第二列数据表示公司人数，第三列数据表示公司薪水</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们直接给出答案，然后进行分析</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -n -k3r -k2 salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出结果</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首先说明，这个输出结果是符合预期的，那么为什么要这么写</p>
+<p>在此需要指出</p>
+<blockquote>
+<ul>
+<li><strong>-n是全局参数</strong>，所有指定的域（列）都有效（按数值排序）</li>
+<li>3r中的紧跟这数字的<strong>r是局部参数</strong>，<strong>仅对-k 3r中r前面的数字所对应的第3个域（列）有效</strong></li>
+<li>后面的 <strong>-k 2 没有指定降序，那么默认第2个域（列）就是升序排列的。</strong></li>
+</ul>
+</blockquote>
+<h3 id="-o把结果输出到指定文件">-o,把结果输出到指定文件
+</h3><blockquote>
+<p><strong>在sort排序中，如果用 &gt; 重定向来把结果输出到源文件，源文件会被置为空。</strong></p>
+<p>此时，-o的作用就凸显出来了。</p>
+</blockquote>
+<p>我们先<strong>备份一下数据进行实验</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>base<span class="o">)</span> jl@jin-X299X-AORUS-MASTER:~/test$ cp salary.txt s.txt
+</span></span><span class="line"><span class="cl"><span class="o">(</span>base<span class="o">)</span> jl@jin-X299X-AORUS-MASTER:~/test$ cat s.txt
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输入以下命令，我们期望的结果是，让文件按照第二列进行排序，并将排序的结果保存起来</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> sort -k2n s.txt &gt; s.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>但现实情况是，<strong>此时的s.txt文件被置空了，也就是说，如果要把排序的结果回写到源文件，需要用-o参数，不能用重定向。</strong></p>
+<p><strong>如果需要保存排序的结果，正确的命令应该是</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -k2n s.txt -o s.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="-u-去除重复行---k-mn消除指定域的重复行">-u 去除重复行 | -k M,N消除指定域的重复行
+</h3><p>再次回顾我们的salary.txt文件内容，我们看到，文本中有三条sohu相关的行，<strong>我们现在的需求是，我们想去除重复的行</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首先尝试使用下述命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -u salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实验失败</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果我们显示指定列呢？也就是这样</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> sort -u -k1  salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>还是失败！为什么呢？</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>这是因为，sort排序的时候，****-u不配合其他任何参数**时，只有*<em>完全相同的重复行*<em>才会被消除。</em></em></p>
+</blockquote>
+<p>另外还需要给出一个知识点，关于**-k选项，其实是有两个参数的**，这个两个参数<strong>指定了一个范围</strong></p>
+<blockquote>
+<p>-K M,N</p>
+<ul>
+<li>
+<p>M的意思是，从哪一列开始的第一个字符作为比较的依据；N表示截止到哪一列的最后一个字符比较结束。</p>
+</li>
+<li>
+<p>M,N是一个(域的)范围，如果这个M,N结合-u使用。那么-u的比较范围就是第M列的第一个字符到第N列最后一个字符之间的这段内容。</p>
+</li>
+<li>
+<p>如果数字N被省略，那么-u比较的范围就是从M域开始，一直到每行的最后一个域的最后一个字符。</p>
+</li>
+</ul>
+</blockquote>
+<p>因此，正确的命令应该如下，这条命令是说，<strong>从第一列的第一个字符开始，到第一列的最后一个字符</strong>进行检查，如果发现重复就去重</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -u -k 1,1 salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="-k-的高级用法-k1235">-k 的高级用法-k1.2,3.5
+</h3><blockquote>
+<p>通过上一案例的学习，对-k M,N有了一定了解，接下来的内容相对会比较容易理解一些。</p>
+</blockquote>
+<blockquote>
+<p>理论知识点：</p>
+<p>如果抛开M,N之间的逗号，单独说这个逗点</p>
+<ul>
+<li><strong>-k 1.2 表示第1个列的第二个字符</strong></li>
+<li><strong>-k 2.3 表示从第2个列的第三个字符。</strong></li>
+</ul>
+</blockquote>
+<p>案例：<strong>仅仅</strong>按工资表中<strong>第一列的第二个字符升序排列</strong></p>
+<p>错误示范</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -k 1.2  salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正确示范</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sort -k 1.2,1.2  salary.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">baidu <span class="m">100</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">google <span class="m">110</span> <span class="m">5000</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">100</span> <span class="m">4500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">1500</span>
+</span></span><span class="line"><span class="cl">sohu <span class="m">30</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">guge <span class="m">50</span> <span class="m">3000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解析</p>
+<blockquote>
+<ul>
+<li>-k1.2,1.2  仅仅且只按照第一个域的第二个字母进行排序，不会再按其他字符进行排序。</li>
+<li>-k1.2 先按照第一个域的第二个字母进行排序，第二个字母如果一样，再按照第二个字母后面的字母进行排序，依次类推，直到行尾最后一个字符。也就是说：google 和 sohu的第二个字母都是o,就开始看第三个字母，显然第三个字母h应该排在o的前面。</li>
+</ul>
+</blockquote>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    
+</footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"lang":"zh-CN","locale":{"admin":"你好","placeholder":null,"sofa":"还没有人评论哦！快来抢沙发吧~"},"placeholder":"欢迎留下宝贵的评论！","requiredMeta":["name","email","url"],"serverURL":"https://blogcomment-iqp14djt5-jl-skys-projects.vercel.app/","visitor":false});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy;
+        
+        2024 -
+        
+        2025 JL-sky
+    </section>
+
+    
+    <section class="running-time">
+        网站已运行
+        <span id="runningdays" class="running-days"></span>
+    </section>
+
+    
+    <section class="totalcount">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        发表了18篇文章 ·
+        总计
+        125,951字
+        
+    </section>
+
+    
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+        </main>
+    </div>
+    <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.dde1bc60c191a36f391af9ea35dd08be3c74bca8ca0cd8ff6a663c09a0256be0.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    let s1 = '2024-11-24'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+<div id="particles-js"></div>
+
+<script src=http://localhost:1313/background/particles.min.js></script>
+<script>
+    particlesJS.load('particles-js', resources.Get("background/package.json").Permalink, function () {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+
+<style>
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+</style>
+</body>
+
+</html>

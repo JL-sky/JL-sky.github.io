@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文介绍了PCB的相关内容以及如何模拟pthread_create函数创建线程并执行之">
+<title>《操作系统真象还原》第九章（一） —— 在内核空间中实现线程</title>
+
+<link rel='canonical' href='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%B8%80-%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B/'>
+
+<link rel="stylesheet" href="/scss/style.min.c2172b128ab8744b3f98599d792c6144c766b07c79ba00c88ff5c11861a33247.css"><meta property='og:title' content="《操作系统真象还原》第九章（一） —— 在内核空间中实现线程">
+<meta property='og:description' content="本文介绍了PCB的相关内容以及如何模拟pthread_create函数创建线程并执行之">
+<meta property='og:url' content='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%B8%80-%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B/'>
+<meta property='og:site_name' content='你好'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-21T23:11:48&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg' />
+<meta name="twitter:title" content="《操作系统真象还原》第九章（一） —— 在内核空间中实现线程">
+<meta name="twitter:description" content="本文介绍了PCB的相关内容以及如何模拟pthread_create函数创建线程并执行之"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg' />
+  
+
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            
+            <a href="https://jl-sky.github.io/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu16686392332003896281.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">🤔</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">你好</a></h1>
+            <h2 class="site-description">原来是你啊</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/JL-sky' target="_blank"  title="GitHub"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="438.536px" height="438.536px" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 438.536 438.536;"
+	 xml:space="preserve">
+<g>
+	<g>
+		<path d="M158.173,352.599c-3.049,0.568-4.381,1.999-3.999,4.281c0.38,2.283,2.093,3.046,5.138,2.283
+			c3.049-0.76,4.38-2.095,3.997-3.997C162.931,353.074,161.218,352.216,158.173,352.599z"/>
+		<path d="M141.898,354.885c-3.046,0-4.568,1.041-4.568,3.139c0,2.474,1.619,3.518,4.853,3.138c3.046,0,4.57-1.047,4.57-3.138
+			C146.753,355.553,145.134,354.502,141.898,354.885z"/>
+		<path d="M119.629,354.022c-0.76,2.095,0.478,3.519,3.711,4.284c2.855,1.137,4.664,0.568,5.424-1.714
+			c0.572-2.091-0.666-3.61-3.711-4.568C122.197,351.265,120.39,351.922,119.629,354.022z"/>
+		<path d="M414.41,24.123C398.326,8.042,378.964,0,356.309,0H82.225C59.577,0,40.208,8.042,24.123,24.123
+			C8.042,40.207,0,59.576,0,82.225v274.088c0,22.65,8.042,42.017,24.123,58.098c16.084,16.084,35.454,24.126,58.102,24.126h63.953
+			c4.184,0,7.327-0.144,9.42-0.424c2.092-0.288,4.184-1.526,6.279-3.717c2.096-2.187,3.14-5.376,3.14-9.562
+			c0-0.568-0.05-7.046-0.144-19.417c-0.097-12.375-0.144-22.176-0.144-29.41l-6.567,1.143c-4.187,0.76-9.469,1.095-15.846,0.999
+			c-6.374-0.096-12.99-0.76-19.841-1.998c-6.855-1.239-13.229-4.093-19.13-8.562c-5.898-4.477-10.085-10.328-12.56-17.559
+			l-2.856-6.571c-1.903-4.373-4.899-9.229-8.992-14.554c-4.093-5.332-8.232-8.949-12.419-10.852l-1.999-1.428
+			c-1.331-0.951-2.568-2.098-3.711-3.429c-1.141-1.335-1.997-2.669-2.568-3.997c-0.571-1.335-0.097-2.43,1.427-3.289
+			c1.524-0.855,4.281-1.279,8.28-1.279l5.708,0.855c3.808,0.76,8.516,3.042,14.134,6.851c5.614,3.806,10.229,8.754,13.846,14.843
+			c4.38,7.806,9.657,13.75,15.846,17.843c6.184,4.097,12.419,6.143,18.699,6.143s11.704-0.476,16.274-1.424
+			c4.565-0.954,8.848-2.385,12.847-4.288c1.713-12.751,6.377-22.559,13.988-29.41c-10.848-1.143-20.602-2.854-29.265-5.14
+			c-8.658-2.286-17.605-5.995-26.835-11.136c-9.234-5.14-16.894-11.512-22.985-19.13c-6.09-7.618-11.088-17.61-14.987-29.978
+			c-3.901-12.375-5.852-26.652-5.852-42.829c0-23.029,7.521-42.637,22.557-58.814c-7.044-17.32-6.379-36.732,1.997-58.242
+			c5.52-1.714,13.706-0.428,24.554,3.855c10.85,4.286,18.794,7.951,23.84,10.992c5.046,3.042,9.089,5.614,12.135,7.71
+			c17.705-4.949,35.976-7.423,54.818-7.423c18.841,0,37.115,2.474,54.821,7.423l10.849-6.852c7.426-4.57,16.18-8.757,26.269-12.562
+			c10.088-3.806,17.795-4.854,23.127-3.14c8.562,21.51,9.328,40.922,2.279,58.241c15.036,16.179,22.559,35.786,22.559,58.815
+			c0,16.18-1.951,30.505-5.852,42.969c-3.898,12.467-8.939,22.463-15.13,29.981c-6.184,7.519-13.894,13.843-23.124,18.986
+			c-9.232,5.137-18.178,8.853-26.84,11.132c-8.661,2.286-18.414,4.004-29.263,5.147c9.891,8.562,14.839,22.072,14.839,40.538v68.238
+			c0,3.237,0.472,5.852,1.424,7.851c0.958,1.998,2.478,3.374,4.571,4.141c2.102,0.76,3.949,1.235,5.571,1.424
+			c1.622,0.191,3.949,0.287,6.995,0.287h63.953c22.648,0,42.018-8.042,58.095-24.126c16.084-16.084,24.126-35.454,24.126-58.102
+			V82.225C438.533,59.576,430.491,40.204,414.41,24.123z"/>
+		<path d="M86.793,319.195c-1.331,0.948-1.141,2.471,0.572,4.565c1.906,1.902,3.427,2.189,4.57,0.855
+			c1.331-0.948,1.141-2.471-0.575-4.569C89.458,318.336,87.936,318.049,86.793,319.195z"/>
+		<path d="M77.374,312.057c-0.57,1.335,0.096,2.478,1.999,3.426c1.521,0.955,2.762,0.767,3.711-0.568
+			c0.57-1.335-0.096-2.478-1.999-3.433C79.182,310.91,77.945,311.102,77.374,312.057z"/>
+		<path d="M95.646,330.331c-1.715,0.948-1.715,2.666,0,5.137c1.713,2.478,3.328,3.142,4.853,1.998c1.714-1.334,1.714-3.142,0-5.427
+			C98.978,329.571,97.359,328.993,95.646,330.331z"/>
+		<path d="M105.641,343.174c-1.714,1.526-1.336,3.327,1.142,5.428c2.281,2.279,4.185,2.566,5.708,0.849
+			c1.524-1.519,1.143-3.326-1.142-5.42C109.068,341.751,107.164,341.463,105.641,343.174z"/>
+	</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E6%88%91%E7%9A%84/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>我的</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                <li id="i18n-switch">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                    <select name="language" title="language"
+                        onchange="window.location.href = this.selectedOptions[0].value">
+                        
+                        <option value="http://localhost:1313/en/" >English</option>
+                        
+                        <option value="http://localhost:1313/" selected>简体中文</option>
+                        
+                        <option value="http://localhost:1313/ar/" >عربي</option>
+                        
+                    </select>
+                </li>
+                
+                
+
+                
+                <li id="dark-mode-toggle">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828a4 4 0 1 0 -5.656 -5.656a4 4 0 0 0 5.656 5.656z" /><path d="M6.343 17.657l-1.414 1.414" /><path d="M6.343 6.343l-1.414 -1.414" /><path d="M17.657 6.343l1.414 -1.414" /><path d="M17.657 17.657l1.414 1.414" /><path d="M4 12h-2" /><path d="M12 4v-2" /><path d="M20 12h2" /><path d="M12 20v2" /></svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /><path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 11h2m-1 -1v2" /></svg>
+                    <span>暗色模式</span>
+                </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#章节任务介绍">章节任务介绍</a>
+      <ol>
+        <li><a href="#任务简介">任务简介</a></li>
+        <li><a href="#任务目标">任务目标</a></li>
+      </ol>
+    </li>
+    <li><a href="#pcb简介">PCB简介</a></li>
+    <li><a href="#在内核空间中创建并运行线程">在内核空间中创建并运行线程</a>
+      <ol>
+        <li><a href="#代码目录结构">代码目录结构</a></li>
+        <li><a href="#数据结构定义">数据结构定义</a></li>
+        <li><a href="#代码讲解">代码讲解</a>
+          <ol>
+            <li><a href="#代码逻辑">代码逻辑</a></li>
+            <li><a href="#初始化pcb">初始化PCB</a></li>
+            <li><a href="#初始化线程栈运行信息">初始化线程栈运行信息</a></li>
+            <li><a href="#创建并运行线程">创建并运行线程</a></li>
+          </ol>
+        </li>
+        <li><a href="#完整代码">完整代码</a></li>
+        <li><a href="#编译运行">编译运行</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%B8%80-%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B/">
+            
+            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第九章（一） —— 在内核空间中实现线程" />
+            
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" >
+            操作系统真象还原
+        </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%B8%80-%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B/">《操作系统真象还原》第九章（一） —— 在内核空间中实现线程</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            本文介绍了PCB的相关内容以及如何模拟pthread_create函数创建线程并执行之
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2024-12-21</time>
+        </div>
+        
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2024-12-21
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 4314 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>本章节所有代码托管在<a class="link" href="https://github.com/JL-sky/miniOS_32"  target="_blank" rel="noopener"
+    >miniOS_32</a></p>
+<h2 id="章节任务介绍">章节任务介绍
+</h2><h3 id="任务简介">任务简介
+</h3><p><a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AB%E7%AB%A0%E4%BA%8C-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"  target="_blank" rel="noopener"
+    >上一节</a>，我们初步完成了内核的内存管理部分的内容</p>
+<p>本节我们将正式开始操作系统进程管理的相关内容</p>
+<p>本节的主要任务有：</p>
+<blockquote>
+<ol>
+<li>创建并初始化PCB</li>
+<li>模拟pthread_create函数创建线程并执行线程函数</li>
+</ol>
+</blockquote>
+<h3 id="任务目标">任务目标
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="o">*</span> <span class="nf">thread_work</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">args</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="o">=</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">args</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;args is %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">str</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">pthread_t</span> <span class="n">tid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tid</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="n">thread_work</span><span class="p">,</span><span class="s">&#34;pthread_create</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pthread_join</span><span class="p">(</span><span class="n">tid</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本节我们将实现一个类似于<code>pthread_create</code>的函数，用于创建一个线程并执行传入的执行函数，最终实现的调用代码如下所示</p>
+<p><code>/kernel/main.c</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;print.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;init.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;thread.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">void</span> <span class="nf">thread_work</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">put_str</span><span class="p">(</span><span class="s">&#34;I am kernel</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">init_all</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">thread_start</span><span class="p">(</span><span class="s">&#34;thread_work&#34;</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="n">thread_work</span><span class="p">,</span> <span class="s">&#34;pthread_create</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 线程执行函数 */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">thread_work</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">para</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">arg</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">--</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">put_str</span><span class="p">(</span><span class="n">para</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="pcb简介">PCB简介
+</h2><blockquote>
+<p>如同<a class="link" href="https://jl-sky.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AB%E7%AB%A0%E4%BA%8C-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"  target="_blank" rel="noopener"
+    >上一节</a>中的位图，<strong>位图是管理内存的数据结构，对于线程或者进程，也需要有一个数据结构对其进行管理，这个数据结构就是PCB</strong>。</p>
+<p><strong>PCB（Process Control Block，进程控制块）<strong>是</strong>操作系统内部用于存储进程信息的数据结构</strong>。</p>
+<p><strong>操作系统通过PCB来管理和调度进程。</strong></p>
+</blockquote>
+<p>PCB 的<strong>生命周期</strong>：</p>
+<blockquote>
+<ol>
+<li><strong>进程创建时</strong>：每当操作系统创建一个新的进程时，系统会为该进程分配一个PCB，初始化进程的各种信息；</li>
+<li><strong>进程执行时</strong>：进程在运行时，操作系统通过 PCB 来管理和调度进程。每当进程状态发生变化（如从就绪变为运行，或从运行变为阻塞），操作系统会更新 PCB；</li>
+<li><strong>进程终止时</strong>：当进程执行完毕或被终止时，操作系统会回收该进程的 PCB，并释放相关资源。</li>
+</ol>
+</blockquote>
+<p>PCB的<strong>内容</strong>：</p>
+<blockquote>
+<p>PCB中包含了<strong>进程执行所需的各种信息，如进程状态、寄存器值、内存使用情况、I/O 状态</strong>等。</p>
+</blockquote>
+<p>PCB 的主要<strong>功能</strong>：</p>
+<blockquote>
+<ol>
+<li><strong>进程管理</strong>：每个进程都有一个唯一的 PCB，操作系统通过它来追踪进程的状态、资源等信息。</li>
+<li><strong>上下文切换</strong>：当操作系统切换执行进程时，它会保存当前进程的 PCB，并加载下一个进程的 PCB，从而实现进程的上下文切换。</li>
+<li><strong>进程调度</strong>：操作系统通过PCB来选择下一个运行的进程。调度器根据进程的状态、优先级等信息做出决策。</li>
+</ol>
+</blockquote>
+<p>以下是PCB的示意结构图</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734790765.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241221221924863"
+	
+	
+></p>
+<h2 id="在内核空间中创建并运行线程">在内核空间中创建并运行线程
+</h2><h3 id="代码目录结构">代码目录结构
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── bin
+</span></span><span class="line"><span class="cl">│   ├── bitmap.o
+</span></span><span class="line"><span class="cl">│   ├── debug.o
+</span></span><span class="line"><span class="cl">│   ├── init.o
+</span></span><span class="line"><span class="cl">│   ├── interrupt.o
+</span></span><span class="line"><span class="cl">│   ├── kernel.bin
+</span></span><span class="line"><span class="cl">│   ├── kernel.o
+</span></span><span class="line"><span class="cl">│   ├── loader
+</span></span><span class="line"><span class="cl">│   ├── main.o
+</span></span><span class="line"><span class="cl">│   ├── mbr
+</span></span><span class="line"><span class="cl">│   ├── memory.o
+</span></span><span class="line"><span class="cl">│   ├── print.o
+</span></span><span class="line"><span class="cl">│   ├── string.o
+</span></span><span class="line"><span class="cl">│   └── thread.o
+</span></span><span class="line"><span class="cl">├── boot
+</span></span><span class="line"><span class="cl">│   ├── include
+</span></span><span class="line"><span class="cl">│   │   └── boot.inc
+</span></span><span class="line"><span class="cl">│   ├── loader.S
+</span></span><span class="line"><span class="cl">│   └── mbr.S
+</span></span><span class="line"><span class="cl">├── kernel
+</span></span><span class="line"><span class="cl">│   ├── debug.c
+</span></span><span class="line"><span class="cl">│   ├── debug.h
+</span></span><span class="line"><span class="cl">│   ├── global.h
+</span></span><span class="line"><span class="cl">│   ├── init.c
+</span></span><span class="line"><span class="cl">│   ├── init.h
+</span></span><span class="line"><span class="cl">│   ├── interrupt.c
+</span></span><span class="line"><span class="cl">│   ├── interrupt.h
+</span></span><span class="line"><span class="cl">│   ├── kernel.S
+</span></span><span class="line"><span class="cl">│   ├── main.c
+</span></span><span class="line"><span class="cl">│   ├── memory.c
+</span></span><span class="line"><span class="cl">│   └── memory.h
+</span></span><span class="line"><span class="cl">├── lib
+</span></span><span class="line"><span class="cl">│   ├── kernel
+</span></span><span class="line"><span class="cl">│   │   ├── bitmap.c
+</span></span><span class="line"><span class="cl">│   │   ├── bitmap.h
+</span></span><span class="line"><span class="cl">│   │   ├── io.h
+</span></span><span class="line"><span class="cl">│   │   ├── print.h
+</span></span><span class="line"><span class="cl">│   │   └── print.S
+</span></span><span class="line"><span class="cl">│   ├── stdint.h
+</span></span><span class="line"><span class="cl">│   ├── string.c
+</span></span><span class="line"><span class="cl">│   └── string.h
+</span></span><span class="line"><span class="cl">├── Makefile
+</span></span><span class="line"><span class="cl">├── start.sh
+</span></span><span class="line"><span class="cl">└── thread
+</span></span><span class="line"><span class="cl">    ├── thread.c
+</span></span><span class="line"><span class="cl">    └── thread.h
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="数据结构定义">数据结构定义
+</h3><p><code>/thread/thread.h</code></p>
+<p>定义进程或者线程的任务状态</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*定义进程或者线程的任务状态*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="n">task_status</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_RUNNGING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_READY</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_BLOCKED</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_WAITING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_HANGING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_DIED</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>定义线程栈，存储线程执行时的运行信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*定义线程栈，存储线程执行时的运行信息*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">thread_stack</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ebp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ebx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">edi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">esi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 一个函数指针，指向线程执行函数，目的是为了实现通用的线程函数调用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">eip</span><span class="p">)(</span><span class="n">thread_func</span> <span class="o">*</span><span class="n">func</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 以下三条是模仿call进入thread_start执行的栈内布局构建的，call进入就会压入参数与返回地址，因为我们是ret进入kernel_thread执行的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 要想让kernel_thread正常执行，就必须人为给它造返回地址，参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="n">unused_retaddr</span><span class="p">);</span> <span class="c1">// 一个栈结构占位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">thread_func</span> <span class="o">*</span><span class="n">function</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>定义PCB，PCB的信息庞大复杂，我们将来一点点对其进行填充，本节只需要以下信息即可</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*PCB结构体*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">task_struct</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程栈的栈顶指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="o">*</span><span class="n">self_kstack</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">enum</span> <span class="n">task_status</span> <span class="n">status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程的优先级
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint8_t</span> <span class="n">priority</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程函数名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 用于PCB结构体的边界标记
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">stack_magic</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="代码讲解">代码讲解
+</h3><h4 id="代码逻辑">代码逻辑
+</h4><blockquote>
+<ol>
+<li>向内存<strong>申请一页空间，分配给要创建的线程</strong></li>
+<li><strong>初始化</strong>该线程的<strong>PCB</strong></li>
+<li>通过PCB中的栈顶指针进一步<strong>初始化线程栈的运行信息</strong></li>
+<li><strong>正式运行线程执行函数</strong></li>
+</ol>
+</blockquote>
+<p>如下所示，<code>thread_start</code>就是我们最终要实现的用以模拟<code>pthread_create</code>的函数</p>
+<p>其包含了我们上述说的代码逻辑</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*根据线程栈的运行信息开始运行线程函数*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="nf">thread_start</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prio</span><span class="p">,</span> <span class="n">thread_func</span> <span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*1.分配一页空间给线程作为线程执行的栈空间*/</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="kr">thread</span> <span class="o">=</span> <span class="nf">get_kernel_pages</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*2.初始化PCB，PCB里存放了线程的基本信息以及线程栈的栈顶指针*/</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">init_thread</span><span class="p">(</span><span class="kr">thread</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">prio</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    3.根据线程栈的栈顶指针，初始化线程栈，也就是初始化线程的运行信息
+</span></span></span><span class="line"><span class="cl"><span class="cm">    比如线程要执行的函数，以及函数参数
+</span></span></span><span class="line"><span class="cl"><span class="cm">    */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">thread_create</span><span class="p">(</span><span class="kr">thread</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*4.上述准备好线程运行时的栈信息后，即可运行执行函数了*/</span>
+</span></span><span class="line"><span class="cl">    <span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;movl %0,%%esp;    \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%ebp;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%ebx;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%edi;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%esi;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                ret&#34;</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span> <span class="s">&#34;g&#34;</span><span class="p">(</span><span class="kr">thread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span> <span class="s">&#34;memory&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kr">thread</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>关于最后执行运行函数的内联汇编代码，主要与线程栈的栈空间布局有关，我们在最后初始化栈空间的运行信息之后进行详细说明</p>
+</blockquote>
+<h4 id="初始化pcb">初始化PCB
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*PCB结构体*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">task_struct</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程栈的栈顶指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="o">*</span><span class="n">self_kstack</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">enum</span> <span class="n">task_status</span> <span class="n">status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程的优先级
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint8_t</span> <span class="n">priority</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程函数名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 用于PCB结构体的边界标记
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">stack_magic</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>PCB的初始化也就是对上述结构体进行初始化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*初始化PCB*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">init_thread</span><span class="p">(</span><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">pthread</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prio</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">memset</span><span class="p">(</span><span class="n">pthread</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">pthread</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">status</span> <span class="o">=</span> <span class="n">TASK_RUNNGING</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    一个线程的栈空间分配一页空间，将PCB放置在栈底
+</span></span></span><span class="line"><span class="cl"><span class="cm">    pthread是申请的一页空间的起始地址，因此加上一页的大小，就是栈顶指针
+</span></span></span><span class="line"><span class="cl"><span class="cm">    */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="o">*</span><span class="p">)((</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">pthread</span> <span class="o">+</span> <span class="n">PG_SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*PCB的边界标记，防止栈顶指针覆盖掉PCB的内容*/</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">stack_magic</span> <span class="o">=</span> <span class="mh">0x19991030</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以下是创建的线程栈内存示意图</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734789307.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241221215506572"
+	
+	
+></p>
+<h4 id="初始化线程栈运行信息">初始化线程栈运行信息
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*根据PCB信息，初始化线程栈的运行信息*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">thread_create</span><span class="p">(</span><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">pthread</span><span class="p">,</span> <span class="n">thread_func</span> <span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*给线程栈空间的顶部预留出中断栈信息的空间*/</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="o">*</span><span class="p">)((</span><span class="kt">int</span><span class="p">)(</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">)</span> <span class="o">-</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">intr_stack</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*给线程栈空间的顶部预留出线程栈信息的空间*/</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="o">*</span><span class="p">)((</span><span class="kt">int</span><span class="p">)(</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">)</span> <span class="o">-</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">thread_stack</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 初始化线程栈，保存线程运行时需要的信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">thread_stack</span> <span class="o">*</span><span class="n">kthread_stack</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">thread_stack</span> <span class="o">*</span><span class="p">)</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程执行函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">eip</span> <span class="o">=</span> <span class="n">kernel_thread</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">function</span> <span class="o">=</span> <span class="n">function</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">func_args</span> <span class="o">=</span> <span class="n">func_args</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">ebp</span> <span class="o">=</span> <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">ebx</span> <span class="o">=</span> <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">edi</span> <span class="o">=</span> <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">esi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中线程执行函数如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">kernel_thread</span><span class="p">(</span><span class="n">thread_func</span> <span class="o">*</span><span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">function</span><span class="p">(</span><span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以下是初始化线程栈后的内存示意图</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734792417.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241221224657762"
+	
+	
+></p>
+<h4 id="创建并运行线程">创建并运行线程
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">    <span class="cm">/*4.上述准备好线程运行时的栈信息后，即可运行执行函数了*/</span>
+</span></span><span class="line"><span class="cl">    <span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;movl %0,%%esp;    \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%ebp;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%ebx;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%edi;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%esi;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                ret&#34;</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span> <span class="s">&#34;g&#34;</span><span class="p">(</span><span class="kr">thread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span> <span class="s">&#34;memory&#34;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如下所示，当线程栈初始化结束之后，栈顶指针首先弹出了寄存器映像</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nasm" data-lang="nasm"><span class="line"><span class="cl">                <span class="nf">pop</span> <span class="o">%%</span><span class="nb">ebp</span><span class="c1">;          \</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">pop</span> <span class="o">%%</span><span class="nb">ebx</span><span class="c1">;          \</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">pop</span> <span class="o">%%</span><span class="nb">edi</span><span class="c1">;          \</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">pop</span> <span class="o">%%</span><span class="nb">esi</span><span class="c1">;          \</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样栈顶指针就指向了通用执行函数<code>kernel_thread</code>，这样接下来只需要调用<code>kernel_thread</code>，就调用了用户的执行函数</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734792535.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241221224854911"
+	
+	
+></p>
+<p>于是接下来代码执行<code>ret</code>指令，<code>ret</code>指令会做两件事</p>
+<blockquote>
+<ul>
+<li>将当前栈顶指针的值弹出，然后赋值给指令寄存器EIP，这样就相当于调用了<code>kernel_thread</code></li>
+<li>由于弹出了栈顶指针的值，因此栈顶指针会回退</li>
+</ul>
+</blockquote>
+<p>最后的结果如下所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734793079.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241221225759674"
+	
+	
+></p>
+<p>于是接下来，根据c语言的函数调用约定，<code>kernel_thread</code>会取出占位的返回地址上边的两个参数，也就是执行函数的地址与执行函数的参数，然后调用执行函数运行</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734793259.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241221230059612"
+	
+	
+></p>
+<h3 id="完整代码">完整代码
+</h3><p><code>/thread/thread.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#ifndef __THREAD_THREAD_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define __THREAD_THREAD_H
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;stdint.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="cm">/*定义执行函数*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">void</span> <span class="nf">thread_func</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*定义进程或者线程的任务状态*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="n">task_status</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_RUNNGING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_READY</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_BLOCKED</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_WAITING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_HANGING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TASK_DIED</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*中断发生时调用中断处理程序的压栈情况*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">intr_stack</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">vec_no</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// pushad的压栈情况
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">edi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">esi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ebp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">esp_dummy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ebx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">edx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ecx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">eax</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 中断调用时处理器自动压栈的情况
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">gs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">fs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">es</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ds</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">err_code</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">eip</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">cs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">eflags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">esp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ss</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*定义线程栈，存储线程执行时的运行信息*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">thread_stack</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ebp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ebx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">edi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">esi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 一个函数指针，指向线程执行函数，目的是为了实现通用的线程函数调用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">eip</span><span class="p">)(</span><span class="n">thread_func</span> <span class="o">*</span><span class="n">func</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 以下三条是模仿call进入thread_start执行的栈内布局构建的，call进入就会压入参数与返回地址，因为我们是ret进入kernel_thread执行的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 要想让kernel_thread正常执行，就必须人为给它造返回地址，参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="n">unused_retaddr</span><span class="p">);</span> <span class="c1">// 一个栈结构占位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">thread_func</span> <span class="o">*</span><span class="n">function</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*PCB结构体*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">task_struct</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程栈的栈顶指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="o">*</span><span class="n">self_kstack</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">enum</span> <span class="n">task_status</span> <span class="n">status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程的优先级
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint8_t</span> <span class="n">priority</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程函数名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 用于PCB结构体的边界标记
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">stack_magic</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*初始化PCB*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">init_thread</span><span class="p">(</span><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">pthread</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prio</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*根据PCB信息，初始化线程栈的运行信息*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">thread_create</span><span class="p">(</span><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">pthread</span><span class="p">,</span> <span class="n">thread_func</span> <span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*根据线程栈的运行信息开始运行线程函数*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="nf">thread_start</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prio</span><span class="p">,</span> <span class="n">thread_func</span> <span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>/thread/thread.c</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;thread.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;stdint.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;string.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;global.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;memory.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define PG_SIZE 4096
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">kernel_thread</span><span class="p">(</span><span class="n">thread_func</span> <span class="o">*</span><span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">function</span><span class="p">(</span><span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*初始化PCB*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">init_thread</span><span class="p">(</span><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">pthread</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prio</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">memset</span><span class="p">(</span><span class="n">pthread</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">pthread</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">status</span> <span class="o">=</span> <span class="n">TASK_RUNNGING</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*一个线程的栈空间分配一页空间，将PCB放置在栈底*/</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="o">*</span><span class="p">)((</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">pthread</span> <span class="o">+</span> <span class="n">PG_SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">stack_magic</span> <span class="o">=</span> <span class="mh">0x19991030</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*根据PCB信息，初始化线程栈的运行信息*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">thread_create</span><span class="p">(</span><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">pthread</span><span class="p">,</span> <span class="n">thread_func</span> <span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*给线程栈空间的顶部预留出中断栈信息的空间*/</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="o">*</span><span class="p">)((</span><span class="kt">int</span><span class="p">)(</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">)</span> <span class="o">-</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">intr_stack</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*给线程栈空间的顶部预留出线程栈信息的空间*/</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="o">*</span><span class="p">)((</span><span class="kt">int</span><span class="p">)(</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">)</span> <span class="o">-</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">thread_stack</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 初始化线程栈，保存线程运行时需要的信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">thread_stack</span> <span class="o">*</span><span class="n">kthread_stack</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">thread_stack</span> <span class="o">*</span><span class="p">)</span><span class="n">pthread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 线程执行函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">eip</span> <span class="o">=</span> <span class="n">kernel_thread</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">function</span> <span class="o">=</span> <span class="n">function</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">func_args</span> <span class="o">=</span> <span class="n">func_args</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">ebp</span> <span class="o">=</span> <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">ebx</span> <span class="o">=</span> <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">edi</span> <span class="o">=</span> <span class="n">kthread_stack</span><span class="o">-&gt;</span><span class="n">esi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*根据线程栈的运行信息开始运行线程函数*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="nf">thread_start</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prio</span><span class="p">,</span> <span class="n">thread_func</span> <span class="n">function</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">func_args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*1.分配一页的空间给线程作为线程执行的栈空间*/</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="kr">thread</span> <span class="o">=</span> <span class="nf">get_kernel_pages</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*2.初始化PCB，PCB里存放了线程的基本信息以及线程栈的栈顶指针*/</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">init_thread</span><span class="p">(</span><span class="kr">thread</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">prio</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    3.根据线程栈的栈顶指针，初始化线程栈，也就是初始化线程的运行信息
+</span></span></span><span class="line"><span class="cl"><span class="cm">    比如线程要执行的函数，以及函数参数
+</span></span></span><span class="line"><span class="cl"><span class="cm">    */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">thread_create</span><span class="p">(</span><span class="kr">thread</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">func_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*4.上述准备好线程运行时的栈信息后，即可运行执行函数了*/</span>
+</span></span><span class="line"><span class="cl">    <span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;movl %0,%%esp;    \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%ebp;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%ebx;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%edi;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                pop %%esi;          \
+</span></span></span><span class="line"><span class="cl"><span class="s">                ret&#34;</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span> <span class="s">&#34;g&#34;</span><span class="p">(</span><span class="kr">thread</span><span class="o">-&gt;</span><span class="n">self_kstack</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                 <span class="o">:</span> <span class="s">&#34;memory&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kr">thread</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="编译运行">编译运行
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p bin
+</span></span><span class="line"><span class="cl"><span class="c1">#编译mbr</span>
+</span></span><span class="line"><span class="cl">nasm -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/mbr -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/include/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/mbr.S
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/mbr <span class="nv">of</span><span class="o">=</span>~/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">1</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#编译loader</span>
+</span></span><span class="line"><span class="cl">nasm -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/loader -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/include/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/boot/loader.S
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/loader <span class="nv">of</span><span class="o">=</span>~/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">4</span> <span class="nv">seek</span><span class="o">=</span><span class="m">2</span> <span class="nv">conv</span><span class="o">=</span>notrunc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#编译print函数</span>
+</span></span><span class="line"><span class="cl">nasm -f elf32 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/print.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/print.S
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译kernel</span>
+</span></span><span class="line"><span class="cl">nasm -f elf32 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/kernel.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/kernel.S
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#编译main文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/main.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/thread/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/main.c
+</span></span><span class="line"><span class="cl"><span class="c1">#编译interrupt文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/interrupt.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/interrupt.c
+</span></span><span class="line"><span class="cl"><span class="c1">#编译init文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/init.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/init.c
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译debug文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/debug.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/debug.c
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译string文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/string.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/string.c
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译bitmap文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/bitmap.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/bitmap.c
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译memory文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/memory.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/memory.c
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译thread文件</span>
+</span></span><span class="line"><span class="cl">gcc-4.4 -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/thread.o -c -fno-builtin -m32 -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/lib/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/kernel/ -I <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/thread/ <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/thread/thread.c
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#将main函数与print函数进行链接</span>
+</span></span><span class="line"><span class="cl">ld -m elf_i386 -Ttext 0xc0001500 -e main -o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/kernel.bin <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/main.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/thread.o  <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/print.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/init.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/interrupt.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/kernel.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/memory.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/bitmap.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/string.o <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/debug.o
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#将内核文件写入磁盘，loader程序会将其加载到内存运行</span>
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/bin/kernel.bin <span class="nv">of</span><span class="o">=</span>~/bochs/hd60M.img <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">200</span> <span class="nv">conv</span><span class="o">=</span>notrunc <span class="nv">seek</span><span class="o">=</span><span class="m">9</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#rm -rf bin/*</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行结果如下所示</p>
+<p><img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734791453.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20241221223053387"
+	
+	
+></p>
+<p>可以看到，最后如期打印了执行函数中的信息</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    
+</footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十一章 —— 创建用户进程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%BA%8C-%E9%94%AE%E7%9B%98%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（二） —— 键盘驱动程序的编写与输入系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%B8%80-%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E5%AE%9E%E7%8E%B0%E4%B8%8E%E8%BE%93%E5%87%BA%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（一） —— 同步机制之互斥锁实现与输出系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%BA%8C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BD%AE%E8%BD%AC%E8%B0%83%E5%BA%A6/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（二） —— 多线程轮转调度</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%85%AB%E7%AB%A0%E4%BA%8C-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734661126.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241220_1734661126.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第八章（二） —— 内存管理系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"lang":"zh-CN","locale":{"admin":"你好","placeholder":null,"sofa":"还没有人评论哦！快来抢沙发吧~"},"placeholder":"欢迎留下宝贵的评论！","requiredMeta":["name","email","url"],"serverURL":"https://blogcomment-iqp14djt5-jl-skys-projects.vercel.app/","visitor":false});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy;
+        
+        2024 -
+        
+        2025 JL-sky
+    </section>
+
+    
+    <section class="running-time">
+        网站已运行
+        <span id="runningdays" class="running-days"></span>
+    </section>
+
+    
+    <section class="totalcount">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        发表了18篇文章 ·
+        总计
+        125,951字
+        
+    </section>
+
+    
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+        </main>
+    </div>
+    <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.dde1bc60c191a36f391af9ea35dd08be3c74bca8ca0cd8ff6a663c09a0256be0.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    let s1 = '2024-11-24'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+<div id="particles-js"></div>
+
+<script src=http://localhost:1313/background/particles.min.js></script>
+<script>
+    particlesJS.load('particles-js', resources.Get("background/package.json").Permalink, function () {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+
+<style>
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+</style>
+</body>
+
+</html>

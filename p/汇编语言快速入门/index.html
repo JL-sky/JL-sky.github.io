@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本文详细介绍了Intel汇编语法的简单使用">
+<title>汇编语言快速入门</title>
+
+<link rel='canonical' href='http://localhost:1313/p/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/'>
+
+<link rel="stylesheet" href="/scss/style.min.c2172b128ab8744b3f98599d792c6144c766b07c79ba00c88ff5c11861a33247.css"><meta property='og:title' content="汇编语言快速入门">
+<meta property='og:description' content="本文详细介绍了Intel汇编语法的简单使用">
+<meta property='og:url' content='http://localhost:1313/p/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/'>
+<meta property='og:site_name' content='你好'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-12-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-11T21:48:52&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733924143.jpg' />
+<meta name="twitter:title" content="汇编语言快速入门">
+<meta name="twitter:description" content="本文详细介绍了Intel汇编语法的简单使用"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733924143.jpg' />
+  
+
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            
+            <a href="https://jl-sky.github.io/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu16686392332003896281.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">🤔</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">你好</a></h1>
+            <h2 class="site-description">原来是你啊</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/JL-sky' target="_blank"  title="GitHub"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="438.536px" height="438.536px" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 438.536 438.536;"
+	 xml:space="preserve">
+<g>
+	<g>
+		<path d="M158.173,352.599c-3.049,0.568-4.381,1.999-3.999,4.281c0.38,2.283,2.093,3.046,5.138,2.283
+			c3.049-0.76,4.38-2.095,3.997-3.997C162.931,353.074,161.218,352.216,158.173,352.599z"/>
+		<path d="M141.898,354.885c-3.046,0-4.568,1.041-4.568,3.139c0,2.474,1.619,3.518,4.853,3.138c3.046,0,4.57-1.047,4.57-3.138
+			C146.753,355.553,145.134,354.502,141.898,354.885z"/>
+		<path d="M119.629,354.022c-0.76,2.095,0.478,3.519,3.711,4.284c2.855,1.137,4.664,0.568,5.424-1.714
+			c0.572-2.091-0.666-3.61-3.711-4.568C122.197,351.265,120.39,351.922,119.629,354.022z"/>
+		<path d="M414.41,24.123C398.326,8.042,378.964,0,356.309,0H82.225C59.577,0,40.208,8.042,24.123,24.123
+			C8.042,40.207,0,59.576,0,82.225v274.088c0,22.65,8.042,42.017,24.123,58.098c16.084,16.084,35.454,24.126,58.102,24.126h63.953
+			c4.184,0,7.327-0.144,9.42-0.424c2.092-0.288,4.184-1.526,6.279-3.717c2.096-2.187,3.14-5.376,3.14-9.562
+			c0-0.568-0.05-7.046-0.144-19.417c-0.097-12.375-0.144-22.176-0.144-29.41l-6.567,1.143c-4.187,0.76-9.469,1.095-15.846,0.999
+			c-6.374-0.096-12.99-0.76-19.841-1.998c-6.855-1.239-13.229-4.093-19.13-8.562c-5.898-4.477-10.085-10.328-12.56-17.559
+			l-2.856-6.571c-1.903-4.373-4.899-9.229-8.992-14.554c-4.093-5.332-8.232-8.949-12.419-10.852l-1.999-1.428
+			c-1.331-0.951-2.568-2.098-3.711-3.429c-1.141-1.335-1.997-2.669-2.568-3.997c-0.571-1.335-0.097-2.43,1.427-3.289
+			c1.524-0.855,4.281-1.279,8.28-1.279l5.708,0.855c3.808,0.76,8.516,3.042,14.134,6.851c5.614,3.806,10.229,8.754,13.846,14.843
+			c4.38,7.806,9.657,13.75,15.846,17.843c6.184,4.097,12.419,6.143,18.699,6.143s11.704-0.476,16.274-1.424
+			c4.565-0.954,8.848-2.385,12.847-4.288c1.713-12.751,6.377-22.559,13.988-29.41c-10.848-1.143-20.602-2.854-29.265-5.14
+			c-8.658-2.286-17.605-5.995-26.835-11.136c-9.234-5.14-16.894-11.512-22.985-19.13c-6.09-7.618-11.088-17.61-14.987-29.978
+			c-3.901-12.375-5.852-26.652-5.852-42.829c0-23.029,7.521-42.637,22.557-58.814c-7.044-17.32-6.379-36.732,1.997-58.242
+			c5.52-1.714,13.706-0.428,24.554,3.855c10.85,4.286,18.794,7.951,23.84,10.992c5.046,3.042,9.089,5.614,12.135,7.71
+			c17.705-4.949,35.976-7.423,54.818-7.423c18.841,0,37.115,2.474,54.821,7.423l10.849-6.852c7.426-4.57,16.18-8.757,26.269-12.562
+			c10.088-3.806,17.795-4.854,23.127-3.14c8.562,21.51,9.328,40.922,2.279,58.241c15.036,16.179,22.559,35.786,22.559,58.815
+			c0,16.18-1.951,30.505-5.852,42.969c-3.898,12.467-8.939,22.463-15.13,29.981c-6.184,7.519-13.894,13.843-23.124,18.986
+			c-9.232,5.137-18.178,8.853-26.84,11.132c-8.661,2.286-18.414,4.004-29.263,5.147c9.891,8.562,14.839,22.072,14.839,40.538v68.238
+			c0,3.237,0.472,5.852,1.424,7.851c0.958,1.998,2.478,3.374,4.571,4.141c2.102,0.76,3.949,1.235,5.571,1.424
+			c1.622,0.191,3.949,0.287,6.995,0.287h63.953c22.648,0,42.018-8.042,58.095-24.126c16.084-16.084,24.126-35.454,24.126-58.102
+			V82.225C438.533,59.576,430.491,40.204,414.41,24.123z"/>
+		<path d="M86.793,319.195c-1.331,0.948-1.141,2.471,0.572,4.565c1.906,1.902,3.427,2.189,4.57,0.855
+			c1.331-0.948,1.141-2.471-0.575-4.569C89.458,318.336,87.936,318.049,86.793,319.195z"/>
+		<path d="M77.374,312.057c-0.57,1.335,0.096,2.478,1.999,3.426c1.521,0.955,2.762,0.767,3.711-0.568
+			c0.57-1.335-0.096-2.478-1.999-3.433C79.182,310.91,77.945,311.102,77.374,312.057z"/>
+		<path d="M95.646,330.331c-1.715,0.948-1.715,2.666,0,5.137c1.713,2.478,3.328,3.142,4.853,1.998c1.714-1.334,1.714-3.142,0-5.427
+			C98.978,329.571,97.359,328.993,95.646,330.331z"/>
+		<path d="M105.641,343.174c-1.714,1.526-1.336,3.327,1.142,5.428c2.281,2.279,4.185,2.566,5.708,0.849
+			c1.524-1.519,1.143-3.326-1.142-5.42C109.068,341.751,107.164,341.463,105.641,343.174z"/>
+	</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E6%88%91%E7%9A%84/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>我的</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                <li id="i18n-switch">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                    <select name="language" title="language"
+                        onchange="window.location.href = this.selectedOptions[0].value">
+                        
+                        <option value="http://localhost:1313/en/" >English</option>
+                        
+                        <option value="http://localhost:1313/" selected>简体中文</option>
+                        
+                        <option value="http://localhost:1313/ar/" >عربي</option>
+                        
+                    </select>
+                </li>
+                
+                
+
+                
+                <li id="dark-mode-toggle">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828a4 4 0 1 0 -5.656 -5.656a4 4 0 0 0 5.656 5.656z" /><path d="M6.343 17.657l-1.414 1.414" /><path d="M6.343 6.343l-1.414 -1.414" /><path d="M17.657 6.343l1.414 -1.414" /><path d="M17.657 17.657l1.414 1.414" /><path d="M4 12h-2" /><path d="M12 4v-2" /><path d="M20 12h2" /><path d="M12 20v2" /></svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /><path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 11h2m-1 -1v2" /></svg>
+                    <span>暗色模式</span>
+                </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#内容的定义">内容的定义</a>
+      <ol>
+        <li><a href="#数据段的定义">数据段的定义</a></li>
+        <li><a href="#数据的定义">数据的定义</a>
+          <ol>
+            <li><a href="#定义字节数据db">定义字节数据DB</a></li>
+            <li><a href="#定义字数据dw">定义字数据DW</a></li>
+            <li><a href="#定义双字数据dd">定义双字数据DD</a></li>
+            <li><a href="#定义八字节和十字节数据dq-dt">定义八字节和十字节数据DQ DT</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#数据的传送">数据的传送</a>
+      <ol>
+        <li><a href="#指令语句的格式">指令语句的格式</a></li>
+        <li><a href="#操作数的分类">操作数的分类</a></li>
+        <li><a href="#程序段的定义">程序段的定义</a></li>
+        <li><a href="#基本传送指令">基本传送指令</a></li>
+      </ol>
+    </li>
+    <li><a href="#堆栈">堆栈</a>
+      <ol>
+        <li><a href="#堆栈的定义">堆栈的定义</a></li>
+        <li><a href="#堆栈的使用方法">堆栈的使用方法</a></li>
+      </ol>
+    </li>
+    <li><a href="#常用操作数表达式">常用操作数表达式</a>
+      <ol>
+        <li><a href="#符号定义伪指令">符号定义伪指令</a></li>
+        <li><a href="#取段基址">取段基址</a></li>
+      </ol>
+    </li>
+    <li><a href="#算术运算">算术运算</a>
+      <ol>
+        <li><a href="#加法指令">加法指令</a></li>
+        <li><a href="#减法指令">减法指令</a></li>
+        <li><a href="#乘法指令和除法指令">乘法指令和除法指令</a></li>
+      </ol>
+    </li>
+    <li><a href="#循环">循环</a></li>
+    <li><a href="#逻辑运算">逻辑运算</a></li>
+    <li><a href="#中断调用">中断调用</a>
+      <ol>
+        <li><a href="#键盘输入单字符">键盘输入单字符</a></li>
+        <li><a href="#屏幕显示单字符">屏幕显示单字符</a></li>
+        <li><a href="#屏幕显示字符串">屏幕显示字符串</a></li>
+        <li><a href="#返回dos">返回DOS</a></li>
+      </ol>
+    </li>
+    <li><a href="#子程序的定义和调用">子程序的定义和调用</a>
+      <ol>
+        <li><a href="#定义子程序">定义子程序</a></li>
+        <li><a href="#调用子程序">调用子程序</a></li>
+      </ol>
+    </li>
+    <li><a href="#对接中的端口进行读写">对接中的端口进行读写</a></li>
+    <li><a href="#空指令延时">空指令延时</a></li>
+    <li><a href="#选择结构">选择结构</a>
+      <ol>
+        <li><a href="#cmp指令">CMP指令</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">
+            
+            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241211_1733924143.jpg" loading="lazy" alt="Featured image of post 汇编语言快速入门" />
+            
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" >
+            操作系统真象还原
+        </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">汇编语言快速入门</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            本文详细介绍了Intel汇编语法的简单使用
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2024-12-11</time>
+        </div>
+        
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2024-12-11
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 4120 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="内容的定义">内容的定义
+</h2><h3 id="数据段的定义">数据段的定义
+</h3><p><strong>汇编语言程序以段为单位进行书写</strong>，一般把数据定义在数据段里，程序写在代码段中。下面给出段的定义语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">段名  SEGMENT
+</span></span><span class="line"><span class="cl">...（段的内容）...
+</span></span><span class="line"><span class="cl">段名  ENDS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw=="
+	
+	
+	
+	loading="lazy"
+	
+		alt="点击并拖拽以移动"
+	
+	
+></p>
+<p><strong>注意事项：</strong></p>
+<blockquote>
+<ol>
+<li>汇编语言不区分字母的大小写；</li>
+<li>汇编语言中一行只能有一条语句；</li>
+<li>段的名字用字母或下划线开头，需要做到含义清晰且不能与保留字重名；</li>
+<li>汇编语言中用英文分号后的内容表示程序注释；</li>
+<li>不能在一个段的内部定义另一个段，也就是各个段之间相互独立。</li>
+</ol>
+</blockquote>
+<h3 id="数据的定义">数据的定义
+</h3><p>数据的定义是指对给出的数据分配存储单元，并将它们以标准的格式存放到数据段中。数据定义的语句元素包括DB DW DD DQ DT等。</p>
+<h4 id="定义字节数据db">定义字节数据DB
+</h4><p>给出下面的汇编程序段</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">DATA  SEGMENT
+</span></span><span class="line"><span class="cl">X     DB   -1,255,<span class="s1">&#39;A&#39;</span>,3+2,?
+</span></span><span class="line"><span class="cl">      DB   <span class="s2">&#34;ABC&#34;</span>,0FFH,11001010B
+</span></span><span class="line"><span class="cl">Y     DB   <span class="m">3</span> DUP<span class="o">(</span>?<span class="o">)</span>
+</span></span><span class="line"><span class="cl">DATA  ENDS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<ol>
+<li><strong>变量的定义</strong>：X和Y称为变量名，表示程序员定义了两个变量X和Y。与高级语言不同，汇编语言中的变量实际上是后面第一个数据的地址，变量名代表了后面的若干个数据；</li>
+<li><strong>字节数据的定义</strong>：DB表示定义的数据类型都是字节类型。DB可以用于定义整数（包括正数和负数，可以使用十进制、十六进制或二进制）以及字符；</li>
+<li><strong>求值表达式</strong>：定义数据时可以出现简单的求值表达式的结果。如上方的DB 3+2相当于 DB 5；</li>
+<li><strong>未知值的定义</strong>：用问号表示一个暂时还不确定的值，一般先用0进行这个单元的填充；</li>
+<li><strong>多个字符的定义</strong>：可以出现用双引号括起来的多个字符，这些字符将分开并按照顺序进行存储；</li>
+<li><strong>重复定义相同数据</strong>：DUP表示重复定义多个相同的数据。语法如下；</li>
+<li><strong>隔行定义</strong>：如果数据太多一行写不下，则可以另起一行继续定义。不需要重新写变量名，但是需要重新写DB伪指令。</li>
+</ol>
+</blockquote>
+<h4 id="定义字数据dw">定义字数据DW
+</h4><p>字数据的位数为16位，只需要将上面字节定义的语法中的DB修改为DW即可。</p>
+<h4 id="定义双字数据dd">定义双字数据DD
+</h4><p>双字数据为32字节，只需要将上面字节定义的语法中的DB修改为DD即可。需要注意的是，数据的高位存放在地址较大的单元里，数据的低位存放在地址较小的单元里。</p>
+<h4 id="定义八字节和十字节数据dq-dt">定义八字节和十字节数据DQ DT
+</h4><p>只需要将DB伪指令修改为DQ和DT即可。</p>
+<h2 id="数据的传送">数据的传送
+</h2><h3 id="指令语句的格式">指令语句的格式
+</h3><p>指令语句是指与一条机器指令相对应的代码语句，其一般格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>标号：<span class="o">]</span>  操作码 <span class="o">[</span>操作数<span class="o">]</span> <span class="o">[</span><span class="p">;</span>注释<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li>标号是指程序员为这一条指令语句所起的名字。大多数指令语句都不需要标号，只有一些特殊的指令语句需要用到；</li>
+<li>操作码指定本条指令的操作类型，所有的操作码都是保留字；</li>
+<li>操作数可以是0-3个，有多个操作数时彼此之间用逗号分隔。右边的操作数为源操作数，最左边的操作数为目的操作数。</li>
+</ol>
+</blockquote>
+<h3 id="操作数的分类">操作数的分类
+</h3><p>操作数可以分为寄存器操作数、立即数操作数和存储器操作数三类。关于寄存器操作数，需要注意的是<strong>寄存器IP和FLAGS不能作为操作数出现在指令中</strong>；关于立即数操作数，需要注意的是<strong>立即数操作数不能用作目的操作数</strong>。下面着重介绍存储器操作数，先介绍两点基础知识：</p>
+<blockquote>
+<ol>
+<li><strong>存储器操作数表示对一个存储器单元进行访问，需要给出这个存储单元的段基址和偏移地址两部分才能进行</strong>；</li>
+<li>大多数情况下，指令将自动使用DS寄存器中的内容作为操作数的段基址，因此，<strong>编写汇编语言源程序时首先要做的事情就是把数据段的段基址放入DS寄存器</strong>。</li>
+</ol>
+</blockquote>
+<p>既然我们已经设置好了段基址，那么只需要有偏移地址即可找到内存中正确的存储单元。给出偏移地址的方法有直接和间接两种方法。直接法是指直接在指令中写出存储单元的偏移地址，间接法则是把存储单元的偏移地址事先装入一个寄存器中，需要时通过这个寄存器中的值来找到这个存储单元。</p>
+<p>（1）<strong>直接法语法</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">MOV  目的寄存器,  变量名<span class="o">[</span>+字节偏移量<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此语句的作用是以DS寄存器中的内容作为段基址，以数据段中指定变量名的偏移量（与字节偏移量）的和作为偏移地址，将指定存储单元中的值放入目的寄存器中。</p>
+<p><strong>（2）间接法语法：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV  间接寻址寄存器,  OFFSET 变量名
+</span></span><span class="line"><span class="cl">(下面是需要使用偏移地址时的语句）
+</span></span><span class="line"><span class="cl">MOV  目的寄存器,     间接寻址寄存器
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li><strong>OFFSET是保留字，表示取出后面变量的偏移地址</strong>；</li>
+<li><strong>间接寻址寄存器只能是BX BP SI DI中的一个</strong>。如果没有另外说明，那么使用BX、SI和DI时自动以DS中的内容作为段基址，使用BP时自动使用SS的值作为段基址。</li>
+</ol>
+</blockquote>
+<h3 id="程序段的定义">程序段的定义
+</h3><p><strong>程序段的一般格式如下：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">CODE SEGMENT
+</span></span><span class="line"><span class="cl">  ASSUME  CS:CODE, DS:DATA
+</span></span><span class="line"><span class="cl">START: MOV  AX, DATA
+</span></span><span class="line"><span class="cl">       MOV  DS, AX
+</span></span><span class="line"><span class="cl">       ...(其他指令部分)...
+</span></span><span class="line"><span class="cl">       MOV  AX, 4C00H
+</span></span><span class="line"><span class="cl">       INT  21H
+</span></span><span class="line"><span class="cl">CODE ENDS
+</span></span><span class="line"><span class="cl">       END  START
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解读：</strong></p>
+<blockquote>
+<ol>
+<li><strong>程序开始的两条指令都是用于装载数据段寄存器DS的</strong>。进入程序后，代码段寄存器CS中的值已经由操作系统自动设置为代码段的段基址，数据段的段基址则需要程序员手动装入DS中；</li>
+<li><strong>ASSUME伪指令用于指定每一个数据段所对应的段基址寄存器</strong>。如上面的代码中CODE段的段基址寄存器为CS，DATA段的段基址寄存器为DS；</li>
+<li><strong>INT 21H表示调用由操作系统提供的21H号服务程序</strong>。服务的种类由AH中的功能号决定，本例中4CH表示返回操作系统的操作；AL中的代码称为返回代码，用返回代码00H表示正常返回；</li>
+<li><strong>END伪指令标志整个程序的结束</strong>。END语句下面书写的任何代码都不会被汇编。END后的标号表示程序的入口地址，也就是汇编程序开始执行的地方。</li>
+</ol>
+</blockquote>
+<h3 id="基本传送指令">基本传送指令
+</h3><p>基本传送指令是使用最频繁的指令，需要熟练掌握。格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV  目的操作数, 源操作数
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li><strong>源操作数和目的操作数的类型必须相同</strong>。如果不相同只有使用强制类型转换后才能进行传送。强制类型转换语法可以见下方；</li>
+<li><strong>源操作数和目的操作数不能同时是存储器操作数，也不能同时是段寄存器</strong>；</li>
+<li><strong>目的操作数不能是立即数</strong>；</li>
+<li><strong>代码段基址寄存器CS不能作目的操作数</strong>；</li>
+<li><strong>使用立即数作为源操作数时，立即数会按照目的操作数的类型进行扩展。</strong></li>
+</ol>
+</blockquote>
+<p><strong>强制类型转换语法（要谨慎使用）</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">数据类型  PTR[变量名]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="堆栈">堆栈
+</h2><h3 id="堆栈的定义">堆栈的定义
+</h3><p>堆栈也是用户使用的存储器的一部分，用于存放临时性的数据和一些其他信息。堆栈段的定义语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">堆栈名  SEGMENT  STACK
+</span></span><span class="line"><span class="cl">       <span class="o">(</span>堆栈内容）
+</span></span><span class="line"><span class="cl">堆栈名  ENDS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li><strong>堆栈定义和一般段的定义的唯一区别在于使用了STACK</strong>；</li>
+<li>对于堆栈段，系统会在装入程序时自动把SSEG的段基址放入SS寄存器中，堆栈中的字节数自动置入SP寄存器中；</li>
+<li><strong>堆栈段中的内容从较大的地址开始分配和使用</strong>；</li>
+<li>对于8086CPU，进出堆栈的只能是2字节的数据。</li>
+</ol>
+</blockquote>
+<h3 id="堆栈的使用方法">堆栈的使用方法
+</h3><p>常用的堆栈相关指令包括PUSH POP PUSHF和POPF，语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">PUSH 源操作数              ;将指定操作数入栈保护
+</span></span><span class="line"><span class="cl">POP 目的操作数              ;将栈顶操作数恢复到指定位置
+</span></span><span class="line"><span class="cl">PUSHF                     ;标志寄存器内容入栈保护
+</span></span><span class="line"><span class="cl">POPF                      ;标志寄存器出栈恢复
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="常用操作数表达式">常用操作数表达式
+</h2><h3 id="符号定义伪指令">符号定义伪指令
+</h3><p>符号定义相当于C语言中的#define编译预处理，用于进行符号的等价替换，符号定义的语法如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">符号名   EQU   表达式
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li>在进行汇编时，对EQU定义的符号名用对应的表达式进行等价替换；</li>
+<li>对用EQU定义的符号名不允许重复定义。</li>
+</ol>
+</blockquote>
+<p>另一种进行符号定义的方式是使用“=”符号，具体语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">符号名   =   常数表达式
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<p>使用等号定义符号时只能使用常量表达式。</p>
+</blockquote>
+<h3 id="取段基址">取段基址
+</h3><p>可以使用SEG来取地址表达式所在段的段基址，具体使用方法为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SEG 地址表达式
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="算术运算">算术运算
+</h2><h3 id="加法指令">加法指令
+</h3><p>对于两个操作数相加应该使用ADD指令，指令语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ADD   目的操作数, 源操作数
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li>该指令将目的操作数与源操作数相加，结果存放在目的操作数原先的存放位置；</li>
+<li>ADD指令执行后会刷新CPU的状态标志位。</li>
+</ol>
+</blockquote>
+<p>除此之外，还有一条INC指令实现操作数的自增，语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">INC   操作数
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li>增量执行执行后不影响CPU的状态标志位；</li>
+<li>增量指令常常用于修改计数器以及存储器指针的值。</li>
+</ol>
+</blockquote>
+<h3 id="减法指令">减法指令
+</h3><p>减法指令和加法指令的使用是对称的。<strong>加法中的ADD对应减法中的SUB；加法中的INC对应减法中的DEC。</strong></p>
+<h3 id="乘法指令和除法指令">乘法指令和除法指令
+</h3><p>**乘法指令为MUL，除法指令为DIV，使用方法和加减法类似。**由于乘除法使用较少，因此不过多介绍。</p>
+<h2 id="循环">循环
+</h2><p>循环指令的语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">LOOP   标号
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li><strong>循环的次数由寄存器CX中的值决定。每一次循环后CX寄存器中的值会自减1，当CX=0时循环终止，因此CX也被称为计数器</strong>；</li>
+<li><strong>装载寄存器CX的过程应该在循环开始之前完成</strong>；</li>
+<li><strong>每一次循环成功则回到标号处的语句。</strong></li>
+</ol>
+</blockquote>
+<h2 id="逻辑运算">逻辑运算
+</h2><p>逻辑运算有AND OR XOR和NOT四种，使用语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">逻辑运算操作码   目的操作数   源操作数
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用情况：</strong></p>
+<blockquote>
+<ol>
+<li>AND指令主要用于对操作数的各位有选择地清零；</li>
+<li>OR指令主要用于对操作数各位有选择地置一；</li>
+<li>XOR指令主要用于对操作数各位有选择地取反；</li>
+<li>NOT指令主要用于对操作数整体取反。</li>
+</ol>
+</blockquote>
+<h2 id="中断调用">中断调用
+</h2><p><strong>所有的DOS系统功能调用都是通过软中断指令INT 21H来实现的。INT 21H是一个具有90多个子功能的中断服务程序。INT 21H对每一个子功能都进行了编号，这个编程成为功能号。</strong></p>
+<p><strong>DOS系统功能调用方法：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV 功能号   ;把功能号放入寄存器AH中
+</span></span><span class="line"><span class="cl">......
+</span></span><span class="line"><span class="cl">(在其他寄存器中放入该功能要求的入口参数)
+</span></span><span class="line"><span class="cl">......
+</span></span><span class="line"><span class="cl">INT 21H     ;调用DOS系统功能
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="键盘输入单字符">键盘输入单字符
+</h3><p><strong>功能号1，输入字符以ASCII码的形式存放在累加器AL中同时显示出来。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV AH 01
+</span></span><span class="line"><span class="cl">INT 21H
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="屏幕显示单字符">屏幕显示单字符
+</h3><p><strong>功能号2，屏幕显示存放在DL寄存器中的字符。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV AH 02
+</span></span><span class="line"><span class="cl">MOV DL 待显示字符
+</span></span><span class="line"><span class="cl">INT 21H
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="屏幕显示字符串">屏幕显示字符串
+</h3><p><strong>功能号9，用于在显示器上显示一个存放在寄存器DX中的字符串，被显示的字符串必须以’$&lsquo;作为结束符。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV AH 09
+</span></span><span class="line"><span class="cl">MOV DX 待显示字符串首地址
+</span></span><span class="line"><span class="cl">INT 21H
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="返回dos">返回DOS
+</h3><p><strong>一个程序执行完成后使得程序正常退出并返回DOS的功能，功能号为4CH。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV AH 4CH
+</span></span><span class="line"><span class="cl">INT 21H
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="子程序的定义和调用">子程序的定义和调用
+</h2><h3 id="定义子程序">定义子程序
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">子程序名 PROC
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">       RET   ;表示子程序返回
+</span></span><span class="line"><span class="cl">子程序名 ENDP ;表示子程序段定义结束
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="调用子程序">调用子程序
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">CALL 子程序名
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="对接中的端口进行读写">对接中的端口进行读写
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MOV DX 端口地址
+</span></span><span class="line"><span class="cl">......
+</span></span><span class="line"><span class="cl">(其他寄存器初始化)
+</span></span><span class="line"><span class="cl">......
+</span></span><span class="line"><span class="cl">OUT DX 需要传输到端口的数据所在的寄存器
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="空指令延时">空指令延时
+</h2><p><strong>使用NOP表示执行一条空指令，不进行任何操作。当指令之间需要有延时时，可以插入NOP指令。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NOP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="选择结构">选择结构
+</h2><h3 id="cmp指令">CMP指令
+</h3><p><strong>CMP指令格式如下：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">CMP 目的操作数,源操作数
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>语法解释：</strong></p>
+<blockquote>
+<ol>
+<li><strong>CMP用于比较两个同类型的操作数的大小；</strong></li>
+<li><strong>指令执行的结果不会修改两个操作数，而是修改标志位；</strong></li>
+<li><strong>CMP指令常常与下列指令结合使用。</strong></li>
+</ol>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">JGE 前&gt;=后     Jump if  greater or equal
+</span></span><span class="line"><span class="cl">JG 前&gt;后       Jump if  greater
+</span></span><span class="line"><span class="cl">JLE 前&lt;=后     Jump if  less or equal
+</span></span><span class="line"><span class="cl">JL 前&lt;后       Jump if  less
+</span></span><span class="line"><span class="cl">JNE 前不等于后  Jump if not equal
+</span></span><span class="line"><span class="cl">JE 前等于后     Jump if equal
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参考：<em><a class="link" href="https://blog.csdn.net/hanmo22357/article/details/127883179"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/hanmo22357/article/details/127883179</a></em></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    
+</footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十一章 —— 创建用户进程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%BA%8C-%E9%94%AE%E7%9B%98%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（二） —— 键盘驱动程序的编写与输入系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%B8%80-%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E5%AE%9E%E7%8E%B0%E4%B8%8E%E8%BE%93%E5%87%BA%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（一） —— 同步机制之互斥锁实现与输出系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%BA%8C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BD%AE%E8%BD%AC%E8%B0%83%E5%BA%A6/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（二） —— 多线程轮转调度</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%B8%80-%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241221_1734775379.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（一） —— 在内核空间中实现线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"lang":"zh-CN","locale":{"admin":"你好","placeholder":null,"sofa":"还没有人评论哦！快来抢沙发吧~"},"placeholder":"欢迎留下宝贵的评论！","requiredMeta":["name","email","url"],"serverURL":"https://blogcomment-iqp14djt5-jl-skys-projects.vercel.app/","visitor":false});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy;
+        
+        2024 -
+        
+        2025 JL-sky
+    </section>
+
+    
+    <section class="running-time">
+        网站已运行
+        <span id="runningdays" class="running-days"></span>
+    </section>
+
+    
+    <section class="totalcount">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        发表了18篇文章 ·
+        总计
+        125,951字
+        
+    </section>
+
+    
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+        </main>
+    </div>
+    <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.dde1bc60c191a36f391af9ea35dd08be3c74bca8ca0cd8ff6a663c09a0256be0.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    let s1 = '2024-11-24'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+<div id="particles-js"></div>
+
+<script src=http://localhost:1313/background/particles.min.js></script>
+<script>
+    particlesJS.load('particles-js', resources.Get("background/package.json").Permalink, function () {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+
+<style>
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+</style>
+</body>
+
+</html>
