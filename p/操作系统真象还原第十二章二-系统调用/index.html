@@ -2,18 +2,19 @@
 <html lang="zh-cn" dir="ltr">
 
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="欢迎来到我的博客！">
-<title>我的</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本章节所有代码托管在miniOS_32 章节任务介绍 任务简介 综上，本节我们将在多线程轮转调度的基础上介绍操作系统的同步机制——锁，同时实现一个">
+<title>《操作系统真象还原》第十二章（二） —— 系统调用</title>
 
-<link rel='canonical' href='http://localhost:1313/%E6%88%91%E7%9A%84/'>
+<link rel='canonical' href='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%E4%BA%8C-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/'>
 
-<link rel="stylesheet" href="/scss/style.min.c2172b128ab8744b3f98599d792c6144c766b07c79ba00c88ff5c11861a33247.css"><meta property='og:title' content="我的">
-<meta property='og:description' content="欢迎来到我的博客！">
-<meta property='og:url' content='http://localhost:1313/%E6%88%91%E7%9A%84/'>
+<link rel="stylesheet" href="/scss/style.min.c2172b128ab8744b3f98599d792c6144c766b07c79ba00c88ff5c11861a33247.css"><meta property='og:title' content="《操作系统真象还原》第十二章（二） —— 系统调用">
+<meta property='og:description' content="本章节所有代码托管在miniOS_32 章节任务介绍 任务简介 综上，本节我们将在多线程轮转调度的基础上介绍操作系统的同步机制——锁，同时实现一个">
+<meta property='og:url' content='http://localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%E4%BA%8C-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/'>
 <meta property='og:site_name' content='你好'>
-<meta property='og:type' content='article'><meta property='article:section' content='Page' /><meta property='article:modified_time' content='2024-11-25T23:04:15&#43;08:00'/>
-<meta name="twitter:title" content="我的">
-<meta name="twitter:description" content="欢迎来到我的博客！">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-01-08T15:26:17&#43;08:00'/><meta property='article:modified_time' content='2025-01-08T15:48:50&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250108_1736322476.jpg' />
+<meta name="twitter:title" content="《操作系统真象还原》第十二章（二） —— 系统调用">
+<meta name="twitter:description" content="本章节所有代码托管在miniOS_32 章节任务介绍 任务简介 综上，本节我们将在多线程轮转调度的基础上介绍操作系统的同步机制——锁，同时实现一个"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250108_1736322476.jpg' />
   
 
 
@@ -188,7 +189,7 @@
         </li>
         
         
-        <li  class='current' >
+        <li >
             <a href='/%E6%88%91%E7%9A%84/' >
                 
                 
@@ -285,18 +286,69 @@
         </li>
     </ol>
 </aside>
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#章节任务介绍">章节任务介绍</a>
+      <ol>
+        <li><a href="#任务简介">任务简介</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
         <main class="main full-width">
-    <article class="main-article">
+    <article class="has-image main-article">
     <header class="article-header">
+    <div class="article-image">
+        <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%E4%BA%8C-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/">
+            
+            <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250108_1736322476.jpg" loading="lazy" alt="Featured image of post 《操作系统真象还原》第十二章（二） —— 系统调用" />
+            
+        </a>
+    </div>
+    
 
     <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F/" >
+            操作系统真象还原
+        </a>
+        
+    </header>
     
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/%E6%88%91%E7%9A%84/">我的</a>
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%E4%BA%8C-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/">《操作系统真象还原》第十二章（二） —— 系统调用</a>
         </h2>
 
         
@@ -306,6 +358,70 @@
     
     
     
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">2025-01-08</time>
+        </div>
+        
+
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-lastmod">
+                最后更新于
+                2025-01-08
+            </time>
+        </div>
+        <div>
+            <?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="33px" height="32px" viewBox="0 0 33 32" enable-background="new 0 0 33 32" xml:space="preserve">
+<g>
+	<path fill="#828282" d="M1.5,32h21c0.827,0,1.5-0.673,1.5-1.5V23c0-0.01-0.005-0.018-0.006-0.028
+		c0.055-0.035,0.112-0.068,0.166-0.105l7.986,7.986C32.244,30.951,32.372,31,32.5,31s0.256-0.049,0.354-0.146
+		c0.195-0.195,0.195-0.512,0-0.707l-7.913-7.913C26.205,21.047,27,19.366,27,17.5c0-2.297-1.201-4.316-3.006-5.472
+		C23.995,12.018,24,12.01,24,12V9.5c0-0.017-0.008-0.031-0.009-0.047c-0.002-0.023-0.008-0.043-0.013-0.065
+		c-0.017-0.071-0.046-0.135-0.09-0.191c-0.007-0.009-0.006-0.02-0.013-0.029l-8-9c-0.003-0.003-0.007-0.003-0.01-0.006
+		c-0.06-0.065-0.137-0.108-0.223-0.134c-0.019-0.006-0.036-0.008-0.056-0.011C15.557,0.012,15.53,0,15.5,0h-14
+		C0.673,0,0,0.673,0,1.5v29C0,31.327,0.673,32,1.5,32z M26,17.5c0,3.033-2.468,5.5-5.5,5.5S15,20.533,15,17.5s2.468-5.5,5.5-5.5
+		S26,14.467,26,17.5z M16,1.815L22.387,9H16.5C16.28,9,16,8.58,16,8.25V1.815z M1,1.5C1,1.224,1.225,1,1.5,1H15v7.25
+		C15,9.059,15.655,10,16.5,10H23v1.501C22.23,11.179,21.386,11,20.5,11c-1.838,0-3.496,0.77-4.679,2H5.5C5.224,13,5,13.224,5,13.5
+		S5.224,14,5.5,14h9.532c-0.565,0.879-0.922,1.901-1.006,3H5.5C5.224,17,5,17.224,5,17.5S5.224,18,5.5,18h8.525
+		c0.084,1.099,0.442,2.121,1.006,3H5.5C5.224,21,5,21.224,5,21.5S5.224,22,5.5,22h10.25c0.021,0,0.039-0.009,0.06-0.012
+		C16.994,23.225,18.657,24,20.5,24c0.886,0,1.73-0.179,2.5-0.502V30.5c0,0.276-0.225,0.5-0.5,0.5h-21C1.22,31,1,30.78,1,30.5V1.5z"
+		/>
+	<path fill="#828282" d="M5.5,10h6c0.276,0,0.5-0.224,0.5-0.5S11.776,9,11.5,9h-6C5.224,9,5,9.224,5,9.5S5.224,10,5.5,10z"/>
+	<path fill="#828282" d="M5.5,26h13c0.276,0,0.5-0.224,0.5-0.5S18.776,25,18.5,25h-13C5.224,25,5,25.224,5,25.5S5.224,26,5.5,26z"/>
+</g>
+</svg>
+
+            
+            <time class="article-words">
+                本文共 102 字
+            </time>
+        </div>
+        
+
+    </footer>
+    
 
     
 </div>
@@ -314,7 +430,18 @@
     <section class="article-content">
     
     
-    <p>欢迎来到我的博客！</p>
+    <p>本章节所有代码托管在<a class="link" href="https://github.com/JL-sky/miniOS_32"  target="_blank" rel="noopener"
+    >miniOS_32</a></p>
+<h2 id="章节任务介绍">章节任务介绍
+</h2><h3 id="任务简介">任务简介
+</h3><p>综上，本节我们将在多线程轮转调度的基础上介绍操作系统的同步机制——锁，同时实现一个互斥锁</p>
+<p>本节的主要任务有：</p>
+<blockquote>
+<ol>
+<li>实现操作系统的同步机制——锁</li>
+<li>实现一个终端</li>
+</ol>
+</blockquote>
 
 </section>
 
@@ -356,6 +483,110 @@
     
 
     
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%E4%B8%80-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250108_1736322215.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250108_1736322215.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十二章（一） —— 系统调用</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2025/01/upgit_20250105_1736061136.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十一章 —— 创建用户进程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%BA%8C-%E9%94%AE%E7%9B%98%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241227_1735287198.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（二） —— 键盘驱动程序的编写与输入系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E5%8D%81%E7%AB%A0%E4%B8%80-%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E5%AE%9E%E7%8E%B0%E4%B8%8E%E8%BE%93%E5%87%BA%E7%B3%BB%E7%BB%9F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241223_1734950685.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第十章（一） —— 同步机制之互斥锁实现与输出系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9C%9F%E8%B1%A1%E8%BF%98%E5%8E%9F%E7%AC%AC%E4%B9%9D%E7%AB%A0%E4%BA%8C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BD%AE%E8%BD%AC%E8%B0%83%E5%BA%A6/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/jl-sky/imageDatesets/master/2024/12/upgit_20241222_1734871213.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">《操作系统真象还原》第九章（二） —— 多线程轮转调度</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
 
      
     
@@ -448,7 +679,7 @@
         
         发表了20篇文章 ·
         总计
-        132,182字
+        126,225字
         
     </section>
 
